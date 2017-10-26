@@ -24,6 +24,9 @@
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.yy.cc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Lexical Analyzer\replace.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0C1C1964-4DB0-4C41-9A12-A9FDCAEB9628}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

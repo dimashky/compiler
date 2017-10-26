@@ -27,4 +27,9 @@
       <Filter>Source Files\Lexical Analyzer</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Lexical Analyzer\replace.txt">
+      <Filter>Source Files\Lexical Analyzer</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

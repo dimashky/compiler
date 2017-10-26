@@ -5,6 +5,9 @@
 	#include <istream>
 	#include <ostream>
 	#include <FlexLexer.h>
+	#include <stdlib.h>
+	#include <unistd.h>
+	using namespace std;
 
 	int lineNo = 1;
 	int colNo = 1;
@@ -18,7 +21,7 @@
 /* This tells flex to read only one input file */
 %option noyywrap
 
-/* define states */
+/* define state */
 %x multilinecomment
 
 
@@ -32,125 +35,66 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
 
+
+
+
 /*** RULE Section ***/
 
 %%
 
-"if"			{
-					colNo += strlen(yytext);
-				}
-"else"			{
-					colNo += strlen(yytext);
-				}
-				
+"if"			{	colNo += strlen(yytext);	printf("if\n");			}
+"else"			{	colNo += strlen(yytext);	printf("else\n");		}	
 
+"for"			{	colNo += strlen(yytext);	printf("for\n");		}				
+"foreach"		{	colNo += strlen(yytext);	printf("foreach\n");	}				
+"while"			{	colNo += strlen(yytext);	printf("while\n");		}
+"break"			{	colNo += strlen(yytext);	printf("break\n");		}
+"switch"		{	colNo += strlen(yytext);	printf("switch\n");		}
+"case"			{	colNo += strlen(yytext);	printf("case\n");		}
+"do"			{	colNo += strlen(yytext);	printf("do\n");			}
+"goto"			{	colNo += strlen(yytext);	printf("goto\n");		}
 				
-				
-"while"			{
-					colNo += strlen(yytext);					
-				}
-"do"			{
-					colNo += strlen(yytext);
-				}
-"for"			{
-					colNo += strlen(yytext);
-				}
+"class"			{	colNo += strlen(yytext);	printf("class\n");		}
+"struct"		{	colNo += strlen(yytext);	printf("struct\n");		}
+"interface"		{	colNo += strlen(yytext);	printf("interface\n");	}
+"enum"			{	colNo += strlen(yytext);	printf("enum\n");		}
 
-				
-				
-				
-				
-"class"			{
-					colNo += strlen(yytext);
-				}
-"struct"		{
-					colNo += strlen(yytext);
-				}
-"interface"		{
-					colNo += strlen(yytext);
-				}
-"implement"		{
-					colNo += strlen(yytext);
-				}
-"public"		{
-					colNo += strlen(yytext);
-				}
-"private"		{
-					colNo += strlen(yytext);				
-				}
-"protected"		{
-					colNo += strlen(yytext);
-				}
-				
-				
-				
-"int"			{
-					colNo += strlen(yytext);
-					cout<<"int\n";
-				}
-"char"			{
-					colNo += strlen(yytext);
-					cout<<"char\n";
-				}
-"float"			{
-					colNo += strlen(yytext);
-					cout<<"float\n";					
-				}				
-"double"		{
-					colNo += strlen(yytext);
-					cout<<"double\n";					
-				}				
-"short"			{
-					colNo += strlen(yytext);
-					cout<<"short\n";					
-				}
-"long"			{
-					colNo += strlen(yytext);
-					cout<<"long\n";					
-				}
-"bool"			{
-					colNo += strlen(yytext);
-					cout<<"bool\n";					
-				}				
-				
-				
-				
-				
-				
-				
-\n				{
-					colNo=1;
-					lineNo++;
-				}
-\t 				{
-					colNo+=4;
-				}			
-	
 
-" "				{
-					colNo += 1; 
-				}
+"public"		{	colNo += strlen(yytext);	printf("public\n");		}
+"private"		{	colNo += strlen(yytext);	printf("private\n");	}
+"protected"		{	colNo += strlen(yytext);	printf("protected\n");	}
+				
+				
+"try"			{	colNo += strlen(yytext);	printf("try\n");		}
+"catch"			{	colNo += strlen(yytext);	printf("catch\n");		}
+"throw"			{	colNo += strlen(yytext);	printf("throw\n");		}
+"finally"		{	colNo += strlen(yytext);	printf("finally\n");	}
+
+
+"int"			{	colNo += strlen(yytext);	printf("int\n");		}
+"char"			{	colNo += strlen(yytext);	printf("char\n");		}
+"float"			{	colNo += strlen(yytext);	printf("float\n");		}				
+"double"		{	colNo += strlen(yytext);	printf("double\n");		}				
+"short"			{	colNo += strlen(yytext);	printf("short\n");		}
+"long"			{	colNo += strlen(yytext);	printf("long\n");		}
+"bool"			{	colNo += strlen(yytext);	printf("bool\n");		}		
+"void"			{	colNo += strlen(yytext);	printf("void\n");		}			
+				
+				
+				
+\n				{	colNo=1;	lineNo++;	}
+\t 				{	colNo+=4;	}			
+" "				{	colNo++;	}
 
 				
 				
 				
 				
-\+				{
-					colNo += strlen(yytext); 
-					cout<<"plus\n";
-				}
-"/"				{
-					colNo += strlen(yytext); 					
-				}
-"*"				{
-					colNo += strlen(yytext); 					
-				}				
-"^"				{
-					colNo += strlen(yytext); 					
-				}
-"-"				{
-					colNo += strlen(yytext); 
-				}
+\+			{	colNo += strlen(yytext);	printf("plus\n");		}	
+"-"			{	colNo += strlen(yytext);	printf("minus\n");		}	
+"*"			{	colNo += strlen(yytext);	printf("multiple\n");	}	
+"/"			{	colNo += strlen(yytext);	printf("divide\n");		}	
+"^"			{	colNo += strlen(yytext);	printf("exp\n");		}	
 				
 				
 				
@@ -158,26 +102,15 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 \/\*                           		{ BEGIN multilinecomment; }
 <multilinecomment>[^*\n]*			{;}
 <multilinecomment>"*"+[^*/\n]*		{lineNo++;}
-<multilinecomment>"*"+"/"           { BEGIN INITIAL;cout<<"\t it is a Multi Line Comment \n";}
+<multilinecomment>"*"+"/"           { BEGIN INITIAL;	printf("multi line comment.\n");}
 
-{Single_line_comment}				{ cout<<"\tit is a single line comment\n";
-										lineNo++;
-									}
+{Single_line_comment}				{ printf("single line comment.\n");	lineNo++;	}
 
 									
-									
-									
-									
-{Identifier}						{ 	colNo += strlen(yytext);
-										cout<<yytext<<endl;;
-										cout<<"\t it is id \n";
-									}
+																
+{Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");			}
 
-{Integer}							{
-										colNo += strlen(yytext);
-										int x=atoi(yytext);
-										cout<<x<<endl;
-									}
+{Integer}							{	colNo += strlen(yytext);	printf("%d\n",atoi(yytext));	}
 											
 
 %%
