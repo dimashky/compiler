@@ -53,6 +53,8 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "case"			{	colNo += strlen(yytext);	printf("case\n");		}
 "do"			{	colNo += strlen(yytext);	printf("do\n");			}
 "goto"			{	colNo += strlen(yytext);	printf("goto\n");		}
+"default"		{	colNo += strlen(yytext);	printf("default\n");	}
+"continue"		{	colNo += strlen(yytext);	printf("continue\n");	}
 				
 "class"			{	colNo += strlen(yytext);	printf("class\n");		}
 "struct"		{	colNo += strlen(yytext);	printf("struct\n");		}
@@ -63,7 +65,12 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "public"		{	colNo += strlen(yytext);	printf("public\n");		}
 "private"		{	colNo += strlen(yytext);	printf("private\n");	}
 "protected"		{	colNo += strlen(yytext);	printf("protected\n");	}
-				
+		
+"abstract"		{	colNo += strlen(yytext);	printf("abstract\n");	}
+"static"		{	colNo += strlen(yytext);	printf("override\n");	}
+		
+"override"		{	colNo += strlen(yytext);	printf("override\n");	}
+"virtual"		{	colNo += strlen(yytext);	printf("virtual\n");	}
 				
 "try"			{	colNo += strlen(yytext);	printf("try\n");		}
 "catch"			{	colNo += strlen(yytext);	printf("catch\n");		}
@@ -71,16 +78,20 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "finally"		{	colNo += strlen(yytext);	printf("finally\n");	}
 
 
+
 "int"			{	colNo += strlen(yytext);	printf("int\n");		}
 "char"			{	colNo += strlen(yytext);	printf("char\n");		}
 "float"			{	colNo += strlen(yytext);	printf("float\n");		}				
 "double"		{	colNo += strlen(yytext);	printf("double\n");		}				
+"byte"			{	colNo += strlen(yytext);	printf("byte\n");		}
 "short"			{	colNo += strlen(yytext);	printf("short\n");		}
 "long"			{	colNo += strlen(yytext);	printf("long\n");		}
 "bool"			{	colNo += strlen(yytext);	printf("bool\n");		}		
 "void"			{	colNo += strlen(yytext);	printf("void\n");		}			
 				
-				
+"const"			{	colNo += strlen(yytext);	printf("const\n");		}			
+"ref"			{	colNo += strlen(yytext);	printf("ref\n");		}			
+"new"			{	colNo += strlen(yytext);	printf("new\n");		}		
 				
 \n				{	colNo=1;	lineNo++;	}
 \t 				{	colNo+=4;	}			
