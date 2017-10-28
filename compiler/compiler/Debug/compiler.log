@@ -1,9 +1,0 @@
-﻿Build started 10/28/2017 1:29:29 PM.
-     1>Project "C:\Users\Mohamed Khair\Desktop\Workspace\compiler\compiler\compiler\compiler.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         compiler.vcxproj -> C:\Users\Mohamed Khair\Desktop\Workspace\compiler\compiler\Debug\compiler.exe
-     1>Done Building Project "C:\Users\Mohamed Khair\Desktop\Workspace\compiler\compiler\compiler\compiler.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.08
