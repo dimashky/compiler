@@ -130,6 +130,10 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "=="		{	colNo += strlen(yytext);	printf("equal\n");			}
 "!="		{	colNo += strlen(yytext);	printf("not equal\n");		}
 
+"->"		{	colNo += strlen(yytext);	printf("to pointer\n");		}
+
+
+
 \/\*                           		{ BEGIN multilinecomment; }
 <multilinecomment>[^*\n]*			{;}
 <multilinecomment>"*"+[^*/\n]*		{lineNo++;}
