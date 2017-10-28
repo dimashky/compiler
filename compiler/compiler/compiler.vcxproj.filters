@@ -32,4 +32,9 @@
       <Filter>Source Files\Lexical Analyzer</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header\tokens.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

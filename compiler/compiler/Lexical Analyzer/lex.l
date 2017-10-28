@@ -7,6 +7,7 @@
 	#include <FlexLexer.h>
 	#include <stdlib.h>
 	#include <unistd.h>
+	#include "../header/tokens.h"
 	using namespace std;
 
 	int lineNo = 1;
@@ -143,7 +144,7 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 									
 																
-{Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");			}
+{Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");			return(ID);}
 
 {Integer}							{	colNo += strlen(yytext);	printf("%d\n",atoi(yytext));	}
 											

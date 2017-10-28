@@ -25,6 +25,7 @@
 #include <iostream>
 using namespace std;
 
+
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
 
@@ -456,17 +457,18 @@ static yyconst short int yy_chk[287] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 1 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 #define INITIAL 0
 /*** Definition Section ***/
 /* C code to be copied verbatim */
-#line 4 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 4 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 	#include <iostream>
 	#include <istream>
 	#include <ostream>
 	#include <FlexLexer.h>
 	#include <stdlib.h>
 	#include <unistd.h>
+	#include "../header/tokens.h"
 	using namespace std;
 
 	int lineNo = 1;
@@ -479,7 +481,7 @@ static yyconst short int yy_chk[287] =
 
 /* Flex definition */
 /*** RULE Section ***/
-#line 482 "lex.yy.cc"
+#line 483 "lex.yy.cc"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -606,10 +608,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 43 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 44 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 
 
-#line 612 "lex.yy.cc"
+#line 613 "lex.yy.cc"
 
 	if ( yy_init )
 		{
@@ -694,380 +696,380 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 45 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 46 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("if\n");			}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 46 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 47 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("else\n");		}	
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 48 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 49 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("for\n");		}				
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 49 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 50 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("foreach\n");	}				
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 50 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 51 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("while\n");		}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 51 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 52 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("break\n");		}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 52 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 53 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("switch\n");		}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 53 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 54 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("case\n");		}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 54 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 55 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("do\n");			}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 55 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 56 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("goto\n");		}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 56 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 57 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("default\n");	}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 57 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 58 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("continue\n");	}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 59 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 60 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("class\n");		}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 60 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 61 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("struct\n");		}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 61 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 62 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("interface\n");	}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 62 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 63 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("enum\n");		}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 65 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 66 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("public\n");		}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 66 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 67 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("private\n");	}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 67 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 68 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("protected\n");	}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 69 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 70 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("abstract\n");	}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 70 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 71 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("override\n");	}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 72 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 73 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("override\n");	}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 73 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 74 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("virtual\n");	}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 75 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 76 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("try\n");		}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 76 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 77 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("catch\n");		}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 77 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 78 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("throw\n");		}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 78 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 79 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("finally\n");	}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 82 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 83 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("int\n");		}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 83 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 84 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("char\n");		}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 84 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 85 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("float\n");		}				
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 85 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 86 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("double\n");		}				
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 86 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 87 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("byte\n");		}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 87 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 88 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("short\n");		}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 88 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 89 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("long\n");		}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 89 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 90 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("bool\n");		}		
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 90 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 91 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("void\n");		}			
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 92 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 93 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("const\n");		}			
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 93 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 94 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("ref\n");		}			
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 94 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 95 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("new\n");		}		
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 96 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 97 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo=1;	lineNo++;	}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 97 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 98 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo+=4;	}			
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 98 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 99 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 99 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 100 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 100 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 101 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 101 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 102 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 102 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 103 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 103 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 104 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 104 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 105 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 105 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 106 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 112 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 113 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("plus\n");			}	
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 113 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 114 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("minus\n");			}	
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 114 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 115 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("multiple\n");		}	
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 115 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 116 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("divide\n");			}						
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 116 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 117 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("assigment\n");		}					
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 117 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 118 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("plus plus\n");		}	
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 118 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 119 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("minus minus\n");	}	
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 119 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 120 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("plus eq\n");		}	
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 120 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 121 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("minus eq\n");		}	
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 121 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 122 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("mult eq\n");		}	
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 122 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 123 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("div eq\n");			}	
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 126 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 127 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("smaller\n");		}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 127 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 128 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("bigger\n");			}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 128 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 129 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("smaller or eq\n");	}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 129 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 130 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("bigger or eq\n");	}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 130 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 131 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("equal\n");			}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 131 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 132 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("not equal\n");		}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 133 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 134 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("to pointer\n");		}
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 137 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 138 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 { BEGIN multilinecomment; }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 138 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 139 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {;}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 139 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 140 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {lineNo++;}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 140 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 141 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 { BEGIN INITIAL;	printf("multi line comment.\n");}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 142 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 143 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 { printf("single line comment.\n");	lineNo++;	}
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 146 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
-{ 	colNo += strlen(yytext);	printf("Identifier\n");			}
+#line 147 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+{ 	colNo += strlen(yytext);	printf("Identifier\n");			return(ID);}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 148 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 149 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo += strlen(yytext);	printf("%d\n",atoi(yytext));	}
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 151 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 152 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 ECHO;
 	YY_BREAK
-#line 1070 "lex.yy.cc"
+#line 1071 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(multilinecomment):
 	yyterminate();
@@ -1875,7 +1877,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 151 "C:\\Users\\Mohamed Khair\\Desktop\\New folder\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
+#line 152 "C:\\Users\\Mohamed Khair\\Desktop\\compiler\\compiler\\compiler\\Lexical Analyzer\\lex.l"
 
 
 
