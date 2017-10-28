@@ -96,19 +96,39 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 \n				{	colNo=1;	lineNo++;	}
 \t 				{	colNo+=4;	}			
 " "				{	colNo++;	}
+"("				{	colNo++;	}
+")"				{	colNo++;	}
+"{"				{	colNo++;	}
+"}"				{	colNo++;	}
+"["				{	colNo++;	}
+"]"				{	colNo++;	}
+";"				{	colNo++;	}
+
 
 				
 				
 				
 				
-\+			{	colNo += strlen(yytext);	printf("plus\n");		}	
-"-"			{	colNo += strlen(yytext);	printf("minus\n");		}	
-"*"			{	colNo += strlen(yytext);	printf("multiple\n");	}	
-"/"			{	colNo += strlen(yytext);	printf("divide\n");		}	
-"^"			{	colNo += strlen(yytext);	printf("exp\n");		}	
-				
-				
-				
+\+			{	colNo += strlen(yytext);	printf("plus\n");			}	
+"-"			{	colNo += strlen(yytext);	printf("minus\n");			}	
+"*"			{	colNo += strlen(yytext);	printf("multiple\n");		}	
+"/"			{	colNo += strlen(yytext);	printf("divide\n");			}						
+"="			{	colNo += strlen(yytext);	printf("assigment\n");		}					
+"++"		{	colNo += strlen(yytext);	printf("plus plus\n");		}	
+"--"		{	colNo += strlen(yytext);	printf("minus minus\n");	}	
+"+="		{	colNo += strlen(yytext);	printf("plus eq\n");		}	
+"-="		{	colNo += strlen(yytext);	printf("minus eq\n");		}	
+"*="		{	colNo += strlen(yytext);	printf("mult eq\n");		}	
+"/="		{	colNo += strlen(yytext);	printf("div eq\n");			}	
+
+
+
+"<"			{	colNo += strlen(yytext);	printf("smaller\n");		}
+">"			{	colNo += strlen(yytext);	printf("bigger\n");			}
+"<="		{	colNo += strlen(yytext);	printf("smaller or eq\n");	}
+">="		{	colNo += strlen(yytext);	printf("bigger or eq\n");	}
+"=="		{	colNo += strlen(yytext);	printf("equal\n");			}
+"!="		{	colNo += strlen(yytext);	printf("not equal\n");		}
 
 \/\*                           		{ BEGIN multilinecomment; }
 <multilinecomment>[^*\n]*			{;}
