@@ -29,7 +29,11 @@
 /* Flex definition */
 
 Single_line_comment		(\/\/)+[^\n]*
-Integer					[1-9][0-9]*|0
+Integer					[+ -]?[1-9][0-9]*|0
+Float                   ([+ -]?[0-9]+[f F]?)|([+ -]?[0-9]+"."+[0-9]+[f F])|([+ -]?[1]+[e E]+[0-9]+[f F])
+Double                  ([+ -]?[0-9]+[d D]?)|([+ -]?[0-9]+"."+[0-9]+[d D]?)|([+ -]?[1]+[e E]+[0-9]+[d D]?)
+Long                    [+ -]?[1-9][0-9]*[l L]?
+
 Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
@@ -182,7 +186,34 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 																
 {Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");			return(ID);}
 
-{Integer}							{	colNo += strlen(yytext);	printf("%d\n",atoi(yytext));	}
+{Integer}							{
+										colNo += strlen(yytext);
+										int x=atoi(yytext);
+										cout<<x<<endl;
+										cout<<"Integer"<<endl; 
+										
+									}
+{Float}							{
+										colNo += strlen(yytext);
+										float x=atof(yytext);
+										cout<<x<<endl;
+										cout <<"Float"<<endl;
+										
+									}
+{Double}							{
+										colNo += strlen(yytext);
+										double x=atof(yytext);
+										cout<<x<<endl;
+										cout <<"Double"<<endl;
+										
+									}
+{Long}							{
+										colNo += strlen(yytext);
+										long x=atol(yytext);
+										cout<<x<<endl;
+										cout <<"Long"<<endl;
+										
+									}
 											
 
 %%
