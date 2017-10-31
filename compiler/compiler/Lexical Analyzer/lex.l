@@ -134,6 +134,48 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "->"		{	colNo += strlen(yytext);	printf("to pointer\n");		}
 
 
+"base"		{	colNo += strlen(yytext);	printf("base\n");	     	}
+"null"		{	colNo += strlen(yytext);	printf("null\n");		}
+"oberator"	{	colNo += strlen(yytext);	printf("oberator\n");	}
+"Namespace" {	colNo += strlen(yytext);	printf("namespace\n");	}
+"event"		{	colNo += strlen(yytext);	printf("event\n");		}
+"extern"	{	colNo += strlen(yytext);	printf("extern\n");		}
+"implicit"	{	colNo += strlen(yytext);	printf("implicit\n");	}
+"internal"  {	colNo += strlen(yytext);	printf("internal\n");	}
+"lock"		{	colNo += strlen(yytext);	printf("lock\n");		}
+"uncheched"	{	colNo += strlen(yytext);	printf("uncheched\n");	}
+"sbyte"		{	colNo += strlen(yytext);	printf("sbyte\n");		}
+"set"		{	colNo += strlen(yytext);	printf("set\n");			}
+"sizeof"	{	colNo += strlen(yytext);	printf("sizeof\n");		}
+"struct"	{	colNo += strlen(yytext);	printf("struct\n");		}
+"this"		{	colNo += strlen(yytext);	printf("this\n");		}
+"true"		{	colNo += strlen(yytext);	printf("true\n");		}
+"typeof"	{	colNo += strlen(yytext);	printf("typeof\n");		}
+"ulong"		{	colNo += strlen(yytext);	printf("ulong\n");		}
+"unsafe"	{	colNo += strlen(yytext);	printf("unsafe\n");		}
+"using"		{	colNo += strlen(yytext);	printf("using\n");		}
+"as"		{	colNo += strlen(yytext);	printf("as\n");			}
+"checked"	{	colNo += strlen(yytext);	printf("checked\n");		}
+"decimal"	{	colNo += strlen(yytext);	printf("decimal\n");		}
+"delegate"	{	colNo += strlen(yytext);	printf("delegate\n");	}
+"explicit"	{	colNo += strlen(yytext);	printf("explicit\n");	}
+"fixed"		{	colNo += strlen(yytext);	printf("fixed\n");		}
+"get"		{	colNo += strlen(yytext);	printf("get\n");			}
+"in"		{	colNo += strlen(yytext);	printf("in\n");			}
+"is"		{	colNo += strlen(yytext);	printf("is\n");			}
+"object"	{	colNo += strlen(yytext);	printf("object\n");		}
+"out"		{	colNo += strlen(yytext);	printf("out\n");			}
+"params"	{	colNo += strlen(yytext);	printf("params\n");		}
+"reaonly"	{	colNo += strlen(yytext);	printf("reaonly\n");		}
+"return"	{	colNo += strlen(yytext);	printf("return\n");		}
+"sealed"	{	colNo += strlen(yytext);	printf("sealed\n");		}
+"stackloc"	{	colNo += strlen(yytext);	printf("stackloc\n");	}
+"unit"		{	colNo += strlen(yytext);	printf("unit\n");		}
+"ushort"	{	colNo += strlen(yytext);	printf("ushort\n");		}
+"value"		{	colNo += strlen(yytext);	printf("value\n");		}
+"volatle"	{	colNo += strlen(yytext);	printf("volatle\n");		}
+
+
 
 \/\*                           		{ BEGIN multilinecomment; }
 <multilinecomment>[^*\n]*			{;}
