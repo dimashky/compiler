@@ -134,7 +134,7 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "->"		{	colNo += strlen(yytext);	printf("to pointer\n");		}
 
 
-"base"		{	colNo += strlen(yytext);	printf("base\n");	     	}
+"base"		{	colNo += strlen(yytext);	printf("base\n");	   	}
 "null"		{	colNo += strlen(yytext);	printf("null\n");		}
 "oberator"	{	colNo += strlen(yytext);	printf("oberator\n");	}
 "Namespace" {	colNo += strlen(yytext);	printf("namespace\n");	}
@@ -145,7 +145,7 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "lock"		{	colNo += strlen(yytext);	printf("lock\n");		}
 "uncheched"	{	colNo += strlen(yytext);	printf("uncheched\n");	}
 "sbyte"		{	colNo += strlen(yytext);	printf("sbyte\n");		}
-"set"		{	colNo += strlen(yytext);	printf("set\n");			}
+"set"		{	colNo += strlen(yytext);	printf("set\n");		}
 "sizeof"	{	colNo += strlen(yytext);	printf("sizeof\n");		}
 "struct"	{	colNo += strlen(yytext);	printf("struct\n");		}
 "this"		{	colNo += strlen(yytext);	printf("this\n");		}
@@ -155,8 +155,8 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 "unsafe"	{	colNo += strlen(yytext);	printf("unsafe\n");		}
 "using"		{	colNo += strlen(yytext);	printf("using\n");		}
 "as"		{	colNo += strlen(yytext);	printf("as\n");			}
-"checked"	{	colNo += strlen(yytext);	printf("checked\n");		}
-"decimal"	{	colNo += strlen(yytext);	printf("decimal\n");		}
+"checked"	{	colNo += strlen(yytext);	printf("checked\n");	}
+"decimal"	{	colNo += strlen(yytext);	printf("decimal\n");	}
 "delegate"	{	colNo += strlen(yytext);	printf("delegate\n");	}
 "explicit"	{	colNo += strlen(yytext);	printf("explicit\n");	}
 "fixed"		{	colNo += strlen(yytext);	printf("fixed\n");		}
