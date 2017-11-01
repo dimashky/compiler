@@ -33,7 +33,7 @@ Integer					[+ -]?[1-9][0-9]*|0
 Float                   ([+ -]?[0-9]+[f F]?)|([+ -]?[0-9]+"."+[0-9]+[f F])|([+ -]?[1]+[e E]+[0-9]+[f F])
 Double                  ([+ -]?[0-9]+[d D]?)|([+ -]?[0-9]+"."+[0-9]+[d D]?)|([+ -]?[1]+[e E]+[0-9]+[d D]?)
 Long                    [+ -]?[1-9][0-9]*[l L]?
-
+String                  ["].*["]
 Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
@@ -214,6 +214,13 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 										cout <<"Long"<<endl;
 										
 									}
+{String}  {
+
+     colNo += strlen(yytext)
+	 cout <<"string\n"; 
+
+}
+
 											
 
 %%
