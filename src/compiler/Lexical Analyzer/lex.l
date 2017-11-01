@@ -29,11 +29,12 @@
 /* Flex definition */
 Real					([+ -]?[0-9]+"."+[0-9]+)|([+ -]?[0-9]+"."+[0-9]+[e E]+[0-9]+)|([+ -]?[0-9]+[e E]+[0-9]+)
 Single_line_comment		(\/\/)+[^\n]*
+
 Integer					[+ -]?[0-9]*|0
 Float                   ({Integer}[f F])|({Real}[f F])
 Double                  ({Integer}[d D])|({Real}[d D]?)
 Long                    {Integer}[l L]?
-String					["c].*[c"]
+String					["].*["]
 Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
@@ -214,6 +215,13 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 										cout <<"Long"<<endl;
 										
 									}
+{String}  {
+
+     colNo += strlen(yytext);
+	 cout <<"string\n"; 
+
+}
+
 											
 
 %%

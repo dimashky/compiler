@@ -1,14 +1,38 @@
-#define INT 1	// integer
-#define FLOAT 2	// float
-#define DOUBLE 3 //double
-#define STRING 4 //string
-#define ID 5	//identifier
+#pragma once
 
-#define PLUS 6	//+
-#define MIN 7	//-
-#define MULT 8	//*
-#define DIV 9	//÷
+enum primitive {
+	T_PRIMITIVE_INTEGER = 1,
+	T_PRIMITIVE_FLOAT,
+	T_PRIMITIVE_DOUBLE,
+	T_PRIMITIVE_BOOLEAN,
+	T_PRIMITIVE_STRING,
+	T_PRIMITIVE_CHAR,
+	T_PRIMITIVE_VOID
+};
 
-#define PP 10	//++
-#define MM 11	//--
+enum SymbolTypes {
+	FUNCTION = 1,
+	CLASS,
+	OBJECT,
+	VARIABLE,
+	INTERFACE,
+	TYPE,
+	DATA_MEMBER,
+	METHODS,
+	CASE_LABEL,
+	PARAMETER,
+	ERROR_SYMBOL
+};
+enum AccessModifiers {
+	DEFAULT = 1,
+	PUBLIC_ACCESS,
+	PRIVATE_ACCESS,
+	PROTECTED_ACCESS
+};
+enum StorageModifier {
+	DEFAULT_STORAGE = 5, 
+	FINAL_STORAGE, 
+	STATIC_STORAGE, 
+	FINAL_STATIC_STORAGE
+};
 
