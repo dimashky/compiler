@@ -27,13 +27,13 @@
 
 
 /* Flex definition */
-
+Real					([+ -]?[0-9]+"."+[0-9]+)|([+ -]?[0-9]+"."+[0-9]+[e E]+[0-9]+)|([+ -]?[0-9]+[e E]+[0-9]+)
 Single_line_comment		(\/\/)+[^\n]*
-Integer					[+ -]?[1-9][0-9]*|0
-Float                   ([+ -]?[0-9]+[f F]?)|([+ -]?[0-9]+"."+[0-9]+[f F])|([+ -]?[1]+[e E]+[0-9]+[f F])
-Double                  ([+ -]?[0-9]+[d D]?)|([+ -]?[0-9]+"."+[0-9]+[d D]?)|([+ -]?[1]+[e E]+[0-9]+[d D]?)
-Long                    [+ -]?[1-9][0-9]*[l L]?
-
+Integer					[+ -]?[0-9]*|0
+Float                   ({Integer}[f F])|({Real}[f F])
+Double                  ({Integer}[d D])|({Real}[d D]?)
+Long                    {Integer}[l L]?
+String					["c].*[c"]
 Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
@@ -184,7 +184,7 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 									
 																
-{Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");			return(ID);}
+{Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");		}
 
 {Integer}							{
 										colNo += strlen(yytext);
