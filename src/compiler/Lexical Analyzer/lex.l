@@ -5,6 +5,7 @@
 	#include <istream>
 	#include <ostream>
 	#include <FlexLexer.h>
+	#include "../parser/yacc.hpp"
 	#include <stdlib.h>
 	#include <unistd.h>
 	#include "../header/tokens.h"
@@ -236,7 +237,7 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 										cout<<"Integer"<<endl; 
 										
 									}
-{Float}							{
+{Float}								{
 										colNo += strlen(yytext);
 										float x=atof(yytext);
 										cout<<x<<endl;
@@ -250,19 +251,19 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 										cout <<"Double"<<endl;
 										
 									}
-{Long}							{
+{Long}								{
 										colNo += strlen(yytext);
 										long x=atol(yytext);
 										cout<<x<<endl;
 										cout <<"Long"<<endl;
 										
 									}
-{String}  {
+{String}							{
 
-     colNo += strlen(yytext);
-	 cout <<"string\n"; 
+										 colNo += strlen(yytext);
+										 cout <<"string\n"; 
 
-}
+									}
 
 											
 
@@ -272,10 +273,3 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
 /*** C Code Section **/
-
-int main(void)
-{
-	FlexLexer* lexer = new yyFlexLexer;
-	lexer->yylex();
-    return 0;
-}

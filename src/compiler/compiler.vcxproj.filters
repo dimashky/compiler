@@ -16,15 +16,24 @@
     <Filter Include="Source Files\Lexical Analyzer">
       <UniqueIdentifier>{a5645b82-0418-4d70-a9b6-c96c91144d12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Parser">
+      <UniqueIdentifier>{0bc6d24e-66c1-4a8a-95f6-449c4892f550}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Lexical Analyzer\lex.l">
       <Filter>Source Files\Lexical Analyzer</Filter>
     </None>
+    <None Include="Parser\yacc.y">
+      <Filter>Source Files\Parser</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.yy.cc">
       <Filter>Source Files\Lexical Analyzer</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\yacc.cpp">
+      <Filter>Source Files\Parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +44,9 @@
   <ItemGroup>
     <ClInclude Include="header\tokens.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\yacc.hpp">
+      <Filter>Source Files\Parser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
