@@ -596,7 +596,6 @@ static yyconst short int yy_chk[559] =
 	#include <istream>
 	#include <ostream>
 	#include <FlexLexer.h>
-	
 	#include "../parser/yacc.hpp"
 	#include <stdlib.h>
 	#include <unistd.h>
@@ -606,6 +605,20 @@ static yyconst short int yy_chk[559] =
 	int lineNo = 1;
 	int colNo = 1;
 
+	void printLiteral(char *str, int len){
+		for(int i=0; i < len; ++i){
+			if(str[i] != '\"'){
+				if(str[i] == '\\' && str[i+1] == 'n'){
+					printf("\n"),++i;
+				}else if(str[i] == '\\' && str[i+1] == 't'){
+					printf("\t"),++i;
+				}else{
+					printf("%c",str[i]);
+				}
+			}
+		}
+		printf("\n");
+	}
 /* options */
 /* This tells flex to read only one input file */
 /* define state */
@@ -613,7 +626,7 @@ static yyconst short int yy_chk[559] =
 
 /* Flex definition */
 /*** RULE Section ***/
-#line 615 "lex.yy.cc"
+#line 628 "lex.yy.cc"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -740,10 +753,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 51 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 64 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 
 
-#line 745 "lex.yy.cc"
+#line 758 "lex.yy.cc"
 
 	if ( yy_init )
 		{
@@ -828,599 +841,599 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 53 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("using static\n");}
+#line 66 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("using static\n");}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 54 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("using\n");		}
+#line 67 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("using\n");		 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 55 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("namespace\n");	}
+#line 68 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("namespace\n");	 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 59 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("if\n");			}
+#line 72 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("if\n");			}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 60 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("else\n");		}	
+#line 73 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("else\n");		}	
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 62 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("foreach\n");	}
+#line 75 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("foreach\n");	}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 63 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("for\n");		}				
+#line 76 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("for\n");		}				
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 64 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("as\n");			}				
+#line 77 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("as\n");			}				
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 65 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("while\n");		}
+#line 78 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("while\n");		}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 66 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("break\n");		}
+#line 79 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("break\n");		}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 67 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("switch\n");		}
+#line 80 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("switch\n");		}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 68 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("case\n");		}
+#line 81 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("case\n");		}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 69 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("do\n");			}
+#line 82 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("do\n");			}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 70 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("goto\n");		}
+#line 83 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("goto\n");		}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 71 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("default\n");	}
+#line 84 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("default\n");	}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 72 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("continue\n");	}
+#line 85 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("continue\n");	}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 74 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("class\n");		}
+#line 87 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("class\n");		}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 75 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("struct\n");		}
+#line 88 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("struct\n");		}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 76 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("interface\n");	}
+#line 89 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("interface\n");	}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 77 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("enum\n");		}
+#line 90 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("enum\n");		}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 80 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("public\n");		}
+#line 93 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("public\n");		}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 81 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("private\n");	}
+#line 94 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("private\n");	}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 82 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("protected\n");	}
+#line 95 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("protected\n");	}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 84 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("abstract\n");	}
+#line 97 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("abstract\n");	}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 85 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("sealed\n");		}
+#line 98 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("sealed\n");		}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 87 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("static\n");		}	
+#line 100 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("static\n");		}	
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 88 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("override\n");	}
+#line 101 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("override\n");	}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 89 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("virtual\n");	}
+#line 102 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("virtual\n");	}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 91 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("base\n");		}
+#line 104 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("base\n");		}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 92 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("this\n");		}
+#line 105 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("this\n");		}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 94 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("object\n");		}
+#line 107 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("object\n");		}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 97 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("try\n");		}
+#line 110 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("try\n");		}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 98 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("catch\n");		}
+#line 111 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("catch\n");		}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 99 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("throw\n");		}
+#line 112 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("throw\n");		}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 100 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("finally\n");	}
+#line 113 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("finally\n");	}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 104 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("char\n");		}
+#line 117 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("char\n");		}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 105 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("string\n");		}
+#line 118 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("string\n");		}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 106 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("float\n");		}				
+#line 119 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("float\n");		}				
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 107 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("double\n");		}				
+#line 120 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("double\n");		}				
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 108 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("byte\n");		}
+#line 121 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("byte\n");		}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 109 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("sbyte\n");		}
+#line 122 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("sbyte\n");		}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 110 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("short\n");		}
+#line 123 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("short\n");		}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 111 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("ushort\n");		}
+#line 124 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("ushort\n");		}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 112 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("int\n");		}
+#line 125 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("int\n");		}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 113 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("uint\n");		}
+#line 126 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("uint\n");		}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 114 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("long\n");		}
+#line 127 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("long\n");		}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 115 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("ulong\n");		}
+#line 128 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("ulong\n");		}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 116 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("decimal\n");	}
+#line 129 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("decimal\n");	}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 117 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("bool\n");		}		
+#line 130 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("bool\n");		}		
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 118 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("void\n");		}
+#line 131 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("void\n");		}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 120 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("checked\n");	}
+#line 133 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("checked\n");	}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 121 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("typeof\n");		}
+#line 134 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("typeof\n");		}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 122 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("sizeof\n");		}
+#line 135 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("sizeof\n");		}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 123 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("operator\n");	}
+#line 136 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("operator\n");	}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 125 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("true\n");		}
+#line 138 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("true\n");		}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 126 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("false\n");		}
+#line 139 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("false\n");		}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 129 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("const\n");		}			
+#line 142 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("const\n");		}			
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 130 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("ref\n");		}			
+#line 143 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("ref\n");		}			
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 131 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("new\n");		}		
+#line 144 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("new\n");		}		
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 132 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("readonly\n");	}		
+#line 145 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("readonly\n");	}		
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 133 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("null\n");		}		
+#line 146 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("null\n");		}		
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 135 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("params\n");		}		
+#line 148 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("params\n");		}		
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 138 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("fixed\n");		}				
+#line 151 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("fixed\n");		}				
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 140 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 153 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo=1;	lineNo++;	}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 141 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 154 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo+=4;	}			
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 142 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 155 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 143 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 156 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 144 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 157 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 145 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 158 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 146 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 159 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 147 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 160 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 148 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 161 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 149 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 162 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {	colNo++;	}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 156 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("plus\n");			}	
+#line 169 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("plus\n");			}	
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 157 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("minus\n");			}	
+#line 170 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("minus\n");			}	
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 158 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("multiple\n");		}	
+#line 171 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("multiple\n");		}	
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 159 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("divide\n");			}						
+#line 172 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("divide\n");			}						
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 160 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("assigment\n");		}					
+#line 173 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("assigment\n");		}					
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 161 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("plus plus\n");		}	
+#line 174 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("plus plus\n");		}	
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 162 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("minus minus\n");	}	
+#line 175 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("minus minus\n");	}	
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 163 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("plus eq\n");		}	
+#line 176 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("plus eq\n");		}	
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 164 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("minus eq\n");		}	
+#line 177 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("minus eq\n");		}	
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 165 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("mult eq\n");		}	
+#line 178 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("mult eq\n");		}	
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 166 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("div eq\n");			}	
+#line 179 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("div eq\n");			}	
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 170 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("smaller\n");		}
+#line 183 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("smaller\n");		}
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 171 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("bigger\n");			}
+#line 184 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("bigger\n");			}
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 172 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("smaller or eq\n");	}
+#line 185 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("smaller or eq\n");	}
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 173 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("bigger or eq\n");	}
+#line 186 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("bigger or eq\n");	}
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 174 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("equal\n");			}
+#line 187 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("equal\n");			}
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 175 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("not equal\n");		}
+#line 188 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("not equal\n");		}
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 182 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("oberator\n");	}
+#line 195 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("oberator\n");	}
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 183 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("namespace\n");	}
+#line 196 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("namespace\n");	}
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 184 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("event\n");		}
+#line 197 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("event\n");		}
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 185 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("extern\n");		}
+#line 198 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("extern\n");		}
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 186 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("implicit\n");	}
+#line 199 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("implicit\n");	}
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 187 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("internal\n");	}
+#line 200 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("internal\n");	}
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 188 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("lock\n");		}
+#line 201 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("lock\n");		}
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 189 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("uncheched\n");	}
+#line 202 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("uncheched\n");	}
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 191 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("set\n");		}
+#line 204 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("set\n");		}
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 198 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("unsafe\n");		}
+#line 211 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("unsafe\n");		}
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 203 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("delegate\n");	}
+#line 216 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("delegate\n");	}
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 204 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("explicit\n");	}
+#line 217 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("explicit\n");	}
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 206 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("get\n");		}
+#line 219 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("get\n");		}
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 207 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("in\n");			}
+#line 220 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("in\n");			}
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 208 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("is\n");			}
+#line 221 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("is\n");			}
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 210 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("out\n");		}
+#line 223 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("out\n");		}
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 212 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("reaonly\n");	}
+#line 225 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("reaonly\n");	}
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 213 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("return\n");		}
+#line 226 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("return\n");		}
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 215 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("stackloc\n");	}
+#line 228 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("stackloc\n");	}
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 216 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("unit\n");		}
+#line 229 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("unit\n");		}
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 218 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("value\n");		}
+#line 231 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("value\n");		}
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 219 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{	colNo += strlen(yytext);	printf("volatle\n");	}
+#line 232 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{	colNo += yyleng;	printf("volatle\n");	}
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 223 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 236 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { BEGIN multilinecomment; }
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 224 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 237 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {;}
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 225 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 238 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {lineNo++;}
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 226 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 239 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { BEGIN INITIAL;	printf("multi line comment.\n");}
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 228 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 241 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { printf("single line comment.\n");	lineNo++;	}
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 232 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ 	colNo += strlen(yytext);	printf("Identifier\n");		}
+#line 245 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ 	colNo += yyleng;	printf("Identifier\n");		}
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 234 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 247 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
-										colNo += strlen(yytext);
+										colNo += yyleng;
 										int x=atoi(yytext);
 										cout<<x<<endl;
 										cout<<"Integer"<<endl; 
@@ -1429,31 +1442,26 @@ YY_RULE_SETUP
 	YY_BREAK
 case 120:
 YY_RULE_SETUP
-#line 241 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 254 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
-										colNo += strlen(yytext);
-										float x=atof(yytext);
-										cout<<x<<endl;
-										cout <<"Float"<<endl;
-										
+										colNo += yyleng;
+										cout<<atof(yytext)<<" is Float"<<endl;
+																
 									}
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 248 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 259 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
-										colNo += strlen(yytext);
-										double x=atof(yytext);
-										cout<<x<<endl;
-										cout <<"Double"<<endl;
-										
+										colNo += yyleng;
+										cout<<atof(yytext)<<" is Double"<<endl; 
 									}
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 255 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 263 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
-										colNo += strlen(yytext);
+										colNo += yyleng;
 										long x=atol(yytext);
 										cout<<x<<endl;
 										cout <<"Long"<<endl;
@@ -1462,21 +1470,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 123:
 YY_RULE_SETUP
-#line 262 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 270 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
 
-     colNo += strlen(yytext);
-	 cout<<typeid(yytext).name()<<endl;
-	 printf("%s\n",yytext); 
-
-}
+										 colNo += yyleng;
+										 printLiteral(yytext,yyleng);
+									}
 	YY_BREAK
 case 124:
 YY_RULE_SETUP
-#line 272 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 278 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 ECHO;
 	YY_BREAK
-#line 1478 "lex.yy.cc"
+#line 1484 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(multilinecomment):
 	yyterminate();
@@ -2284,10 +2290,11 @@ int main()
 	return 0;
 	}
 #endif
-#line 272 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 278 "C:\\Users\\Mohamed Khair\\Desktop\\shit\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 
 
 
 
 
 /*** C Code Section **/
+

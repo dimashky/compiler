@@ -14,6 +14,20 @@
 	int lineNo = 1;
 	int colNo = 1;
 
+	void printLiteral(char *str, int len){
+		for(int i=0; i < len; ++i){
+			if(str[i] != '\"'){
+				if(str[i] == '\\' && str[i+1] == 'n'){
+					printf("\n"),++i;
+				}else if(str[i] == '\\' && str[i+1] == 't'){
+					printf("\t"),++i;
+				}else{
+					printf("%c",str[i]);
+				}
+			}
+		}
+		printf("\n");
+	}
 %}
 
 /* options */
@@ -49,92 +63,92 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 %%
 
-"using static"	{	colNo += strlen(yytext);	printf("using static\n");}
-"using"			{	colNo += strlen(yytext);	printf("using\n");		}
-"namespace"		{	colNo += strlen(yytext);	printf("namespace\n");	}
+"using static"	{	colNo += yyleng;	printf("using static\n");}
+"using"			{	colNo += yyleng;	printf("using\n");		 }
+"namespace"		{	colNo += yyleng;	printf("namespace\n");	 }
 
 
 
-"if"			{	colNo += strlen(yytext);	printf("if\n");			}
-"else"			{	colNo += strlen(yytext);	printf("else\n");		}	
+"if"			{	colNo += yyleng;	printf("if\n");			}
+"else"			{	colNo += yyleng;	printf("else\n");		}	
 
-"foreach"		{	colNo += strlen(yytext);	printf("foreach\n");	}
-"for"			{	colNo += strlen(yytext);	printf("for\n");		}				
-"as"			{	colNo += strlen(yytext);	printf("as\n");			}				
-"while"			{	colNo += strlen(yytext);	printf("while\n");		}
-"break"			{	colNo += strlen(yytext);	printf("break\n");		}
-"switch"		{	colNo += strlen(yytext);	printf("switch\n");		}
-"case"			{	colNo += strlen(yytext);	printf("case\n");		}
-"do"			{	colNo += strlen(yytext);	printf("do\n");			}
-"goto"			{	colNo += strlen(yytext);	printf("goto\n");		}
-"default"		{	colNo += strlen(yytext);	printf("default\n");	}
-"continue"		{	colNo += strlen(yytext);	printf("continue\n");	}
+"foreach"		{	colNo += yyleng;	printf("foreach\n");	}
+"for"			{	colNo += yyleng;	printf("for\n");		}				
+"as"			{	colNo += yyleng;	printf("as\n");			}				
+"while"			{	colNo += yyleng;	printf("while\n");		}
+"break"			{	colNo += yyleng;	printf("break\n");		}
+"switch"		{	colNo += yyleng;	printf("switch\n");		}
+"case"			{	colNo += yyleng;	printf("case\n");		}
+"do"			{	colNo += yyleng;	printf("do\n");			}
+"goto"			{	colNo += yyleng;	printf("goto\n");		}
+"default"		{	colNo += yyleng;	printf("default\n");	}
+"continue"		{	colNo += yyleng;	printf("continue\n");	}
 				
-"class"			{	colNo += strlen(yytext);	printf("class\n");		}
-"struct"		{	colNo += strlen(yytext);	printf("struct\n");		}
-"interface"		{	colNo += strlen(yytext);	printf("interface\n");	}
-"enum"			{	colNo += strlen(yytext);	printf("enum\n");		}
+"class"			{	colNo += yyleng;	printf("class\n");		}
+"struct"		{	colNo += yyleng;	printf("struct\n");		}
+"interface"		{	colNo += yyleng;	printf("interface\n");	}
+"enum"			{	colNo += yyleng;	printf("enum\n");		}
 
 
-"public"		{	colNo += strlen(yytext);	printf("public\n");		}
-"private"		{	colNo += strlen(yytext);	printf("private\n");	}
-"protected"		{	colNo += strlen(yytext);	printf("protected\n");	}
+"public"		{	colNo += yyleng;	printf("public\n");		}
+"private"		{	colNo += yyleng;	printf("private\n");	}
+"protected"		{	colNo += yyleng;	printf("protected\n");	}
 		
-"abstract"		{	colNo += strlen(yytext);	printf("abstract\n");	}
-"sealed"		{	colNo += strlen(yytext);	printf("sealed\n");		}
+"abstract"		{	colNo += yyleng;	printf("abstract\n");	}
+"sealed"		{	colNo += yyleng;	printf("sealed\n");		}
 
-"static"		{	colNo += strlen(yytext);	printf("static\n");		}	
-"override"		{	colNo += strlen(yytext);	printf("override\n");	}
-"virtual"		{	colNo += strlen(yytext);	printf("virtual\n");	}
+"static"		{	colNo += yyleng;	printf("static\n");		}	
+"override"		{	colNo += yyleng;	printf("override\n");	}
+"virtual"		{	colNo += yyleng;	printf("virtual\n");	}
 
-"base"			{	colNo += strlen(yytext);	printf("base\n");		}
-"this"			{	colNo += strlen(yytext);	printf("this\n");		}
+"base"			{	colNo += yyleng;	printf("base\n");		}
+"this"			{	colNo += yyleng;	printf("this\n");		}
 
-"object"		{	colNo += strlen(yytext);	printf("object\n");		}
-
-				
-"try"			{	colNo += strlen(yytext);	printf("try\n");		}
-"catch"			{	colNo += strlen(yytext);	printf("catch\n");		}
-"throw"			{	colNo += strlen(yytext);	printf("throw\n");		}
-"finally"		{	colNo += strlen(yytext);	printf("finally\n");	}
-
-
-
-"char"			{	colNo += strlen(yytext);	printf("char\n");		}
-"string"		{	colNo += strlen(yytext);	printf("string\n");		}
-"float"			{	colNo += strlen(yytext);	printf("float\n");		}				
-"double"		{	colNo += strlen(yytext);	printf("double\n");		}				
-"byte"			{	colNo += strlen(yytext);	printf("byte\n");		}
-"sbyte"			{	colNo += strlen(yytext);	printf("sbyte\n");		}
-"short"			{	colNo += strlen(yytext);	printf("short\n");		}
-"ushort"		{	colNo += strlen(yytext);	printf("ushort\n");		}
-"int"			{	colNo += strlen(yytext);	printf("int\n");		}
-"uint"			{	colNo += strlen(yytext);	printf("uint\n");		}
-"long"			{	colNo += strlen(yytext);	printf("long\n");		}
-"ulong"			{	colNo += strlen(yytext);	printf("ulong\n");		}
-"decimal"		{	colNo += strlen(yytext);	printf("decimal\n");	}
-"bool"			{	colNo += strlen(yytext);	printf("bool\n");		}		
-"void"			{	colNo += strlen(yytext);	printf("void\n");		}
-
-"checked"		{	colNo += strlen(yytext);	printf("checked\n");	}
-"typeof"		{	colNo += strlen(yytext);	printf("typeof\n");		}
-"sizeof"		{	colNo += strlen(yytext);	printf("sizeof\n");		}
-"operator"		{	colNo += strlen(yytext);	printf("operator\n");	}
-
-"true"			{	colNo += strlen(yytext);	printf("true\n");		}
-"false"			{	colNo += strlen(yytext);	printf("false\n");		}
+"object"		{	colNo += yyleng;	printf("object\n");		}
 
 				
-"const"			{	colNo += strlen(yytext);	printf("const\n");		}			
-"ref"			{	colNo += strlen(yytext);	printf("ref\n");		}			
-"new"			{	colNo += strlen(yytext);	printf("new\n");		}		
-"readonly"		{	colNo += strlen(yytext);	printf("readonly\n");	}		
-"null"			{	colNo += strlen(yytext);	printf("null\n");		}		
-
-"params"		{	colNo += strlen(yytext);	printf("params\n");		}		
+"try"			{	colNo += yyleng;	printf("try\n");		}
+"catch"			{	colNo += yyleng;	printf("catch\n");		}
+"throw"			{	colNo += yyleng;	printf("throw\n");		}
+"finally"		{	colNo += yyleng;	printf("finally\n");	}
 
 
-"fixed"			{	colNo += strlen(yytext);	printf("fixed\n");		}				
+
+"char"			{	colNo += yyleng;	printf("char\n");		}
+"string"		{	colNo += yyleng;	printf("string\n");		}
+"float"			{	colNo += yyleng;	printf("float\n");		}				
+"double"		{	colNo += yyleng;	printf("double\n");		}				
+"byte"			{	colNo += yyleng;	printf("byte\n");		}
+"sbyte"			{	colNo += yyleng;	printf("sbyte\n");		}
+"short"			{	colNo += yyleng;	printf("short\n");		}
+"ushort"		{	colNo += yyleng;	printf("ushort\n");		}
+"int"			{	colNo += yyleng;	printf("int\n");		}
+"uint"			{	colNo += yyleng;	printf("uint\n");		}
+"long"			{	colNo += yyleng;	printf("long\n");		}
+"ulong"			{	colNo += yyleng;	printf("ulong\n");		}
+"decimal"		{	colNo += yyleng;	printf("decimal\n");	}
+"bool"			{	colNo += yyleng;	printf("bool\n");		}		
+"void"			{	colNo += yyleng;	printf("void\n");		}
+
+"checked"		{	colNo += yyleng;	printf("checked\n");	}
+"typeof"		{	colNo += yyleng;	printf("typeof\n");		}
+"sizeof"		{	colNo += yyleng;	printf("sizeof\n");		}
+"operator"		{	colNo += yyleng;	printf("operator\n");	}
+
+"true"			{	colNo += yyleng;	printf("true\n");		}
+"false"			{	colNo += yyleng;	printf("false\n");		}
+
+				
+"const"			{	colNo += yyleng;	printf("const\n");		}			
+"ref"			{	colNo += yyleng;	printf("ref\n");		}			
+"new"			{	colNo += yyleng;	printf("new\n");		}		
+"readonly"		{	colNo += yyleng;	printf("readonly\n");	}		
+"null"			{	colNo += yyleng;	printf("null\n");		}		
+
+"params"		{	colNo += yyleng;	printf("params\n");		}		
+
+
+"fixed"			{	colNo += yyleng;	printf("fixed\n");		}				
 
 \n				{	colNo=1;	lineNo++;	}
 \t 				{	colNo+=4;	}			
@@ -152,70 +166,70 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 				
 				
 				
-\+			{	colNo += strlen(yytext);	printf("plus\n");			}	
-"-"			{	colNo += strlen(yytext);	printf("minus\n");			}	
-"*"			{	colNo += strlen(yytext);	printf("multiple\n");		}	
-"/"			{	colNo += strlen(yytext);	printf("divide\n");			}						
-"="			{	colNo += strlen(yytext);	printf("assigment\n");		}					
-"++"		{	colNo += strlen(yytext);	printf("plus plus\n");		}	
-"--"		{	colNo += strlen(yytext);	printf("minus minus\n");	}	
-"+="		{	colNo += strlen(yytext);	printf("plus eq\n");		}	
-"-="		{	colNo += strlen(yytext);	printf("minus eq\n");		}	
-"*="		{	colNo += strlen(yytext);	printf("mult eq\n");		}	
-"/="		{	colNo += strlen(yytext);	printf("div eq\n");			}	
+\+			{	colNo += yyleng;	printf("plus\n");			}	
+"-"			{	colNo += yyleng;	printf("minus\n");			}	
+"*"			{	colNo += yyleng;	printf("multiple\n");		}	
+"/"			{	colNo += yyleng;	printf("divide\n");			}						
+"="			{	colNo += yyleng;	printf("assigment\n");		}					
+"++"		{	colNo += yyleng;	printf("plus plus\n");		}	
+"--"		{	colNo += yyleng;	printf("minus minus\n");	}	
+"+="		{	colNo += yyleng;	printf("plus eq\n");		}	
+"-="		{	colNo += yyleng;	printf("minus eq\n");		}	
+"*="		{	colNo += yyleng;	printf("mult eq\n");		}	
+"/="		{	colNo += yyleng;	printf("div eq\n");			}	
 
 
 
-"<"			{	colNo += strlen(yytext);	printf("smaller\n");		}
-">"			{	colNo += strlen(yytext);	printf("bigger\n");			}
-"<="		{	colNo += strlen(yytext);	printf("smaller or eq\n");	}
-">="		{	colNo += strlen(yytext);	printf("bigger or eq\n");	}
-"=="		{	colNo += strlen(yytext);	printf("equal\n");			}
-"!="		{	colNo += strlen(yytext);	printf("not equal\n");		}
-
-
-
-
-
-
-"oberator"	{	colNo += strlen(yytext);	printf("oberator\n");	}
-"Namespace" {	colNo += strlen(yytext);	printf("namespace\n");	}
-"event"		{	colNo += strlen(yytext);	printf("event\n");		}
-"extern"	{	colNo += strlen(yytext);	printf("extern\n");		}
-"implicit"	{	colNo += strlen(yytext);	printf("implicit\n");	}
-"internal"  {	colNo += strlen(yytext);	printf("internal\n");	}
-"lock"		{	colNo += strlen(yytext);	printf("lock\n");		}
-"uncheched"	{	colNo += strlen(yytext);	printf("uncheched\n");	}
-
-"set"		{	colNo += strlen(yytext);	printf("set\n");		}
+"<"			{	colNo += yyleng;	printf("smaller\n");		}
+">"			{	colNo += yyleng;	printf("bigger\n");			}
+"<="		{	colNo += yyleng;	printf("smaller or eq\n");	}
+">="		{	colNo += yyleng;	printf("bigger or eq\n");	}
+"=="		{	colNo += yyleng;	printf("equal\n");			}
+"!="		{	colNo += yyleng;	printf("not equal\n");		}
 
 
 
 
 
 
-"unsafe"	{	colNo += strlen(yytext);	printf("unsafe\n");		}
+"oberator"	{	colNo += yyleng;	printf("oberator\n");	}
+"Namespace" {	colNo += yyleng;	printf("namespace\n");	}
+"event"		{	colNo += yyleng;	printf("event\n");		}
+"extern"	{	colNo += yyleng;	printf("extern\n");		}
+"implicit"	{	colNo += yyleng;	printf("implicit\n");	}
+"internal"  {	colNo += yyleng;	printf("internal\n");	}
+"lock"		{	colNo += yyleng;	printf("lock\n");		}
+"uncheched"	{	colNo += yyleng;	printf("uncheched\n");	}
+
+"set"		{	colNo += yyleng;	printf("set\n");		}
 
 
 
 
-"delegate"	{	colNo += strlen(yytext);	printf("delegate\n");	}
-"explicit"	{	colNo += strlen(yytext);	printf("explicit\n");	}
 
-"get"		{	colNo += strlen(yytext);	printf("get\n");		}
-"in"		{	colNo += strlen(yytext);	printf("in\n");			}
-"is"		{	colNo += strlen(yytext);	printf("is\n");			}
 
-"out"		{	colNo += strlen(yytext);	printf("out\n");		}
+"unsafe"	{	colNo += yyleng;	printf("unsafe\n");		}
 
-"reaonly"	{	colNo += strlen(yytext);	printf("reaonly\n");	}
-"return"	{	colNo += strlen(yytext);	printf("return\n");		}
 
-"stackloc"	{	colNo += strlen(yytext);	printf("stackloc\n");	}
-"unit"		{	colNo += strlen(yytext);	printf("unit\n");		}
 
-"value"		{	colNo += strlen(yytext);	printf("value\n");		}
-"volatle"	{	colNo += strlen(yytext);	printf("volatle\n");	}
+
+"delegate"	{	colNo += yyleng;	printf("delegate\n");	}
+"explicit"	{	colNo += yyleng;	printf("explicit\n");	}
+
+"get"		{	colNo += yyleng;	printf("get\n");		}
+"in"		{	colNo += yyleng;	printf("in\n");			}
+"is"		{	colNo += yyleng;	printf("is\n");			}
+
+"out"		{	colNo += yyleng;	printf("out\n");		}
+
+"reaonly"	{	colNo += yyleng;	printf("reaonly\n");	}
+"return"	{	colNo += yyleng;	printf("return\n");		}
+
+"stackloc"	{	colNo += yyleng;	printf("stackloc\n");	}
+"unit"		{	colNo += yyleng;	printf("unit\n");		}
+
+"value"		{	colNo += yyleng;	printf("value\n");		}
+"volatle"	{	colNo += yyleng;	printf("volatle\n");	}
 
 
 
@@ -228,31 +242,26 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 									
 																
-{Identifier}						{ 	colNo += strlen(yytext);	printf("Identifier\n");		}
+{Identifier}						{ 	colNo += yyleng;	printf("Identifier\n");		}
 
 {Integer}							{
-										colNo += strlen(yytext);
+										colNo += yyleng;
 										int x=atoi(yytext);
 										cout<<x<<endl;
 										cout<<"Integer"<<endl; 
 										
 									}
 {Float}								{
-										colNo += strlen(yytext);
-										float x=atof(yytext);
-										cout<<x<<endl;
-										cout <<"Float"<<endl;
-										
+										colNo += yyleng;
+										cout<<atof(yytext)<<" is Float"<<endl;
+																
 									}
 {Double}							{
-										colNo += strlen(yytext);
-										double x=atof(yytext);
-										cout<<x<<endl;
-										cout <<"Double"<<endl;
-										
+										colNo += yyleng;
+										cout<<atof(yytext)<<" is Double"<<endl; 
 									}
 {Long}								{
-										colNo += strlen(yytext);
+										colNo += yyleng;
 										long x=atol(yytext);
 										cout<<x<<endl;
 										cout <<"Long"<<endl;
@@ -260,9 +269,8 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 									}
 {String}							{
 
-										 colNo += strlen(yytext);
-										 cout <<"string\n"; 
-
+										 colNo += yyleng;
+										 printLiteral(yytext,yyleng);
 									}
 
 											
@@ -273,3 +281,4 @@ Identifier              [a-zA-Z_][a-zA-Z0-9_]*
 
 
 /*** C Code Section **/
+
