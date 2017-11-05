@@ -135,6 +135,7 @@ bad_identifier			[&^%$#@!~{}"?,|\/{}0-9]*{identifier}
 
 {identifier}          { doForReturn(yytext); doForName(yytext); return token_for(yytext); }
 
+{bad_identifier}	  { doForReturn(yytext); doForName(yytext); lexical_error("invalid token", yytext); return BAD_IDENTIFIER; }
 
 
 
@@ -279,9 +280,9 @@ static int is_allowed_char(const char c)
 
 void lexical_error(const char *msg, char *yytext)
 {
-/*
-	FILE *f = fopen("Lexical Log.txt","a");
+
+	FILE *f = fopen("Lexical Errors.log","a");
 	fprintf(f,"line:%d-col:%d -> lexical error (%s) [%s]\n",line_no,col_no,msg,yytext);
 	fclose(f);
-*/
+
 }
