@@ -1,284 +1,287 @@
-/*** Definition Section ***/
-/* C code to be copied verbatim */
 %{
-	#include <iostream>
-	#include <istream>
-	#include <ostream>
-	#include <FlexLexer.h>
-	#include "../parser/yacc.hpp"
-	#include <stdlib.h>
+	#include <string.h>
 	#include <unistd.h>
-	#include "../header/tokens.h"
-	using namespace std;
+	#include <iostream>
+	#include <FlexLexer.h>
+	#include <string>
 
-	int lineNo = 1;
-	int colNo = 1;
+	#include "../parser/yacc.hpp"
 
-	void printLiteral(char *str, int len){
-		for(int i=0; i < len; ++i){
-			if(str[i] != '\"'){
-				if(str[i] == '\\' && str[i+1] == 'n'){
-					printf("\n"),++i;
-				}else if(str[i] == '\\' && str[i+1] == 't'){
-					printf("\t"),++i;
-				}else{
-					printf("%c",str[i]);
-				}
-			}
-		}
-		printf("\n");
+	int line_no = 1;
+	int col_no = 1;
+
+	void lexical_error(const char *, char *);
+	static int token_for(const char *);
+	static int is_allowed_char(const char );
+
+	void doForReturn(char * yytext){
+		yylval.r.col_no = col_no;
+		yylval.r.line_no = line_no;
+		col_no += strlen(yytext);
+	}
+	void doForName(char* yytext){
+		yylval.r.str = new char[255];
+		yylval.r.str[0] = '\0';
+		strcpy(yylval.r.str, yytext);
 	}
 %}
 
-/* options */
-
-%option c++
-
-/* This tells flex to read only one input file */
 %option noyywrap
+%option c++
+%option stack
 
-/* define state */
 %x multilinecomment
 
+single_line_comment    "//".*
 
-/* Flex definition */
-Real					([+ -]?[0-9]+"."+[0-9]+)|([+ -]?[0-9]+"."+[0-9]+[e E]+[0-9]+)|([+ -]?[0-9]+[e E]+[0-9]+)
-Single_line_comment		(\/\/)+[^\n]*
+dec_digit              [0-9]
+hex_digit              [0-9A-Fa-f]
+int_suffix             [UuLl]|[Uu][Ll]|[Ll][Uu]
+dec_literal            {dec_digit}+{int_suffix}?
+hex_literal            0[xX]{hex_digit}+{int_suffix}?
+integer_literal        {dec_literal}|{hex_literal}
 
-Integer					[+ -]?[0-9]*|0
-Float                   ({Integer}[f F])|({Real}[f F])
-Double                  ({Integer}[d D])|({Real}[d D]?)
-Long                    {Integer}[l L]?
-String					["].*["]
-Identifier              [a-zA-Z_][a-zA-Z0-9_]*
+real_suffix            [FfDdMm]
+sign                   [+\-]
+exponent_part          [eE]{sign}?{dec_digit}+
+whole_real1            {dec_digit}+{exponent_part}{real_suffix}?
+whole_real2            {dec_digit}+{real_suffix}
+part_real              {dec_digit}*\.{dec_digit}+{exponent_part}?{real_suffix}?
+real_literal           {whole_real1}|{whole_real2}|{part_real}
+
+single_char            [^\\\']
+simple_esc_seq         \\[\'\"\\0abfnrtv]
+uni_esc_seq1           \\u{hex_digit}{4}
+uni_esc_seq2           \\U{hex_digit}{8}
+uni_esc_seq            {uni_esc_seq1}|{uni_esc_seq2}
+hex_esc_seq            \\x{hex_digit}{1,4}
+character              {single_char}|{simple_esc_seq}|{hex_esc_seq}|{uni_esc_seq}
+character_literal      \'{character}\'
+
+
+single_string_char     [^\\\"]
+reg_string_char        {single_string_char}|{simple_esc_seq}|{hex_esc_seq}|{uni_esc_seq}
+regular_string         \"{reg_string_char}*\"
+single_verbatim_char   [^\"]
+quote_esc_seq          \"\"
+verb_string_char       {single_verbatim_char}|{quote_esc_seq}
+verbatim_string        @\"{verb_string_char}*\"
+string_literal         {regular_string}|{verbatim_string}
+
+white_space			  [ \t\n\r]
+
+letter_char            [A-Za-z]
+ident_char             {dec_digit}|{letter_char}|"_"|"@"
+identifier             ({letter_char}|"_"){ident_char}*
+bad_identifier			[&^%$#@!~{}"?,|\/{}0-9]*{identifier}
 
 
 
+%x IN_COMMENT
 
-
-
-
-
-/*** RULE Section ***/
+%s IN_ATTRIB IN_ACCESSOR IN_GETSET
 
 %%
-
-"using static"	{	colNo += yyleng;	printf("using static\n");}
-"using"			{	colNo += yyleng;	printf("using\n");		 }
-"namespace"		{	colNo += yyleng;	printf("namespace\n");	 }
-
-
-
-"if"			{	colNo += yyleng;	printf("if\n");			}
-"else"			{	colNo += yyleng;	printf("else\n");		}	
-
-"foreach"		{	colNo += yyleng;	printf("foreach\n");	}
-"for"			{	colNo += yyleng;	printf("for\n");		}				
-"as"			{	colNo += yyleng;	printf("as\n");			}				
-"while"			{	colNo += yyleng;	printf("while\n");		}
-"break"			{	colNo += yyleng;	printf("break\n");		}
-"switch"		{	colNo += yyleng;	printf("switch\n");		}
-"case"			{	colNo += yyleng;	printf("case\n");		}
-"do"			{	colNo += yyleng;	printf("do\n");			}
-"goto"			{	colNo += yyleng;	printf("goto\n");		}
-"default"		{	colNo += yyleng;	printf("default\n");	}
-"continue"		{	colNo += yyleng;	printf("continue\n");	}
-				
-"class"			{	colNo += yyleng;	printf("class\n");		}
-"struct"		{	colNo += yyleng;	printf("struct\n");		}
-"interface"		{	colNo += yyleng;	printf("interface\n");	}
-"enum"			{	colNo += yyleng;	printf("enum\n");		}
+					/***** White comments *****/
+\n				{ col_no=1; line_no++; }
+\t				{ col_no+=4; }
+" "				{ col_no++; }
 
 
-"public"		{	colNo += yyleng;	printf("public\n");		}
-"private"		{	colNo += yyleng;	printf("private\n");	}
-"protected"		{	colNo += yyleng;	printf("protected\n");	}
-		
-"abstract"		{	colNo += yyleng;	printf("abstract\n");	}
-"sealed"		{	colNo += yyleng;	printf("sealed\n");		}
-
-"static"		{	colNo += yyleng;	printf("static\n");		}	
-"override"		{	colNo += yyleng;	printf("override\n");	}
-"virtual"		{	colNo += yyleng;	printf("virtual\n");	}
-
-"base"			{	colNo += yyleng;	printf("base\n");		}
-"this"			{	colNo += yyleng;	printf("this\n");		}
-
-"object"		{	colNo += yyleng;	printf("object\n");		}
-
-				
-"try"			{	colNo += yyleng;	printf("try\n");		}
-"catch"			{	colNo += yyleng;	printf("catch\n");		}
-"throw"			{	colNo += yyleng;	printf("throw\n");		}
-"finally"		{	colNo += yyleng;	printf("finally\n");	}
-
-
-
-"char"			{	colNo += yyleng;	printf("char\n");		}
-"string"		{	colNo += yyleng;	printf("string\n");		}
-"float"			{	colNo += yyleng;	printf("float\n");		}				
-"double"		{	colNo += yyleng;	printf("double\n");		}				
-"byte"			{	colNo += yyleng;	printf("byte\n");		}
-"sbyte"			{	colNo += yyleng;	printf("sbyte\n");		}
-"short"			{	colNo += yyleng;	printf("short\n");		}
-"ushort"		{	colNo += yyleng;	printf("ushort\n");		}
-"int"			{	colNo += yyleng;	printf("int\n");		}
-"uint"			{	colNo += yyleng;	printf("uint\n");		}
-"long"			{	colNo += yyleng;	printf("long\n");		}
-"ulong"			{	colNo += yyleng;	printf("ulong\n");		}
-"decimal"		{	colNo += yyleng;	printf("decimal\n");	}
-"bool"			{	colNo += yyleng;	printf("bool\n");		}		
-"void"			{	colNo += yyleng;	printf("void\n");		}
-
-"checked"		{	colNo += yyleng;	printf("checked\n");	}
-"typeof"		{	colNo += yyleng;	printf("typeof\n");		}
-"sizeof"		{	colNo += yyleng;	printf("sizeof\n");		}
-"operator"		{	colNo += yyleng;	printf("operator\n");	}
-
-"true"			{	colNo += yyleng;	printf("true\n");		}
-"false"			{	colNo += yyleng;	printf("false\n");		}
-
-				
-"const"			{	colNo += yyleng;	printf("const\n");		}			
-"ref"			{	colNo += yyleng;	printf("ref\n");		}			
-"new"			{	colNo += yyleng;	printf("new\n");		}		
-"readonly"		{	colNo += yyleng;	printf("readonly\n");	}		
-"null"			{	colNo += yyleng;	printf("null\n");		}		
-
-"params"		{	colNo += yyleng;	printf("params\n");		}		
-
-
-"fixed"			{	colNo += yyleng;	printf("fixed\n");		}				
-
-\n				{	colNo=1;	lineNo++;	}
-\t 				{	colNo+=4;	}			
-" "				{	colNo++;	}
-"("				{	colNo++;	}
-")"				{	colNo++;	}
-"{"				{	colNo++;	}
-"}"				{	colNo++;	}
-"["				{	colNo++;	}
-"]"				{	colNo++;	}
-";"				{	colNo++;	}
-
-
-				
-				
-				
-				
-\+			{	colNo += yyleng;	printf("plus\n");			}	
-"-"			{	colNo += yyleng;	printf("minus\n");			}	
-"*"			{	colNo += yyleng;	printf("multiple\n");		}	
-"/"			{	colNo += yyleng;	printf("divide\n");			}						
-"="			{	colNo += yyleng;	printf("assigment\n");		}					
-"++"		{	colNo += yyleng;	printf("plus plus\n");		}	
-"--"		{	colNo += yyleng;	printf("minus minus\n");	}	
-"+="		{	colNo += yyleng;	printf("plus eq\n");		}	
-"-="		{	colNo += yyleng;	printf("minus eq\n");		}	
-"*="		{	colNo += yyleng;	printf("mult eq\n");		}	
-"/="		{	colNo += yyleng;	printf("div eq\n");			}	
-
-
-
-"<"			{	colNo += yyleng;	printf("smaller\n");		}
-">"			{	colNo += yyleng;	printf("bigger\n");			}
-"<="		{	colNo += yyleng;	printf("smaller or eq\n");	}
-">="		{	colNo += yyleng;	printf("bigger or eq\n");	}
-"=="		{	colNo += yyleng;	printf("equal\n");			}
-"!="		{	colNo += yyleng;	printf("not equal\n");		}
-
-
-
-
-
-
-"oberator"	{	colNo += yyleng;	printf("oberator\n");	}
-"Namespace" {	colNo += yyleng;	printf("namespace\n");	}
-"event"		{	colNo += yyleng;	printf("event\n");		}
-"extern"	{	colNo += yyleng;	printf("extern\n");		}
-"implicit"	{	colNo += yyleng;	printf("implicit\n");	}
-"internal"  {	colNo += yyleng;	printf("internal\n");	}
-"lock"		{	colNo += yyleng;	printf("lock\n");		}
-"uncheched"	{	colNo += yyleng;	printf("uncheched\n");	}
-
-"set"		{	colNo += yyleng;	printf("set\n");		}
-
-
-
-
-
-
-"unsafe"	{	colNo += yyleng;	printf("unsafe\n");		}
-
-
-
-
-"delegate"	{	colNo += yyleng;	printf("delegate\n");	}
-"explicit"	{	colNo += yyleng;	printf("explicit\n");	}
-
-"get"		{	colNo += yyleng;	printf("get\n");		}
-"in"		{	colNo += yyleng;	printf("in\n");			}
-"is"		{	colNo += yyleng;	printf("is\n");			}
-
-"out"		{	colNo += yyleng;	printf("out\n");		}
-
-"reaonly"	{	colNo += yyleng;	printf("reaonly\n");	}
-"return"	{	colNo += yyleng;	printf("return\n");		}
-
-"stackloc"	{	colNo += yyleng;	printf("stackloc\n");	}
-"unit"		{	colNo += yyleng;	printf("unit\n");		}
-
-"value"		{	colNo += yyleng;	printf("value\n");		}
-"volatle"	{	colNo += yyleng;	printf("volatle\n");	}
-
-
-
+                      /***** Comments *****/
 \/\*                           		{ BEGIN multilinecomment; }
 <multilinecomment>[^*\n]*			{;}
-<multilinecomment>"*"+[^*/\n]*		{lineNo++;}
-<multilinecomment>"*"+"/"           { BEGIN INITIAL;	printf("multi line comment.\n");}
+<multilinecomment>"*"+[^*/\n]*		{line_no++;}
+<multilinecomment>"*"+"/"           { BEGIN INITIAL;}
 
-{Single_line_comment}				{ printf("single line comment.\n");	lineNo++;	}
+{single_line_comment} { line_no++; col_no=1; }
 
-									
-																
-{Identifier}						{ 	colNo += yyleng;	printf("Identifier\n");		}
+                      /***** Literals *****/
+{integer_literal}     { doForReturn(yytext); yylval.r.i=atoi(yytext); return INTEGER_LITERAL; }
+{real_literal}        { doForReturn(yytext); yylval.r.f=(float)atof(yytext); return REAL_LITERAL; }
+{character_literal}   { doForReturn(yytext); yylval.r.c=yytext[1]; return CHARACTER_LITERAL; }
+{string_literal}      { doForReturn(yytext); doForName(yytext); return STRING_LITERAL; }
 
-{Integer}							{
-										colNo += yyleng;
-										int x=atoi(yytext);
-										cout<<x<<endl;
-										cout<<"Integer"<<endl; 
-										
-									}
-{Float}								{
-										colNo += yyleng;
-										cout<<atof(yytext)<<" is Float"<<endl;
-																
-									}
-{Double}							{
-										colNo += yyleng;
-										cout<<atof(yytext)<<" is Double"<<endl; 
-									}
-{Long}								{
-										colNo += yyleng;
-										long x=atol(yytext);
-										cout<<x<<endl;
-										cout <<"Long"<<endl;
-										
-									}
-{String}							{
+                      /*** Punctuation and Single-Character Operators ***/
+","   { doForReturn(yytext); return COMMA; }
+"["   { doForReturn(yytext); return LEFT_BRACKET; }
+"]"   { doForReturn(yytext); return RIGHT_BRACKET; }
 
-										 colNo += yyleng;
-										 printLiteral(yytext,yyleng);
-									}
 
-											
+                      /*** Multi-Character Operators ***/
+"+="  { doForReturn(yytext); return PLUSEQ; }
+"-="  { doForReturn(yytext); return MINUSEQ; }
+"*="  { doForReturn(yytext); return STAREQ; }
+"/="  { doForReturn(yytext); return DIVEQ; }
+"%="  { doForReturn(yytext); return MODEQ; }
+"^="  { doForReturn(yytext); return XOREQ; }
+"&="  { doForReturn(yytext); return ANDEQ; }
+"|="  { doForReturn(yytext); return OREQ; }
+"<<"  { doForReturn(yytext); return LTLT; }
+">>"  { doForReturn(yytext); return GTGT; }
+">>="  { doForReturn(yytext); return GTGTEQ; }
+"<<="  { doForReturn(yytext); return LTLTEQ; }
+"=="  { doForReturn(yytext); return EQEQ; }
+"!="  { doForReturn(yytext); return NOTEQ; }
+"<="  { doForReturn(yytext); return LEQ; }
+">="  { doForReturn(yytext); return GEQ; }
+"&&"  { doForReturn(yytext); return ANDAND; }
+"||"  { doForReturn(yytext); return OROR; }
+"++"  { doForReturn(yytext); return PLUSPLUS; }
+"--"  { doForReturn(yytext); return MINUSMINUS; }
+"->"  { doForReturn(yytext); return ARROW; }
 
+
+
+{identifier}          { doForReturn(yytext); doForName(yytext); return token_for(yytext); }
+
+
+
+
+.  {
+        if (is_allowed_char(yytext[0])) return yytext[0];
+        else lexical_error("invalid token", yytext);
+      }
 %%
 
 
+static struct name_value {
+  char *name;
+  int value;
+} name_value;
+static struct name_value keywords [] = {
+ /* This list must remain sorted!!! */
+    {"abstract", ABSTRACT},
+    {"as", AS},
+    {"base", BASE},
+    {"bool", BOOL},
+    {"break", BREAK},
+    {"byte", BYTE},
+    {"case", CASE},
+    {"catch", CATCH},
+    {"char", CHAR},
+    {"checked", CHECKED},
+    {"class", CLASS},
+    {"const", CONST},
+    {"continue", CONTINUE},
+    {"decimal", DECIMAL},
+    {"default", DEFAULT},
+    {"delegate", DELEGATE},
+    {"do", DO},
+    {"double", DOUBLE},
+    {"else", ELSE},
+    {"enum", ENUM},
+    {"event", EVENT},
+    {"explicit", EXPLICIT},
+    {"extern", EXTERN},
+    {"false", FALSE},
+    {"finally", FINALLY},
+    {"fixed", FIXED},
+    {"float", FLOAT},
+    {"for", FOR},
+    {"foreach", FOREACH},
+    {"goto", GOTO},
+    {"if", IF},
+    {"implicit", IMPLICIT},
+    {"in", IN},
+    {"int", INT},
+    {"interface", INTERFACE},
+    {"internal", INTERNAL},
+    {"is", IS},
+    {"lock", LOCK},
+    {"long", LONG},
+    {"namespace", NAMESPACE},
+    {"new", NEW},
+    {"null", NULL_LITERAL},
+    {"object", OBJECT},
+    {"operator", OPERATOR},
+    {"out", OUT},
+    {"override", OVERRIDE},
+    {"params", PARAMS},
+    {"private", PRIVATE},
+    {"protected", PROTECTED},
+    {"public", PUBLIC},
+    {"readonly", READONLY},
+    {"ref", REF},
+    {"return", RETURN},
+    {"sbyte", SBYTE},
+    {"sealed", SEALED},
+    {"short", SHORT},
+    {"sizeof", SIZEOF},
+    {"stackalloc", STACKALLOC},
+    {"static", STATIC},
+    {"string", STRING},
+    {"struct", STRUCT},
+    {"switch", SWITCH},
+    {"this", THIS},
+    {"throw", THROW},
+    {"true", TRUE},
+    {"try", TRY},
+    {"typeof", TYPEOF},
+    {"uint", UINT},
+    {"ulong", ULONG},
+    {"unchecked", UNCHECKED},
+    {"unsafe", UNSAFE},
+    {"ushort", USHORT},
+    {"using", USING},
+    {"virtual", VIRTUAL},
+    {"void", VOID},
+    {"volatile", VOLATILE},
+    {"while", WHILE},
+  };
 
 
-/*** C Code Section **/
+/* Conduct a binary search for lexeme in the keywords array
+ * between indices start (inclusive) and finish (exclusive)
+ */
+static int bin_search(const char *lexeme, int start, int finish)
+{
+  if (start >= finish)  /* Not found */
+      return IDENTIFIER;
+  else {
+    int mid = (start+finish)/2;
+    int cmp = strcmp(lexeme,keywords[mid].name);
+    if (cmp == 0)
+      return keywords[mid].value;
+    else if (cmp < 0)
+      return bin_search(lexeme,start,mid);
+    else
+      return bin_search(lexeme,mid+1,finish);
+  }
+}
 
+static int token_for(const char *lexeme)
+{
+
+  static int num_keywords = sizeof(keywords) / sizeof(name_value);
+  int token = bin_search(lexeme,0,num_keywords);
+  if (token == -1)
+    token = IDENTIFIER;
+  return token;
+}
+
+static int is_allowed_char(const char c)
+{
+  static char allowed [] = {
+    '.', ';', ':',
+    '(', ')', '{', '}', '<', '>',
+    '+', '-', '*', '/', '%', '&', '|', '!', '~', '^',
+    '=', '?',
+  };
+  static int num_allowed = sizeof(allowed) / sizeof(char);
+  int i;
+  for (i=0; i<num_allowed; i++) {
+    if (allowed[i]==c)
+      return 1;
+  }
+  return 0;
+}
+
+void lexical_error(const char *msg, char *yytext)
+{
+/*
+	FILE *f = fopen("Lexical Log.txt","a");
+	fprintf(f,"line:%d-col:%d -> lexical error (%s) [%s]\n",line_no,col_no,msg,yytext);
+	fclose(f);
+*/
+}

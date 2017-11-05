@@ -41,12 +41,4 @@
       <Filter>Source Files\Lexical Analyzer</Filter>
     </Text>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="header\tokens.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Parser\yacc.hpp">
-      <Filter>Source Files\Parser</Filter>
-    </ClInclude>
-  </ItemGroup>
 </Project>
