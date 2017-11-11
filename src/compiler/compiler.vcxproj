@@ -20,14 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Lexical Analyzer\lex.l" />
+    <None Include="Parser\yacc.output" />
     <None Include="Parser\yacc.y" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.yy.cc" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\yacc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Lexical Analyzer\replace.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Parser\yacc.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0C1C1964-4DB0-4C41-9A12-A9FDCAEB9628}</ProjectGuid>
@@ -112,6 +117,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

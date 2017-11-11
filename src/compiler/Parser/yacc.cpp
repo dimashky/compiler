@@ -2716,12 +2716,7 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 223:
-#line 480 "C:\\Users\\Mohamed Khair\\Desktop\\Quad M\\compiler\\src\\compiler\\Parser\\yacc.y"
-    {printf("IF statment");getchar();;}
-    break;
-
-  case 532:
+        case 532:
 #line 1152 "C:\\Users\\Mohamed Khair\\Desktop\\Quad M\\compiler\\src\\compiler\\Parser\\yacc.y"
     { /* lex_enter_attrib(); */ ;}
     break;
@@ -2756,7 +2751,7 @@ yyreduce:
     }
 
 /* Line 1126 of yacc.c.  */
-#line 2760 "yacc.cpp"
+#line 2755 "yacc.cpp"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -3040,9 +3035,6 @@ int yylex()
 {
 	return lexer->yylex();
 }
-void main(void)
-{
-	Parser* p = new Parser();
-	p->parse();
-	
-}
+
+
+

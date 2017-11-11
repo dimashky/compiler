@@ -27,6 +27,9 @@
     <None Include="Parser\yacc.y">
       <Filter>Source Files\Parser</Filter>
     </None>
+    <None Include="Parser\yacc.output">
+      <Filter>Source Files\Parser</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.yy.cc">
@@ -35,10 +38,18 @@
     <ClCompile Include="Parser\yacc.cpp">
       <Filter>Source Files\Parser</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Lexical Analyzer\replace.txt">
       <Filter>Source Files\Lexical Analyzer</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Parser\yacc.hpp">
+      <Filter>Source Files\Parser</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

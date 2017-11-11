@@ -477,7 +477,7 @@ selection_statement
   | switch_statement
   ;
 if_statement
-  : IF '(' boolean_expression ')' embedded_statement {printf("IF statment");getchar();}
+  : IF '(' boolean_expression ')' embedded_statement
   | IF '(' boolean_expression ')' embedded_statement ELSE embedded_statement
   ;
 switch_statement
@@ -1184,9 +1184,5 @@ int yylex()
 {
 	return lexer->yylex();
 }
-void main(void)
-{
-	Parser* p = new Parser();
-	p->parse();
-	
-}
+
+
