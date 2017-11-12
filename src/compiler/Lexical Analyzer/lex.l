@@ -73,9 +73,10 @@ white_space			  [ \t\n\r]
 letter_char            [A-Za-z]
 ident_char             {dec_digit}|{letter_char}|"_"|"@"
 identifier             ({letter_char}|"_"){ident_char}*
+at_identifier          \@{identifier}
 bad_identifier			[&^%$#@!~{}"?,|\/{}0-9]*{identifier}
 
-
+rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 %x IN_COMMENT
 
@@ -107,6 +108,7 @@ bad_identifier			[&^%$#@!~{}"?,|\/{}0-9]*{identifier}
 "["   { doForReturn(yytext); return LEFT_BRACKET; }
 "]"   { doForReturn(yytext); return RIGHT_BRACKET; }
 
+{rank_specifier}     { return RANK_SPECIFIER; }
 
                       /*** Multi-Character Operators ***/
 "+="  { doForReturn(yytext); return PLUSEQ; }

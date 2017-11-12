@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Parser">
       <UniqueIdentifier>{0bc6d24e-66c1-4a8a-95f6-449c4892f550}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\I/O">
+      <UniqueIdentifier>{86e0eafe-4d5b-4e16-bdb1-3fff1356cb46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Lexical Analyzer\lex.l">
@@ -29,6 +32,9 @@
     </None>
     <None Include="Parser\yacc.output">
       <Filter>Source Files\Parser</Filter>
+    </None>
+    <None Include="sample inputs\input.cs">
+      <Filter>Source Files\I/O</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +51,9 @@
   <ItemGroup>
     <Text Include="Lexical Analyzer\replace.txt">
       <Filter>Source Files\Lexical Analyzer</Filter>
+    </Text>
+    <Text Include="output.txt">
+      <Filter>Source Files\I/O</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

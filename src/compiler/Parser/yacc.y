@@ -84,6 +84,9 @@
 %token XOREQ  ANDEQ   OREQ LTLT GTGT GTGTEQ LTLTEQ EQEQ NOTEQ
 %token LEQ GEQ ANDAND OROR PLUSPLUS MINUSMINUS ARROW
 
+%nonassoc THEN
+%nonassoc ELSE
+
 %start compilation_unit  /* I think */
 
 %%
@@ -477,7 +480,7 @@ selection_statement
   | switch_statement
   ;
 if_statement
-  : IF '(' boolean_expression ')' embedded_statement
+  : IF '(' boolean_expression ')' embedded_statement %prec THEN
   | IF '(' boolean_expression ')' embedded_statement ELSE embedded_statement
   ;
 switch_statement

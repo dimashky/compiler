@@ -1,5 +1,5 @@
-class 2X{
+class cc{
     public void f(int x, int y){
-        y = 0;
+        int[] x;
     }
 }

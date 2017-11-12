@@ -147,7 +147,8 @@
      OROR = 373,
      PLUSPLUS = 374,
      MINUSMINUS = 375,
-     ARROW = 376
+     ARROW = 376,
+     THEN = 377
    };
 #endif
 /* Tokens.  */
@@ -270,6 +271,7 @@
 #define PLUSPLUS 374
 #define MINUSMINUS 375
 #define ARROW 376
+#define THEN 377
 
 
 
@@ -287,7 +289,7 @@ typedef union YYSTYPE {
 		}r;
 	} YYSTYPE;
 /* Line 1403 of yacc.c.  */
-#line 291 "yacc.hpp"
+#line 293 "yacc.hpp"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

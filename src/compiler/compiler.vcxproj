@@ -22,6 +22,7 @@
     <None Include="Lexical Analyzer\lex.l" />
     <None Include="Parser\yacc.output" />
     <None Include="Parser\yacc.y" />
+    <None Include="sample inputs\input.cs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.yy.cc" />
@@ -30,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Lexical Analyzer\replace.txt" />
+    <Text Include="output.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\yacc.hpp" />
