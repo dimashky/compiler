@@ -4,6 +4,7 @@
 	#include <iostream>
 	#include <FlexLexer.h>
 	#include <string>
+	#include <map>
 
 	#include "../parser/yacc.hpp"
 
@@ -12,7 +13,6 @@
 
 	void lexical_error(const char *, char *);
 	static int token_for(const char *);
-	static int is_allowed_char(const char );
 
 	void doForReturn(char * yytext){
 		yylval.r.col_no = col_no;
@@ -104,9 +104,32 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 {string_literal}      { doForReturn(yytext); doForName(yytext); return STRING_LITERAL; }
 
                       /*** Punctuation and Single-Character Operators ***/
-","   { doForReturn(yytext); return COMMA; }
+","   { printf("comma");doForReturn(yytext); return COMMA; }
 "["   { doForReturn(yytext); return LEFT_BRACKET; }
 "]"   { doForReturn(yytext); return RIGHT_BRACKET; }
+"{"   { doForReturn(yytext); return LEFT_BRACKET_GROUP; }
+"}"   { doForReturn(yytext); return RIGHT_BRACKET_GROUP; }
+"("   { doForReturn(yytext); return LEFT_BRACKET_CIRCLE; }
+")"   { doForReturn(yytext); return RIGHT_BRACKET_CIRCLE; }
+
+">"   { doForReturn(yytext); return GREATER; }
+"<"   { doForReturn(yytext); return SMALLER; }
+
+"."   { doForReturn(yytext); return DOT; }
+";"   { doForReturn(yytext); return SEMICOLON; }
+":"   { doForReturn(yytext); return COLON; }
+
+"+"   { doForReturn(yytext); return PLUS; }
+"-"   { doForReturn(yytext); return MINUS; }
+"*"   { doForReturn(yytext); return STAR; }
+"/"   { doForReturn(yytext); return SLASH; }
+"%"   { doForReturn(yytext); return PERCENT; }
+"&"   { doForReturn(yytext); return AND; }
+"|"   { doForReturn(yytext); return OR; }
+"!"   { doForReturn(yytext); return EXCLAMATION_POINT; }
+"~"   { doForReturn(yytext); return TILDE; }
+"^"   { doForReturn(yytext); return QUESTION_MARK; }
+
 
 {rank_specifier}     { return RANK_SPECIFIER; }
 
@@ -142,8 +165,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 .  {
-        if (is_allowed_char(yytext[0])) return yytext[0];
-        else lexical_error("invalid token", yytext);
+        lexical_error("invalid token", yytext);
       }
 %%
 
@@ -263,22 +285,7 @@ static int token_for(const char *lexeme)
   return token;
 }
 
-static int is_allowed_char(const char c)
-{
-  static char allowed [] = {
-    '.', ';', ':',
-    '(', ')', '{', '}', '<', '>',
-    '+', '-', '*', '/', '%', '&', '|', '!', '~', '^',
-    '=', '?',
-  };
-  static int num_allowed = sizeof(allowed) / sizeof(char);
-  int i;
-  for (i=0; i<num_allowed; i++) {
-    if (allowed[i]==c)
-      return 1;
-  }
-  return 0;
-}
+
 
 void lexical_error(const char *msg, char *yytext)
 {

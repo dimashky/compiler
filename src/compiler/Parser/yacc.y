@@ -86,11 +86,16 @@
 %token COMMA  ","
 %token LEFT_BRACKET  "["
 %token RIGHT_BRACKET "]"
+%token LEFT_BRACKET_GROUP RIGHT_BRACKET_GROUP LEFT_BRACKET_CIRCLE RIGHT_BRACKET_CIRCLE
+%token GREATER SMALLER
+%token SEMICOLON COLON DOT
+
 
 /*** MULTI-CHARACTER OPERATORS ***/
 %token PLUSEQ MINUSEQ STAREQ DIVEQ MODEQ
 %token XOREQ  ANDEQ   OREQ LTLT GTGT GTGTEQ LTLTEQ EQEQ NOTEQ
 %token LEQ GEQ ANDAND OROR PLUSPLUS MINUSMINUS ARROW
+%token PLUS MINUS STAR SLASH PERCENT AND OR EXCLAMATION_POINT TILDE QUESTION_MARK
 
 %nonassoc THEN
 %nonassoc ELSE
@@ -154,8 +159,8 @@ class_type
   : OBJECT | STRING
   ;
 pointer_type
-  : type '*'
-  | VOID '*'
+  : type STAR
+  | VOID STAR
   ;
 array_type
   : array_type rank_specifier
@@ -202,16 +207,16 @@ primary_expression_no_parenthesis
   | unchecked_expression
   ;
 parenthesized_expression
-  : '(' expression ')'
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE
   ;
 member_access
-  : primary_expression '.' IDENTIFIER
-  | primitive_type '.' IDENTIFIER
-  | class_type '.' IDENTIFIER
+  : primary_expression DOT IDENTIFIER
+  | primitive_type DOT IDENTIFIER
+  | class_type DOT IDENTIFIER
   ;
 invocation_expression
-  : primary_expression_no_parenthesis '(' argument_list_opt ')'
-  | qualified_identifier '(' argument_list_opt ')'
+  : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE
+  | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE
   ;
 argument_list_opt
   : /* Nothing */
@@ -233,7 +238,7 @@ this_access
   : THIS
   ;
 base_access
-  : BASE '.' IDENTIFIER
+  : BASE DOT IDENTIFIER
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET
   ;
 post_increment_expression
@@ -246,7 +251,7 @@ new_expression
   : object_creation_expression
   ;
 object_creation_expression
-  : NEW type '(' argument_list_opt ')'
+  : NEW type LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE
   ;
 array_creation_expression
   : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt
@@ -257,23 +262,23 @@ array_initializer_opt
   | array_initializer
   ;
 typeof_expression
-  : TYPEOF '(' type ')'
-  | TYPEOF '(' VOID ')'
+  : TYPEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE
+  | TYPEOF LEFT_BRACKET_CIRCLE VOID RIGHT_BRACKET_CIRCLE
   ;
 checked_expression
-  : CHECKED '(' expression ')'
+  : CHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE
   ;
 unchecked_expression
-  : UNCHECKED '(' expression ')'
+  : UNCHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE
   ;
 pointer_member_access
   : postfix_expression ARROW IDENTIFIER
   ;
 addressof_expression
-  : '&' unary_expression
+  : AND unary_expression
   ;
 sizeof_expression
-  : SIZEOF '(' type ')'
+  : SIZEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE
   ;
 postfix_expression
   : primary_expression
@@ -284,8 +289,8 @@ postfix_expression
   ;
 unary_expression_not_plusminus
   : postfix_expression
-  | '!' unary_expression
-  | '~' unary_expression
+  | EXCLAMATION_POINT unary_expression
+  | TILDE unary_expression
   | cast_expression
   ;
 pre_increment_expression
@@ -296,9 +301,9 @@ pre_decrement_expression
   ;
 unary_expression
   : unary_expression_not_plusminus
-  | '+' unary_expression
-  | '-' unary_expression
-  | '*' unary_expression
+  | PLUS unary_expression
+  | MINUS unary_expression
+  | STAR unary_expression
   | pre_increment_expression
   | pre_decrement_expression
   | addressof_expression
@@ -309,12 +314,12 @@ unary_expression
  * semantically restricted to an identifier, optionally follwed by qualifiers
  */
 cast_expression
-  : '(' expression ')' unary_expression_not_plusminus
-  | '(' multiplicative_expression '*' ')' unary_expression 
-  | '(' qualified_identifier rank_specifier type_quals_opt ')' unary_expression  
-  | '(' primitive_type type_quals_opt ')' unary_expression
-  | '(' class_type type_quals_opt ')' unary_expression
-  | '(' VOID type_quals_opt ')' unary_expression
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus
+  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression 
+  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression  
+  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression
+  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression
+  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression
   ;
 type_quals_opt
   : /* Nothing */
@@ -326,18 +331,18 @@ type_quals
   ;
 type_qual 
   : rank_specifier 
-  | '*'
+  | STAR
   ;
 multiplicative_expression
   : unary_expression
-  | multiplicative_expression '*' unary_expression  
-  | multiplicative_expression '/' unary_expression
-  | multiplicative_expression '%' unary_expression
+  | multiplicative_expression STAR unary_expression  
+  | multiplicative_expression SLASH unary_expression
+  | multiplicative_expression PERCENT unary_expression
   ;
 additive_expression
   : multiplicative_expression
-  | additive_expression '+' multiplicative_expression
-  | additive_expression '-' multiplicative_expression
+  | additive_expression PLUS multiplicative_expression
+  | additive_expression MINUS multiplicative_expression
   ;
 shift_expression
   : additive_expression 
@@ -346,8 +351,8 @@ shift_expression
   ;
 relational_expression
   : shift_expression
-  | relational_expression '<' shift_expression
-  | relational_expression '>' shift_expression
+  | relational_expression SMALLER shift_expression
+  | relational_expression GREATER shift_expression
   | relational_expression LEQ shift_expression
   | relational_expression GEQ shift_expression
   | relational_expression IS type
@@ -360,7 +365,7 @@ equality_expression
   ;
 and_expression
   : equality_expression
-  | and_expression '&' equality_expression
+  | and_expression AND equality_expression
   ;
 exclusive_or_expression
   : and_expression
@@ -368,7 +373,7 @@ exclusive_or_expression
   ;
 inclusive_or_expression
   : exclusive_or_expression
-  | inclusive_or_expression '|' exclusive_or_expression
+  | inclusive_or_expression OR exclusive_or_expression
   ;
 conditional_and_expression
   : inclusive_or_expression
@@ -380,7 +385,7 @@ conditional_or_expression
   ;
 conditional_expression
   : conditional_or_expression
-  | conditional_or_expression '?' expression ':' expression
+  | conditional_or_expression QUESTION_MARK expression COLON expression
   ;
 assignment
 : unary_expression assignment_operator expression
@@ -421,7 +426,7 @@ embedded_statement
   | fixed_statement
   ;
 block
-  : '{' statement_list_opt '}'
+  : LEFT_BRACKET_GROUP statement_list_opt RIGHT_BRACKET_GROUP
   ;
 statement_list_opt
   : /* Nothing */
@@ -433,14 +438,14 @@ statement_list
   | statement_list statement
   ;
 empty_statement
-  : ';'
+  : SEMICOLON
   ;
 labeled_statement
-  : IDENTIFIER ':' statement
+  : IDENTIFIER COLON statement
   ;
 declaration_statement
-  : local_variable_declaration ';'
-  | local_constant_declaration ';'
+  : local_variable_declaration SEMICOLON
+  | local_constant_declaration SEMICOLON
   ;
 local_variable_declaration
   : type variable_declarators
@@ -472,7 +477,7 @@ constant_declarator
   : IDENTIFIER '=' constant_expression
   ;
 expression_statement
-  : statement_expression ';'
+  : statement_expression SEMICOLON
   ;
 statement_expression
   : invocation_expression
@@ -488,14 +493,14 @@ selection_statement
   | switch_statement
   ;
 if_statement
-  : IF '(' boolean_expression ')' embedded_statement %prec THEN
-  | IF '(' boolean_expression ')' embedded_statement ELSE embedded_statement
+  : IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement %prec THEN
+  | IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement ELSE embedded_statement
   ;
 switch_statement
-  : SWITCH '(' expression ')' switch_block
+  : SWITCH LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE switch_block
   ;
 switch_block
-  : '{' switch_sections_opt '}'
+  : LEFT_BRACKET_GROUP switch_sections_opt RIGHT_BRACKET_GROUP
   ;
 switch_sections_opt
   : /* Nothing */
@@ -513,8 +518,8 @@ switch_labels
   | switch_labels switch_label
   ;
 switch_label
-  : CASE constant_expression ':'
-  | DEFAULT ':'
+  : CASE constant_expression COLON
+  | DEFAULT COLON
   ;
 iteration_statement
   : while_statement
@@ -526,13 +531,13 @@ unsafe_statement
   : UNSAFE block
   ;
 while_statement
-  : WHILE '(' boolean_expression ')' embedded_statement
+  : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement
   ;
 do_statement
-  : DO embedded_statement WHILE '(' boolean_expression ')' ';'
+  : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON
   ;
 for_statement
-  : FOR '(' for_initializer_opt ';' for_condition_opt ';' for_iterator_opt ')' embedded_statement
+  : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement
   ;
 for_initializer_opt
   : /* Nothing */
@@ -561,7 +566,7 @@ statement_expression_list
   | statement_expression_list COMMA statement_expression
   ;
 foreach_statement
-  : FOREACH '(' type IDENTIFIER IN expression ')' embedded_statement
+  : FOREACH LEFT_BRACKET_CIRCLE type IDENTIFIER IN expression RIGHT_BRACKET_CIRCLE embedded_statement
   ;
 jump_statement
   : break_statement
@@ -571,25 +576,25 @@ jump_statement
   | throw_statement
   ;
 break_statement
-  : BREAK ';'
+  : BREAK SEMICOLON
   ;
 continue_statement
-  : CONTINUE ';'
+  : CONTINUE SEMICOLON
   ;
 goto_statement
-  : GOTO IDENTIFIER ';'
-  | GOTO CASE constant_expression ';'
-  | GOTO DEFAULT ';'
+  : GOTO IDENTIFIER SEMICOLON
+  | GOTO CASE constant_expression SEMICOLON
+  | GOTO DEFAULT SEMICOLON
   ;
 return_statement
-  : RETURN expression_opt ';'
+  : RETURN expression_opt SEMICOLON
   ;
 expression_opt
   : /* Nothing */
   | expression
   ;
 throw_statement
-  : THROW expression_opt ';'
+  : THROW expression_opt SEMICOLON
   ;
 try_statement
   : TRY block catch_clauses
@@ -601,8 +606,8 @@ catch_clauses
   | catch_clauses catch_clause
   ;
 catch_clause
-  : CATCH '(' class_type identifier_opt ')' block
-  | CATCH '(' type_name identifier_opt ')' block
+  : CATCH LEFT_BRACKET_CIRCLE class_type identifier_opt RIGHT_BRACKET_CIRCLE block
+  | CATCH LEFT_BRACKET_CIRCLE type_name identifier_opt RIGHT_BRACKET_CIRCLE block
   | CATCH block
   ;
 identifier_opt
@@ -619,18 +624,18 @@ unchecked_statement
   : UNCHECKED block
   ;
 lock_statement
-  : LOCK '(' expression ')' embedded_statement
+  : LOCK LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE embedded_statement
   ;
 using_statement
-  : USING '(' resource_acquisition ')' embedded_statement
+  : USING LEFT_BRACKET_CIRCLE resource_acquisition RIGHT_BRACKET_CIRCLE embedded_statement
   ;
 resource_acquisition
   : local_variable_declaration
   | expression
   ;
 fixed_statement
-/*! : FIXED '(' pointer_type fixed_pointer_declarators ')' embedded_statement */
-  : FIXED '('  type fixed_pointer_declarators ')' embedded_statement
+/*! : FIXED LEFT_BRACKET_CIRCLE pointer_type fixed_pointer_declarators RIGHT_BRACKET_CIRCLE embedded_statement */
+  : FIXED LEFT_BRACKET_CIRCLE  type fixed_pointer_declarators RIGHT_BRACKET_CIRCLE embedded_statement
   ;
 fixed_pointer_declarators
   : fixed_pointer_declarator
@@ -660,12 +665,12 @@ namespace_declaration
   ;
 comma_opt
   : /* Nothing */
-  | ';'
+  | SEMICOLON
   ;
 /*
 qualified_identifier
   : IDENTIFIER
-  | qualified_identifier '.' IDENTIFIER
+  | qualified_identifier DOT IDENTIFIER
   ;
 */
 qualified_identifier
@@ -673,11 +678,11 @@ qualified_identifier
   | qualifier IDENTIFIER
   ;
 qualifier
-  : IDENTIFIER '.' 
-  | qualifier IDENTIFIER '.' 
+  : IDENTIFIER DOT 
+  | qualifier IDENTIFIER DOT 
   ;
 namespace_body
-  : '{' using_directives_opt namespace_member_declarations_opt '}'
+  : LEFT_BRACKET_GROUP using_directives_opt namespace_member_declarations_opt RIGHT_BRACKET_GROUP
   ;
 using_directives
   : using_directive
@@ -688,10 +693,10 @@ using_directive
   | using_namespace_directive
   ;
 using_alias_directive
-  : USING IDENTIFIER '=' qualified_identifier ';'
+  : USING IDENTIFIER '=' qualified_identifier SEMICOLON
   ;
 using_namespace_directive
-  : USING namespace_name ';'
+  : USING namespace_name SEMICOLON
   ;
 namespace_member_declarations
   : namespace_member_declaration
@@ -749,16 +754,16 @@ class_base_opt
   | class_base
   ;
 class_base
-  : ':' class_type
-  | ':' interface_type_list
-  | ':' class_type COMMA interface_type_list
+  : COLON class_type
+  | COLON interface_type_list
+  | COLON class_type COMMA interface_type_list
   ;
 interface_type_list
   : type_name
   | interface_type_list COMMA type_name
   ;
 class_body
-  : '{' class_member_declarations_opt '}'
+  : LEFT_BRACKET_GROUP class_member_declarations_opt RIGHT_BRACKET_GROUP
   ;
 class_member_declarations_opt
   : /* Nothing */
@@ -782,18 +787,18 @@ class_member_declaration
   | type_declaration
   ;
 constant_declaration
-  : attributes_opt modifiers_opt CONST type constant_declarators ';'
+  : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON
   ;
 field_declaration
-  : attributes_opt modifiers_opt type variable_declarators ';'
+  : attributes_opt modifiers_opt type variable_declarators SEMICOLON
   ;
 method_declaration
   : method_header method_body
   ;
 /* Inline return_type to avoid conflict with field_declaration */
 method_header
-  : attributes_opt modifiers_opt type qualified_identifier '(' formal_parameter_list_opt ')'
-  | attributes_opt modifiers_opt VOID qualified_identifier '(' formal_parameter_list_opt ')'
+  : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE
+  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE
   ;
 formal_parameter_list_opt
   : /* Nothing */
@@ -805,7 +810,7 @@ return_type
   ;
 method_body
   : block
-  | ';'
+  | SEMICOLON
   ;
 formal_parameter_list
   : formal_parameter
@@ -830,7 +835,7 @@ parameter_array
 property_declaration
   : attributes_opt modifiers_opt type qualified_identifier 
       ENTER_getset
-    '{' accessor_declarations '}'
+    LEFT_BRACKET_GROUP accessor_declarations RIGHT_BRACKET_GROUP
       EXIT_getset
   ;
 accessor_declarations
@@ -859,13 +864,13 @@ set_accessor_declaration
   ;
 accessor_body
   : block
-  | ';'
+  | SEMICOLON
   ;
 event_declaration
-  : attributes_opt modifiers_opt EVENT type variable_declarators ';'
+  : attributes_opt modifiers_opt EVENT type variable_declarators SEMICOLON
   | attributes_opt modifiers_opt EVENT type qualified_identifier 
       ENTER_accessor_decl 
-    '{' event_accessor_declarations '}'
+    LEFT_BRACKET_GROUP event_accessor_declarations RIGHT_BRACKET_GROUP
       EXIT_accessor_decl
   ;
 event_accessor_declarations
@@ -887,12 +892,12 @@ remove_accessor_declaration
 indexer_declaration
   : attributes_opt modifiers_opt indexer_declarator 
       ENTER_getset
-    '{' accessor_declarations '}'
+    LEFT_BRACKET_GROUP accessor_declarations RIGHT_BRACKET_GROUP
       EXIT_getset
   ;
 indexer_declarator
   : type THIS LEFT_BRACKET formal_parameter_list RIGHT_BRACKET
-/* | type type_name '.' THIS LEFT_BRACKET formal_parameter_list RIGHT_BRACKET */
+/* | type type_name DOT THIS LEFT_BRACKET formal_parameter_list RIGHT_BRACKET */
   | type qualified_this LEFT_BRACKET formal_parameter_list RIGHT_BRACKET
   ;
 qualified_this
@@ -907,37 +912,37 @@ operator_declarator
   | conversion_operator_declarator
   ;
 overloadable_operator_declarator
-  : type OPERATOR overloadable_operator '(' type IDENTIFIER ')'
-  | type OPERATOR overloadable_operator '(' type IDENTIFIER COMMA type IDENTIFIER ')'
+  : type OPERATOR overloadable_operator LEFT_BRACKET_CIRCLE type IDENTIFIER RIGHT_BRACKET_CIRCLE
+  | type OPERATOR overloadable_operator LEFT_BRACKET_CIRCLE type IDENTIFIER COMMA type IDENTIFIER RIGHT_BRACKET_CIRCLE
   ;
 overloadable_operator
-  : '+' | '-' 
-  | '!' | '~' | PLUSPLUS | MINUSMINUS | TRUE | FALSE
-  | '*' | '/' | '%' | '&' | '|' | '^' 
-  | LTLT | GTGT | EQEQ | NOTEQ | '>' | '<' | GEQ | LEQ
+  : PLUS | MINUS 
+  | EXCLAMATION_POINT | TILDE | PLUSPLUS | MINUSMINUS | TRUE | FALSE
+  | STAR | SLASH | PERCENT | AND | OR | '^' 
+  | LTLT | GTGT | EQEQ | NOTEQ | GREATER | SMALLER | GEQ | LEQ
   ;
 conversion_operator_declarator
-  : IMPLICIT OPERATOR type '(' type IDENTIFIER ')'
-  | EXPLICIT OPERATOR type '(' type IDENTIFIER ')'
+  : IMPLICIT OPERATOR type LEFT_BRACKET_CIRCLE type IDENTIFIER RIGHT_BRACKET_CIRCLE
+  | EXPLICIT OPERATOR type LEFT_BRACKET_CIRCLE type IDENTIFIER RIGHT_BRACKET_CIRCLE
   ;
 constructor_declaration
   : attributes_opt modifiers_opt constructor_declarator constructor_body
   ;
 constructor_declarator
-  : IDENTIFIER '(' formal_parameter_list_opt ')' constructor_initializer_opt
+  : IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE constructor_initializer_opt
   ;
 constructor_initializer_opt
   : /* Nothing */
   | constructor_initializer
   ;
 constructor_initializer
-  : ':' BASE '(' argument_list_opt ')'
-  | ':' THIS '(' argument_list_opt ')'
+  : COLON BASE LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE
+  | COLON THIS LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE
   ;
 /* Widen from unsafe_opt STATIC to modifiers_opt */
 /* This is now subsumed by constructor_declaration - delete
  * static_constructor_declaration
- *  : attributes_opt modifiers_opt IDENTIFIER '(' ')' block
+ *  : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE RIGHT_BRACKET_CIRCLE block
  *  ;
  */
 /* No longer needed after modification of static_constructor_declaration
@@ -948,15 +953,15 @@ constructor_initializer
  */
 /* Widen from unsafe_opt to modifiers_opt */
 destructor_declaration
-  : attributes_opt modifiers_opt '~' IDENTIFIER '(' ')' block
+  : attributes_opt modifiers_opt TILDE IDENTIFIER LEFT_BRACKET_CIRCLE RIGHT_BRACKET_CIRCLE block
   ;
 operator_body
   : block
-  | ';'
+  | SEMICOLON
   ;
 constructor_body /*** Added by JP - same as method_body ***/
   : block
-  | ';'
+  | SEMICOLON
   ;
 
 /***** C.2.7 Structs *****/
@@ -968,10 +973,10 @@ struct_interfaces_opt
   | struct_interfaces
   ;
 struct_interfaces
-  : ':' interface_type_list
+  : COLON interface_type_list
   ;
 struct_body
-  : '{' struct_member_declarations_opt '}'
+  : LEFT_BRACKET_GROUP struct_member_declarations_opt RIGHT_BRACKET_GROUP
   ;
 struct_member_declarations_opt
   : /* Nothing */
@@ -996,8 +1001,8 @@ struct_member_declaration
 
 /***** C.2.8 Arrays *****/
 array_initializer
-  : '{' variable_initializer_list_opt '}'
-  | '{' variable_initializer_list COMMA '}'
+  : LEFT_BRACKET_GROUP variable_initializer_list_opt RIGHT_BRACKET_GROUP
+  | LEFT_BRACKET_GROUP variable_initializer_list COMMA RIGHT_BRACKET_GROUP
   ;
 variable_initializer_list_opt
   : /* Nothing */
@@ -1017,10 +1022,10 @@ interface_base_opt
   | interface_base
   ;
 interface_base
-  : ':' interface_type_list
+  : COLON interface_type_list
   ;
 interface_body
-  : '{' interface_member_declarations_opt '}'
+  : LEFT_BRACKET_GROUP interface_member_declarations_opt RIGHT_BRACKET_GROUP
   ;
 interface_member_declarations_opt
   : /* Nothing */
@@ -1038,8 +1043,8 @@ interface_member_declaration
   ;
 /* inline return_type to avoid conflict with interface_property_declaration */
 interface_method_declaration
-  : attributes_opt new_opt type IDENTIFIER '(' formal_parameter_list_opt ')' interface_empty_body
-  | attributes_opt new_opt VOID IDENTIFIER '(' formal_parameter_list_opt ')' interface_empty_body
+  : attributes_opt new_opt type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body
+  | attributes_opt new_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body
   ;
 new_opt
   : /* Nothing */
@@ -1048,14 +1053,14 @@ new_opt
 interface_property_declaration
   : attributes_opt new_opt type IDENTIFIER 
       ENTER_getset
-    '{' interface_accessors '}'
+    LEFT_BRACKET_GROUP interface_accessors RIGHT_BRACKET_GROUP
       EXIT_getset
   ;
 interface_indexer_declaration
   : attributes_opt new_opt type THIS 
     LEFT_BRACKET formal_parameter_list RIGHT_BRACKET 
       ENTER_getset
-    '{' interface_accessors '}'
+    LEFT_BRACKET_GROUP interface_accessors RIGHT_BRACKET_GROUP
       EXIT_getset
   ;
 
@@ -1071,8 +1076,8 @@ interface_event_declaration
 
 /* mono seems to allow this */
 interface_empty_body
-  : ';'
-  | '{' '}'
+  : SEMICOLON
+  | LEFT_BRACKET_GROUP RIGHT_BRACKET_GROUP
   ;
 
 /***** C.2.10 Enums *****/
@@ -1084,11 +1089,11 @@ enum_base_opt
   | enum_base
   ;
 enum_base
-  : ':' integral_type
+  : COLON integral_type
   ;
 enum_body
-  : '{' enum_member_declarations_opt '}'
-  | '{' enum_member_declarations COMMA '}'
+  : LEFT_BRACKET_GROUP enum_member_declarations_opt RIGHT_BRACKET_GROUP
+  | LEFT_BRACKET_GROUP enum_member_declarations COMMA RIGHT_BRACKET_GROUP
   ;
 enum_member_declarations_opt
   : /* Nothing */
@@ -1105,7 +1110,7 @@ enum_member_declaration
 
 /***** C.2.11 Delegates *****/
 delegate_declaration
-  : attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER '(' formal_parameter_list_opt ')' ';'
+  : attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE SEMICOLON
   ;
 
 /***** C.2.12 Attributes *****/
@@ -1125,7 +1130,7 @@ attribute_target_specifier_opt
   | attribute_target_specifier
   ;
 attribute_target_specifier
-  : attribute_target ':'
+  : attribute_target COLON
   ;
 attribute_target
   : ASSEMBLY
@@ -1153,7 +1158,7 @@ attribute_name
   : type_name
   ;
 attribute_arguments
-  : '(' expression_list_opt ')'
+  : LEFT_BRACKET_CIRCLE expression_list_opt RIGHT_BRACKET_CIRCLE
   ;
 
 

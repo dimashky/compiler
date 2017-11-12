@@ -127,28 +127,47 @@
      COMMA = 353,
      LEFT_BRACKET = 354,
      RIGHT_BRACKET = 355,
-     PLUSEQ = 356,
-     MINUSEQ = 357,
-     STAREQ = 358,
-     DIVEQ = 359,
-     MODEQ = 360,
-     XOREQ = 361,
-     ANDEQ = 362,
-     OREQ = 363,
-     LTLT = 364,
-     GTGT = 365,
-     GTGTEQ = 366,
-     LTLTEQ = 367,
-     EQEQ = 368,
-     NOTEQ = 369,
-     LEQ = 370,
-     GEQ = 371,
-     ANDAND = 372,
-     OROR = 373,
-     PLUSPLUS = 374,
-     MINUSMINUS = 375,
-     ARROW = 376,
-     THEN = 377
+     LEFT_BRACKET_GROUP = 356,
+     RIGHT_BRACKET_GROUP = 357,
+     LEFT_BRACKET_CIRCLE = 358,
+     RIGHT_BRACKET_CIRCLE = 359,
+     GREATER = 360,
+     SMALLER = 361,
+     SEMICOLON = 362,
+     COLON = 363,
+     DOT = 364,
+     PLUSEQ = 365,
+     MINUSEQ = 366,
+     STAREQ = 367,
+     DIVEQ = 368,
+     MODEQ = 369,
+     XOREQ = 370,
+     ANDEQ = 371,
+     OREQ = 372,
+     LTLT = 373,
+     GTGT = 374,
+     GTGTEQ = 375,
+     LTLTEQ = 376,
+     EQEQ = 377,
+     NOTEQ = 378,
+     LEQ = 379,
+     GEQ = 380,
+     ANDAND = 381,
+     OROR = 382,
+     PLUSPLUS = 383,
+     MINUSMINUS = 384,
+     ARROW = 385,
+     PLUS = 386,
+     MINUS = 387,
+     STAR = 388,
+     SLASH = 389,
+     PERCENT = 390,
+     AND = 391,
+     OR = 392,
+     EXCLAMATION_POINT = 393,
+     TILDE = 394,
+     QUESTION_MARK = 395,
+     THEN = 396
    };
 #endif
 /* Tokens.  */
@@ -250,34 +269,53 @@
 #define COMMA 353
 #define LEFT_BRACKET 354
 #define RIGHT_BRACKET 355
-#define PLUSEQ 356
-#define MINUSEQ 357
-#define STAREQ 358
-#define DIVEQ 359
-#define MODEQ 360
-#define XOREQ 361
-#define ANDEQ 362
-#define OREQ 363
-#define LTLT 364
-#define GTGT 365
-#define GTGTEQ 366
-#define LTLTEQ 367
-#define EQEQ 368
-#define NOTEQ 369
-#define LEQ 370
-#define GEQ 371
-#define ANDAND 372
-#define OROR 373
-#define PLUSPLUS 374
-#define MINUSMINUS 375
-#define ARROW 376
-#define THEN 377
+#define LEFT_BRACKET_GROUP 356
+#define RIGHT_BRACKET_GROUP 357
+#define LEFT_BRACKET_CIRCLE 358
+#define RIGHT_BRACKET_CIRCLE 359
+#define GREATER 360
+#define SMALLER 361
+#define SEMICOLON 362
+#define COLON 363
+#define DOT 364
+#define PLUSEQ 365
+#define MINUSEQ 366
+#define STAREQ 367
+#define DIVEQ 368
+#define MODEQ 369
+#define XOREQ 370
+#define ANDEQ 371
+#define OREQ 372
+#define LTLT 373
+#define GTGT 374
+#define GTGTEQ 375
+#define LTLTEQ 376
+#define EQEQ 377
+#define NOTEQ 378
+#define LEQ 379
+#define GEQ 380
+#define ANDAND 381
+#define OROR 382
+#define PLUSPLUS 383
+#define MINUSMINUS 384
+#define ARROW 385
+#define PLUS 386
+#define MINUS 387
+#define STAR 388
+#define SLASH 389
+#define PERCENT 390
+#define AND 391
+#define OR 392
+#define EXCLAMATION_POINT 393
+#define TILDE 394
+#define QUESTION_MARK 395
+#define THEN 396
 
 
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 37 "C:\\Users\\Mohamed Khair\\Desktop\\Quad M\\compiler\\src\\compiler\\Parser\\yacc.y"
+#line 37 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Parser\\yacc.y"
 typedef union YYSTYPE {
 	struct R{
 		int i;
@@ -288,8 +326,8 @@ typedef union YYSTYPE {
 		int col_no;
 		}r;
 	} YYSTYPE;
-/* Line 1403 of yacc.c.  */
-#line 293 "yacc.hpp"
+/* Line 1447 of yacc.c.  */
+#line 331 "yacc.hpp"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
