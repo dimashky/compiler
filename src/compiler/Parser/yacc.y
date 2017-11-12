@@ -1,9 +1,14 @@
 /* Based on Appendix C of the C# Language Specification,
  *  version 0.28 of 5/7/2001
  */
+
+
+
+
  %output ="yacc.cpp"
 %{
-	#define YYERROR_VERBOSE
+	#define YYERROR_VERBOSE 1
+	#define YYDEBUG 1
 	
 	#include <iostream>
 	#include <FlexLexer.h>
@@ -39,6 +44,9 @@
 		int col_no;
 		}r;
 	}
+
+
+
 
 /* Special tokens to help disambiguate rank_specifiers */
 %token RANK_SPECIFIER
@@ -1176,9 +1184,10 @@ EXIT_getset
 
 int yyerror(char *s)
 {
-	printf("ERRROOOOORRRR");
-	getchar();
-	getchar();
+	extern int line_no;
+	extern int col_no;
+
+	printf ("[%d, %d] -> %s\n", line_no, col_no,s);
 	return 1;
 }
 

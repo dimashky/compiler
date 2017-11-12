@@ -1,5 +1,7 @@
-class cc{
-    public void f(int x, int y){
-        int[] x;
+class xx
+{
+    public int trust(int x, int y)
+    {
+
     }
 }
