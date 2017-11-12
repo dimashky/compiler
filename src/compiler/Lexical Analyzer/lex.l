@@ -5,12 +5,19 @@
 	#include <FlexLexer.h>
 	#include <string>
 	#include <queue>
+	#include <stack>
 	#include "../parser/yacc.hpp"
+	
+	struct bracket {
+		char br;
+		int line_no;
+		int col_no;
+	};
 
 	int line_no = 1;
 	int col_no = 1;
 	queue <int> t;
-
+	stack <bracket> brackets;
 
 	void lexical_error(const char *, char *);
 	static int token_for(const char *);
@@ -114,12 +121,97 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
                       /*** Punctuation and Single-Character Operators ***/
 ","   { doForReturn(yytext); t.push(COMMA); }
-"["   { doForReturn(yytext); t.push(LEFT_BRACKET); }
-"]"   { doForReturn(yytext); t.push(RIGHT_BRACKET); }
-"{"   { doForReturn(yytext); t.push(LEFT_BRACKET_GROUP); }
-"}"   { doForReturn(yytext); t.push(RIGHT_BRACKET_GROUP); }
-"("   { doForReturn(yytext); t.push(LEFT_BRACKET_CIRCLE); }
-")"   { doForReturn(yytext); t.push(RIGHT_BRACKET_CIRCLE); }
+
+"["   { 
+	
+	doForReturn(yytext); 
+	
+	bracket b = {'[',line_no,col_no};
+	brackets.push(b);
+	
+	t.push(LEFT_BRACKET); 
+	
+}
+
+"]"   {
+	doForReturn(yytext); 
+	
+	if(brackets.empty()){
+		printf("unexpected ] on line %d\n",line_no);
+	}
+	else if(brackets.top().br != '[') {
+		printf("Error it isn't expected ] at line %d column %d.\n",brackets.top().line_no,brackets.top().col_no);
+	} else{
+		printf("[] open line %d and close line %d\n",brackets.top().line_no,line_no);
+		brackets.pop();
+	}
+		
+	t.push(RIGHT_BRACKET); 
+
+}
+
+
+
+"{"   {
+
+	doForReturn(yytext); 
+
+	bracket b = {'{',line_no,col_no};
+	brackets.push(b);
+
+	t.push(LEFT_BRACKET_GROUP); 
+
+}
+
+"}"   {
+
+	doForReturn(yytext); 
+
+	if(brackets.empty()){
+		printf("unexpected } on line %d\n",line_no);
+	}
+	else if(brackets.top().br != '{') {
+		printf("Error it isn't expected } at line %d column %d.\n",brackets.top().line_no,brackets.top().col_no);
+	} else{
+		printf("{} open line %d and close line %d\n",brackets.top().line_no,line_no);
+		brackets.pop();
+	}
+
+	t.push(RIGHT_BRACKET_GROUP); 
+	
+}
+
+
+
+"("   { 
+
+	doForReturn(yytext); 
+	
+	bracket b = {'(',line_no,col_no};
+	brackets.push(b);
+	
+	t.push(LEFT_BRACKET_CIRCLE); 
+
+}
+
+")"   { 
+
+	doForReturn(yytext); 
+	if(brackets.empty()){
+		printf("unexpected ) on line %d\n",line_no);
+	}
+	else if(brackets.top().br != '(') {
+		printf("Error it isn't expected ) at line %d column %d.\n",brackets.top().line_no,brackets.top().col_no);
+	} else{
+		printf("() open line %d and close line %d\n",brackets.top().line_no,line_no);
+		brackets.pop();
+	}
+
+	t.push(RIGHT_BRACKET_CIRCLE); 
+
+}
+
+
 
 ">"   { doForReturn(yytext); t.push(GREATER); }
 "<"   { doForReturn(yytext); t.push(SMALLER); }

@@ -1,0 +1,8 @@
+() open line 3 and close line 3
+() open line 9 and close line 9
+() open line 10 and close line 10
+{} open line 11 and close line 13
+{} open line 4 and close line 14
+{} open line 2 and close line 15
+unexpected } on line 16
+[16, 2] -> syntax error, unexpected RIGHT_BRACKET_GROUP

@@ -7,9 +7,10 @@ class xx
         int[] asd;
         string ss;
         ss.asd();
-        if(x > y)
+        if (x > y)
         {
 
         }
     }
+}
 }
