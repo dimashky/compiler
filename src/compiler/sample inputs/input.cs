@@ -4,4 +4,4 @@ class compiler
     {
         x = "asdsad";
     }
-}
+)

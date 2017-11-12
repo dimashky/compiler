@@ -272,6 +272,8 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
       }
 
 <<EOF>> {
+	if(!brackets.empty())
+		yyterminate();
 	t.push(0);
 	while(!t.empty()){
 		int x = t.front();

@@ -1241,6 +1241,8 @@ case YY_STATE_EOF(IN_ACCESSOR):
 case YY_STATE_EOF(IN_GETSET):
 #line 274 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
+	if(!brackets.empty())
+		yyterminate();
 	t.push(0);
 	while(!t.empty()){
 		int x = t.front();
@@ -1251,10 +1253,10 @@ case YY_STATE_EOF(IN_GETSET):
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 282 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 284 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 ECHO;
 	YY_BREAK
-#line 1257 "lex.yy.cc"
+#line 1259 "lex.yy.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2059,7 +2061,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 282 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 284 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 
 
 
