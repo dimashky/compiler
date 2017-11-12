@@ -25,6 +25,7 @@
 #include <iostream>
 using namespace std;
 
+
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
 
@@ -581,20 +582,21 @@ static yyconst short int yy_chk[939] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 1 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 #define INITIAL 0
-#line 2 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 2 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 	#include <string.h>
 	#include <unistd.h>
 	#include <iostream>
 	#include <FlexLexer.h>
 	#include <string>
-	#include <map>
-
+	#include <queue>
 	#include "../parser/yacc.hpp"
 
 	int line_no = 1;
 	int col_no = 1;
+	queue <int> t;
+
 
 	void lexical_error(const char *, char *);
 	static int token_for(const char *);
@@ -618,7 +620,7 @@ static yyconst short int yy_chk[939] =
 #define IN_ACCESSOR 4
 #define IN_GETSET 5
 
-#line 621 "lex.yy.cc"
+#line 622 "lex.yy.cc"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -745,10 +747,18 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 85 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 86 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+
+
+
+		while(!t.empty()){
+			int x = t.front();
+			t.pop();
+			return x;
+		}
 
 					/***** White comments *****/
-#line 751 "lex.yy.cc"
+#line 760 "lex.yy.cc"
 
 	if ( yy_init )
 		{
@@ -833,318 +843,327 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 87 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 96 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { col_no=1; line_no++; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 88 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 97 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { col_no+=4; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 89 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 98 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { col_no++; }
 	YY_BREAK
 /***** Comments *****/
 case 4:
 YY_RULE_SETUP
-#line 93 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 102 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { BEGIN multilinecomment; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 94 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 103 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 95 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 104 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {line_no++;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 96 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 105 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 98 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 107 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 { line_no++; col_no=1; }
 	YY_BREAK
 /***** Literals *****/
 case 9:
 YY_RULE_SETUP
-#line 101 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); yylval.r.i=atoi(yytext); return INTEGER_LITERAL; }
+#line 110 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); yylval.r.i=atoi(yytext); t.push(INTEGER_LITERAL); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 102 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); yylval.r.f=(float)atof(yytext); return REAL_LITERAL; }
+#line 111 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); yylval.r.f=(float)atof(yytext); t.push(REAL_LITERAL); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 103 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); yylval.r.c=yytext[1]; return CHARACTER_LITERAL; }
+#line 112 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); yylval.r.c=yytext[1]; t.push(CHARACTER_LITERAL); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 104 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); doForName(yytext); return STRING_LITERAL; }
+#line 113 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); doForName(yytext); t.push(STRING_LITERAL); }
 	YY_BREAK
 /*** Punctuation and Single-Character Operators ***/
 case 13:
 YY_RULE_SETUP
-#line 107 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ printf("comma");doForReturn(yytext); return COMMA; }
+#line 116 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(COMMA); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 108 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return LEFT_BRACKET; }
+#line 117 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(LEFT_BRACKET); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 109 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return RIGHT_BRACKET; }
+#line 118 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(RIGHT_BRACKET); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 110 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return LEFT_BRACKET_GROUP; }
+#line 119 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(LEFT_BRACKET_GROUP); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 111 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return RIGHT_BRACKET_GROUP; }
+#line 120 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(RIGHT_BRACKET_GROUP); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 112 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return LEFT_BRACKET_CIRCLE; }
+#line 121 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(LEFT_BRACKET_CIRCLE); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 113 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return RIGHT_BRACKET_CIRCLE; }
+#line 122 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(RIGHT_BRACKET_CIRCLE); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 115 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return GREATER; }
+#line 124 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(GREATER); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 116 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return SMALLER; }
+#line 125 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(SMALLER); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 118 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return DOT; }
+#line 127 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(DOT); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 119 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return SEMICOLON; }
+#line 128 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(SEMICOLON); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 120 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return COLON; }
+#line 129 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(COLON); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 122 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return PLUS; }
+#line 131 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(PLUS); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 123 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return MINUS; }
+#line 132 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(MINUS); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 124 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return STAR; }
+#line 133 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(STAR); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 125 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return SLASH; }
+#line 134 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(SLASH); }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 126 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return PERCENT; }
+#line 135 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(PERCENT); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 127 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return AND; }
+#line 136 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(AND); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 128 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return OR; }
+#line 137 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(OR); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 129 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return EXCLAMATION_POINT; }
+#line 138 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(EXCLAMATION_POINT); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 130 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return TILDE; }
+#line 139 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(TILDE); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 131 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return QUESTION_MARK; }
+#line 140 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(QUESTION_MARK); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 134 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ return RANK_SPECIFIER; }
+#line 143 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ t.push(RANK_SPECIFIER); }
 	YY_BREAK
 /*** Multi-Character Operators ***/
 case 36:
 YY_RULE_SETUP
-#line 137 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return PLUSEQ; }
+#line 146 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(PLUSEQ); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 138 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return MINUSEQ; }
+#line 147 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(MINUSEQ); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 139 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return STAREQ; }
+#line 148 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(STAREQ); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 140 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return DIVEQ; }
+#line 149 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(DIVEQ); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 141 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return MODEQ; }
+#line 150 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(MODEQ); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 142 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return XOREQ; }
+#line 151 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(XOREQ); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 143 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return ANDEQ; }
+#line 152 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(ANDEQ); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 144 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return OREQ; }
+#line 153 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(OREQ); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 145 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return LTLT; }
+#line 154 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(LTLT); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 146 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return GTGT; }
+#line 155 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(GTGT); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 147 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return GTGTEQ; }
+#line 156 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(GTGTEQ); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 148 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return LTLTEQ; }
+#line 157 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(LTLTEQ); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 149 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return EQEQ; }
+#line 158 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(EQEQ); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 150 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return NOTEQ; }
+#line 159 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(NOTEQ); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 151 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return LEQ; }
+#line 160 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(LEQ); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 152 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return GEQ; }
+#line 161 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(GEQ); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 153 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return ANDAND; }
+#line 162 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(ANDAND); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 154 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return OROR; }
+#line 163 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(OROR); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 155 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return PLUSPLUS; }
+#line 164 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(PLUSPLUS); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 156 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return MINUSMINUS; }
+#line 165 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(MINUSMINUS); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 157 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); return ARROW; }
+#line 166 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); t.push(ARROW); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 161 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); doForName(yytext); return token_for(yytext); }
+#line 170 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); doForName(yytext); t.push(token_for(yytext)); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 163 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-{ doForReturn(yytext); doForName(yytext); lexical_error("invalid token", yytext); return BAD_IDENTIFIER; }
+#line 172 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{ doForReturn(yytext); doForName(yytext); lexical_error("invalid token", yytext); t.push(BAD_IDENTIFIER); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 167 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 176 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 {
         lexical_error("invalid token", yytext);
       }
 	YY_BREAK
-case 60:
-YY_RULE_SETUP
-#line 170 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
-ECHO;
-	YY_BREAK
-#line 1140 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(multilinecomment):
 case YY_STATE_EOF(IN_COMMENT):
 case YY_STATE_EOF(IN_ATTRIB):
 case YY_STATE_EOF(IN_ACCESSOR):
 case YY_STATE_EOF(IN_GETSET):
-	yyterminate();
+#line 180 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+{
+	t.push(0);
+	while(!t.empty()){
+		int x = t.front();
+		t.pop();
+		return x;
+	}
+}
+	YY_BREAK
+case 60:
+YY_RULE_SETUP
+#line 188 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+ECHO;
+	YY_BREAK
+#line 1165 "lex.yy.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1949,7 +1968,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 170 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
+#line 188 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Lexical Analyzer\\lex.l"
 
 
 

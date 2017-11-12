@@ -4,12 +4,13 @@
 	#include <iostream>
 	#include <FlexLexer.h>
 	#include <string>
-	#include <map>
-
+	#include <queue>
 	#include "../parser/yacc.hpp"
 
 	int line_no = 1;
 	int col_no = 1;
+	queue <int> t;
+
 
 	void lexical_error(const char *, char *);
 	static int token_for(const char *);
@@ -83,6 +84,14 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 %s IN_ATTRIB IN_ACCESSOR IN_GETSET
 
 %%
+
+%{
+		while(!t.empty()){
+			int x = t.front();
+			t.pop();
+			return x;
+		}
+%}
 					/***** White comments *****/
 \n				{ col_no=1; line_no++; }
 \t				{ col_no+=4; }
@@ -98,75 +107,84 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 {single_line_comment} { line_no++; col_no=1; }
 
                       /***** Literals *****/
-{integer_literal}     { doForReturn(yytext); yylval.r.i=atoi(yytext); return INTEGER_LITERAL; }
-{real_literal}        { doForReturn(yytext); yylval.r.f=(float)atof(yytext); return REAL_LITERAL; }
-{character_literal}   { doForReturn(yytext); yylval.r.c=yytext[1]; return CHARACTER_LITERAL; }
-{string_literal}      { doForReturn(yytext); doForName(yytext); return STRING_LITERAL; }
+{integer_literal}     { doForReturn(yytext); yylval.r.i=atoi(yytext); t.push(INTEGER_LITERAL); }
+{real_literal}        { doForReturn(yytext); yylval.r.f=(float)atof(yytext); t.push(REAL_LITERAL); }
+{character_literal}   { doForReturn(yytext); yylval.r.c=yytext[1]; t.push(CHARACTER_LITERAL); }
+{string_literal}      { doForReturn(yytext); doForName(yytext); t.push(STRING_LITERAL); }
 
                       /*** Punctuation and Single-Character Operators ***/
-","   { printf("comma");doForReturn(yytext); return COMMA; }
-"["   { doForReturn(yytext); return LEFT_BRACKET; }
-"]"   { doForReturn(yytext); return RIGHT_BRACKET; }
-"{"   { doForReturn(yytext); return LEFT_BRACKET_GROUP; }
-"}"   { doForReturn(yytext); return RIGHT_BRACKET_GROUP; }
-"("   { doForReturn(yytext); return LEFT_BRACKET_CIRCLE; }
-")"   { doForReturn(yytext); return RIGHT_BRACKET_CIRCLE; }
+","   { doForReturn(yytext); t.push(COMMA); }
+"["   { doForReturn(yytext); t.push(LEFT_BRACKET); }
+"]"   { doForReturn(yytext); t.push(RIGHT_BRACKET); }
+"{"   { doForReturn(yytext); t.push(LEFT_BRACKET_GROUP); }
+"}"   { doForReturn(yytext); t.push(RIGHT_BRACKET_GROUP); }
+"("   { doForReturn(yytext); t.push(LEFT_BRACKET_CIRCLE); }
+")"   { doForReturn(yytext); t.push(RIGHT_BRACKET_CIRCLE); }
 
-">"   { doForReturn(yytext); return GREATER; }
-"<"   { doForReturn(yytext); return SMALLER; }
+">"   { doForReturn(yytext); t.push(GREATER); }
+"<"   { doForReturn(yytext); t.push(SMALLER); }
 
-"."   { doForReturn(yytext); return DOT; }
-";"   { doForReturn(yytext); return SEMICOLON; }
-":"   { doForReturn(yytext); return COLON; }
+"."   { doForReturn(yytext); t.push(DOT); }
+";"   { doForReturn(yytext); t.push(SEMICOLON); }
+":"   { doForReturn(yytext); t.push(COLON); }
 
-"+"   { doForReturn(yytext); return PLUS; }
-"-"   { doForReturn(yytext); return MINUS; }
-"*"   { doForReturn(yytext); return STAR; }
-"/"   { doForReturn(yytext); return SLASH; }
-"%"   { doForReturn(yytext); return PERCENT; }
-"&"   { doForReturn(yytext); return AND; }
-"|"   { doForReturn(yytext); return OR; }
-"!"   { doForReturn(yytext); return EXCLAMATION_POINT; }
-"~"   { doForReturn(yytext); return TILDE; }
-"^"   { doForReturn(yytext); return QUESTION_MARK; }
+"+"   { doForReturn(yytext); t.push(PLUS); }
+"-"   { doForReturn(yytext); t.push(MINUS); }
+"*"   { doForReturn(yytext); t.push(STAR); }
+"/"   { doForReturn(yytext); t.push(SLASH); }
+"%"   { doForReturn(yytext); t.push(PERCENT); }
+"&"   { doForReturn(yytext); t.push(AND); }
+"|"   { doForReturn(yytext); t.push(OR); }
+"!"   { doForReturn(yytext); t.push(EXCLAMATION_POINT); }
+"~"   { doForReturn(yytext); t.push(TILDE); }
+"^"   { doForReturn(yytext); t.push(QUESTION_MARK); }
 
 
-{rank_specifier}     { return RANK_SPECIFIER; }
+{rank_specifier}     { t.push(RANK_SPECIFIER); }
 
                       /*** Multi-Character Operators ***/
-"+="  { doForReturn(yytext); return PLUSEQ; }
-"-="  { doForReturn(yytext); return MINUSEQ; }
-"*="  { doForReturn(yytext); return STAREQ; }
-"/="  { doForReturn(yytext); return DIVEQ; }
-"%="  { doForReturn(yytext); return MODEQ; }
-"^="  { doForReturn(yytext); return XOREQ; }
-"&="  { doForReturn(yytext); return ANDEQ; }
-"|="  { doForReturn(yytext); return OREQ; }
-"<<"  { doForReturn(yytext); return LTLT; }
-">>"  { doForReturn(yytext); return GTGT; }
-">>="  { doForReturn(yytext); return GTGTEQ; }
-"<<="  { doForReturn(yytext); return LTLTEQ; }
-"=="  { doForReturn(yytext); return EQEQ; }
-"!="  { doForReturn(yytext); return NOTEQ; }
-"<="  { doForReturn(yytext); return LEQ; }
-">="  { doForReturn(yytext); return GEQ; }
-"&&"  { doForReturn(yytext); return ANDAND; }
-"||"  { doForReturn(yytext); return OROR; }
-"++"  { doForReturn(yytext); return PLUSPLUS; }
-"--"  { doForReturn(yytext); return MINUSMINUS; }
-"->"  { doForReturn(yytext); return ARROW; }
+"+="  { doForReturn(yytext); t.push(PLUSEQ); }
+"-="  { doForReturn(yytext); t.push(MINUSEQ); }
+"*="  { doForReturn(yytext); t.push(STAREQ); }
+"/="  { doForReturn(yytext); t.push(DIVEQ); }
+"%="  { doForReturn(yytext); t.push(MODEQ); }
+"^="  { doForReturn(yytext); t.push(XOREQ); }
+"&="  { doForReturn(yytext); t.push(ANDEQ); }
+"|="  { doForReturn(yytext); t.push(OREQ); }
+"<<"  { doForReturn(yytext); t.push(LTLT); }
+">>"  { doForReturn(yytext); t.push(GTGT); }
+">>="  { doForReturn(yytext); t.push(GTGTEQ); }
+"<<="  { doForReturn(yytext); t.push(LTLTEQ); }
+"=="  { doForReturn(yytext); t.push(EQEQ); }
+"!="  { doForReturn(yytext); t.push(NOTEQ); }
+"<="  { doForReturn(yytext); t.push(LEQ); }
+">="  { doForReturn(yytext); t.push(GEQ); }
+"&&"  { doForReturn(yytext); t.push(ANDAND); }
+"||"  { doForReturn(yytext); t.push(OROR); }
+"++"  { doForReturn(yytext); t.push(PLUSPLUS); }
+"--"  { doForReturn(yytext); t.push(MINUSMINUS); }
+"->"  { doForReturn(yytext); t.push(ARROW); }
 
 
 
-{identifier}          { doForReturn(yytext); doForName(yytext); return token_for(yytext); }
+{identifier}          { doForReturn(yytext); doForName(yytext); t.push(token_for(yytext)); }
 
-{bad_identifier}	  { doForReturn(yytext); doForName(yytext); lexical_error("invalid token", yytext); return BAD_IDENTIFIER; }
+{bad_identifier}	  { doForReturn(yytext); doForName(yytext); lexical_error("invalid token", yytext); t.push(BAD_IDENTIFIER); }
 
 
 
 .  {
         lexical_error("invalid token", yytext);
       }
+
+<<EOF>> {
+	t.push(0);
+	while(!t.empty()){
+		int x = t.front();
+		t.pop();
+		return x;
+	}
+}
 %%
 
 
