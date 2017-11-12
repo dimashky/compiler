@@ -215,7 +215,7 @@ Grammar
   147               | and_expression AND equality_expression
 
   148 exclusive_or_expression: and_expression
-  149                        | exclusive_or_expression '^' and_expression
+  149                        | exclusive_or_expression POWER and_expression
 
   150 inclusive_or_expression: exclusive_or_expression
   151                        | inclusive_or_expression OR exclusive_or_expression
@@ -231,7 +231,7 @@ Grammar
 
   158 assignment: unary_expression assignment_operator expression
 
-  159 assignment_operator: '='
+  159 assignment_operator: EQUAL
   160                    | PLUSEQ
   161                    | MINUSEQ
   162                    | STAREQ
@@ -289,7 +289,7 @@ Grammar
   201                     | variable_declarators "," variable_declarator
 
   202 variable_declarator: IDENTIFIER
-  203                    | IDENTIFIER '=' variable_initializer
+  203                    | IDENTIFIER EQUAL variable_initializer
 
   204 variable_initializer: expression
   205                     | array_initializer
@@ -302,7 +302,7 @@ Grammar
   209 constant_declarators: constant_declarator
   210                     | constant_declarators "," constant_declarator
 
-  211 constant_declarator: IDENTIFIER '=' constant_expression
+  211 constant_declarator: IDENTIFIER EQUAL constant_expression
 
   212 expression_statement: statement_expression SEMICOLON
 
@@ -425,7 +425,7 @@ Grammar
   288 fixed_pointer_declarators: fixed_pointer_declarator
   289                          | fixed_pointer_declarators "," fixed_pointer_declarator
 
-  290 fixed_pointer_declarator: IDENTIFIER '=' expression
+  290 fixed_pointer_declarator: IDENTIFIER EQUAL expression
 
   291 compilation_unit: using_directives_opt attributes_opt
   292                 | using_directives_opt namespace_member_declarations
@@ -458,7 +458,7 @@ Grammar
   309 using_directive: using_alias_directive
   310                | using_namespace_directive
 
-  311 using_alias_directive: USING IDENTIFIER '=' qualified_identifier SEMICOLON
+  311 using_alias_directive: USING IDENTIFIER EQUAL qualified_identifier SEMICOLON
 
   312 using_namespace_directive: USING namespace_name SEMICOLON
 
@@ -614,7 +614,7 @@ Grammar
   419                      | PERCENT
   420                      | AND
   421                      | OR
-  422                      | '^'
+  422                      | POWER
   423                      | LTLT
   424                      | GTGT
   425                      | EQEQ
@@ -736,7 +736,7 @@ Grammar
   503                         | enum_member_declarations "," enum_member_declaration
 
   504 enum_member_declaration: attributes_opt IDENTIFIER
-  505                        | attributes_opt IDENTIFIER '=' constant_expression
+  505                        | attributes_opt IDENTIFIER EQUAL constant_expression
 
   506 delegate_declaration: attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE SEMICOLON
 
@@ -791,8 +791,6 @@ Grammar
 Terminals, with rules where they appear
 
 $end (0) 0
-'=' (61) 159 203 211 290 311 505
-'^' (94) 149 422
 error (256)
 RANK_SPECIFIER (258) 43
 IDENTIFIER (259) 65 66 67 79 93 196 202 203 211 255 263 279 290 302
@@ -911,38 +909,40 @@ SEMICOLON (362) 195 197 198 212 241 242 261 262 263 264 265 266 269
     301 311 312 363 364 373 393 394 441 443 492 506
 COLON (363) 157 196 233 234 343 344 345 437 438 447 471 497 514
 DOT (364) 65 66 67 79 304 305
-PLUSEQ (365) 160
-MINUSEQ (366) 161
-STAREQ (367) 162
-DIVEQ (368) 163
-MODEQ (369) 164
-XOREQ (370) 165
-ANDEQ (371) 166
-OREQ (372) 167
-LTLT (373) 134 423
-GTGT (374) 135 424
-GTGTEQ (375) 168
-LTLTEQ (376) 169
-EQEQ (377) 144 425
-NOTEQ (378) 145 426
-LEQ (379) 139 430
-GEQ (380) 140 429
-ANDAND (381) 153
-OROR (382) 155
-PLUSPLUS (383) 81 105 413
-MINUSMINUS (384) 82 106 414
-ARROW (385) 93
-PLUS (386) 108 131 409
-MINUS (387) 109 132 410
-STAR (388) 36 37 110 115 125 127 417
-SLASH (389) 128 418
-PERCENT (390) 129 419
-AND (391) 94 147 420
-OR (392) 151 421
-EXCLAMATION_POINT (393) 102 411
-TILDE (394) 103 412 439
-QUESTION_MARK (395) 157
-THEN (396)
+PLUS (365) 108 131 409
+MINUS (366) 109 132 410
+STAR (367) 36 37 110 115 125 127 417
+SLASH (368) 128 418
+PERCENT (369) 129 419
+AND (370) 94 147 420
+OR (371) 151 421
+EXCLAMATION_POINT (372) 102 411
+TILDE (373) 103 412 439
+QUESTION_MARK (374) 157
+POWER (375) 149 422
+EQUAL (376) 159 203 211 290 311 505
+PLUSEQ (377) 160
+MINUSEQ (378) 161
+STAREQ (379) 162
+DIVEQ (380) 163
+MODEQ (381) 164
+XOREQ (382) 165
+ANDEQ (383) 166
+OREQ (384) 167
+LTLT (385) 134 423
+GTGT (386) 135 424
+GTGTEQ (387) 168
+LTLTEQ (388) 169
+EQEQ (389) 144 425
+NOTEQ (390) 145 426
+LEQ (391) 139 430
+GEQ (392) 140 429
+ANDAND (393) 153
+OROR (394) 155
+PLUSPLUS (395) 81 105 413
+MINUSMINUS (396) 82 106 414
+ARROW (397) 93
+THEN (398)
 
 
 Nonterminals, with rules where they appear
@@ -1466,7 +1466,7 @@ state 0
 
 state 1
 
-  311 using_alias_directive: USING . IDENTIFIER '=' qualified_identifier SEMICOLON
+  311 using_alias_directive: USING . IDENTIFIER EQUAL qualified_identifier SEMICOLON
   312 using_namespace_directive: USING . namespace_name SEMICOLON
 
     IDENTIFIER  shift, and go to state 8
@@ -1546,10 +1546,10 @@ state 8
 
   302 qualified_identifier: IDENTIFIER .
   304 qualifier: IDENTIFIER . DOT
-  311 using_alias_directive: USING IDENTIFIER . '=' qualified_identifier SEMICOLON
+  311 using_alias_directive: USING IDENTIFIER . EQUAL qualified_identifier SEMICOLON
 
-    DOT  shift, and go to state 28
-    '='  shift, and go to state 29
+    DOT    shift, and go to state 28
+    EQUAL  shift, and go to state 29
 
     $default  reduce using rule 302 (qualified_identifier)
 
@@ -1747,7 +1747,7 @@ state 28
 
 state 29
 
-  311 using_alias_directive: USING IDENTIFIER '=' . qualified_identifier SEMICOLON
+  311 using_alias_directive: USING IDENTIFIER EQUAL . qualified_identifier SEMICOLON
 
     IDENTIFIER  shift, and go to state 54
 
@@ -2007,7 +2007,7 @@ state 54
 
 state 55
 
-  311 using_alias_directive: USING IDENTIFIER '=' qualified_identifier . SEMICOLON
+  311 using_alias_directive: USING IDENTIFIER EQUAL qualified_identifier . SEMICOLON
 
     SEMICOLON  shift, and go to state 76
 
@@ -2195,7 +2195,7 @@ state 75
 
 state 76
 
-  311 using_alias_directive: USING IDENTIFIER '=' qualified_identifier SEMICOLON .
+  311 using_alias_directive: USING IDENTIFIER EQUAL qualified_identifier SEMICOLON .
 
     $default  reduce using rule 311 (using_alias_directive)
 
@@ -2817,14 +2817,14 @@ state 142
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 74 (expression_list_opt)
 
@@ -3348,14 +3348,14 @@ state 179
     USHORT               shift, and go to state 94
     VOID                 shift, and go to state 297
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3408,7 +3408,7 @@ state 179
 
 state 180
 
-  105 pre_increment_expression: PLUSPLUS . unary_expression
+  108 unary_expression: PLUS . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3441,14 +3441,14 @@ state 180
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3488,7 +3488,7 @@ state 180
 
 state 181
 
-  106 pre_decrement_expression: MINUSMINUS . unary_expression
+  109 unary_expression: MINUS . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3521,14 +3521,14 @@ state 181
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3568,7 +3568,7 @@ state 181
 
 state 182
 
-  108 unary_expression: PLUS . unary_expression
+  110 unary_expression: STAR . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3601,14 +3601,14 @@ state 182
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3648,7 +3648,7 @@ state 182
 
 state 183
 
-  109 unary_expression: MINUS . unary_expression
+   94 addressof_expression: AND . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3681,14 +3681,14 @@ state 183
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3728,7 +3728,7 @@ state 183
 
 state 184
 
-  110 unary_expression: STAR . unary_expression
+  102 unary_expression_not_plusminus: EXCLAMATION_POINT . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3761,14 +3761,14 @@ state 184
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3808,7 +3808,7 @@ state 184
 
 state 185
 
-   94 addressof_expression: AND . unary_expression
+  103 unary_expression_not_plusminus: TILDE . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3841,14 +3841,14 @@ state 185
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3888,7 +3888,7 @@ state 185
 
 state 186
 
-  102 unary_expression_not_plusminus: EXCLAMATION_POINT . unary_expression
+  105 pre_increment_expression: PLUSPLUS . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -3921,14 +3921,14 @@ state 186
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -3968,7 +3968,7 @@ state 186
 
 state 187
 
-  103 unary_expression_not_plusminus: TILDE . unary_expression
+  106 pre_decrement_expression: MINUSMINUS . unary_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -4001,14 +4001,14 @@ state 187
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -4272,17 +4272,17 @@ state 217
   126 multiplicative_expression: unary_expression .
   158 assignment: unary_expression . assignment_operator expression
 
-    PLUSEQ   shift, and go to state 321
-    MINUSEQ  shift, and go to state 322
-    STAREQ   shift, and go to state 323
-    DIVEQ    shift, and go to state 324
-    MODEQ    shift, and go to state 325
-    XOREQ    shift, and go to state 326
-    ANDEQ    shift, and go to state 327
-    OREQ     shift, and go to state 328
-    GTGTEQ   shift, and go to state 329
-    LTLTEQ   shift, and go to state 330
-    '='      shift, and go to state 331
+    EQUAL    shift, and go to state 321
+    PLUSEQ   shift, and go to state 322
+    MINUSEQ  shift, and go to state 323
+    STAREQ   shift, and go to state 324
+    DIVEQ    shift, and go to state 325
+    MODEQ    shift, and go to state 326
+    XOREQ    shift, and go to state 327
+    ANDEQ    shift, and go to state 328
+    OREQ     shift, and go to state 329
+    GTGTEQ   shift, and go to state 330
+    LTLTEQ   shift, and go to state 331
 
     $default  reduce using rule 126 (multiplicative_expression)
 
@@ -4378,10 +4378,10 @@ state 224
 
 state 225
 
-  149 exclusive_or_expression: exclusive_or_expression . '^' and_expression
+  149 exclusive_or_expression: exclusive_or_expression . POWER and_expression
   150 inclusive_or_expression: exclusive_or_expression .
 
-    '^'  shift, and go to state 349
+    POWER  shift, and go to state 349
 
     $default  reduce using rule 150 (inclusive_or_expression)
 
@@ -4412,8 +4412,8 @@ state 228
   156 conditional_expression: conditional_or_expression .
   157                       | conditional_or_expression . QUESTION_MARK expression COLON expression
 
-    OROR           shift, and go to state 352
-    QUESTION_MARK  shift, and go to state 353
+    QUESTION_MARK  shift, and go to state 352
+    OROR           shift, and go to state 353
 
     $default  reduce using rule 156 (conditional_expression)
 
@@ -4712,7 +4712,7 @@ state 257
 state 258
 
   504 enum_member_declaration: attributes_opt . IDENTIFIER
-  505                        | attributes_opt . IDENTIFIER '=' constant_expression
+  505                        | attributes_opt . IDENTIFIER EQUAL constant_expression
 
     IDENTIFIER  shift, and go to state 371
 
@@ -5032,14 +5032,14 @@ state 287
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -5133,14 +5133,14 @@ state 289
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -5342,14 +5342,14 @@ state 296
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -5490,58 +5490,58 @@ state 302
 
 state 303
 
-  105 pre_increment_expression: PLUSPLUS unary_expression .
-
-    $default  reduce using rule 105 (pre_increment_expression)
-
-
-state 304
-
-  106 pre_decrement_expression: MINUSMINUS unary_expression .
-
-    $default  reduce using rule 106 (pre_decrement_expression)
-
-
-state 305
-
   108 unary_expression: PLUS unary_expression .
 
     $default  reduce using rule 108 (unary_expression)
 
 
-state 306
+state 304
 
   109 unary_expression: MINUS unary_expression .
 
     $default  reduce using rule 109 (unary_expression)
 
 
-state 307
+state 305
 
   110 unary_expression: STAR unary_expression .
 
     $default  reduce using rule 110 (unary_expression)
 
 
-state 308
+state 306
 
    94 addressof_expression: AND unary_expression .
 
     $default  reduce using rule 94 (addressof_expression)
 
 
-state 309
+state 307
 
   102 unary_expression_not_plusminus: EXCLAMATION_POINT unary_expression .
 
     $default  reduce using rule 102 (unary_expression_not_plusminus)
 
 
-state 310
+state 308
 
   103 unary_expression_not_plusminus: TILDE unary_expression .
 
     $default  reduce using rule 103 (unary_expression_not_plusminus)
+
+
+state 309
+
+  105 pre_increment_expression: PLUSPLUS unary_expression .
+
+    $default  reduce using rule 105 (pre_increment_expression)
+
+
+state 310
+
+  106 pre_decrement_expression: MINUSMINUS unary_expression .
+
+    $default  reduce using rule 106 (pre_decrement_expression)
 
 
 state 311
@@ -5593,14 +5593,14 @@ state 313
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -5696,14 +5696,14 @@ state 315
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 70 (argument_list_opt)
 
@@ -5801,14 +5801,14 @@ state 317
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -5882,79 +5882,79 @@ state 320
 
 state 321
 
+  159 assignment_operator: EQUAL .
+
+    $default  reduce using rule 159 (assignment_operator)
+
+
+state 322
+
   160 assignment_operator: PLUSEQ .
 
     $default  reduce using rule 160 (assignment_operator)
 
 
-state 322
+state 323
 
   161 assignment_operator: MINUSEQ .
 
     $default  reduce using rule 161 (assignment_operator)
 
 
-state 323
+state 324
 
   162 assignment_operator: STAREQ .
 
     $default  reduce using rule 162 (assignment_operator)
 
 
-state 324
+state 325
 
   163 assignment_operator: DIVEQ .
 
     $default  reduce using rule 163 (assignment_operator)
 
 
-state 325
+state 326
 
   164 assignment_operator: MODEQ .
 
     $default  reduce using rule 164 (assignment_operator)
 
 
-state 326
+state 327
 
   165 assignment_operator: XOREQ .
 
     $default  reduce using rule 165 (assignment_operator)
 
 
-state 327
+state 328
 
   166 assignment_operator: ANDEQ .
 
     $default  reduce using rule 166 (assignment_operator)
 
 
-state 328
+state 329
 
   167 assignment_operator: OREQ .
 
     $default  reduce using rule 167 (assignment_operator)
 
 
-state 329
+state 330
 
   168 assignment_operator: GTGTEQ .
 
     $default  reduce using rule 168 (assignment_operator)
 
 
-state 330
+state 331
 
   169 assignment_operator: LTLTEQ .
 
     $default  reduce using rule 169 (assignment_operator)
-
-
-state 331
-
-  159 assignment_operator: '=' .
-
-    $default  reduce using rule 159 (assignment_operator)
 
 
 state 332
@@ -5992,14 +5992,14 @@ state 332
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6085,14 +6085,14 @@ state 333
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6165,14 +6165,14 @@ state 334
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6245,14 +6245,14 @@ state 335
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6325,14 +6325,14 @@ state 336
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6406,14 +6406,14 @@ state 337
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6487,14 +6487,14 @@ state 338
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6569,14 +6569,14 @@ state 339
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6725,14 +6725,14 @@ state 342
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6808,14 +6808,14 @@ state 343
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6891,14 +6891,14 @@ state 344
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -6974,14 +6974,14 @@ state 345
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7057,14 +7057,14 @@ state 346
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7141,14 +7141,14 @@ state 347
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7225,14 +7225,14 @@ state 348
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7277,7 +7277,7 @@ state 348
 
 state 349
 
-  149 exclusive_or_expression: exclusive_or_expression '^' . and_expression
+  149 exclusive_or_expression: exclusive_or_expression POWER . and_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -7310,14 +7310,14 @@ state 349
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7396,14 +7396,14 @@ state 350
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7483,14 +7483,14 @@ state 351
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7538,95 +7538,6 @@ state 351
 
 state 352
 
-  155 conditional_or_expression: conditional_or_expression OROR . conditional_and_expression
-
-    IDENTIFIER           shift, and go to state 54
-    INTEGER_LITERAL      shift, and go to state 165
-    REAL_LITERAL         shift, and go to state 166
-    CHARACTER_LITERAL    shift, and go to state 167
-    STRING_LITERAL       shift, and go to state 168
-    BASE                 shift, and go to state 169
-    BOOL                 shift, and go to state 80
-    BYTE                 shift, and go to state 81
-    CHAR                 shift, and go to state 82
-    CHECKED              shift, and go to state 170
-    DECIMAL              shift, and go to state 83
-    DOUBLE               shift, and go to state 84
-    FALSE                shift, and go to state 171
-    FLOAT                shift, and go to state 85
-    INT                  shift, and go to state 86
-    LONG                 shift, and go to state 87
-    NEW                  shift, and go to state 172
-    NULL_LITERAL         shift, and go to state 173
-    OBJECT               shift, and go to state 88
-    SBYTE                shift, and go to state 89
-    SHORT                shift, and go to state 90
-    SIZEOF               shift, and go to state 174
-    STRING               shift, and go to state 91
-    THIS                 shift, and go to state 175
-    TRUE                 shift, and go to state 176
-    TYPEOF               shift, and go to state 177
-    UINT                 shift, and go to state 92
-    ULONG                shift, and go to state 93
-    UNCHECKED            shift, and go to state 178
-    USHORT               shift, and go to state 94
-    LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
-
-    literal                            go to state 188
-    boolean_literal                    go to state 189
-    primitive_type                     go to state 190
-    numeric_type                       go to state 101
-    integral_type                      go to state 102
-    floating_point_type                go to state 103
-    class_type                         go to state 191
-    primary_expression                 go to state 192
-    primary_expression_no_parenthesis  go to state 193
-    parenthesized_expression           go to state 194
-    member_access                      go to state 195
-    invocation_expression              go to state 196
-    element_access                     go to state 197
-    this_access                        go to state 200
-    base_access                        go to state 201
-    post_increment_expression          go to state 202
-    post_decrement_expression          go to state 203
-    new_expression                     go to state 204
-    object_creation_expression         go to state 205
-    array_creation_expression          go to state 206
-    typeof_expression                  go to state 207
-    checked_expression                 go to state 208
-    unchecked_expression               go to state 209
-    pointer_member_access              go to state 210
-    addressof_expression               go to state 211
-    sizeof_expression                  go to state 212
-    postfix_expression                 go to state 213
-    unary_expression_not_plusminus     go to state 214
-    pre_increment_expression           go to state 215
-    pre_decrement_expression           go to state 216
-    unary_expression                   go to state 418
-    cast_expression                    go to state 218
-    multiplicative_expression          go to state 219
-    additive_expression                go to state 220
-    shift_expression                   go to state 221
-    relational_expression              go to state 222
-    equality_expression                go to state 223
-    and_expression                     go to state 224
-    exclusive_or_expression            go to state 225
-    inclusive_or_expression            go to state 226
-    conditional_and_expression         go to state 435
-    qualified_identifier               go to state 232
-    qualifier                          go to state 11
-
-
-state 353
-
   157 conditional_expression: conditional_or_expression QUESTION_MARK . expression COLON expression
 
     IDENTIFIER           shift, and go to state 54
@@ -7660,14 +7571,14 @@ state 353
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7713,7 +7624,96 @@ state 353
     conditional_or_expression          go to state 228
     conditional_expression             go to state 229
     assignment                         go to state 230
-    expression                         go to state 436
+    expression                         go to state 435
+    qualified_identifier               go to state 232
+    qualifier                          go to state 11
+
+
+state 353
+
+  155 conditional_or_expression: conditional_or_expression OROR . conditional_and_expression
+
+    IDENTIFIER           shift, and go to state 54
+    INTEGER_LITERAL      shift, and go to state 165
+    REAL_LITERAL         shift, and go to state 166
+    CHARACTER_LITERAL    shift, and go to state 167
+    STRING_LITERAL       shift, and go to state 168
+    BASE                 shift, and go to state 169
+    BOOL                 shift, and go to state 80
+    BYTE                 shift, and go to state 81
+    CHAR                 shift, and go to state 82
+    CHECKED              shift, and go to state 170
+    DECIMAL              shift, and go to state 83
+    DOUBLE               shift, and go to state 84
+    FALSE                shift, and go to state 171
+    FLOAT                shift, and go to state 85
+    INT                  shift, and go to state 86
+    LONG                 shift, and go to state 87
+    NEW                  shift, and go to state 172
+    NULL_LITERAL         shift, and go to state 173
+    OBJECT               shift, and go to state 88
+    SBYTE                shift, and go to state 89
+    SHORT                shift, and go to state 90
+    SIZEOF               shift, and go to state 174
+    STRING               shift, and go to state 91
+    THIS                 shift, and go to state 175
+    TRUE                 shift, and go to state 176
+    TYPEOF               shift, and go to state 177
+    UINT                 shift, and go to state 92
+    ULONG                shift, and go to state 93
+    UNCHECKED            shift, and go to state 178
+    USHORT               shift, and go to state 94
+    LEFT_BRACKET_CIRCLE  shift, and go to state 179
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
+
+    literal                            go to state 188
+    boolean_literal                    go to state 189
+    primitive_type                     go to state 190
+    numeric_type                       go to state 101
+    integral_type                      go to state 102
+    floating_point_type                go to state 103
+    class_type                         go to state 191
+    primary_expression                 go to state 192
+    primary_expression_no_parenthesis  go to state 193
+    parenthesized_expression           go to state 194
+    member_access                      go to state 195
+    invocation_expression              go to state 196
+    element_access                     go to state 197
+    this_access                        go to state 200
+    base_access                        go to state 201
+    post_increment_expression          go to state 202
+    post_decrement_expression          go to state 203
+    new_expression                     go to state 204
+    object_creation_expression         go to state 205
+    array_creation_expression          go to state 206
+    typeof_expression                  go to state 207
+    checked_expression                 go to state 208
+    unchecked_expression               go to state 209
+    pointer_member_access              go to state 210
+    addressof_expression               go to state 211
+    sizeof_expression                  go to state 212
+    postfix_expression                 go to state 213
+    unary_expression_not_plusminus     go to state 214
+    pre_increment_expression           go to state 215
+    pre_decrement_expression           go to state 216
+    unary_expression                   go to state 418
+    cast_expression                    go to state 218
+    multiplicative_expression          go to state 219
+    additive_expression                go to state 220
+    shift_expression                   go to state 221
+    relational_expression              go to state 222
+    equality_expression                go to state 223
+    and_expression                     go to state 224
+    exclusive_or_expression            go to state 225
+    inclusive_or_expression            go to state 226
+    conditional_and_expression         go to state 436
     qualified_identifier               go to state 232
     qualifier                          go to state 11
 
@@ -7753,14 +7753,14 @@ state 354
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -7849,14 +7849,14 @@ state 355
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 70 (argument_list_opt)
 
@@ -8065,14 +8065,14 @@ state 361
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 191 (statement_list_opt)
 
@@ -8288,9 +8288,9 @@ state 370
 state 371
 
   504 enum_member_declaration: attributes_opt IDENTIFIER .
-  505                        | attributes_opt IDENTIFIER . '=' constant_expression
+  505                        | attributes_opt IDENTIFIER . EQUAL constant_expression
 
-    '='  shift, and go to state 522
+    EQUAL  shift, and go to state 522
 
     $default  reduce using rule 504 (enum_member_declaration)
 
@@ -8522,14 +8522,14 @@ state 384
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 70 (argument_list_opt)
 
@@ -8620,14 +8620,14 @@ state 385
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -8717,14 +8717,14 @@ state 386
     USHORT               shift, and go to state 94
     LEFT_BRACKET_GROUP   shift, and go to state 386
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 464 (variable_initializer_list_opt)
 
@@ -8916,14 +8916,14 @@ state 399
     USHORT                shift, and go to state 94
     LEFT_BRACKET_CIRCLE   shift, and go to state 179
     RIGHT_BRACKET_CIRCLE  shift, and go to state 547
-    PLUSPLUS              shift, and go to state 180
-    MINUSMINUS            shift, and go to state 181
-    PLUS                  shift, and go to state 182
-    MINUS                 shift, and go to state 183
-    STAR                  shift, and go to state 184
-    AND                   shift, and go to state 185
-    EXCLAMATION_POINT     shift, and go to state 186
-    TILDE                 shift, and go to state 187
+    PLUS                  shift, and go to state 180
+    MINUS                 shift, and go to state 181
+    STAR                  shift, and go to state 182
+    AND                   shift, and go to state 183
+    EXCLAMATION_POINT     shift, and go to state 184
+    TILDE                 shift, and go to state 185
+    PLUSPLUS              shift, and go to state 186
+    MINUSMINUS            shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -8997,8 +8997,8 @@ state 400
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
 
     $default  reduce using rule 64 (parenthesized_expression)
 
@@ -9114,14 +9114,14 @@ state 406
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -9208,14 +9208,14 @@ state 407
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -9522,7 +9522,7 @@ state 431
 state 432
 
   147 and_expression: and_expression . AND equality_expression
-  149 exclusive_or_expression: exclusive_or_expression '^' and_expression .
+  149 exclusive_or_expression: exclusive_or_expression POWER and_expression .
 
     AND  shift, and go to state 348
 
@@ -9531,10 +9531,10 @@ state 432
 
 state 433
 
-  149 exclusive_or_expression: exclusive_or_expression . '^' and_expression
+  149 exclusive_or_expression: exclusive_or_expression . POWER and_expression
   151 inclusive_or_expression: inclusive_or_expression OR exclusive_or_expression .
 
-    '^'  shift, and go to state 349
+    POWER  shift, and go to state 349
 
     $default  reduce using rule 151 (inclusive_or_expression)
 
@@ -9551,19 +9551,19 @@ state 434
 
 state 435
 
+  157 conditional_expression: conditional_or_expression QUESTION_MARK expression . COLON expression
+
+    COLON  shift, and go to state 556
+
+
+state 436
+
   153 conditional_and_expression: conditional_and_expression . ANDAND inclusive_or_expression
   155 conditional_or_expression: conditional_or_expression OROR conditional_and_expression .
 
     ANDAND  shift, and go to state 351
 
     $default  reduce using rule 155 (conditional_or_expression)
-
-
-state 436
-
-  157 conditional_expression: conditional_or_expression QUESTION_MARK expression . COLON expression
-
-    COLON  shift, and go to state 556
 
 
 state 437
@@ -9897,14 +9897,14 @@ state 457
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -10051,14 +10051,14 @@ state 464
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 267 (expression_opt)
 
@@ -10154,14 +10154,14 @@ state 466
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 267 (expression_opt)
 
@@ -10369,17 +10369,17 @@ state 482
 
   158 assignment: unary_expression . assignment_operator expression
 
-    PLUSEQ   shift, and go to state 321
-    MINUSEQ  shift, and go to state 322
-    STAREQ   shift, and go to state 323
-    DIVEQ    shift, and go to state 324
-    MODEQ    shift, and go to state 325
-    XOREQ    shift, and go to state 326
-    ANDEQ    shift, and go to state 327
-    OREQ     shift, and go to state 328
-    GTGTEQ   shift, and go to state 329
-    LTLTEQ   shift, and go to state 330
-    '='      shift, and go to state 331
+    EQUAL    shift, and go to state 321
+    PLUSEQ   shift, and go to state 322
+    MINUSEQ  shift, and go to state 323
+    STAREQ   shift, and go to state 324
+    DIVEQ    shift, and go to state 325
+    MODEQ    shift, and go to state 326
+    XOREQ    shift, and go to state 327
+    ANDEQ    shift, and go to state 328
+    OREQ     shift, and go to state 329
+    GTGTEQ   shift, and go to state 330
+    LTLTEQ   shift, and go to state 331
 
     assignment_operator  go to state 332
 
@@ -10475,14 +10475,14 @@ state 488
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 192 (statement_list_opt)
 
@@ -10810,7 +10810,7 @@ state 521
 
 state 522
 
-  505 enum_member_declaration: attributes_opt IDENTIFIER '=' . constant_expression
+  505 enum_member_declaration: attributes_opt IDENTIFIER EQUAL . constant_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -10843,14 +10843,14 @@ state 522
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11150,14 +11150,14 @@ state 543
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11237,14 +11237,14 @@ state 545
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11317,14 +11317,14 @@ state 546
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11397,14 +11397,14 @@ state 547
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11521,14 +11521,14 @@ state 554
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11622,14 +11622,14 @@ state 556
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -11832,12 +11832,12 @@ state 565
 state 566
 
   202 variable_declarator: IDENTIFIER .
-  203                    | IDENTIFIER . '=' variable_initializer
+  203                    | IDENTIFIER . EQUAL variable_initializer
   302 qualified_identifier: IDENTIFIER .
   304 qualifier: IDENTIFIER . DOT
 
-    DOT  shift, and go to state 28
-    '='  shift, and go to state 641
+    DOT    shift, and go to state 28
+    EQUAL  shift, and go to state 641
 
     LEFT_BRACKET_GROUP   reduce using rule 302 (qualified_identifier)
     LEFT_BRACKET_CIRCLE  reduce using rule 302 (qualified_identifier)
@@ -11853,24 +11853,24 @@ state 567
     TRUE               shift, and go to state 643
     GREATER            shift, and go to state 644
     SMALLER            shift, and go to state 645
-    LTLT               shift, and go to state 646
-    GTGT               shift, and go to state 647
-    EQEQ               shift, and go to state 648
-    NOTEQ              shift, and go to state 649
-    LEQ                shift, and go to state 650
-    GEQ                shift, and go to state 651
-    PLUSPLUS           shift, and go to state 652
-    MINUSMINUS         shift, and go to state 653
-    PLUS               shift, and go to state 654
-    MINUS              shift, and go to state 655
-    STAR               shift, and go to state 656
-    SLASH              shift, and go to state 657
-    PERCENT            shift, and go to state 658
-    AND                shift, and go to state 659
-    OR                 shift, and go to state 660
-    EXCLAMATION_POINT  shift, and go to state 661
-    TILDE              shift, and go to state 662
-    '^'                shift, and go to state 663
+    PLUS               shift, and go to state 646
+    MINUS              shift, and go to state 647
+    STAR               shift, and go to state 648
+    SLASH              shift, and go to state 649
+    PERCENT            shift, and go to state 650
+    AND                shift, and go to state 651
+    OR                 shift, and go to state 652
+    EXCLAMATION_POINT  shift, and go to state 653
+    TILDE              shift, and go to state 654
+    POWER              shift, and go to state 655
+    LTLT               shift, and go to state 656
+    GTGT               shift, and go to state 657
+    EQEQ               shift, and go to state 658
+    NOTEQ              shift, and go to state 659
+    LEQ                shift, and go to state 660
+    GEQ                shift, and go to state 661
+    PLUSPLUS           shift, and go to state 662
+    MINUSMINUS         shift, and go to state 663
 
     overloadable_operator  go to state 664
 
@@ -12031,14 +12031,14 @@ state 581
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12227,14 +12227,14 @@ state 588
     USHORT               shift, and go to state 94
     VOID                 shift, and go to state 290
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 243 (for_initializer_opt)
 
@@ -12365,14 +12365,14 @@ state 591
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12467,14 +12467,14 @@ state 593
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12561,14 +12561,14 @@ state 594
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12668,14 +12668,14 @@ state 597
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12797,14 +12797,14 @@ state 602
     USHORT               shift, and go to state 94
     VOID                 shift, and go to state 290
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12898,14 +12898,14 @@ state 603
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -12960,9 +12960,9 @@ state 603
 state 604
 
   202 variable_declarator: IDENTIFIER .
-  203                    | IDENTIFIER . '=' variable_initializer
+  203                    | IDENTIFIER . EQUAL variable_initializer
 
-    '='  shift, and go to state 641
+    EQUAL  shift, and go to state 641
 
     $default  reduce using rule 202 (variable_declarator)
 
@@ -13035,7 +13035,7 @@ state 613
 
 state 614
 
-  505 enum_member_declaration: attributes_opt IDENTIFIER '=' constant_expression .
+  505 enum_member_declaration: attributes_opt IDENTIFIER EQUAL constant_expression .
 
     $default  reduce using rule 505 (enum_member_declaration)
 
@@ -13149,14 +13149,14 @@ state 623
     LEFT_BRACKET_GROUP   shift, and go to state 386
     RIGHT_BRACKET_GROUP  shift, and go to state 709
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -13273,14 +13273,14 @@ state 628
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -13341,9 +13341,9 @@ state 631
 
 state 632
 
-  211 constant_declarator: IDENTIFIER . '=' constant_expression
+  211 constant_declarator: IDENTIFIER . EQUAL constant_expression
 
-    '='  shift, and go to state 713
+    EQUAL  shift, and go to state 713
 
 
 state 633
@@ -13427,7 +13427,7 @@ state 640
 
 state 641
 
-  203 variable_declarator: IDENTIFIER '=' . variable_initializer
+  203 variable_declarator: IDENTIFIER EQUAL . variable_initializer
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -13462,14 +13462,14 @@ state 641
     USHORT               shift, and go to state 94
     LEFT_BRACKET_GROUP   shift, and go to state 386
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -13553,128 +13553,128 @@ state 645
 
 state 646
 
-  423 overloadable_operator: LTLT .
-
-    $default  reduce using rule 423 (overloadable_operator)
-
-
-state 647
-
-  424 overloadable_operator: GTGT .
-
-    $default  reduce using rule 424 (overloadable_operator)
-
-
-state 648
-
-  425 overloadable_operator: EQEQ .
-
-    $default  reduce using rule 425 (overloadable_operator)
-
-
-state 649
-
-  426 overloadable_operator: NOTEQ .
-
-    $default  reduce using rule 426 (overloadable_operator)
-
-
-state 650
-
-  430 overloadable_operator: LEQ .
-
-    $default  reduce using rule 430 (overloadable_operator)
-
-
-state 651
-
-  429 overloadable_operator: GEQ .
-
-    $default  reduce using rule 429 (overloadable_operator)
-
-
-state 652
-
-  413 overloadable_operator: PLUSPLUS .
-
-    $default  reduce using rule 413 (overloadable_operator)
-
-
-state 653
-
-  414 overloadable_operator: MINUSMINUS .
-
-    $default  reduce using rule 414 (overloadable_operator)
-
-
-state 654
-
   409 overloadable_operator: PLUS .
 
     $default  reduce using rule 409 (overloadable_operator)
 
 
-state 655
+state 647
 
   410 overloadable_operator: MINUS .
 
     $default  reduce using rule 410 (overloadable_operator)
 
 
-state 656
+state 648
 
   417 overloadable_operator: STAR .
 
     $default  reduce using rule 417 (overloadable_operator)
 
 
-state 657
+state 649
 
   418 overloadable_operator: SLASH .
 
     $default  reduce using rule 418 (overloadable_operator)
 
 
-state 658
+state 650
 
   419 overloadable_operator: PERCENT .
 
     $default  reduce using rule 419 (overloadable_operator)
 
 
-state 659
+state 651
 
   420 overloadable_operator: AND .
 
     $default  reduce using rule 420 (overloadable_operator)
 
 
-state 660
+state 652
 
   421 overloadable_operator: OR .
 
     $default  reduce using rule 421 (overloadable_operator)
 
 
-state 661
+state 653
 
   411 overloadable_operator: EXCLAMATION_POINT .
 
     $default  reduce using rule 411 (overloadable_operator)
 
 
-state 662
+state 654
 
   412 overloadable_operator: TILDE .
 
     $default  reduce using rule 412 (overloadable_operator)
 
 
-state 663
+state 655
 
-  422 overloadable_operator: '^' .
+  422 overloadable_operator: POWER .
 
     $default  reduce using rule 422 (overloadable_operator)
+
+
+state 656
+
+  423 overloadable_operator: LTLT .
+
+    $default  reduce using rule 423 (overloadable_operator)
+
+
+state 657
+
+  424 overloadable_operator: GTGT .
+
+    $default  reduce using rule 424 (overloadable_operator)
+
+
+state 658
+
+  425 overloadable_operator: EQEQ .
+
+    $default  reduce using rule 425 (overloadable_operator)
+
+
+state 659
+
+  426 overloadable_operator: NOTEQ .
+
+    $default  reduce using rule 426 (overloadable_operator)
+
+
+state 660
+
+  430 overloadable_operator: LEQ .
+
+    $default  reduce using rule 430 (overloadable_operator)
+
+
+state 661
+
+  429 overloadable_operator: GEQ .
+
+    $default  reduce using rule 429 (overloadable_operator)
+
+
+state 662
+
+  413 overloadable_operator: PLUSPLUS .
+
+    $default  reduce using rule 413 (overloadable_operator)
+
+
+state 663
+
+  414 overloadable_operator: MINUSMINUS .
+
+    $default  reduce using rule 414 (overloadable_operator)
 
 
 state 664
@@ -14147,14 +14147,14 @@ state 708
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -14240,7 +14240,7 @@ state 712
 
 state 713
 
-  211 constant_declarator: IDENTIFIER '=' . constant_expression
+  211 constant_declarator: IDENTIFIER EQUAL . constant_expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -14273,14 +14273,14 @@ state 713
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -14454,7 +14454,7 @@ state 721
 
 state 722
 
-  203 variable_declarator: IDENTIFIER '=' variable_initializer .
+  203 variable_declarator: IDENTIFIER EQUAL variable_initializer .
 
     $default  reduce using rule 203 (variable_declarator)
 
@@ -14631,14 +14631,14 @@ state 733
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -14692,9 +14692,9 @@ state 733
 
 state 734
 
-  290 fixed_pointer_declarator: IDENTIFIER . '=' expression
+  290 fixed_pointer_declarator: IDENTIFIER . EQUAL expression
 
-    '='  shift, and go to state 787
+    EQUAL  shift, and go to state 787
 
 
 state 735
@@ -14748,14 +14748,14 @@ state 737
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 245 (for_condition_opt)
 
@@ -14846,14 +14846,14 @@ state 738
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -14961,14 +14961,14 @@ state 741
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -15086,14 +15086,14 @@ state 742
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -15263,14 +15263,14 @@ state 749
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -15388,14 +15388,14 @@ state 750
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -15572,7 +15572,7 @@ state 764
 
 state 765
 
-  211 constant_declarator: IDENTIFIER '=' constant_expression .
+  211 constant_declarator: IDENTIFIER EQUAL constant_expression .
 
     $default  reduce using rule 211 (constant_declarator)
 
@@ -15749,7 +15749,7 @@ state 786
 
 state 787
 
-  290 fixed_pointer_declarator: IDENTIFIER '=' . expression
+  290 fixed_pointer_declarator: IDENTIFIER EQUAL . expression
 
     IDENTIFIER           shift, and go to state 54
     INTEGER_LITERAL      shift, and go to state 165
@@ -15782,14 +15782,14 @@ state 787
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -15902,14 +15902,14 @@ state 789
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -16037,14 +16037,14 @@ state 794
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -16362,7 +16362,7 @@ state 823
 
 state 824
 
-  290 fixed_pointer_declarator: IDENTIFIER '=' expression .
+  290 fixed_pointer_declarator: IDENTIFIER EQUAL expression .
 
     $default  reduce using rule 290 (fixed_pointer_declarator)
 
@@ -16416,14 +16416,14 @@ state 827
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 247 (for_iterator_opt)
 
@@ -16528,14 +16528,14 @@ state 829
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -16635,14 +16635,14 @@ state 830
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -16788,14 +16788,14 @@ state 835
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -16990,14 +16990,14 @@ state 846
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 70 (argument_list_opt)
 
@@ -17090,14 +17090,14 @@ state 847
     UNCHECKED            shift, and go to state 178
     USHORT               shift, and go to state 94
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 70 (argument_list_opt)
 
@@ -17389,14 +17389,14 @@ state 868
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189
@@ -17552,14 +17552,14 @@ state 874
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     $default  reduce using rule 230 (switch_section)
 
@@ -17831,14 +17831,14 @@ state 890
     LEFT_BRACKET_GROUP   shift, and go to state 361
     LEFT_BRACKET_CIRCLE  shift, and go to state 179
     SEMICOLON            shift, and go to state 472
-    PLUSPLUS             shift, and go to state 180
-    MINUSMINUS           shift, and go to state 181
-    PLUS                 shift, and go to state 182
-    MINUS                shift, and go to state 183
-    STAR                 shift, and go to state 184
-    AND                  shift, and go to state 185
-    EXCLAMATION_POINT    shift, and go to state 186
-    TILDE                shift, and go to state 187
+    PLUS                 shift, and go to state 180
+    MINUS                shift, and go to state 181
+    STAR                 shift, and go to state 182
+    AND                  shift, and go to state 183
+    EXCLAMATION_POINT    shift, and go to state 184
+    TILDE                shift, and go to state 185
+    PLUSPLUS             shift, and go to state 186
+    MINUSMINUS           shift, and go to state 187
 
     literal                            go to state 188
     boolean_literal                    go to state 189

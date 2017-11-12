@@ -136,38 +136,40 @@
      SEMICOLON = 362,
      COLON = 363,
      DOT = 364,
-     PLUSEQ = 365,
-     MINUSEQ = 366,
-     STAREQ = 367,
-     DIVEQ = 368,
-     MODEQ = 369,
-     XOREQ = 370,
-     ANDEQ = 371,
-     OREQ = 372,
-     LTLT = 373,
-     GTGT = 374,
-     GTGTEQ = 375,
-     LTLTEQ = 376,
-     EQEQ = 377,
-     NOTEQ = 378,
-     LEQ = 379,
-     GEQ = 380,
-     ANDAND = 381,
-     OROR = 382,
-     PLUSPLUS = 383,
-     MINUSMINUS = 384,
-     ARROW = 385,
-     PLUS = 386,
-     MINUS = 387,
-     STAR = 388,
-     SLASH = 389,
-     PERCENT = 390,
-     AND = 391,
-     OR = 392,
-     EXCLAMATION_POINT = 393,
-     TILDE = 394,
-     QUESTION_MARK = 395,
-     THEN = 396
+     PLUS = 365,
+     MINUS = 366,
+     STAR = 367,
+     SLASH = 368,
+     PERCENT = 369,
+     AND = 370,
+     OR = 371,
+     EXCLAMATION_POINT = 372,
+     TILDE = 373,
+     QUESTION_MARK = 374,
+     POWER = 375,
+     EQUAL = 376,
+     PLUSEQ = 377,
+     MINUSEQ = 378,
+     STAREQ = 379,
+     DIVEQ = 380,
+     MODEQ = 381,
+     XOREQ = 382,
+     ANDEQ = 383,
+     OREQ = 384,
+     LTLT = 385,
+     GTGT = 386,
+     GTGTEQ = 387,
+     LTLTEQ = 388,
+     EQEQ = 389,
+     NOTEQ = 390,
+     LEQ = 391,
+     GEQ = 392,
+     ANDAND = 393,
+     OROR = 394,
+     PLUSPLUS = 395,
+     MINUSMINUS = 396,
+     ARROW = 397,
+     THEN = 398
    };
 #endif
 /* Tokens.  */
@@ -278,44 +280,46 @@
 #define SEMICOLON 362
 #define COLON 363
 #define DOT 364
-#define PLUSEQ 365
-#define MINUSEQ 366
-#define STAREQ 367
-#define DIVEQ 368
-#define MODEQ 369
-#define XOREQ 370
-#define ANDEQ 371
-#define OREQ 372
-#define LTLT 373
-#define GTGT 374
-#define GTGTEQ 375
-#define LTLTEQ 376
-#define EQEQ 377
-#define NOTEQ 378
-#define LEQ 379
-#define GEQ 380
-#define ANDAND 381
-#define OROR 382
-#define PLUSPLUS 383
-#define MINUSMINUS 384
-#define ARROW 385
-#define PLUS 386
-#define MINUS 387
-#define STAR 388
-#define SLASH 389
-#define PERCENT 390
-#define AND 391
-#define OR 392
-#define EXCLAMATION_POINT 393
-#define TILDE 394
-#define QUESTION_MARK 395
-#define THEN 396
+#define PLUS 365
+#define MINUS 366
+#define STAR 367
+#define SLASH 368
+#define PERCENT 369
+#define AND 370
+#define OR 371
+#define EXCLAMATION_POINT 372
+#define TILDE 373
+#define QUESTION_MARK 374
+#define POWER 375
+#define EQUAL 376
+#define PLUSEQ 377
+#define MINUSEQ 378
+#define STAREQ 379
+#define DIVEQ 380
+#define MODEQ 381
+#define XOREQ 382
+#define ANDEQ 383
+#define OREQ 384
+#define LTLT 385
+#define GTGT 386
+#define GTGTEQ 387
+#define LTLTEQ 388
+#define EQEQ 389
+#define NOTEQ 390
+#define LEQ 391
+#define GEQ 392
+#define ANDAND 393
+#define OROR 394
+#define PLUSPLUS 395
+#define MINUSMINUS 396
+#define ARROW 397
+#define THEN 398
 
 
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 37 "C:\\Users\\maher\\Desktop\\New folder\\compiler\\src\\compiler\\Parser\\yacc.y"
+#line 37 "C:\\Users\\maher\\Desktop\\Compiler\\compiler\\src\\compiler\\Parser\\yacc.y"
 typedef union YYSTYPE {
 	struct R{
 		int i;
@@ -327,7 +331,7 @@ typedef union YYSTYPE {
 		}r;
 	} YYSTYPE;
 /* Line 1447 of yacc.c.  */
-#line 331 "yacc.hpp"
+#line 335 "yacc.hpp"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

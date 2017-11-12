@@ -89,13 +89,13 @@
 %token LEFT_BRACKET_GROUP RIGHT_BRACKET_GROUP LEFT_BRACKET_CIRCLE RIGHT_BRACKET_CIRCLE
 %token GREATER SMALLER
 %token SEMICOLON COLON DOT
+%token PLUS MINUS STAR SLASH PERCENT AND OR EXCLAMATION_POINT TILDE QUESTION_MARK POWER EQUAL
 
 
 /*** MULTI-CHARACTER OPERATORS ***/
 %token PLUSEQ MINUSEQ STAREQ DIVEQ MODEQ
 %token XOREQ  ANDEQ   OREQ LTLT GTGT GTGTEQ LTLTEQ EQEQ NOTEQ
 %token LEQ GEQ ANDAND OROR PLUSPLUS MINUSMINUS ARROW
-%token PLUS MINUS STAR SLASH PERCENT AND OR EXCLAMATION_POINT TILDE QUESTION_MARK
 
 %nonassoc THEN
 %nonassoc ELSE
@@ -369,7 +369,7 @@ and_expression
   ;
 exclusive_or_expression
   : and_expression
-  | exclusive_or_expression '^' and_expression
+  | exclusive_or_expression POWER and_expression
   ;
 inclusive_or_expression
   : exclusive_or_expression
@@ -391,7 +391,7 @@ assignment
 : unary_expression assignment_operator expression
   ;
 assignment_operator
-  : '=' | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | MODEQ 
+  : EQUAL | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | MODEQ 
   | XOREQ | ANDEQ | OREQ | GTGTEQ | LTLTEQ 
   ;
 expression
@@ -456,7 +456,7 @@ variable_declarators
   ;
 variable_declarator
   : IDENTIFIER
-  | IDENTIFIER '=' variable_initializer
+  | IDENTIFIER EQUAL variable_initializer
   ;
 variable_initializer
   : expression
@@ -474,7 +474,7 @@ constant_declarators
   | constant_declarators COMMA constant_declarator
   ;
 constant_declarator
-  : IDENTIFIER '=' constant_expression
+  : IDENTIFIER EQUAL constant_expression
   ;
 expression_statement
   : statement_expression SEMICOLON
@@ -642,7 +642,7 @@ fixed_pointer_declarators
   | fixed_pointer_declarators COMMA fixed_pointer_declarator
   ;
 fixed_pointer_declarator
-  : IDENTIFIER '=' expression
+  : IDENTIFIER EQUAL expression
   ;
 compilation_unit
   : using_directives_opt attributes_opt 
@@ -693,7 +693,7 @@ using_directive
   | using_namespace_directive
   ;
 using_alias_directive
-  : USING IDENTIFIER '=' qualified_identifier SEMICOLON
+  : USING IDENTIFIER EQUAL qualified_identifier SEMICOLON
   ;
 using_namespace_directive
   : USING namespace_name SEMICOLON
@@ -918,7 +918,7 @@ overloadable_operator_declarator
 overloadable_operator
   : PLUS | MINUS 
   | EXCLAMATION_POINT | TILDE | PLUSPLUS | MINUSMINUS | TRUE | FALSE
-  | STAR | SLASH | PERCENT | AND | OR | '^' 
+  | STAR | SLASH | PERCENT | AND | OR | POWER 
   | LTLT | GTGT | EQEQ | NOTEQ | GREATER | SMALLER | GEQ | LEQ
   ;
 conversion_operator_declarator
@@ -1105,7 +1105,7 @@ enum_member_declarations
   ;
 enum_member_declaration
   : attributes_opt IDENTIFIER
-  | attributes_opt IDENTIFIER '=' constant_expression
+  | attributes_opt IDENTIFIER EQUAL constant_expression
   ;
 
 /***** C.2.11 Delegates *****/

@@ -229,8 +229,10 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "|"   { doForReturn(yytext); t.push(OR); }
 "!"   { doForReturn(yytext); t.push(EXCLAMATION_POINT); }
 "~"   { doForReturn(yytext); t.push(TILDE); }
-"^"   { doForReturn(yytext); t.push(QUESTION_MARK); }
+"^"   { doForReturn(yytext); t.push(POWER); }
 
+"?"   { doForReturn(yytext); t.push(QUESTION_MARK); }
+"="   { doForReturn(yytext); t.push(EQUAL); }
 
 {rank_specifier}     { t.push(RANK_SPECIFIER); }
 
