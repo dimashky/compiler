@@ -5,7 +5,7 @@
 
 
 
- %output ="yacc.cpp"
+
 %{
 	#define YYERROR_VERBOSE 1
 	#define YYDEBUG 1
@@ -13,15 +13,17 @@
 	#include <iostream>
 	#include <FlexLexer.h>
 
-
 	using namespace std;
 	
+	extern int yylex();
+	extern int yyparse();
+	extern FILE* yyin;
+
+	void yyerror(const char *);
 	
-	int yylex(void);
-	int yyparse();
-	int yyerror(char *);
+
+
 	
-	FlexLexer* lexer = new yyFlexLexer();
 
 %}
 
@@ -1196,19 +1198,14 @@ EXIT_getset
 
 %%
 
-int yyerror(char *s)
+void yyerror(const char* s)
 {
 	extern int line_no;
 	extern int col_no;
-
 	fprintf (stderr,"[%d, %d] -> %s\n", line_no, col_no,s);
-	return 1;
+	
 }
 
 
-int yylex()
-{
-	return lexer->yylex();
-}
 
 

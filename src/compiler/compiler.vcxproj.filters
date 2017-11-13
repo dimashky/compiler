@@ -24,28 +24,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Lexical Analyzer\lex.l">
-      <Filter>Source Files\Lexical Analyzer</Filter>
-    </None>
-    <None Include="Parser\yacc.y">
-      <Filter>Source Files\Parser</Filter>
-    </None>
-    <None Include="Parser\yacc.output">
-      <Filter>Source Files\Parser</Filter>
-    </None>
     <None Include="sample inputs\input.cs">
       <Filter>Source Files\I/O</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lexical Analyzer\lex.yy.cc">
-      <Filter>Source Files\Lexical Analyzer</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser\yacc.cpp">
-      <Filter>Source Files\Parser</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lexical Analyzer\lex.flex.cpp">
+      <Filter>Source Files\Lexical Analyzer</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\yacc.tab.cpp">
+      <Filter>Source Files\Parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,8 +48,14 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parser\yacc.hpp">
+    <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Bison Include="Parser\yacc.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <Flex Include="Lexical Analyzer\lex.l" />
   </ItemGroup>
 </Project>

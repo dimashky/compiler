@@ -6,8 +6,14 @@
 	#include <string>
 	#include <queue>
 	#include <stack>
-	#include "../parser/yacc.hpp"
-	
+
+	using namespace std;
+
+	#define YY_DECL int yylex()
+
+	#include "../parser/yacc.tab.h"
+
+
 	struct bracket {
 		char br;
 		int line_no;
@@ -26,7 +32,7 @@
 	void doForReturn(char * yytext){
 		yylval.r.col_no = col_no;
 		yylval.r.line_no = line_no;
-		col_no += strlen(yytext);
+		col_no += (int)strlen(yytext);
 	}
 	void doForName(char* yytext){
 		yylval.r.str = new char[255];
@@ -36,8 +42,9 @@
 %}
 
 %option noyywrap
-%option c++
 %option stack
+
+
 
 %x multilinecomment
 
