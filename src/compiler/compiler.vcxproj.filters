@@ -52,7 +52,7 @@
     <Text Include="Lexical Analyzer\replace.txt">
       <Filter>Source Files\Lexical Analyzer</Filter>
     </Text>
-    <Text Include="output.txt">
+    <Text Include="error.log">
       <Filter>Source Files\I/O</Filter>
     </Text>
   </ItemGroup>

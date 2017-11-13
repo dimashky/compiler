@@ -1,7 +1,11 @@
 class compiler
 {
-    void main()
+    id main()
     {
-        x = "asdsad";
+
+        for (int i = 0; i < 2; ++i)
+        {
+            int x = 3
+        }
     }
-)
+}

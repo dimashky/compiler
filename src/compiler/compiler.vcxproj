@@ -30,8 +30,8 @@
     <ClCompile Include="Parser\yacc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="error.log" />
     <Text Include="Lexical Analyzer\replace.txt" />
-    <Text Include="output.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\yacc.hpp" />

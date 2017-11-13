@@ -22,16 +22,7 @@
 	int yyerror(char *);
 	
 	FlexLexer* lexer = new yyFlexLexer();
-	
-	class Parser
-	{
-		public:
-		int	parse()
-		{
-			return yyparse();
-		}
-	};
-	
+
 %}
 
 %union{
@@ -52,8 +43,8 @@
 %token RANK_SPECIFIER
 
 /* C.1.4 Tokens */
-%token IDENTIFIER  BAD_IDENTIFIER
-%token INTEGER_LITERAL REAL_LITERAL CHARACTER_LITERAL STRING_LITERAL
+%token IDENTIFIER "id" BAD_IDENTIFIER "bad_id"
+%token INTEGER_LITERAL "int_value" REAL_LITERAL "real_value" CHARACTER_LITERAL "char_value" STRING_LITERAL "str_value"
 
 
 /* C.1.7 KEYWORDS */ 
@@ -83,12 +74,12 @@
 %token ADD REMOVE
 
 /*** PUNCTUATION AND SINGLE CHARACTER OPERATORS ***/
-%token COMMA  ","
-%token LEFT_BRACKET  "["
+%token COMMA ","
+%token LEFT_BRACKET "["
 %token RIGHT_BRACKET "]"
-%token LEFT_BRACKET_GROUP RIGHT_BRACKET_GROUP LEFT_BRACKET_CIRCLE RIGHT_BRACKET_CIRCLE
-%token GREATER SMALLER
-%token SEMICOLON COLON DOT
+%token LEFT_BRACKET_GROUP "{" RIGHT_BRACKET_GROUP "}" LEFT_BRACKET_CIRCLE "(" RIGHT_BRACKET_CIRCLE ")"
+%token GREATER ">" SMALLER "<"
+%token SEMICOLON ";" COLON ":" DOT "."
 %token PLUS MINUS STAR SLASH PERCENT AND OR EXCLAMATION_POINT TILDE QUESTION_MARK POWER EQUAL
 
 
@@ -446,6 +437,8 @@ labeled_statement
 declaration_statement
   : local_variable_declaration SEMICOLON
   | local_constant_declaration SEMICOLON
+  | local_variable_declaration error
+  | local_constant_declaration error
   ;
 local_variable_declaration
   : type variable_declarators
@@ -478,6 +471,7 @@ constant_declarator
   ;
 expression_statement
   : statement_expression SEMICOLON
+  |	statement_expression error
   ;
 statement_expression
   : invocation_expression
@@ -535,9 +529,12 @@ while_statement
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON
+  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error
   ;
 for_statement
   : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement
+  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error for_condition_opt error for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement
+
   ;
 for_initializer_opt
   : /* Nothing */
@@ -577,17 +574,23 @@ jump_statement
   ;
 break_statement
   : BREAK SEMICOLON
+  | BREAK error
   ;
 continue_statement
   : CONTINUE SEMICOLON
+  | CONTINUE error
   ;
 goto_statement
   : GOTO IDENTIFIER SEMICOLON
   | GOTO CASE constant_expression SEMICOLON
   | GOTO DEFAULT SEMICOLON
+  | GOTO IDENTIFIER error
+  | GOTO CASE constant_expression error
+  | GOTO DEFAULT error
   ;
 return_statement
   : RETURN expression_opt SEMICOLON
+  | RETURN expression_opt error
   ;
 expression_opt
   : /* Nothing */
@@ -595,6 +598,7 @@ expression_opt
   ;
 throw_statement
   : THROW expression_opt SEMICOLON
+  | THROW expression_opt error
   ;
 try_statement
   : TRY block catch_clauses
@@ -694,9 +698,11 @@ using_directive
   ;
 using_alias_directive
   : USING IDENTIFIER EQUAL qualified_identifier SEMICOLON
+  | USING IDENTIFIER EQUAL qualified_identifier error
   ;
 using_namespace_directive
   : USING namespace_name SEMICOLON
+  | USING namespace_name error
   ;
 namespace_member_declarations
   : namespace_member_declaration
@@ -788,9 +794,11 @@ class_member_declaration
   ;
 constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON
+  | attributes_opt modifiers_opt CONST type constant_declarators error
   ;
 field_declaration
   : attributes_opt modifiers_opt type variable_declarators SEMICOLON
+  | attributes_opt modifiers_opt type variable_declarators error
   ;
 method_declaration
   : method_header method_body
@@ -1111,6 +1119,7 @@ enum_member_declaration
 /***** C.2.11 Delegates *****/
 delegate_declaration
   : attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE SEMICOLON
+  | attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE error
   ;
 
 /***** C.2.12 Attributes *****/
@@ -1192,7 +1201,7 @@ int yyerror(char *s)
 	extern int line_no;
 	extern int col_no;
 
-	printf ("[%d, %d] -> %s\n", line_no, col_no,s);
+	fprintf (stderr,"[%d, %d] -> %s\n", line_no, col_no,s);
 	return 1;
 }
 

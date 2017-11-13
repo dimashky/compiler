@@ -9,7 +9,7 @@ int main()
 
 	freopen("sample inputs/input.cs", "r", stdin);
 
-	freopen("output.txt", "w", stdout);
+	freopen("error.log", "w", stderr);
 
 	return yyparse();
 

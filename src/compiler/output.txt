@@ -1,3 +1,0 @@
-() open line 3 and close line 3
-{} open line 4 and close line 6
-Error it isn't expected ) at line 2 column 2.

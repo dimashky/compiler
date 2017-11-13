@@ -16,6 +16,7 @@
 
 	int line_no = 1;
 	int col_no = 1;
+	static bool invalid_token = false;
 	queue <int> t;
 	stack <bracket> brackets;
 
@@ -119,96 +120,56 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 {character_literal}   { doForReturn(yytext); yylval.r.c=yytext[1]; t.push(CHARACTER_LITERAL); }
 {string_literal}      { doForReturn(yytext); doForName(yytext); t.push(STRING_LITERAL); }
 
+
+
                       /*** Punctuation and Single-Character Operators ***/
 ","   { doForReturn(yytext); t.push(COMMA); }
 
-"["   { 
-	
-	doForReturn(yytext); 
-	
-	bracket b = {'[',line_no,col_no};
-	brackets.push(b);
-	
-	t.push(LEFT_BRACKET); 
-	
-}
 
-"]"   {
-	doForReturn(yytext); 
+"["   { doForReturn(yytext);  bracket b = {'[',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET); }
+
+"]"   { doForReturn(yytext); 
 	
-	if(brackets.empty()){
-		printf("unexpected ] on line %d\n",line_no);
-	}
-	else if(brackets.top().br != '[') {
-		printf("Error it isn't expected ] at line %d column %d.\n",brackets.top().line_no,brackets.top().col_no);
-	} else{
-		printf("[] open line %d and close line %d\n",brackets.top().line_no,line_no);
-		brackets.pop();
-	}
+		if(brackets.empty())
+			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ]\n",line_no,col_no);
+		else if(brackets.top().br != '[')
+			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ], expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
+		else
+			brackets.pop();
 		
-	t.push(RIGHT_BRACKET); 
-
+		t.push(RIGHT_BRACKET); 
 }
 
 
 
-"{"   {
+"{"   { doForReturn(yytext);  bracket b = {'{',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_GROUP); }
 
-	doForReturn(yytext); 
+"}"   { doForReturn(yytext); 
 
-	bracket b = {'{',line_no,col_no};
-	brackets.push(b);
+		if(brackets.empty())
+			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }\n",line_no,col_no);
+		else if(brackets.top().br != '{')
+			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }, expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
+		else
+			brackets.pop();
 
-	t.push(LEFT_BRACKET_GROUP); 
-
+		t.push(RIGHT_BRACKET_GROUP); 
 }
 
-"}"   {
 
-	doForReturn(yytext); 
 
-	if(brackets.empty()){
-		printf("unexpected } on line %d\n",line_no);
-	}
-	else if(brackets.top().br != '{') {
-		printf("Error it isn't expected } at line %d column %d.\n",brackets.top().line_no,brackets.top().col_no);
-	} else{
-		printf("{} open line %d and close line %d\n",brackets.top().line_no,line_no);
-		brackets.pop();
-	}
+"("   {  doForReturn(yytext);  bracket b = {'(',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_CIRCLE); }
 
-	t.push(RIGHT_BRACKET_GROUP); 
+")"   { doForReturn(yytext); 
 	
-}
+		if(brackets.empty())
+			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected )\n",line_no,col_no);
+		else if(brackets.top().br != '(')
+			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ), expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
+		else
+			brackets.pop();
 
-
-
-"("   { 
-
-	doForReturn(yytext); 
-	
-	bracket b = {'(',line_no,col_no};
-	brackets.push(b);
-	
-	t.push(LEFT_BRACKET_CIRCLE); 
-
-}
-
-")"   { 
-
-	doForReturn(yytext); 
-	if(brackets.empty()){
-		printf("unexpected ) on line %d\n",line_no);
-	}
-	else if(brackets.top().br != '(') {
-		printf("Error it isn't expected ) at line %d column %d.\n",brackets.top().line_no,brackets.top().col_no);
-	} else{
-		printf("() open line %d and close line %d\n",brackets.top().line_no,line_no);
-		brackets.pop();
-	}
-
-	t.push(RIGHT_BRACKET_CIRCLE); 
-
+		t.push(RIGHT_BRACKET_CIRCLE); 
 }
 
 
@@ -261,18 +222,15 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 
+
 {identifier}          { doForReturn(yytext); doForName(yytext); t.push(token_for(yytext)); }
 
-{bad_identifier}	  { doForReturn(yytext); doForName(yytext); lexical_error("invalid token", yytext); t.push(BAD_IDENTIFIER); }
+{bad_identifier}	  { lexical_error("unqualified id, unexpected",  yytext); }
 
-
-
-.  {
-        lexical_error("invalid token", yytext);
-      }
+.					  {	lexical_error("invalid token", yytext);	}
 
 <<EOF>> {
-	if(!brackets.empty())
+	if(!brackets.empty() || invalid_token == true)
 		yyterminate();
 	t.push(0);
 	while(!t.empty()){
@@ -403,9 +361,7 @@ static int token_for(const char *lexeme)
 
 void lexical_error(const char *msg, char *yytext)
 {
-
-	FILE *f = fopen("Lexical Errors.log","a");
-	fprintf(f,"line:%d-col:%d -> lexical error (%s) [%s]\n",line_no,col_no,msg,yytext);
-	fclose(f);
-
+	extern bool invalid_token;
+	invalid_token = true;
+	fprintf(stderr,"[%d, %d] -> lexical error, %s [%s]\n",line_no,col_no,msg,yytext);
 }
