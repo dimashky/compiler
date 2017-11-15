@@ -22,6 +22,12 @@
     <Filter Include="Source Files\I/O">
       <UniqueIdentifier>{86e0eafe-4d5b-4e16-bdb1-3fff1356cb46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Error Handler">
+      <UniqueIdentifier>{11549d30-f754-42ee-bc6b-3dcbbd0ab5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Logs">
+      <UniqueIdentifier>{94959b74-21d8-4867-a7f7-e849fb00fb92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\input.cs">
@@ -50,6 +56,12 @@
   <ItemGroup>
     <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Error Handler\error_handler.h">
+      <Filter>Source Files\Error Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Error Handler\error_record.h">
+      <Filter>Source Files\Error Handler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

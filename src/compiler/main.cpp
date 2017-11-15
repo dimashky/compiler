@@ -1,16 +1,27 @@
 #include <stdio.h>
+#include "Error Handler\error_handler.h"
 
 using namespace std;
 
 extern int yyparse(void);
 
+extern errorHandler error_handler("logs/error.log");
+
+
 int main()
 {
+	//extern int yydebug;
+	//yydebug = 1;
+
 
 	freopen("sample inputs/input.cs", "r", stdin);
 
-	freopen("error.log", "w", stderr);
 
-	return yyparse();
+	//freopen("error.log", "w", stderr);
 
+	yyparse();
+
+	error_handler.print();
+
+	return 0;
 }

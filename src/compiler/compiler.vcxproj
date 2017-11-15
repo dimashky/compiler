@@ -31,11 +31,13 @@
     <Text Include="Lexical Analyzer\replace.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Error Handler\error_handler.h" />
+    <ClInclude Include="Error Handler\error_record.h" />
     <ClInclude Include="Parser\yacc.tab.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y">
-      <Warnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">all</Warnings>
+      <Warnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">yacc</Warnings>
     </Bison>
   </ItemGroup>
   <ItemGroup>

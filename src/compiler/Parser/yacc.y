@@ -4,17 +4,20 @@
 
 
 
-
+ %define parse.error verbose
 
 %{
 	#define YYERROR_VERBOSE 1
 	#define YYDEBUG 1
 	
 	#include <iostream>
-	#include <FlexLexer.h>
+	#include "../Error Handler/error_handler.h"
 
+	
 	using namespace std;
 	
+
+
 	extern int yylex();
 	extern int yyparse();
 	extern FILE* yyin;
@@ -23,7 +26,7 @@
 	
 
 
-	
+
 
 %}
 
@@ -1200,10 +1203,8 @@ EXIT_getset
 
 void yyerror(const char* s)
 {
-	extern int line_no;
-	extern int col_no;
-	fprintf (stderr,"[%d, %d] -> %s\n", line_no, col_no,s);
-	
+	extern errorHandler error_handler;
+	error_handler.add(error(yylval.r.line_no, yylval.r.col_no, s));
 }
 
 

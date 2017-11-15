@@ -1,11 +1,11 @@
-class compiler
+class a
 {
-    id main()
+    int[] a;
+    int main()
     {
+        int x
 
-        for (int i = 0; i < 2; ++i)
-        {
-            int x = 3
-        }
+
+        int y = 5
     }
 }

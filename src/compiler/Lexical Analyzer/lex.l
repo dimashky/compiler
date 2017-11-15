@@ -6,7 +6,7 @@
 	#include <string>
 	#include <queue>
 	#include <stack>
-
+	#define mp(x,y) make_pair(x,y)
 	using namespace std;
 
 	#define YY_DECL int yylex()
@@ -19,11 +19,32 @@
 		int line_no;
 		int col_no;
 	};
+	
+	struct r{
+		int i;
+		float f;
+		char c;
+		char* str;
+		int line_no;
+		int col_no;
+		r(int i, float f, char c, char* s, int line_no, int col_no){
+			this->i = i;
+			this->f = f;
+			this->c = c;
+			if(s != NULL){
+			this->str = new char[255];	this->str[0] = '\0';
+				strcpy(this->str, s);
+			}
+			this->line_no = line_no;
+			this->col_no = col_no;
+		}
+	};
 
 	int line_no = 1;
 	int col_no = 1;
 	static bool invalid_token = false;
 	queue <int> t;
+	queue <r> q;
 	stack <bracket> brackets;
 
 	void lexical_error(const char *, char *);
@@ -32,6 +53,11 @@
 	void doForReturn(char * yytext){
 		yylval.r.col_no = col_no;
 		yylval.r.line_no = line_no;
+		col_no += (int)strlen(yytext);
+	}
+	void add(int i, float f, char c, char* s, char* yytext){
+		q.push(r(i,f,c,s,line_no,col_no) );
+		if(yytext != NULL)
 		col_no += (int)strlen(yytext);
 	}
 	void doForName(char* yytext){
@@ -43,7 +69,6 @@
 
 %option noyywrap
 %option stack
-
 
 
 %x multilinecomment
@@ -103,6 +128,9 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 %{
 		while(!t.empty()){
 			int x = t.front();
+			r y = q.front();
+			yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.col_no = y.col_no , yylval.r.line_no = y.line_no;
+			q.pop();
 			t.pop();
 			return x;
 		}
@@ -122,20 +150,20 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 {single_line_comment} { line_no++; col_no=1; }
 
                       /***** Literals *****/
-{integer_literal}     { doForReturn(yytext); yylval.r.i=atoi(yytext); t.push(INTEGER_LITERAL); }
-{real_literal}        { doForReturn(yytext); yylval.r.f=(float)atof(yytext); t.push(REAL_LITERAL); }
-{character_literal}   { doForReturn(yytext); yylval.r.c=yytext[1]; t.push(CHARACTER_LITERAL); }
-{string_literal}      { doForReturn(yytext); doForName(yytext); t.push(STRING_LITERAL); }
+{integer_literal}     { add(atoi(yytext),NULL,NULL,NULL,yytext); t.push(INTEGER_LITERAL); }
+{real_literal}        { add(NULL,atof(yytext),NULL,NULL,yytext); t.push(REAL_LITERAL); }
+{character_literal}   { add(NULL,NULL,yytext[0],NULL,yytext);	  t.push(CHARACTER_LITERAL); }
+{string_literal}      { add(NULL,NULL,NULL,yytext,yytext);		  t.push(STRING_LITERAL); }
 
 
 
                       /*** Punctuation and Single-Character Operators ***/
-","   { doForReturn(yytext); t.push(COMMA); }
+","   { add(NULL,NULL,NULL,NULL,yytext);  t.push(COMMA); }
 
 
-"["   { doForReturn(yytext);  bracket b = {'[',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET); }
+"["   { add(NULL,NULL,NULL,NULL,yytext);   bracket b = {'[',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET); }
 
-"]"   { doForReturn(yytext); 
+"]"   { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
 			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ]\n",line_no,col_no);
@@ -149,9 +177,9 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 
-"{"   { doForReturn(yytext);  bracket b = {'{',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_GROUP); }
+"{"   { add(NULL,NULL,NULL,NULL,yytext);   bracket b = {'{',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_GROUP); }
 
-"}"   { doForReturn(yytext); 
+"}"   { add(NULL,NULL,NULL,NULL,yytext);  
 
 		if(brackets.empty())
 			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }\n",line_no,col_no);
@@ -165,9 +193,9 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 
-"("   {  doForReturn(yytext);  bracket b = {'(',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_CIRCLE); }
+"("   {  add(NULL,NULL,NULL,NULL,yytext);   bracket b = {'(',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_CIRCLE); }
 
-")"   { doForReturn(yytext); 
+")"   { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
 			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected )\n",line_no,col_no);
@@ -181,56 +209,56 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 
-">"   { doForReturn(yytext); t.push(GREATER); }
-"<"   { doForReturn(yytext); t.push(SMALLER); }
+">"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(GREATER); }
+"<"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(SMALLER); }
 
-"."   { doForReturn(yytext); t.push(DOT); }
-";"   { doForReturn(yytext); t.push(SEMICOLON); }
-":"   { doForReturn(yytext); t.push(COLON); }
+"."   { add(NULL,NULL,NULL,NULL,yytext);  t.push(DOT); }
+";"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(SEMICOLON); }
+":"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(COLON); }
 
-"+"   { doForReturn(yytext); t.push(PLUS); }
-"-"   { doForReturn(yytext); t.push(MINUS); }
-"*"   { doForReturn(yytext); t.push(STAR); }
-"/"   { doForReturn(yytext); t.push(SLASH); }
-"%"   { doForReturn(yytext); t.push(PERCENT); }
-"&"   { doForReturn(yytext); t.push(AND); }
-"|"   { doForReturn(yytext); t.push(OR); }
-"!"   { doForReturn(yytext); t.push(EXCLAMATION_POINT); }
-"~"   { doForReturn(yytext); t.push(TILDE); }
-"^"   { doForReturn(yytext); t.push(POWER); }
+"+"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUS); }
+"-"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(MINUS); }
+"*"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(STAR); }
+"/"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(SLASH); }
+"%"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(PERCENT); }
+"&"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(AND); }
+"|"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(OR); }
+"!"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(EXCLAMATION_POINT); }
+"~"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(TILDE); }
+"^"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(POWER); }
 
-"?"   { doForReturn(yytext); t.push(QUESTION_MARK); }
-"="   { doForReturn(yytext); t.push(EQUAL); }
+"?"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(QUESTION_MARK); }
+"="   { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQUAL); }
 
-{rank_specifier}     { t.push(RANK_SPECIFIER); }
+{rank_specifier}     { add(NULL,NULL,NULL,NULL,yytext); t.push(RANK_SPECIFIER); }
 
                       /*** Multi-Character Operators ***/
-"+="  { doForReturn(yytext); t.push(PLUSEQ); }
-"-="  { doForReturn(yytext); t.push(MINUSEQ); }
-"*="  { doForReturn(yytext); t.push(STAREQ); }
-"/="  { doForReturn(yytext); t.push(DIVEQ); }
-"%="  { doForReturn(yytext); t.push(MODEQ); }
-"^="  { doForReturn(yytext); t.push(XOREQ); }
-"&="  { doForReturn(yytext); t.push(ANDEQ); }
-"|="  { doForReturn(yytext); t.push(OREQ); }
-"<<"  { doForReturn(yytext); t.push(LTLT); }
-">>"  { doForReturn(yytext); t.push(GTGT); }
-">>="  { doForReturn(yytext); t.push(GTGTEQ); }
-"<<="  { doForReturn(yytext); t.push(LTLTEQ); }
-"=="  { doForReturn(yytext); t.push(EQEQ); }
-"!="  { doForReturn(yytext); t.push(NOTEQ); }
-"<="  { doForReturn(yytext); t.push(LEQ); }
-">="  { doForReturn(yytext); t.push(GEQ); }
-"&&"  { doForReturn(yytext); t.push(ANDAND); }
-"||"  { doForReturn(yytext); t.push(OROR); }
-"++"  { doForReturn(yytext); t.push(PLUSPLUS); }
-"--"  { doForReturn(yytext); t.push(MINUSMINUS); }
-"->"  { doForReturn(yytext); t.push(ARROW); }
+"+="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUSEQ); }
+"-="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(MINUSEQ); }
+"*="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(STAREQ); }
+"/="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(DIVEQ); }
+"%="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(MODEQ); }
+"^="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(XOREQ); }
+"&="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(ANDEQ); }
+"|="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(OREQ); }
+"<<"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLT); }
+">>"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGT); }
+">>="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGTEQ); }
+"<<="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLTEQ); }
+"=="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQEQ); }
+"!="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(NOTEQ); }
+"<="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LEQ); }
+">="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GEQ); }
+"&&"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(ANDAND); }
+"||"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(OROR); }
+"++"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUSPLUS); }
+"--"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(MINUSMINUS); }
+"->"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(ARROW); }
 
 
 
 
-{identifier}          { doForReturn(yytext); doForName(yytext); t.push(token_for(yytext)); }
+{identifier}          { add(NULL,NULL,NULL,yytext,yytext);  t.push(token_for(yytext)); }
 
 {bad_identifier}	  { lexical_error("unqualified id, unexpected",  yytext); }
 
@@ -240,8 +268,12 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 	if(!brackets.empty() || invalid_token == true)
 		yyterminate();
 	t.push(0);
+	add(NULL,NULL,NULL,NULL,0);
 	while(!t.empty()){
 		int x = t.front();
+		r y = q.front();
+		yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.line_no = y.col_no;
+		q.pop();
 		t.pop();
 		return x;
 	}
