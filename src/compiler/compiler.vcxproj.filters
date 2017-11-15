@@ -49,8 +49,11 @@
     <Text Include="Lexical Analyzer\replace.txt">
       <Filter>Source Files\Lexical Analyzer</Filter>
     </Text>
-    <Text Include="error.log">
-      <Filter>Source Files\I/O</Filter>
+    <Text Include="logs\error.log">
+      <Filter>Source Files\Logs</Filter>
+    </Text>
+    <Text Include="logs\Lex.log">
+      <Filter>Source Files\Logs</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

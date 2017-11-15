@@ -31,8 +31,8 @@
 			this->i = i;
 			this->f = f;
 			this->c = c;
+							this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
-			this->str = new char[255];	this->str[0] = '\0';
 				strcpy(this->str, s);
 			}
 			this->line_no = line_no;
@@ -59,6 +59,17 @@
 		q.push(r(i,f,c,s,line_no,col_no) );
 		if(yytext != NULL)
 		col_no += (int)strlen(yytext);
+	}
+	void print(FILE* f, r *x){
+		static int last_row = 1;
+		if( last_row != x->line_no){
+			fprintf(f,"\n");
+			last_row = x->line_no;
+		}
+		if(x->i != NULL) fprintf(f,"%d ",x->i);
+		else if(x->f != NULL) fprintf(f,"%f ",x->f);
+		else if(x->c != NULL) fprintf(f,"%c ",x->c);
+		else if(x->str) fprintf(f,"%s ",x->str);
 	}
 	void doForName(char* yytext){
 		yylval.r.str = new char[255];
@@ -126,14 +137,17 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 %%
 
 %{
+		FILE *f = fopen("Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
 			r y = q.front();
+			print(f, &y);
 			yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.col_no = y.col_no , yylval.r.line_no = y.line_no;
 			q.pop();
 			t.pop();
 			return x;
 		}
+		fclose(f);
 %}
 					/***** White comments *****/
 \n				{ col_no=1; line_no++; }
@@ -268,15 +282,18 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 	if(!brackets.empty() || invalid_token == true)
 		yyterminate();
 	t.push(0);
-	add(NULL,NULL,NULL,NULL,0);
+	add(NULL,NULL,NULL,"END","END");
+	FILE *f = fopen("Lex.log","w");
 	while(!t.empty()){
 		int x = t.front();
 		r y = q.front();
+		print(f,&y);
 		yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.line_no = y.col_no;
 		q.pop();
 		t.pop();
 		return x;
 	}
+	fclose(f);
 }
 %%
 

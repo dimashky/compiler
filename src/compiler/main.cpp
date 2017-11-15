@@ -15,7 +15,7 @@ int main()
 
 
 	freopen("sample inputs/input.cs", "r", stdin);
-
+	fclose(fopen("logs/Lex.log", "w"));
 
 	//freopen("error.log", "w", stderr);
 

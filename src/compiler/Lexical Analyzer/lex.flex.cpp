@@ -809,8 +809,8 @@ char *yytext;
 			this->i = i;
 			this->f = f;
 			this->c = c;
+							this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
-			this->str = new char[255];	this->str[0] = '\0';
 				strcpy(this->str, s);
 			}
 			this->line_no = line_no;
@@ -838,14 +838,25 @@ char *yytext;
 		if(yytext != NULL)
 		col_no += (int)strlen(yytext);
 	}
+	void print(FILE* f, r *x){
+		static int last_row = 1;
+		if( last_row != x->line_no){
+			fprintf(f,"\n");
+			last_row = x->line_no;
+		}
+		if(x->i != NULL) fprintf(f,"%d ",x->i);
+		else if(x->f != NULL) fprintf(f,"%f ",x->f);
+		else if(x->c != NULL) fprintf(f,"%c ",x->c);
+		else if(x->str) fprintf(f,"%s ",x->str);
+	}
 	void doForName(char* yytext){
 		yylval.r.str = new char[255];
 		yylval.r.str[0] = '\0';
 		strcpy(yylval.r.str, yytext);
 	}
-#line 846 "lex.flex.cpp"
+#line 857 "lex.flex.cpp"
 
-#line 848 "lex.flex.cpp"
+#line 859 "lex.flex.cpp"
 
 #define INITIAL 0
 #define multilinecomment 1
@@ -1074,22 +1085,25 @@ YY_DECL
 		}
 
 	{
-#line 126 "lex.l"
+#line 137 "lex.l"
 
 
 
-#line 130 "lex.l"
+#line 141 "lex.l"
+		FILE *f = fopen("logs/Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
 			r y = q.front();
+			print(f, &y);
 			yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.col_no = y.col_no , yylval.r.line_no = y.line_no;
 			q.pop();
 			t.pop();
 			return x;
 		}
+		fclose(f);
 
 					/***** White comments *****/
-#line 1092 "lex.flex.cpp"
+#line 1106 "lex.flex.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1149,82 +1163,82 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 140 "lex.l"
+#line 154 "lex.l"
 { col_no=1; line_no++; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 141 "lex.l"
+#line 155 "lex.l"
 { col_no+=4; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 142 "lex.l"
+#line 156 "lex.l"
 { col_no++; }
 	YY_BREAK
 /***** Comments *****/
 case 4:
 YY_RULE_SETUP
-#line 146 "lex.l"
+#line 160 "lex.l"
 { BEGIN multilinecomment; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 147 "lex.l"
+#line 161 "lex.l"
 {;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 148 "lex.l"
+#line 162 "lex.l"
 {line_no++;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 149 "lex.l"
+#line 163 "lex.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 151 "lex.l"
+#line 165 "lex.l"
 { line_no++; col_no=1; }
 	YY_BREAK
 /***** Literals *****/
 case 9:
 YY_RULE_SETUP
-#line 154 "lex.l"
+#line 168 "lex.l"
 { add(atoi(yytext),NULL,NULL,NULL,yytext); t.push(INTEGER_LITERAL); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 155 "lex.l"
+#line 169 "lex.l"
 { add(NULL,atof(yytext),NULL,NULL,yytext); t.push(REAL_LITERAL); }
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 156 "lex.l"
+#line 170 "lex.l"
 { add(NULL,NULL,yytext[0],NULL,yytext);	  t.push(CHARACTER_LITERAL); }
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 157 "lex.l"
+#line 171 "lex.l"
 { add(NULL,NULL,NULL,yytext,yytext);		  t.push(STRING_LITERAL); }
 	YY_BREAK
 /*** Punctuation and Single-Character Operators ***/
 case 13:
 YY_RULE_SETUP
-#line 162 "lex.l"
+#line 176 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(COMMA); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 165 "lex.l"
+#line 179 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);   bracket b = {'[',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 167 "lex.l"
+#line 181 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
@@ -1239,12 +1253,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 181 "lex.l"
+#line 195 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);   bracket b = {'{',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_GROUP); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 183 "lex.l"
+#line 197 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  
 
 		if(brackets.empty())
@@ -1259,12 +1273,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 197 "lex.l"
+#line 211 "lex.l"
 {  add(NULL,NULL,NULL,NULL,yytext);   bracket b = {'(',line_no,col_no}; brackets.push(b); t.push(LEFT_BRACKET_CIRCLE); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 199 "lex.l"
+#line 213 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
@@ -1279,214 +1293,214 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 213 "lex.l"
+#line 227 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(GREATER); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 214 "lex.l"
+#line 228 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(SMALLER); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 216 "lex.l"
+#line 230 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(DOT); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 217 "lex.l"
+#line 231 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(SEMICOLON); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 218 "lex.l"
+#line 232 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(COLON); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 220 "lex.l"
+#line 234 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUS); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 221 "lex.l"
+#line 235 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(MINUS); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 222 "lex.l"
+#line 236 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(STAR); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 223 "lex.l"
+#line 237 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(SLASH); }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 224 "lex.l"
+#line 238 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(PERCENT); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 225 "lex.l"
+#line 239 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(AND); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 226 "lex.l"
+#line 240 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(OR); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 227 "lex.l"
+#line 241 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(EXCLAMATION_POINT); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 228 "lex.l"
+#line 242 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(TILDE); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 229 "lex.l"
+#line 243 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(POWER); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 231 "lex.l"
+#line 245 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(QUESTION_MARK); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 232 "lex.l"
+#line 246 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQUAL); }
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 234 "lex.l"
+#line 248 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext); t.push(RANK_SPECIFIER); }
 	YY_BREAK
 /*** Multi-Character Operators ***/
 case 38:
 YY_RULE_SETUP
-#line 237 "lex.l"
+#line 251 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUSEQ); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 238 "lex.l"
+#line 252 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(MINUSEQ); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 239 "lex.l"
+#line 253 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(STAREQ); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 240 "lex.l"
+#line 254 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(DIVEQ); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 241 "lex.l"
+#line 255 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(MODEQ); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 242 "lex.l"
+#line 256 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(XOREQ); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 243 "lex.l"
+#line 257 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(ANDEQ); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 244 "lex.l"
+#line 258 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(OREQ); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 245 "lex.l"
+#line 259 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLT); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 246 "lex.l"
+#line 260 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGT); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 247 "lex.l"
+#line 261 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGTEQ); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 248 "lex.l"
+#line 262 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLTEQ); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 249 "lex.l"
+#line 263 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQEQ); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 250 "lex.l"
+#line 264 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(NOTEQ); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 251 "lex.l"
+#line 265 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(LEQ); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 252 "lex.l"
+#line 266 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(GEQ); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 253 "lex.l"
+#line 267 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(ANDAND); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 254 "lex.l"
+#line 268 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(OROR); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 255 "lex.l"
+#line 269 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUSPLUS); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 256 "lex.l"
+#line 270 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(MINUSMINUS); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 257 "lex.l"
+#line 271 "lex.l"
 { add(NULL,NULL,NULL,NULL,yytext);  t.push(ARROW); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 262 "lex.l"
+#line 276 "lex.l"
 { add(NULL,NULL,NULL,yytext,yytext);  t.push(token_for(yytext)); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 264 "lex.l"
+#line 278 "lex.l"
 { lexical_error("unqualified id, unexpected",  yytext); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 266 "lex.l"
+#line 280 "lex.l"
 {	lexical_error("invalid token", yytext);	}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1495,28 +1509,31 @@ case YY_STATE_EOF(IN_COMMENT):
 case YY_STATE_EOF(IN_ATTRIB):
 case YY_STATE_EOF(IN_ACCESSOR):
 case YY_STATE_EOF(IN_GETSET):
-#line 268 "lex.l"
+#line 282 "lex.l"
 {
 	if(!brackets.empty() || invalid_token == true)
 		yyterminate();
 	t.push(0);
-	add(NULL,NULL,NULL,NULL,0);
+	add(NULL,NULL,NULL,"END","END");
+	FILE *f = fopen("logs/Lex.log","w");
 	while(!t.empty()){
 		int x = t.front();
 		r y = q.front();
+		print(f,&y);
 		yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.line_no = y.col_no;
 		q.pop();
 		t.pop();
 		return x;
 	}
+	fclose(f);
 }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 282 "lex.l"
+#line 299 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1519 "lex.flex.cpp"
+#line 1536 "lex.flex.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2560,7 +2577,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 282 "lex.l"
+#line 299 "lex.l"
 
 
 

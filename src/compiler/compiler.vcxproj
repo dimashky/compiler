@@ -27,8 +27,9 @@
     <ClCompile Include="Parser\yacc.tab.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="error.log" />
     <Text Include="Lexical Analyzer\replace.txt" />
+    <Text Include="logs\error.log" />
+    <Text Include="logs\Lex.log" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h" />
