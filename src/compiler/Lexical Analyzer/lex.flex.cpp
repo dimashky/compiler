@@ -1090,7 +1090,7 @@ YY_DECL
 
 
 #line 141 "lex.l"
-		FILE *f = fopen("logs/Lex.log","a");
+		FILE *f = fopen("Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
 			r y = q.front();
@@ -1515,7 +1515,7 @@ case YY_STATE_EOF(IN_GETSET):
 		yyterminate();
 	t.push(0);
 	add(NULL,NULL,NULL,"END","END");
-	FILE *f = fopen("logs/Lex.log","w");
+	FILE *f = fopen("Lex.log","w");
 	while(!t.empty()){
 		int x = t.front();
 		r y = q.front();

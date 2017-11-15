@@ -6,7 +6,7 @@ using namespace std;
 
 extern int yyparse(void);
 
-extern errorHandler error_handler("Logs/error.log");
+extern errorHandler error_handler("error.log");
 
 extern Logger l;
 
