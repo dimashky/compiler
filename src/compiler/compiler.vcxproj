@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\yacc.tab.cpp" />
   </ItemGroup>
@@ -34,6 +35,7 @@
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h" />
     <ClInclude Include="Error Handler\error_record.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Parser\yacc.tab.h" />
   </ItemGroup>
   <ItemGroup>

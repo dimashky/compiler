@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include "Error Handler\error_handler.h"
+#include "Logger.h"
 
 using namespace std;
 
 extern int yyparse(void);
 
-extern errorHandler error_handler("logs/error.log");
+extern errorHandler error_handler("Logs/error.log");
 
+extern Logger l;
 
 int main()
 {
@@ -21,6 +23,8 @@ int main()
 
 	yyparse();
 
+	l.print();
+	
 	error_handler.print();
 
 	return 0;

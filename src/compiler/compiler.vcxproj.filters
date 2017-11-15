@@ -44,6 +44,9 @@
     <ClCompile Include="Parser\yacc.tab.cpp">
       <Filter>Source Files\Parser</Filter>
     </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Lexical Analyzer\replace.txt">
@@ -65,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="Error Handler\error_record.h">
       <Filter>Source Files\Error Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

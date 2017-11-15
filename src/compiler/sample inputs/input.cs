@@ -1,11 +1,4 @@
-class a
+class xx
 {
-    int[] a;
-    int main()
-    {
-        int x
-
-
-        int y = 5
-    }
+    int x
 }
