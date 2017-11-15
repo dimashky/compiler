@@ -1,0 +1,18 @@
+compilation_unit
+namespace_member_declarations
+namespace_member_declaration
+type_declaration
+class_declaration
+class_body
+class_member_declarations_opt
+class_member_declarations
+class_member_declaration
+field_declaration
+variable_declarators
+variable_declarator
+type Non Array
+non_array_type simple type
+simple_type primitive type
+primitive_type numeric type
+numeric_type integral_type
+integral_type INT
