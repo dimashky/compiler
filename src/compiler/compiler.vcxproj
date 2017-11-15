@@ -78,7 +78,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="..\..\..\..\..\..\win_flex_bison-latest\custom_build_rules\win_flex_bison_custom_build.props" />
+    <Import Project="C:\win flex bison\win_flex_bison3-latest\custom_build_rules\win_flex_bison_custom_build.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -170,6 +170,6 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\..\..\..\..\..\win_flex_bison-latest\custom_build_rules\win_flex_bison_custom_build.targets" />
+    <Import Project="C:\win flex bison\win_flex_bison3-latest\custom_build_rules\win_flex_bison_custom_build.targets" />
   </ImportGroup>
 </Project>
