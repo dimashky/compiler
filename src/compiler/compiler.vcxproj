@@ -19,23 +19,33 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample inputs\input.cs" />
+    <None Include="sample inputs\example1.cs" />
+    <None Include="sample inputs\example10.cs" />
+    <None Include="sample inputs\example11.cs" />
+    <None Include="sample inputs\example12.cs" />
+    <None Include="sample inputs\example13.cs" />
+    <None Include="sample inputs\example14.cs" />
+    <None Include="sample inputs\example15.cs" />
+    <None Include="sample inputs\example2.cs" />
+    <None Include="sample inputs\example3.cs" />
+    <None Include="sample inputs\example4.cs" />
+    <None Include="sample inputs\example5.cs" />
+    <None Include="sample inputs\example6.cs" />
+    <None Include="sample inputs\example7.cs" />
+    <None Include="sample inputs\example8.cs" />
+    <None Include="sample inputs\example9.cs" />
+    <None Include="sample inputs\example16.cs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp" />
-    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="logger\Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\yacc.tab.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Lexical Analyzer\replace.txt" />
-    <Text Include="logs\error.log" />
-    <Text Include="logs\Lex.log" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h" />
     <ClInclude Include="Error Handler\error_record.h" />
-    <ClInclude Include="Logger.h" />
+    <ClInclude Include="logger\Logger.h" />
     <ClInclude Include="Parser\yacc.tab.h" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +57,11 @@
     <Flex Include="Lexical Analyzer\lex.l">
       <LexCompat Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LexCompat>
     </Flex>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="error.log" />
+    <Text Include="Lex.log" />
+    <Text Include="parser.log" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0C1C1964-4DB0-4C41-9A12-A9FDCAEB9628}</ProjectGuid>

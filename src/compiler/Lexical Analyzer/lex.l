@@ -274,7 +274,6 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 {identifier}          { add(NULL,NULL,NULL,yytext,yytext);  t.push(token_for(yytext)); }
 
-{bad_identifier}	  { lexical_error("unqualified id, unexpected",  yytext); }
 
 .					  {	lexical_error("invalid token", yytext);	}
 

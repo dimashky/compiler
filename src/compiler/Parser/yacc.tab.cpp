@@ -71,7 +71,7 @@
 	#include <FlexLexer.h>
 	#include <stack>
 	#include <string>
-	#include "../Logger.h"
+	#include "../logger/Logger.h"
 	#include "../Error Handler/error_handler.h"
 
 	using namespace std;
@@ -81,7 +81,7 @@
 	extern int yyparse();
 	extern FILE* yyin;
 
-	Logger l("l.txt");
+	Logger l("parser.log");
 	void yyerror(const char *);
 		
 
