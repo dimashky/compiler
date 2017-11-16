@@ -5,7 +5,7 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            char x = 'a';
+            char[] stt = "xxxx\txx";
             int start = 1;
             int end = 1; 
             int  res = bin(x,start,end); 

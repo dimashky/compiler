@@ -60,6 +60,26 @@
 		if(yytext != NULL)
 		col_no += (int)strlen(yytext);
 	}
+	void printstr(FILE* f, char* s){
+		fprintf(f," ");
+		for(int i = 0; i < strlen(s); ++i){
+			
+				if(s[i] == '\\' && s[i+1] == 'n')
+				{
+					fprintf(f,"\n");
+					i++;
+				}
+				else if(s[i] == '\\' && s[i+1] == 't')
+				{
+					fprintf(f,"\t");
+					i++;
+				}
+				else{
+					fprintf(f,"%c",s[i]);
+				}	
+		}
+		printf("\n");
+	}
 	void print(FILE* f, r *x){
 		static int last_row = 1;
 		if( last_row != x->line_no){
@@ -69,7 +89,7 @@
 		if(x->i != NULL) fprintf(f,"%d ",x->i);
 		else if(x->f != NULL) fprintf(f,"%f ",x->f);
 		else if(x->c != NULL) fprintf(f,"%c ",x->c);
-		else if(x->str) fprintf(f,"%s ",x->str);
+		else if(x->str) printstr(f, x->str);
 	}
 	void doForName(char* yytext){
 		yylval.r.str = new char[255];
@@ -167,7 +187,8 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 {integer_literal}     { add(atoi(yytext),NULL,NULL,NULL,yytext); t.push(INTEGER_LITERAL); }
 {real_literal}        { add(NULL,atof(yytext),NULL,NULL,yytext); t.push(REAL_LITERAL); }
 {character_literal}   { add(NULL,NULL,yytext[0],NULL,yytext);	  t.push(CHARACTER_LITERAL); }
-{string_literal}      { add(NULL,NULL,NULL,yytext,yytext);		  t.push(STRING_LITERAL); }
+{string_literal}      { add(NULL,NULL,NULL,yytext,yytext);	  // printstr(stdout, yytext);
+																 t.push(STRING_LITERAL); }
 
 
 

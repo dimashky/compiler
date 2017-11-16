@@ -4,7 +4,8 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            int x=10; 
+            int x=10;
+            string ss = "xxx\tsssss";
             switch(x)
             {
                 case 1: {
