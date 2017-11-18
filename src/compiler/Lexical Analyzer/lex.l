@@ -78,7 +78,7 @@
 					fprintf(f,"%c",s[i]);
 				}	
 		}
-		printf("\n");
+
 	}
 	void print(FILE* f, r *x){
 		static int last_row = 1;

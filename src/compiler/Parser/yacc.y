@@ -103,217 +103,217 @@
 
 /***** C.1.8 Literals *****/
 literal
-  : boolean_literal		{l.a("literal Bool");}
-  | INTEGER_LITERAL		{l.a("literal Integer");}
-  | REAL_LITERAL		{l.a("literal Real");}
-  | CHARACTER_LITERAL	{l.a("literal Char");}
-  | STRING_LITERAL		{l.a("literal String");}
-  | NULL_LITERAL		{l.a("literal Null");}
+  : boolean_literal		{l.a("boolean_literal",1);}
+  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);}
+  | REAL_LITERAL		{l.a("REAL_LITERAL",0);}
+  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",1);}
+  | STRING_LITERAL		{l.a("STRING_LITERAL",1);}
+  | NULL_LITERAL		{l.a("NULL_LITERAL",1);}
   ;
 boolean_literal
-  : TRUE	{l.a("boolean_literal True");}
-  | FALSE	{l.a("boolean_literal False");}
+  : TRUE	{l.a("TRUE",1);}
+  | FALSE	{l.a("FALSE",1);}
   ;
 /********** C.2 Syntactic grammar **********/
 
 /***** C.2.1 Basic concepts *****/
 namespace_name
-  : qualified_identifier	{l.a("namespace_name");}	
+  : qualified_identifier	{l.a("namespace_name",0);}	
   ;
 type_name
-  : qualified_identifier	{l.a("type_name");}
+  : qualified_identifier	{l.a("type_name",0);}
   ;
 /***** C.2.2 Types *****/
 type
-  : non_array_type	{l.a("type Non Array");}	
-  | array_type		{l.a("type Array");}	
+  : non_array_type	{l.a("type",0);}	
+  | array_type		{l.a("type",0);}	
   ;
 non_array_type
-  : simple_type		{l.a("non_array_type simple type");}
-  | type_name		{l.a("non_array_type type name");}
+  : simple_type		{l.a("non_array_type",0);}
+  | type_name		{l.a("non_array_type",0);}
   ;
 simple_type
-  : primitive_type	{l.a("simple_type primitive type");}
-  | class_type		{l.a("simple_type class type");}
-  | pointer_type	{l.a("simple_type pointer type");}
+  : primitive_type	{l.a("simple_type",0);}
+  | class_type		{l.a("simple_type",0);}
+  | pointer_type	{l.a("simple_type",0);}
   ;
 primitive_type
-  : numeric_type	{l.a("primitive_type numeric type");}
-  | BOOL			{l.a("primitive_type bool");}
+  : numeric_type	{l.a("primitive_type",0);}
+  | BOOL			{l.a("primitive_type",1);}
   ;
 numeric_type
-  : integral_type			{l.a("numeric_type integral_type");}
-  | floating_point_type		{l.a("numeric_type floating_point_type");}
-  | DECIMAL					{l.a("numeric_type decimal");}
+  : integral_type			{l.a("numeric_type",0);}
+  | floating_point_type		{l.a("numeric_type",0);}
+  | DECIMAL					{l.a("numeric_type",1);}
   ;
 integral_type
-  : SBYTE	 {l.a("integral_type SBYTE");}
-  | BYTE	 {l.a("integral_type BYTE");}
-  | SHORT	 {l.a("integral_type SHORT");}
-  | USHORT	 {l.a("integral_type USHORT");}
-  | INT		 {l.a("integral_type INT");}
-  | UINT	 {l.a("integral_type UINT");}
-  | LONG	 {l.a("integral_type LONG");}
-  | ULONG	 {l.a("integral_type ULONG");}
-  | CHAR	 {l.a("integral_type CHAR");}
+  : SBYTE	 {l.a("integral_type",1);}
+  | BYTE	 {l.a("integral_type",1);}
+  | SHORT	 {l.a("integral_type",1);}
+  | USHORT	 {l.a("integral_type",1);}
+  | INT		 {l.a("integral_type",1);}
+  | UINT	 {l.a("integral_type",1);}
+  | LONG	 {l.a("integral_type",1);}
+  | ULONG	 {l.a("integral_type",1);}
+  | CHAR	 {l.a("integral_type",1);}
   ;
 floating_point_type
-  : FLOAT	{l.a("floating_point_type FLOAT");}
-  | DOUBLE	{l.a("floating_point_type DOUBLE");}
+  : FLOAT	{l.a("floating_point_type",1);}
+  | DOUBLE	{l.a("floating_point_type",1);}
   ;
 class_type
-  : OBJECT  {l.a("class_type OBJECT");}
-  | STRING  {l.a("class_type STRING");}
+  : OBJECT  {l.a("class_type",1);}
+  | STRING  {l.a("class_type",1);}
   ;
 pointer_type
-  : type STAR	{l.a("pointer_type type");}
-  | VOID STAR	{l.a("pointer_type VOID");}
+  : type STAR	{l.a("pointer_type",0);}
+  | VOID STAR	{l.a("pointer_type",1);}
   ;
 array_type
-  : array_type rank_specifier				{l.a("array_type array_type");}
-  | simple_type rank_specifier				{l.a("array_type simple_type");}
-  | qualified_identifier rank_specifier		{l.a("array_type qualified_identifier");}
+  : array_type rank_specifier				{l.a("array_type",0);}
+  | simple_type rank_specifier				{l.a("array_type",0);}
+  | qualified_identifier rank_specifier		{l.a("array_type",0);}
   ;
 rank_specifiers_opt
-  : /* Nothing */
-  | rank_specifier rank_specifiers_opt	{l.a("rank_specifiers_opt");}
+  : /* Nothing */                       {l.a("rank_specifiers_opt",1);}
+  | rank_specifier rank_specifiers_opt	{l.a("rank_specifiers_opt",0);}
   ;
 rank_specifier
-  : RANK_SPECIFIER		{l.a("rank_specifier");}
+  : RANK_SPECIFIER		{l.a("rank_specifier",1);}
   ;
 /***** C.2.3 Variables *****/
 variable_reference
-  : expression	{l.a("variable_reference");}
+  : expression	{l.a("variable_reference",1);}
   ;
 /***** C.2.4 Expressions *****/
 argument_list
-  : argument						{l.a("argument_list argument");}
-  | argument_list COMMA argument	{l.a("argument_list argument_list");}
+  : argument						{l.a("argument_list",0);}
+  | argument_list COMMA argument	{l.a("argument_list",0);}
   ;
 argument
-  : expression					{l.a("argument expression");}
-  | REF variable_reference		{l.a("argument REF");}
-  | OUT variable_reference		{l.a("argument OUT");}
+  : expression					      {l.a("argument",0);}
+  | REF variable_reference		{l.a("argument",0);}
+  | OUT variable_reference		{l.a("argument",0);}
   ;
 primary_expression
-  : parenthesized_expression			{l.a("primary_expression parenthesized_expression");}
-  | primary_expression_no_parenthesis	{l.a("primary_expression primary_expression_no_parenthesis");}
+  : parenthesized_expression			{l.a("primary_expression",0);}
+  | primary_expression_no_parenthesis	{l.a("primary_expression",0);}
   ;
 primary_expression_no_parenthesis
-  : literal							{l.a("primary_expression_no_parenthesis literal");}
-  | array_creation_expression		{l.a("primary_expression_no_parenthesis array_creation_expression");}
-  | member_access					{l.a("primary_expression_no_parenthesis member_access");}
-  | invocation_expression			{l.a("primary_expression_no_parenthesis invocation_expression");}
-  | element_access					{l.a("primary_expression_no_parenthesis element_access");}
-  | this_access						{l.a("primary_expression_no_parenthesis this_access");}
-  | base_access						{l.a("primary_expression_no_parenthesis base_access");}
-  | new_expression					{l.a("primary_expression_no_parenthesis new_expression");}
-  | typeof_expression				{l.a("primary_expression_no_parenthesis typeof_expression");}
-  | sizeof_expression				{l.a("primary_expression_no_parenthesis sizeof_expression");}
-  | checked_expression				{l.a("primary_expression_no_parenthesis checked_expression");}
-  | unchecked_expression			{l.a("primary_expression_no_parenthesis unchecked_expression");}
+  : literal							{l.a("primary_expression_no_parenthesis",0);}
+  | array_creation_expression		{l.a("primary_expression_no_parenthesis",0);}
+  | member_access					{l.a("primary_expression_no_parenthesis",0);}
+  | invocation_expression			{l.a("primary_expression_no_parenthesis",0);}
+  | element_access					{l.a("primary_expression_no_parenthesis",0);}
+  | this_access						{l.a("primary_expression_no_parenthesis",0);}
+  | base_access						{l.a("primary_expression_no_parenthesis",0);}
+  | new_expression					{l.a("primary_expression_no_parenthesis",0);}
+  | typeof_expression				{l.a("primary_expression_no_parenthesis",0);}
+  | sizeof_expression				{l.a("primary_expression_no_parenthesis",0);}
+  | checked_expression				{l.a("primary_expression_no_parenthesis",0);}
+  | unchecked_expression			{l.a("primary_expression_no_parenthesis",0);}
   ;
 parenthesized_expression
-  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE		{l.a("parenthesized_expression");}
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE		{l.a("parenthesized_expression",0);}
   ;
 member_access
-  : primary_expression DOT IDENTIFIER	{l.a("member_access primary_expression");}
-  | primitive_type DOT IDENTIFIER		{l.a("member_access primitive_type");}
-  | class_type DOT IDENTIFIER			{l.a("member_access class_type");}
+  : primary_expression DOT IDENTIFIER	{l.a("member_access",0);}
+  | primitive_type DOT IDENTIFIER		{l.a("member_access",0);}
+  | class_type DOT IDENTIFIER			{l.a("member_access",0);}
   ;
 invocation_expression
-  : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE	{l.a("invocation_expression primary_expression_no_parenthesis");}
-  | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE					{l.a("invocation_expression qualified_identifier");}
+  : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE	{l.a("invocation_expression",0);}
+  | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE					      {l.a("invocation_expression",0);}
   ;
 argument_list_opt
-  : /* Nothing */
-  | argument_list	{l.a("argument_list_opt");}
+  : /* Nothing */ {l.a("argument_list_opt",1);}
+  | argument_list	{l.a("argument_list_opt",0);}
   ;
 element_access
-  : primary_expression LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access primary_expression");}
-  | qualified_identifier LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access qualified_identifier");}
+  : primary_expression LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access",0);}
+  | qualified_identifier LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access",0);}
   ;
 expression_list_opt
-  : /* Nothing */
-  | expression_list		{l.a("expression_list_opt");}
+  : /* Nothing */     {l.a("expression_list_opt",1);}
+  | expression_list		{l.a("expression_list_opt",0);}
   ;
 expression_list
-  : expression							{l.a("expression_list expression");}
-  | expression_list COMMA expression	{l.a("expression_list expression_list");}
+  : expression							{l.a("expression_list",0);}
+  | expression_list COMMA expression	{l.a("expression_list",0);}
   ;
 this_access
-  : THIS	{l.a("this_access");}
+  : THIS	{l.a("this_access",1);}
   ;
 base_access
-  : BASE DOT IDENTIFIER									{l.a("base_access BASE DOT IDENTIFIER");}
-  | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access BASE expression_list");}
+  : BASE DOT IDENTIFIER									{l.a("base_access",1);}
+  | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",0);}
   ;
 post_increment_expression
-  : postfix_expression PLUSPLUS		{l.a("post_increment_expression");}
+  : postfix_expression PLUSPLUS		{l.a("post_increment_expression",0);}
   ;
 post_decrement_expression
-  : postfix_expression MINUSMINUS	{l.a("post_decrement_expression");}
+  : postfix_expression MINUSMINUS	{l.a("post_decrement_expression",0);}
   ;
 new_expression
-  : object_creation_expression		{l.a("new_expression");}
+  : object_creation_expression		{l.a("new_expression",0);}
   ;
 object_creation_expression
-  : NEW type LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		{l.a("object_creation_expression");}
+  : NEW type LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		{l.a("object_creation_expression",0);}
   ;
 array_creation_expression
-  : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		{l.a("array_creation_expression non_array_type");}
-  | NEW array_type array_initializer																			{l.a("array_creation_expression array_type");}
+  : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		{l.a("array_creation_expression",0);}
+  | NEW array_type array_initializer																			                                    {l.a("array_creation_expression",0);}
   ;
 array_initializer_opt
   : /* Nothing */
-  | array_initializer	{l.a("array_initializer_opt");}
+  | array_initializer	{l.a("array_initializer_opt",0);}
   ;
 typeof_expression
-  : TYPEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE	{l.a("typeof_expression type");}
-  | TYPEOF LEFT_BRACKET_CIRCLE VOID RIGHT_BRACKET_CIRCLE	{l.a("typeof_expression VOID");}
+  : TYPEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE	{l.a("typeof_expression",0);}
+  | TYPEOF LEFT_BRACKET_CIRCLE VOID RIGHT_BRACKET_CIRCLE	{l.a("typeof_expression",1);}
   ;
 checked_expression
-  : CHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE	{l.a("checked_expression");}
+  : CHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE	{l.a("checked_expression",0);}
   ;
 unchecked_expression
-  : UNCHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE	{l.a("unchecked_expression");}
+  : UNCHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE	{l.a("unchecked_expression",0);}
   ;
 pointer_member_access
-  : postfix_expression ARROW IDENTIFIER		{l.a("pointer_member_access");}
+  : postfix_expression ARROW IDENTIFIER		{l.a("pointer_member_access",0);}
   ;
 addressof_expression
-  : AND unary_expression		{l.a("addressof_expression");}
+  : AND unary_expression		{l.a("addressof_expression",0);}
   ;
 sizeof_expression
-  : SIZEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE		{l.a("sizeof_expression");}
+  : SIZEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE		{l.a("sizeof_expression",0);}
   ;
 postfix_expression
-  : primary_expression			{l.a("postfix_expression primary_expression");}
-  | qualified_identifier		{l.a("postfix_expression qualified_identifier");}
-  | post_increment_expression	{l.a("postfix_expression post_increment_expression");}
-  | post_decrement_expression	{l.a("postfix_expression post_decrement_expression");}
-  | pointer_member_access		{l.a("postfix_expression pointer_member_access");}
+  : primary_expression			{l.a("postfix_expression primary_expression",0);}
+  | qualified_identifier		{l.a("postfix_expression qualified_identifier",0);}
+  | post_increment_expression	{l.a("postfix_expression post_increment_expression",0);}
+  | post_decrement_expression	{l.a("postfix_expression post_decrement_expression",0);}
+  | pointer_member_access		{l.a("postfix_expression pointer_member_access",0);}
   ;
 unary_expression_not_plusminus
-  : postfix_expression					{l.a("unary_expression_not_plusminus postfix_expression");}
-  | EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus EXCLAMATION_POINT");}
-  | TILDE unary_expression				{l.a("unary_expression_not_plusminus TILDE");}	
-  | cast_expression						{l.a("unary_expression_not_plusminus cast_expression");}
+  : postfix_expression					{l.a("unary_expression_not_plusminus postfix_expression",0);}
+  | EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus EXCLAMATION_POINT",0);}
+  | TILDE unary_expression				{l.a("unary_expression_not_plusminus TILDE",0);}	
+  | cast_expression						{l.a("unary_expression_not_plusminus cast_expression",0);}
   ;
 pre_increment_expression
-  : PLUSPLUS unary_expression	{l.a("pre_increment_expression");}
+  : PLUSPLUS unary_expression	{l.a("pre_increment_expression",0);}
   ;
 pre_decrement_expression
-  : MINUSMINUS unary_expression	{l.a("pre_decrement_expression");}
+  : MINUSMINUS unary_expression	{l.a("pre_decrement_expression",0);}
   ;
 unary_expression
-  : unary_expression_not_plusminus	{l.a("unary_expression unary_expression_not_plusminus");}
-  | PLUS unary_expression			{l.a("unary_expression PLUS");}
-  | MINUS unary_expression			{l.a("unary_expression MINUS");}
-  | STAR unary_expression			{l.a("unary_expression STAR");}
-  | pre_increment_expression		{l.a("unary_expression pre_increment_expression");}
-  | pre_decrement_expression		{l.a("unary_expression pre_decrement_expression");}
-  | addressof_expression			{l.a("unary_expression addressof_expression");}
+  : unary_expression_not_plusminus	{l.a("unary_expression unary_expression_not_plusminus",0);}
+  | PLUS unary_expression			{l.a("unary_expression PLUS",0);}
+  | MINUS unary_expression			{l.a("unary_expression MINUS",0);}
+  | STAR unary_expression			{l.a("unary_expression STAR",0);}
+  | pre_increment_expression		{l.a("unary_expression pre_increment_expression",0);}
+  | pre_decrement_expression		{l.a("unary_expression pre_decrement_expression",0);}
+  | addressof_expression			{l.a("unary_expression addressof_expression",0);}
   ;
 /* For cast_expression we really just want a (type) in the brackets,
  * but have to do some factoring to get rid of conflict with expressions.
@@ -321,198 +321,198 @@ unary_expression
  * semantically restricted to an identifier, optionally follwed by qualifiers
  */
 cast_expression
-  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								{l.a("cast_expression expression");}
-  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression multiplicative_expression");}
-  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	{l.a("cast_expression qualified_identifier");}	
-  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							{l.a("cast_expression primitive_type");}
-  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								{l.a("cast_expression class_type");}
-  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									{l.a("cast_expression VOID");}
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								{l.a("cast_expression",0);}
+  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",0);}
+  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	{l.a("cast_expression",0);}	
+  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							{l.a("cast_expression",0);}
+  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								{l.a("cast_expression",0);}
+  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									{l.a("cast_expression",0);}
   ;	
 type_quals_opt
-  : /* Nothing */
-  | type_quals	{l.a("type_quals_opt");}
+  : /* Nothing */ {l.a("type_quals_opt",1);}
+  | type_quals	{l.a("type_quals_opt",0);}
   ;
 type_quals
-  : type_qual				{l.a("type_quals type_qual");}		
-  | type_quals type_qual	{l.a("type_quals type_quals");}
+  : type_qual				{l.a("type_quals",0);}		
+  | type_quals type_qual	{l.a("type_quals",0);}
   ;
 type_qual 
-  : rank_specifier	{l.a("type_qual rank_specifier");}
-  | STAR			{l.a("type_qual STAR");}
+  : rank_specifier	{l.a("type_qual",0);}
+  | STAR			{l.a("type_qual",1);}
   ;
 multiplicative_expression
   : unary_expression
-  | multiplicative_expression STAR unary_expression		{l.a("unary_expression STAR");}
-  | multiplicative_expression SLASH unary_expression	{l.a("unary_expression SLASH");}
-  | multiplicative_expression PERCENT unary_expression	{l.a("unary_expression PERCENT");}
+  | multiplicative_expression STAR unary_expression		{l.a("unary_expression",0);}
+  | multiplicative_expression SLASH unary_expression	{l.a("unary_expression",0);}
+  | multiplicative_expression PERCENT unary_expression	{l.a("unary_expression",0);}
   ;
 additive_expression
-  : multiplicative_expression								{l.a("additive_expression multiplicative_expression");}
-  | additive_expression PLUS multiplicative_expression		{l.a("additive_expression additive_expression PLUS");}
-  | additive_expression MINUS multiplicative_expression		{l.a("additive_expression additive_expression MINUS");}
+  : multiplicative_expression								{l.a("additive_expression",0);}
+  | additive_expression PLUS multiplicative_expression		{l.a("additive_expression",0);}
+  | additive_expression MINUS multiplicative_expression		{l.a("additive_expression",0);}
   ;
 shift_expression
-  : additive_expression							{l.a("shift_expression additive_expression");}
-  | shift_expression LTLT additive_expression	{l.a("shift_expression shift_expression LTLT");}
-  | shift_expression GTGT additive_expression	{l.a("shift_expression shift_expression GTGT");}
+  : additive_expression							              {l.a("shift_expression",0);}
+  | shift_expression LTLT additive_expression	    {l.a("shift_expression",0);}
+  | shift_expression GTGT additive_expression	    {l.a("shift_expression",0);}
   ;
 relational_expression
-  : shift_expression									{l.a("relational_expression relational_expression SMALLER");}
-  | relational_expression SMALLER shift_expression		{l.a("relational_expression relational_expression SMALLER");}
-  | relational_expression GREATER shift_expression		{l.a("relational_expression relational_expression GREATER");}
-  | relational_expression LEQ shift_expression			{l.a("relational_expression relational_expression LEQ");}
-  | relational_expression GEQ shift_expression			{l.a("relational_expression relational_expression GEQ");}	
-  | relational_expression IS type						{l.a("relational_expression relational_expression IS");}
-  | relational_expression AS type						{l.a("relational_expression relational_expression AS");}
+  : shift_expression								                	{l.a("relational_expression",0);}
+  | relational_expression SMALLER shift_expression		{l.a("relational_expression",0);}
+  | relational_expression GREATER shift_expression		{l.a("relational_expression",0);}
+  | relational_expression LEQ shift_expression			  {l.a("relational_expression",0);}
+  | relational_expression GEQ shift_expression			  {l.a("relational_expression",0);}	
+  | relational_expression IS type						          {l.a("relational_expression",0);}
+  | relational_expression AS type						          {l.a("relational_expression",0);}
   ;
 equality_expression
-  : relational_expression								{l.a("relational_expression relational_expression");}
-  | equality_expression EQEQ relational_expression		{l.a("relational_expression equality_expression EQEQ");}
-  | equality_expression NOTEQ relational_expression		{l.a("relational_expression equality_expression NOTEQ");}
+  : relational_expression							              	{l.a("equality_expression",0);}
+  | equality_expression EQEQ relational_expression		{l.a("equality_expression",0);}
+  | equality_expression NOTEQ relational_expression		{l.a("equality_expression",0);}
   ;
 and_expression
-  : equality_expression						{l.a("and_expression equality_expression");}
-  | and_expression AND equality_expression	{l.a("and_expression and_expression");}
+  : equality_expression					                    	{l.a("and_expression",0);}
+  | and_expression AND equality_expression	          {l.a("and_expression",0);}
   ;
 exclusive_or_expression
-  : and_expression										{l.a("exclusive_or_expression and_expression");}
-  | exclusive_or_expression POWER and_expression		{l.a("exclusive_or_expression exclusive_or_expression");}
+  : and_expression									              	{l.a("exclusive_or_expression",0);}
+  | exclusive_or_expression POWER and_expression		{l.a("exclusive_or_expression",0);}
   ;
 inclusive_or_expression
-  : exclusive_or_expression									{l.a("inclusive_or_expression exclusive_or_expression");}
-  | inclusive_or_expression OR exclusive_or_expression		{l.a("inclusive_or_expression inclusive_or_expression");}
+  : exclusive_or_expression									              {l.a("inclusive_or_expression",0);}
+  | inclusive_or_expression OR exclusive_or_expression		{l.a("inclusive_or_expression",0);}
   ;
 conditional_and_expression
-  : inclusive_or_expression										{l.a("conditional_and_expression inclusive_or_expression");}
-  | conditional_and_expression ANDAND inclusive_or_expression	{l.a("conditional_and_expression conditional_and_expression");}
+  : inclusive_or_expression									                    	{l.a("conditional_and_expression",0);}
+  | conditional_and_expression ANDAND inclusive_or_expression	    {l.a("conditional_and_expression",0);}
   ;
 conditional_or_expression
-  : conditional_and_expression									{l.a("conditional_or_expression conditional_and_expression");}
-  | conditional_or_expression OROR conditional_and_expression	{l.a("conditional_or_expression c_a_e OROR c_a_e");}
+  : conditional_and_expression									                  {l.a("conditional_or_expression",0);}
+  | conditional_or_expression OROR conditional_and_expression	    {l.a("conditional_or_expression",0);}
   ;
 conditional_expression
-  : conditional_or_expression												{l.a("conditional_expression conditional_or_expression");}
-  | conditional_or_expression QUESTION_MARK expression COLON expression		{l.a("conditional_expression c_o_e QUESTION_MARK c_o_e");}
+  : conditional_or_expression											                      	{l.a("conditional_expression",0);}
+  | conditional_or_expression QUESTION_MARK expression COLON expression		{l.a("conditional_expression",0);}
   ;
 assignment
-: unary_expression assignment_operator expression	{l.a("assignment");}
+: unary_expression assignment_operator expression                        	{l.a("assignment",0);}
   ;
 assignment_operator
-  : EQUAL	{l.a("assignment_operator EQUAL");}
-  | PLUSEQ	{l.a("assignment_operator PLUSEQ");}
-  | MINUSEQ	{l.a("assignment_operator MINUSEQ");}
-  | STAREQ	{l.a("assignment_operator STAREQ");}
-  | DIVEQ	{l.a("assignment_operator DIVEQ");}
-  | MODEQ	{l.a("assignment_operator MODEQ");}
-  | XOREQ	{l.a("assignment_operator XOREQ");}
-  | ANDEQ	{l.a("assignment_operator ANDEQ");}
-  | OREQ	{l.a("assignment_operator OREQ");}
-  | GTGTEQ	{l.a("assignment_operator GTGTEQ");}
-  | LTLTEQ	{l.a("assignment_operator LTLTEQ");}
+  : EQUAL	                                                            {l.a("assignment_operator EQUAL",1);}
+  | PLUSEQ	                                                          {l.a("assignment_operator PLUSEQ",1);}
+  | MINUSEQ	                                                          {l.a("assignment_operator MINUSEQ",1);}
+  | STAREQ	                                                          {l.a("assignment_operator STAREQ",1);}
+  | DIVEQ	                                                            {l.a("assignment_operator DIVEQ",1);}
+  | MODEQ	                                                            {l.a("assignment_operator MODEQ",1);}
+  | XOREQ	                                                            {l.a("assignment_operator XOREQ",1);}
+  | ANDEQ	                                                            {l.a("assignment_operator ANDEQ",1);}
+  | OREQ	                                                            {l.a("assignment_operator OREQ",1);}
+  | GTGTEQ	                                                          {l.a("assignment_operator GTGTEQ",1);}
+  | LTLTEQ	                                                          {l.a("assignment_operator LTLTEQ",1);}
   ;
 expression
-  : conditional_expression {l.a("expression conditional_expression");}
-  | assignment			   {l.a("expression assignment");}
+  : conditional_expression                                            {l.a("expression",0);}
+  | assignment			                                                  {l.a("expression",0);}
   ;
 constant_expression
-  : expression	{l.a("constant_expression");}
+  : expression	                                                      {l.a("constant_expression",0);}
   ;
 boolean_expression
-  : expression	{l.a("boolean_expression");}
+  : expression	                                                       {l.a("boolean_expression",0);}
   ;
 /***** C.2.5 Statements *****/
 statement
-  : labeled_statement		{l.a("statement");}
-  | declaration_statement	{l.a("statement");}
-  | embedded_statement		{l.a("statement");}
+  : labeled_statement		                                              {l.a("statement",0);}
+  | declaration_statement	                                            {l.a("statement",0);}
+  | embedded_statement		                                            {l.a("statement",0);}
   ;
 embedded_statement
-  : block					{l.a("embedded_statement");}
-  | empty_statement			{l.a("embedded_statement");}
-  | expression_statement	{l.a("embedded_statement");}
-  | selection_statement		{l.a("embedded_statement");}
-  | iteration_statement		{l.a("embedded_statement");}
-  | jump_statement			{l.a("embedded_statement");}
-  | try_statement			{l.a("embedded_statement");}
-  | checked_statement		{l.a("embedded_statement");}
-  | unchecked_statement		{l.a("embedded_statement");}
-  | lock_statement			{l.a("embedded_statement");}
-  | using_statement			{l.a("embedded_statement");}
-  | unsafe_statement		{l.a("embedded_statement");}
-  | fixed_statement			{l.a("embedded_statement");}
+  : block					                                                     {l.a("embedded_statement",0);}
+  | empty_statement			                                               {l.a("embedded_statement",0);}
+  | expression_statement	                                             {l.a("embedded_statement",0);}
+  | selection_statement		                                             {l.a("embedded_statement",0);}
+  | iteration_statement		                                             {l.a("embedded_statement",0);}
+  | jump_statement			                                               {l.a("embedded_statement",0);}
+  | try_statement			                                                 {l.a("embedded_statement",0);}
+  | checked_statement		                                               {l.a("embedded_statement",0);}
+  | unchecked_statement		                                             {l.a("embedded_statement",0);}
+  | lock_statement			                                               {l.a("embedded_statement",0);}
+  | using_statement			                                               {l.a("embedded_statement",0);}
+  | unsafe_statement		                                               {l.a("embedded_statement",0);}
+  | fixed_statement			                                               {l.a("embedded_statement",0);}
   ;
 block
-  : LEFT_BRACKET_GROUP statement_list_opt RIGHT_BRACKET_GROUP	{l.a("block");}
+  : LEFT_BRACKET_GROUP statement_list_opt RIGHT_BRACKET_GROUP	          {l.a("block",0);}
   ;
 statement_list_opt
-  : /* Nothing */
-  | statement_list	{l.a("statement_list_opt");}
+  : /* Nothing */                                                     {l.a("statement_list_opt",1);}
+  | statement_list	                                                  {l.a("statement_list_opt",0);}
   ;
 
 statement_list
-  : statement					{l.a("statement_list");}
-  | statement_list statement	{l.a("statement_list");}
+  : statement					                                                {l.a("statement_list",0);}
+  | statement_list statement	                                        {l.a("statement_list",0);}
   ;
 empty_statement
-  : SEMICOLON	{l.a("empty_statement");}
+  : SEMICOLON                                                        	{l.a("empty_statement",1);}
   ;
 labeled_statement
-  : IDENTIFIER COLON statement	{l.a("labeled_statement");}
+  : IDENTIFIER COLON statement	                                      {l.a("labeled_statement",0);}
   ;
 declaration_statement
-  : local_variable_declaration SEMICOLON	{l.a("declaration_statement");}
-  | local_constant_declaration SEMICOLON	{l.a("declaration_statement");}
-  | local_variable_declaration error		{l.a("declaration_statement");}
-  | local_constant_declaration error		{l.a("declaration_statement");}
+  : local_variable_declaration SEMICOLON	                            {l.a("declaration_statement",0);}
+  | local_constant_declaration SEMICOLON	                            {l.a("declaration_statement",0);}
+  | local_variable_declaration error		                              {l.a("declaration_statement",0);}
+  | local_constant_declaration error		                              {l.a("declaration_statement",0);}
   ;
 local_variable_declaration
-  : type variable_declarators		{l.a("local_variable_declaration");}
+  : type variable_declarators		                                      {l.a("local_variable_declaration",0);}
   ;
 variable_declarators
-  : variable_declarator									{l.a("variable_declarators");}
-  | variable_declarators COMMA variable_declarator		{l.a("variable_declarators");}
+  : variable_declarator									                              {l.a("variable_declarators",0);}
+  | variable_declarators COMMA variable_declarator		                {l.a("variable_declarators",0);}
   ;
 variable_declarator
-  : IDENTIFIER								{l.a("variable_declarator");}
-  | IDENTIFIER EQUAL variable_initializer	{l.a("variable_declarator");}
+  : IDENTIFIER								                                        {l.a("variable_declarator",1);}
+  | IDENTIFIER EQUAL variable_initializer	                            {l.a("variable_declarator",0);}
   ;
 variable_initializer
-  : expression				{l.a("variable_initializer");}
-  | array_initializer		{l.a("variable_initializer");}
-  | stackalloc_initializer	{l.a("variable_initializer");}
+  : expression				                                                {l.a("variable_initializer",0);}
+  | array_initializer		                                              {l.a("variable_initializer",0);}
+  | stackalloc_initializer	                                          {l.a("variable_initializer",0);}
   ;
 stackalloc_initializer
-: STACKALLOC type  LEFT_BRACKET expression RIGHT_BRACKET	{l.a("stackalloc_initializer");}
+: STACKALLOC type  LEFT_BRACKET expression RIGHT_BRACKET	            {l.a("stackalloc_initializer",0);}
   ; 
 local_constant_declaration
-  : CONST type constant_declarators	{l.a("local_constant_declaration");}
+  : CONST type constant_declarators	                                  {l.a("local_constant_declaration",0);}
   ;
 constant_declarators
-  : constant_declarator									{l.a("constant_declarators");}
-  | constant_declarators COMMA constant_declarator		{l.a("constant_declarators");}
+  : constant_declarator									                              {l.a("constant_declarators",0);}
+  | constant_declarators COMMA constant_declarator		                {l.a("constant_declarators",0);}
   ;
 constant_declarator
-  : IDENTIFIER EQUAL constant_expression	{l.a("constant_declarator");}
+  : IDENTIFIER EQUAL constant_expression                            	{l.a("constant_declarator",0);}
   ;
 expression_statement
-  : statement_expression SEMICOLON	{l.a("expression_statement");}
-  |	statement_expression error		{l.a("expression_statement");}
+  : statement_expression SEMICOLON	                                  {l.a("expression_statement",0);}
+  |	statement_expression error		                                    {l.a("expression_statement",0);}
   ;
 statement_expression
-  : invocation_expression			{l.a("statement_expression");}
-  | object_creation_expression		{l.a("statement_expression");}
-  | assignment						{l.a("statement_expression");}
-  | post_increment_expression		{l.a("statement_expression");}
-  | post_decrement_expression		{l.a("statement_expression");}
-  | pre_increment_expression		{l.a("statement_expression");}
-  | pre_decrement_expression		{l.a("statement_expression");}
+  : invocation_expression			                                        {l.a("statement_expression",0);}
+  | object_creation_expression	                                      {l.a("statement_expression",0);}
+  | assignment						                                            {l.a("statement_expression",0);}
+  | post_increment_expression		                                      {l.a("statement_expression",0);}
+  | post_decrement_expression		                                      {l.a("statement_expression",0);}
+  | pre_increment_expression		                                      {l.a("statement_expression",0);}
+  | pre_decrement_expression		                                      {l.a("statement_expression",0);}
   ;
 selection_statement
-  : if_statement		{l.a("selection_statement");}
-  | switch_statement	{l.a("selection_statement");}
+  : if_statement		                                                  {l.a("selection_statement");}
+  | switch_statement	                                                {l.a("selection_statement");}
   ;
 if_statement
-  : IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement %prec THEN				{l.a("if_statement");}
+  : IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement %prec THEN				      {l.a("if_statement");}
   | IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement ELSE embedded_statement	{l.a("if_statement");}
   ;
 switch_statement
@@ -522,29 +522,29 @@ switch_block
   : LEFT_BRACKET_GROUP switch_sections_opt RIGHT_BRACKET_GROUP		{l.a("switch_block");}
   ;
 switch_sections_opt
-  : /* Nothing */
+  : /* Nothing */     {l.a("switch_sections_opt",1);}
   | switch_sections		{l.a("switch_sections_opt");}
   ;
 switch_sections
-  : switch_section					{l.a("switch_sections");}
+  : switch_section					        {l.a("switch_sections");}
   | switch_sections switch_section	{l.a("switch_sections");}
   ;
 switch_section
   : switch_labels statement_list	{l.a("switch_section");}
   ;
 switch_labels
-  : switch_label				{l.a("switch_labels");}
-  | switch_labels switch_label	{l.a("switch_labels");}
+  : switch_label				                              {l.a("switch_labels");}
+  | switch_labels switch_label	                      {l.a("switch_labels");}
   ;
 switch_label
-  : CASE constant_expression COLON	{l.a("switch_label");}
-  | DEFAULT COLON					{l.a("switch_label");}
+  : CASE constant_expression COLON	                  {l.a("switch_label");}
+  | DEFAULT COLON					                            {l.a("switch_label",1);}
   ;
 iteration_statement
-  : while_statement		{l.a("iteration_statement");}
-  | do_statement		{l.a("iteration_statement");}
-  | for_statement		{l.a("iteration_statement");}
-  | foreach_statement	{l.a("iteration_statement");}
+  : while_statement		                                {l.a("iteration_statement");}
+  | do_statement		                                  {l.a("iteration_statement");}
+  | for_statement		                                  {l.a("iteration_statement");}
+  | foreach_statement	                                {l.a("iteration_statement");}
   ;
 unsafe_statement
   : UNSAFE block	{l.a("unsafe_statement");}
@@ -562,20 +562,20 @@ for_statement
 
   ;
 for_initializer_opt
-  : /* Nothing */
+  : /* Nothing */   {l.a("for_initializer_opt",1);}
   | for_initializer	{l.a("for_initializer_opt");}
   ;
 for_condition_opt
-  : /* Nothing */
+  : /* Nothing */ {l.a("for_condition_opt",1);}
   | for_condition	{l.a("for_condition_opt");}
   ;
 for_iterator_opt
-  : /* Nothing */
+  : /* Nothing */ {l.a("for_iterator_opt",1);}
   | for_iterator	{l.a("for_iterator_opt");}
   ;
 for_initializer
   : local_variable_declaration	{l.a("for_initializer");}
-  | statement_expression_list	{l.a("for_initializer");}
+  | statement_expression_list	  {l.a("for_initializer");}
   ;
 for_condition
   : boolean_expression	{l.a("for_condition");}
@@ -598,40 +598,40 @@ jump_statement
   | throw_statement		{l.a("jump_statement");}
   ;
 break_statement
-  : BREAK SEMICOLON	{l.a("break_statement");}
-  | BREAK error		{l.a("break_statement");}
+  : BREAK SEMICOLON	{l.a("break_statement",1);}
+  | BREAK error		{l.a("break_statement",1);}
   ;
 continue_statement
-  : CONTINUE SEMICOLON	{l.a("continue_statement");}
-  | CONTINUE error		{l.a("continue_statement");}
+  : CONTINUE SEMICOLON	{l.a("continue_statement",1);}
+  | CONTINUE error		{l.a("continue_statement",1);}
   ;
 goto_statement
-  : GOTO IDENTIFIER SEMICOLON					{l.a("goto_statement");}
+  : GOTO IDENTIFIER SEMICOLON					{l.a("goto_statement",1);}
   | GOTO CASE constant_expression SEMICOLON		{l.a("goto_statement");}
-  | GOTO DEFAULT SEMICOLON						{l.a("goto_statement");}
-  | GOTO IDENTIFIER error						{l.a("goto_statement");}
+  | GOTO DEFAULT SEMICOLON						{l.a("goto_statement",1);}
+  | GOTO IDENTIFIER error						{l.a("goto_statement",1);}
   | GOTO CASE constant_expression error			{l.a("goto_statement");}
-  | GOTO DEFAULT error							{l.a("goto_statement");}
+  | GOTO DEFAULT error							{l.a("goto_statement",1);}
   ;
 return_statement
   : RETURN expression_opt SEMICOLON	{l.a("return_statement");}
   | RETURN expression_opt error		{l.a("return_statement");}
   ;
 expression_opt
-  : /* Nothing */
+  : /* Nothing */ {l.a("expression_opt",1);}
   | expression	{l.a("expression_opt");}
   ;
 throw_statement
   : THROW expression_opt SEMICOLON	{l.a("throw_statement");}
-  | THROW expression_opt error		{l.a("throw_statement");}
+  | THROW expression_opt error		  {l.a("throw_statement");}
   ;
 try_statement
-  : TRY block catch_clauses					{l.a("try_statement");}
-  | TRY block finally_clause				{l.a("try_statement");}
+  : TRY block catch_clauses					        {l.a("try_statement");}
+  | TRY block finally_clause				        {l.a("try_statement");}
   | TRY block catch_clauses finally_clause	{l.a("try_statement");}
   ;
 catch_clauses	
-  : catch_clause				{l.a("catch_clauses");}
+  : catch_clause				        {l.a("catch_clauses");}
   | catch_clauses catch_clause	{l.a("catch_clauses");}
   ;
 catch_clause
@@ -640,7 +640,7 @@ catch_clause
   | CATCH block
   ;
 identifier_opt
-  : /* Nothing */	
+  : /* Nothing */	{l.a("identifier_opt",1);}
   | IDENTIFIER		{l.a("identifier_opt");}
   ;
 finally_clause
@@ -678,36 +678,36 @@ compilation_unit
   | using_directives_opt namespace_member_declarations		{l.a("compilation_unit");}
   ;
 using_directives_opt
-  : /* Nothing */
+  : /* Nothing */     {l.a("using_directives_opt",1);}
   | using_directives	{l.a("using_directives_opt");}
   ;
 attributes_opt
-  : /* Nothing */	
+  : /* Nothing */	 {l.a("attributes_opt",1);}
   | attributes	{l.a("attributes_opt");}
   ;
 namespace_member_declarations_opt
-  : /* Nothing */
-  | namespace_member_declarations	{l.a("namespace_member_declarations_opt");}
+  : /* Nothing */                     {l.a("namespace_member_declarations_opt",1);}
+  | namespace_member_declarations	    {l.a("namespace_member_declarations_opt");}
   ;
 namespace_declaration
   : attributes_opt NAMESPACE qualified_identifier namespace_body comma_opt	{l.a("namespace_declaration");}
   ;
 comma_opt
-  : /* Nothing */
-  | SEMICOLON	{l.a("comma_opt");}
+  : /* Nothing */ {l.a("comma_opt",1);}
+  | SEMICOLON	{l.a("comma_opt",1);}
   ;	
 /*
 qualified_identifier
-  : IDENTIFIER								{l.a("qualified_identifier");}
+  : IDENTIFIER							            	{l.a("qualified_identifier",1);}
   | qualified_identifier DOT IDENTIFIER		{l.a("qualified_identifier");}
   ;
 */
 qualified_identifier
-  : IDENTIFIER				{l.a("qualified_identifier");}
+  : IDENTIFIER				{l.a("qualified_identifier",1);}
   | qualifier IDENTIFIER	{l.a("qualified_identifier");}
   ;
 qualifier
-  : IDENTIFIER DOT				{l.a("qualifier");}
+  : IDENTIFIER DOT				{l.a("qualifier",1);}
   | qualifier IDENTIFIER DOT	{l.a("qualifier");}
   ;
 namespace_body
@@ -730,7 +730,7 @@ using_namespace_directive
   | USING namespace_name error			{l.a("using_namespace_directive");}
   ;
 namespace_member_declarations
-  : namespace_member_declaration									{l.a("namespace_member_declarations");}
+  : namespace_member_declaration									                {l.a("namespace_member_declarations");}
   | namespace_member_declarations namespace_member_declaration		{l.a("namespace_member_declarations");}
   ;
 namespace_member_declaration
@@ -753,35 +753,35 @@ type_declaration
  * enum_modifier, delegate_modifier
  */
 modifiers_opt
-  : /* Nothing */
-  | modifiers	{l.a("modifiers_opt");}
+  : /* Nothing */       {l.a("modifiers_opt",1);}
+  | modifiers	          {l.a("modifiers_opt");}
   ;
 modifiers
-  : modifier			{l.a("modifiers");}
-  | modifiers modifier	{l.a("modifiers");}
+  : modifier			          {l.a("modifiers");}
+  | modifiers modifier	    {l.a("modifiers");}
   ;
 modifier
-  : ABSTRACT	{l.a("modifier");}
-  | EXTERN		{l.a("modifier");}
-  | INTERNAL	{l.a("modifier");}
-  | NEW			{l.a("modifier");}
-  | OVERRIDE	{l.a("modifier");}
-  | PRIVATE		{l.a("modifier");}
-  | PROTECTED	{l.a("modifier");}
-  | PUBLIC		{l.a("modifier");}
-  | READONLY	{l.a("modifier");}
-  | SEALED		{l.a("modifier");}
-  | STATIC		{l.a("modifier");}
-  | UNSAFE		{l.a("modifier");}
-  | VIRTUAL		{l.a("modifier");}
-  | VOLATILE	{l.a("modifier");}
+  : ABSTRACT	              {l.a("modifier",1);}
+  | EXTERN		              {l.a("modifier",1);}
+  | INTERNAL	              {l.a("modifier",1);}
+  | NEW			                {l.a("modifier",1);}
+  | OVERRIDE	              {l.a("modifier",1);}
+  | PRIVATE		              {l.a("modifier",1);}
+  | PROTECTED	              {l.a("modifier",1);}
+  | PUBLIC		              {l.a("modifier",1);}
+  | READONLY	              {l.a("modifier",1);}
+  | SEALED		              {l.a("modifier",1);}
+  | STATIC		              {l.a("modifier",1);}
+  | UNSAFE		              {l.a("modifier",1);}
+  | VIRTUAL		              {l.a("modifier",1);}
+  | VOLATILE	              {l.a("modifier",1);}
   ;
 /***** C.2.6 Classes *****/
 class_declaration
   : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration");}
   ;
 class_base_opt
-  : /* Nothing */
+  : /* Nothing */   {l.a("class_base_opt",1);}
   | class_base	{l.a("class_base_opt");}
   ;
 class_base
@@ -797,7 +797,7 @@ class_body
   : LEFT_BRACKET_GROUP class_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("class_body");}
   ;
 class_member_declarations_opt
-  : /* Nothing */
+  : /* Nothing */             {l.a("class_member_declarations_opt",1);}
   | class_member_declarations	{l.a("class_member_declarations_opt");}
   ;
 class_member_declarations
@@ -834,16 +834,16 @@ method_header
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header");}
   ;
 formal_parameter_list_opt
-  : /* Nothing */
+  : /* Nothing */         {l.a("formal_parameter_list_opt",1);}
   | formal_parameter_list	{l.a("formal_parameter_list_opt");}
   ;
 return_type
   : type	{l.a("return_type");}
-  | VOID	{l.a("return_type");}
+  | VOID	{l.a("return_type",1);}
   ;
 method_body
   : block		{l.a("method_body");}
-  | SEMICOLON	{l.a("method_body");}
+  | SEMICOLON	{l.a("method_body",1);}
   ;
 formal_parameter_list
   : formal_parameter								{l.a("formal_parameter_list");}
@@ -857,9 +857,9 @@ fixed_parameter
   : attributes_opt parameter_modifier_opt type IDENTIFIER	{l.a("fixed_parameter");}
   ;	
 parameter_modifier_opt
-  : /* Nothing */
-  | REF		{l.a("parameter_modifier_opt");}
-  | OUT		{l.a("parameter_modifier_opt");}
+  : /* Nothing */             {l.a("parameter_modifier_opt",1);}
+  | REF		                    {l.a("parameter_modifier_opt",1);}
+  | OUT		                    {l.a("parameter_modifier_opt",1);}
   ;
 parameter_array
 /*!  : attributes_opt PARAMS array_type IDENTIFIER */
@@ -876,11 +876,11 @@ accessor_declarations
   | set_accessor_declaration get_accessor_declaration_opt	{l.a("accessor_declarations");}
   ;
 set_accessor_declaration_opt
-  : /* Nothing */
+  : /* Nothing */             {l.a("set_accessor_declaration_opt",1);}
   | set_accessor_declaration	{l.a("set_accessor_declaration_opt");}
   ;
 get_accessor_declaration_opt
-  : /* Nothing */
+  : /* Nothing */             {l.a("get_accessor_declaration_opt",1);}
   | get_accessor_declaration	{l.a("get_accessor_declaration_opt");}
   ;
 get_accessor_declaration
@@ -897,7 +897,7 @@ set_accessor_declaration
   ;
 accessor_body
   : block		{l.a("accessor_body");}
-  | SEMICOLON	{l.a("accessor_body");}
+  | SEMICOLON	{l.a("accessor_body",1);}
   ;
 event_declaration
   : attributes_opt modifiers_opt EVENT type variable_declarators SEMICOLON		{l.a("event_declaration");}
@@ -949,28 +949,28 @@ overloadable_operator_declarator
   | type OPERATOR overloadable_operator LEFT_BRACKET_CIRCLE type IDENTIFIER COMMA type IDENTIFIER RIGHT_BRACKET_CIRCLE		{l.a("overloadable_operator_declarator");}
   ;
 overloadable_operator
-  : PLUS					{l.a("overloadable_operator");}
-  | MINUS					{l.a("overloadable_operator");}
-  | EXCLAMATION_POINT		{l.a("overloadable_operator");}
-  | TILDE					{l.a("overloadable_operator");}
-  | PLUSPLUS				{l.a("overloadable_operator");}
-  | MINUSMINUS				{l.a("overloadable_operator");}
-  | TRUE					{l.a("overloadable_operator");}
-  | FALSE					{l.a("overloadable_operator");}
-  | STAR					{l.a("overloadable_operator");}
-  | SLASH					{l.a("overloadable_operator");}
-  | PERCENT					{l.a("overloadable_operator");}
-  | AND						{l.a("overloadable_operator");}
-  | OR						{l.a("overloadable_operator");}
-  | POWER					{l.a("overloadable_operator");}
-  | LTLT					{l.a("overloadable_operator");}
-  | GTGT					{l.a("overloadable_operator");}
-  | EQEQ					{l.a("overloadable_operator");}
-  | NOTEQ					{l.a("overloadable_operator");}
-  | GREATER					{l.a("overloadable_operator");}
-  | SMALLER					{l.a("overloadable_operator");}
-  | GEQ						{l.a("overloadable_operator");}
-  | LEQ						{l.a("overloadable_operator");}
+  : PLUS					        {l.a("overloadable_operator",1);}
+  | MINUS					        {l.a("overloadable_operator",1);}
+  | EXCLAMATION_POINT		  {l.a("overloadable_operator",1);}
+  | TILDE					        {l.a("overloadable_operator",1);}
+  | PLUSPLUS			      	{l.a("overloadable_operator",1);}
+  | MINUSMINUS		    		{l.a("overloadable_operator",1);}
+  | TRUE					        {l.a("overloadable_operator",1);}
+  | FALSE				        	{l.a("overloadable_operator",1);}
+  | STAR				        	{l.a("overloadable_operator",1);}
+  | SLASH				        	{l.a("overloadable_operator",1);}
+  | PERCENT			      		{l.a("overloadable_operator",1);}
+  | AND						        {l.a("overloadable_operator",1);}
+  | OR						        {l.a("overloadable_operator",1);}
+  | POWER					        {l.a("overloadable_operator",1);}
+  | LTLT					        {l.a("overloadable_operator",1);}
+  | GTGT					        {l.a("overloadable_operator",1);}
+  | EQEQ					        {l.a("overloadable_operator",1);}
+  | NOTEQ					        {l.a("overloadable_operator",1);}
+  | GREATER					      {l.a("overloadable_operator",1);}
+  | SMALLER					      {l.a("overloadable_operator",1);}
+  | GEQ						        {l.a("overloadable_operator",1);}
+  | LEQ						        {l.a("overloadable_operator",1);}
   ;
 conversion_operator_declarator
   : IMPLICIT OPERATOR type LEFT_BRACKET_CIRCLE type IDENTIFIER RIGHT_BRACKET_CIRCLE		{l.a("conversion_operator_declarator");}
@@ -983,7 +983,7 @@ constructor_declarator
   : IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE constructor_initializer_opt		{l.a("constructor_declarator");}
   ;
 constructor_initializer_opt
-  : /* Nothing */
+  : /* Nothing */             {l.a("constructor_initializer_opt",1);}
   | constructor_initializer		{l.a("constructor_initializer_opt");}
   ;
 constructor_initializer
@@ -1008,11 +1008,11 @@ destructor_declaration
   ;
 operator_body
   : block		{l.a("operator_body");}
-  | SEMICOLON	{l.a("operator_body");}
+  | SEMICOLON	{l.a("operator_body",1);}
   ;
 constructor_body /*** Added by JP - same as method_body ***/
   : block		{l.a("constructor_body");}
-  | SEMICOLON	{l.a("constructor_body");}
+  | SEMICOLON	{l.a("constructor_body",1);}
   ;
 
 /***** C.2.7 Structs *****/
@@ -1020,7 +1020,7 @@ struct_declaration
   : attributes_opt modifiers_opt STRUCT IDENTIFIER struct_interfaces_opt struct_body comma_opt	{l.a("struct_declaration");}
   ;
 struct_interfaces_opt
-  : /* Nothing */
+  : /* Nothing */     {l.a("struct_interfaces_opt",1);}
   | struct_interfaces	{l.a("struct_interfaces_opt");}
   ;
 struct_interfaces	
@@ -1030,7 +1030,7 @@ struct_body
   : LEFT_BRACKET_GROUP struct_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("struct_body");}
   ;
 struct_member_declarations_opt
-  : /* Nothing */
+  : /* Nothing */             	{l.a("struct_member_declarations_opt",1);}
   | struct_member_declarations	{l.a("struct_member_declarations_opt");}
   ;
 struct_member_declarations
@@ -1056,7 +1056,7 @@ array_initializer
   | LEFT_BRACKET_GROUP variable_initializer_list COMMA RIGHT_BRACKET_GROUP		{l.a("array_initializer");}
   ;
 variable_initializer_list_opt
-  : /* Nothing */
+  : /* Nothing */             {l.a("variable_initializer_list_opt",1);}
   | variable_initializer_list	{l.a("variable_initializer_list_opt");}
   ;
 variable_initializer_list
@@ -1069,7 +1069,7 @@ interface_declaration
   : attributes_opt modifiers_opt INTERFACE IDENTIFIER interface_base_opt interface_body comma_opt	{l.a("interface_declaration");}
   ;
 interface_base_opt
-  : /* Nothing */	
+  : /* Nothing */	  {l.a("interface_base_opt",1);}
   | interface_base	{l.a("interface_base_opt");}
   ;
 interface_base
@@ -1079,11 +1079,11 @@ interface_body
   : LEFT_BRACKET_GROUP interface_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("interface_body");}
   ;
 interface_member_declarations_opt
-  : /* Nothing */
+  : /* Nothing */                    	{l.a("interface_member_declarations_opt",1);}
   | interface_member_declarations			{l.a("interface_member_declarations_opt");}
   ;
 interface_member_declarations
-  : interface_member_declaration									{l.a("interface_member_declarations");}
+  : interface_member_declaration									                {l.a("interface_member_declarations");}
   | interface_member_declarations interface_member_declaration		{l.a("interface_member_declarations");}
   ;
 interface_member_declaration
@@ -1098,8 +1098,8 @@ interface_method_declaration
   | attributes_opt new_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		{l.a("interface_method_declaration");}
   ;
 new_opt
-  : /* Nothing */
-  | NEW
+  : /* Nothing */  {l.a("new_opt",1);}
+  | NEW            {l.a("new_opt",1);}
   ;
 interface_property_declaration
   : attributes_opt new_opt type IDENTIFIER 
@@ -1127,8 +1127,8 @@ interface_event_declaration
 
 /* mono seems to allow this */
 interface_empty_body
-  : SEMICOLON									{l.a("interface_empty_body");}
-  | LEFT_BRACKET_GROUP RIGHT_BRACKET_GROUP		{l.a("interface_empty_body");}
+  : SEMICOLON									{l.a("interface_empty_body",1);}
+  | LEFT_BRACKET_GROUP RIGHT_BRACKET_GROUP		{l.a("interface_empty_body",1);}
   ;
 
 /***** C.2.10 Enums *****/
@@ -1136,7 +1136,7 @@ enum_declaration
   : attributes_opt modifiers_opt ENUM IDENTIFIER enum_base_opt enum_body comma_opt		{l.a("enum_declaration");}
   ;
 enum_base_opt
-  : /* Nothing */
+  : /* Nothing */ {l.a("enum_base_opt",1);}
   | enum_base		{l.a("enum_base_opt");}
   ;
 enum_base
@@ -1147,7 +1147,7 @@ enum_body
   | LEFT_BRACKET_GROUP enum_member_declarations COMMA RIGHT_BRACKET_GROUP	{l.a("enum_body");}
   ;
 enum_member_declarations_opt
-  : /* Nothing */
+  : /* Nothing */             	{l.a("enum_member_declarations_opt",1);}
   | enum_member_declarations		{l.a("enum_member_declarations_opt");}
   ;
 enum_member_declarations
@@ -1178,7 +1178,7 @@ attribute_section
   | ENTER_attrib LEFT_BRACKET attribute_target_specifier_opt attribute_list COMMA RIGHT_BRACKET EXIT_attrib		{l.a("attribute_section");}
   ;
 attribute_target_specifier_opt
-  : /* Nothing */
+  : /* Nothing */                 	{l.a("attribute_target_specifier_opt",1);}
   | attribute_target_specifier			{l.a("attribute_target_specifier_opt");}
   ;
 attribute_target_specifier	
@@ -1203,7 +1203,7 @@ attribute
   : attribute_name attribute_arguments_opt	{l.a("attribute");}
   ;
 attribute_arguments_opt
-  : /* Nothing */
+  : /* Nothing */         {l.a("attribute_arguments_opt",1);}
   | attribute_arguments		{l.a("attribute_arguments_opt");}
   ;
 attribute_name
