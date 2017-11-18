@@ -462,8 +462,8 @@ labeled_statement
 declaration_statement
   : local_variable_declaration SEMICOLON	                            {l.a("declaration_statement",1);}
   | local_constant_declaration SEMICOLON	                            {l.a("declaration_statement",1);}
-  | local_variable_declaration error		                              {l.a("declaration_statement",1);}
-  | local_constant_declaration error		                              {l.a("declaration_statement",1);}
+  | local_variable_declaration error		                              {l.a("declaration_statement",1,1);}
+  | local_constant_declaration error		                              {l.a("declaration_statement",1,1);}
   ;
 local_variable_declaration
   : type variable_declarators		                                      {l.a("local_variable_declaration",2);}
@@ -496,7 +496,7 @@ constant_declarator
   ;
 expression_statement
   : statement_expression SEMICOLON	                                  {l.a("expression_statement",1);}
-  |	statement_expression error		                                    {l.a("expression_statement",1);}
+  |	statement_expression error		                                    {l.a("expression_statement",1,1);}
   ;
 statement_expression
   : invocation_expression			                                        {l.a("statement_expression",1);}
@@ -819,11 +819,11 @@ class_member_declaration
   ;
 constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	{l.a("constant_declaration",4);}
-  | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4);}
+  | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
   ;
 field_declaration
   : attributes_opt modifiers_opt type variable_declarators SEMICOLON		{l.a("field_declaration",4);}
-  | attributes_opt modifiers_opt type variable_declarators error			{l.a("field_declaration",4);}
+  | attributes_opt modifiers_opt type variable_declarators error			{l.a("field_declaration",4,1);}
   ;
 method_declaration
   : method_header method_body		{l.a("method_declaration",2);}

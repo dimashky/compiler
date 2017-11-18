@@ -16,19 +16,23 @@ Logger::Logger(string file)
 	fprintf(nodeFile, "var nodes = [");
 	fprintf(edgeFile, "var edges = [");
 }
-void Logger::a(string s, int subnodes_number)
+void Logger::a(string s, int subnodes_number, bool err)
 {
+	char* color = "#74bffc";
+	
+	if (err) color = "#f80000";
+
 	if(subnodes_number != 0)
-		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'box'},", nodeCnt, s.c_str());
+		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'box', color:'%s'},", nodeCnt, s.c_str(),color);
 	else
-		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'ellipse'},", nodeCnt, s.c_str());
+		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'ellipse', color:'%s'},", nodeCnt, s.c_str(),color);
 	if (subnodes_number != 0) { // non terminal node
 		for (int i = 0;  i < subnodes_number - 1; ++i) {
-			fprintf(edgeFile, "{from:%d,to:%d,id:'e%d'},", nodeCnt, subnodes.top(), edgeCnt);
+			fprintf(edgeFile, "{from:%d,to:%d,id:'e%d', label: '%d', dashes:true},", nodeCnt, subnodes.top(), edgeCnt, edgeCnt);
 			subnodes.pop();
 			edgeCnt++;
 		}
-		fprintf(edgeFile, "{from:%d,to:%d,id:'e%d'},", nodeCnt, nodeCnt - 1, edgeCnt);
+		fprintf(edgeFile, "{from:%d,to:%d,id:'e%d', label: '%d', dashes:true},", nodeCnt, nodeCnt - 1, edgeCnt, edgeCnt);
 		edgeCnt++;
 	}
 	else {

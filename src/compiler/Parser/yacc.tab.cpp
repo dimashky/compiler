@@ -3721,13 +3721,13 @@ yyreduce:
 
   case 200:
 #line 465 "yacc.y" /* yacc.c:1646  */
-    {l.a("declaration_statement",1);}
+    {l.a("declaration_statement",1,1);}
 #line 3726 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 201:
 #line 466 "yacc.y" /* yacc.c:1646  */
-    {l.a("declaration_statement",1);}
+    {l.a("declaration_statement",1,1);}
 #line 3732 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -3817,7 +3817,7 @@ yyreduce:
 
   case 216:
 #line 499 "yacc.y" /* yacc.c:1646  */
-    {l.a("expression_statement",1);}
+    {l.a("expression_statement",1,1);}
 #line 3822 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -4789,7 +4789,7 @@ yyreduce:
 
   case 379:
 #line 822 "yacc.y" /* yacc.c:1646  */
-    {l.a("constant_declaration",4);}
+    {l.a("constant_declaration",4,1);}
 #line 4794 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -4801,7 +4801,7 @@ yyreduce:
 
   case 381:
 #line 826 "yacc.y" /* yacc.c:1646  */
-    {l.a("field_declaration",4);}
+    {l.a("field_declaration",4,1);}
 #line 4806 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 

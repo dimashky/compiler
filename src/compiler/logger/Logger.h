@@ -16,7 +16,7 @@ private:
 	int nodeCnt, edgeCnt;
 public:
 	Logger(string file);
-	void a(string, int);
+	void a(string, int, bool err = false);
 	void print();
 };
 

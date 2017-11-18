@@ -1,4 +1,6 @@
 class xx
 {
-    int x;
+    int x
+    
+    int y = 1
 }
