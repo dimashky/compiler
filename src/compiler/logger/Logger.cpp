@@ -18,9 +18,12 @@ Logger::Logger(string file)
 }
 void Logger::a(string s, int subnodes_number)
 {
-	fprintf(nodeFile, "{ id:%d, label:'%s'},", nodeCnt, s.c_str());
+	if(subnodes_number != 0)
+		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'box'},", nodeCnt, s.c_str());
+	else
+		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'ellipse'},", nodeCnt, s.c_str());
 	if (subnodes_number != 0) { // non terminal node
-		for (int i = 0; subnodes.size() > 0 && i < subnodes_number - 1; ++i) {
+		for (int i = 0;  i < subnodes_number - 1; ++i) {
 			fprintf(edgeFile, "{from:%d,to:%d,id:'e%d'},", nodeCnt, subnodes.top(), edgeCnt);
 			subnodes.pop();
 			edgeCnt++;

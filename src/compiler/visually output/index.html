@@ -1,24 +1,65 @@
 
-<html>
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <title>Hierarchical Layout without Physics</title>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
-  <script src="js/nodes.js"></script>
-    <script src="js/edges.js"></script>
-    <style type="text/css">
-        #network{
-            width: 1000px;
-            height: 400px;
-            border: 1px solid lightgray;
-        }
-    </style>
-</head>
-<body>
-<h1>Syntax Tree</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<div id="network"></div>
+    <title>Compiler</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/vis/vis-network.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Compiler</a>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">AST <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Setting</button>
+        </form>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Syntax Tree</h1>
+        <div id="network"></div>
+      </div>
+
+      <footer class="text-center" style="border-radius: 5px; margin-top:350px; padding: 15px; background-color:lightgrey">
+          QuadM Team
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/vendor/jquery/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/vis/vis.js"></script>
+    <script src="js/nodes.js"></script>
+    <script src="js/edges.js"></script>
 <script>
     var data = {
         nodes: nodes,
@@ -33,26 +74,28 @@
                 sortMethod: "directed"
             }
         },
-        interaction: {dragNodes :false},
+        interaction: {
+            dragNodes: true
+        },
         physics: {
             enabled: false
         },
         configure: {
-          filter: function (option, path) {
-              if (path.indexOf('hierarchical') !== -1) {
-                  return true;
-              }
-              return false;
-          },
-          showButton:false
+            filter: function (option, path) {
+                if (path.indexOf('hierarchical') !== -1) {
+                    return true;
+                }
+                return false;
+            },
+            showButton: false
         }
     };
     var network = new vis.Network(container, data, options);
 </script>
-</body>
+  </body>
 </html>
+    
 
+<!--
 
-
-
-
+	-->
