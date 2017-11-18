@@ -23,6 +23,7 @@ void Logger::a(string s, int subnodes_number)
 		for (int i = 0; subnodes.size() > 0 && i < subnodes_number - 1; ++i) {
 			fprintf(edgeFile, "{from:%d,to:%d,id:'e%d'},", nodeCnt, subnodes.top(), edgeCnt);
 			subnodes.pop();
+			edgeCnt++;
 		}
 		fprintf(edgeFile, "{from:%d,to:%d,id:'e%d'},", nodeCnt, nodeCnt - 1, edgeCnt);
 		edgeCnt++;
