@@ -35,7 +35,7 @@ void Logger::a(string s, int subnodes_number, bool err)
 		fprintf(edgeFile, "{from:%d,to:%d,id:'e%d', label: '%d', dashes:true},", nodeCnt, nodeCnt - 1, edgeCnt, edgeCnt);
 		edgeCnt++;
 	}
-	else {
+	else if(subnodes_number == 0 && nodeCnt != 1){
 		subnodes.push(nodeCnt - 1);
 	}
 	nodeCnt++;
@@ -46,6 +46,15 @@ void Logger::print()
 {
 	fprintf(nodeFile, "];");
 	fprintf(edgeFile, "];");
+	if (!subnodes.empty()) {
+		printf("There some ERRORS with 'subnodes' stack: [ ");
+		while (!subnodes.empty())
+		{
+			printf("%d ", subnodes.top());
+			subnodes.pop();
+		}
+		printf("]\n");
+	}
 	fclose(nodeFile);
 	fclose(edgeFile);
 	stack<string>pr = stprint;

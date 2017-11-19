@@ -6,7 +6,10 @@
 	#include <string>
 	#include <queue>
 	#include <stack>
-	#define mp(x,y) make_pair(x,y)
+	#include <ctime>
+	#include <ratio>
+	#include <chrono>
+
 	using namespace std;
 
 	#define YY_DECL int yylex()
@@ -40,6 +43,7 @@
 		}
 	};
 
+	bool first_loop = true;
 	int line_no = 1;
 	int col_no = 1;
 	static bool invalid_token = false;
@@ -96,6 +100,7 @@
 		yylval.r.str[0] = '\0';
 		strcpy(yylval.r.str, yytext);
 	}
+	std::chrono::system_clock::time_point start;
 %}
 
 %option noyywrap
@@ -157,6 +162,10 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 %%
 
 %{
+		if(first_loop){
+		 start  = std::chrono::system_clock::now();
+		 first_loop = false;
+		}
 		FILE *f = fopen("Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
@@ -299,6 +308,13 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 .					  {	lexical_error("invalid token", yytext);	}
 
 <<EOF>> {
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+	std::cout << "Statics:\n-> Finished Scan at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n============\n";
+
+
 	if(!brackets.empty() || invalid_token == true)
 		yyterminate();
 	t.push(0);
