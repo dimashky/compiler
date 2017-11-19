@@ -4003,13 +4003,13 @@ yyreduce:
 
   case 247:
 #line 560 "yacc.y" /* yacc.c:1646  */
-    {l.a("for_statement",3);}
+    {l.a("for_statement",4);}
 #line 4008 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 248:
 #line 561 "yacc.y" /* yacc.c:1646  */
-    {l.a("for_statement",3);}
+    {l.a("for_statement",4);}
 #line 4014 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
