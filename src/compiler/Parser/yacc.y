@@ -554,12 +554,12 @@ while_statement
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
-  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{l.a("do_statement",2);}
+  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{l.a("do_statement",2,1);}
   ;
 for_statement
   : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("for_statement",4);}
-  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error for_condition_opt error for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4);}
-
+  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error for_condition_opt error for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",5,1);}
+  | FOR error				for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt error embedded_statement					{l.a("for_statement",5,1);}
   ;
 for_initializer_opt
   : /* Nothing */   {l.a("for_initializer_opt",0);}
@@ -599,23 +599,23 @@ jump_statement
   ;
 break_statement
   : BREAK SEMICOLON	{l.a("break_statement",0);}
-  | BREAK error		{l.a("break_statement",0);}
+  | BREAK error		{l.a("break_statement",0,1);}
   ;
 continue_statement
   : CONTINUE SEMICOLON	{l.a("continue_statement",0);}
-  | CONTINUE error		{l.a("continue_statement",0);}
+  | CONTINUE error		{l.a("continue_statement",0,1);}
   ;
 goto_statement
   : GOTO IDENTIFIER SEMICOLON					{l.a("goto_statement",0);}
   | GOTO CASE constant_expression SEMICOLON		{l.a("goto_statement",1);}
   | GOTO DEFAULT SEMICOLON						{l.a("goto_statement",0);}
-  | GOTO IDENTIFIER error						{l.a("goto_statement",0);}
-  | GOTO CASE constant_expression error			{l.a("goto_statement",1);}
-  | GOTO DEFAULT error							{l.a("goto_statement",0);}
+  | GOTO IDENTIFIER error						{l.a("goto_statement",0,1);}
+  | GOTO CASE constant_expression error			{l.a("goto_statement",1,1);}
+  | GOTO DEFAULT error							{l.a("goto_statement",0,1);}
   ;
 return_statement
   : RETURN expression_opt SEMICOLON	{l.a("return_statement",1);}
-  | RETURN expression_opt error		{l.a("return_statement",1);}
+  | RETURN expression_opt error		{l.a("return_statement",1,1);}
   ;
 expression_opt
   : /* Nothing */ {l.a("expression_opt",0);}
@@ -623,7 +623,7 @@ expression_opt
   ;
 throw_statement
   : THROW expression_opt SEMICOLON	{l.a("throw_statement",1);}
-  | THROW expression_opt error		  {l.a("throw_statement",1);}
+  | THROW expression_opt error		  {l.a("throw_statement",1,1);}
   ;
 try_statement
   : TRY block catch_clauses					        {l.a("try_statement",2);}
@@ -723,11 +723,11 @@ using_directive
   ;
 using_alias_directive
   : USING IDENTIFIER EQUAL qualified_identifier SEMICOLON	{l.a("using_alias_directive",1);}
-  | USING IDENTIFIER EQUAL qualified_identifier error		{l.a("using_alias_directive",1);}
+  | USING IDENTIFIER EQUAL qualified_identifier error		{l.a("using_alias_directive",1,1);}
   ;
 using_namespace_directive
   : USING namespace_name SEMICOLON		{l.a("using_namespace_directive",1);}
-  | USING namespace_name error			{l.a("using_namespace_directive",1);}
+  | USING namespace_name error			{l.a("using_namespace_directive",1,1);}
   ;
 namespace_member_declarations
   : namespace_member_declaration									                {l.a("namespace_member_declarations",1);}
@@ -1162,7 +1162,7 @@ enum_member_declaration
 /***** C.2.11 Delegates *****/
 delegate_declaration
   : attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE SEMICOLON		{l.a("enum_member_declaration",4);}
-  | attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE error			{l.a("enum_member_declaration",4);}
+  | attributes_opt modifiers_opt DELEGATE return_type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE error			{l.a("enum_member_declaration",4,1);}
   ;
 
 /***** C.2.12 Attributes *****/

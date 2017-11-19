@@ -30,6 +30,9 @@ public:
 		}
 		fclose(f);
 	}
+	int errorsNum() {
+		return errorList.size();
+	}
 };
 
 

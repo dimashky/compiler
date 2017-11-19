@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <iostream>
-
+#include"../Error Handler/error_handler.h"
 
 Logger::Logger(string file)
 {
@@ -46,7 +46,8 @@ void Logger::print()
 {
 	fprintf(nodeFile, "];");
 	fprintf(edgeFile, "];");
-	if (!subnodes.empty()) {
+	extern errorHandler error_handler;
+	if (!subnodes.empty() && error_handler.errorsNum() == 0) {
 		printf("There some ERRORS with 'subnodes' stack: [ ");
 		while (!subnodes.empty())
 		{
