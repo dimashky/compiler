@@ -22,43 +22,109 @@
     <Filter Include="Source Files\I/O">
       <UniqueIdentifier>{86e0eafe-4d5b-4e16-bdb1-3fff1356cb46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Error Handler">
+      <UniqueIdentifier>{11549d30-f754-42ee-bc6b-3dcbbd0ab5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logger">
+      <UniqueIdentifier>{260fc320-d7be-4de6-803d-01bdf063d6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logs">
+      <UniqueIdentifier>{ef64ae75-534c-4b23-9106-40218af167b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Lexical Analyzer\lex.l">
-      <Filter>Source Files\Lexical Analyzer</Filter>
+    <None Include="sample inputs\example1.cs">
+      <Filter>Source Files\I/O</Filter>
     </None>
-    <None Include="Parser\yacc.y">
-      <Filter>Source Files\Parser</Filter>
+    <None Include="sample inputs\example2.cs">
+      <Filter>Source Files\I/O</Filter>
     </None>
-    <None Include="Parser\yacc.output">
-      <Filter>Source Files\Parser</Filter>
+    <None Include="sample inputs\example3.cs">
+      <Filter>Source Files\I/O</Filter>
     </None>
-    <None Include="sample inputs\input.cs">
+    <None Include="sample inputs\example4.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example5.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example6.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example8.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example9.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example10.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example11.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example12.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example13.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example14.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example15.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example7.cs">
+      <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\example16.cs">
       <Filter>Source Files\I/O</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lexical Analyzer\lex.yy.cc">
-      <Filter>Source Files\Lexical Analyzer</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser\yacc.cpp">
-      <Filter>Source Files\Parser</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Lexical Analyzer\replace.txt">
+    <ClCompile Include="Lexical Analyzer\lex.flex.cpp">
       <Filter>Source Files\Lexical Analyzer</Filter>
-    </Text>
-    <Text Include="output.txt">
-      <Filter>Source Files\I/O</Filter>
-    </Text>
+    </ClCompile>
+    <ClCompile Include="Parser\yacc.tab.cpp">
+      <Filter>Source Files\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="logger\Logger.cpp">
+      <Filter>Source Files\logger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parser\yacc.hpp">
+    <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
     </ClInclude>
+    <ClInclude Include="Error Handler\error_handler.h">
+      <Filter>Source Files\Error Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Error Handler\error_record.h">
+      <Filter>Source Files\Error Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="logger\Logger.h">
+      <Filter>Source Files\logger</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Bison Include="Parser\yacc.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <Flex Include="Lexical Analyzer\lex.l" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="error.log">
+      <Filter>Source Files\logs</Filter>
+    </Text>
+    <Text Include="Lex.log">
+      <Filter>Source Files\logs</Filter>
+    </Text>
+    <Text Include="parser.log">
+      <Filter>Source Files\logs</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -19,22 +19,49 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Lexical Analyzer\lex.l" />
-    <None Include="Parser\yacc.output" />
-    <None Include="Parser\yacc.y" />
-    <None Include="sample inputs\input.cs" />
+    <None Include="sample inputs\example1.cs" />
+    <None Include="sample inputs\example10.cs" />
+    <None Include="sample inputs\example11.cs" />
+    <None Include="sample inputs\example12.cs" />
+    <None Include="sample inputs\example13.cs" />
+    <None Include="sample inputs\example14.cs" />
+    <None Include="sample inputs\example15.cs" />
+    <None Include="sample inputs\example2.cs" />
+    <None Include="sample inputs\example3.cs" />
+    <None Include="sample inputs\example4.cs" />
+    <None Include="sample inputs\example5.cs" />
+    <None Include="sample inputs\example6.cs" />
+    <None Include="sample inputs\example7.cs" />
+    <None Include="sample inputs\example8.cs" />
+    <None Include="sample inputs\example9.cs" />
+    <None Include="sample inputs\example16.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lexical Analyzer\lex.yy.cc" />
+    <ClCompile Include="Lexical Analyzer\lex.flex.cpp" />
+    <ClCompile Include="logger\Logger.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Parser\yacc.cpp" />
+    <ClCompile Include="Parser\yacc.tab.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Lexical Analyzer\replace.txt" />
-    <Text Include="output.txt" />
+    <ClInclude Include="Error Handler\error_handler.h" />
+    <ClInclude Include="Error Handler\error_record.h" />
+    <ClInclude Include="logger\Logger.h" />
+    <ClInclude Include="Parser\yacc.tab.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parser\yacc.hpp" />
+    <Bison Include="Parser\yacc.y">
+      <Warnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">yacc</Warnings>
+    </Bison>
+  </ItemGroup>
+  <ItemGroup>
+    <Flex Include="Lexical Analyzer\lex.l">
+      <LexCompat Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LexCompat>
+    </Flex>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="error.log" />
+    <Text Include="Lex.log" />
+    <Text Include="parser.log" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0C1C1964-4DB0-4C41-9A12-A9FDCAEB9628}</ProjectGuid>
@@ -71,6 +98,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="C:\win flex bison\win_flex_bison3-latest\custom_build_rules\win_flex_bison_custom_build.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -162,5 +190,6 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="C:\win flex bison\win_flex_bison3-latest\custom_build_rules\win_flex_bison_custom_build.targets" />
   </ImportGroup>
 </Project>
