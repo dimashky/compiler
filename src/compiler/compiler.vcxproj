@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Parser\yacc.output" />
     <None Include="sample inputs\example1.cs" />
     <None Include="sample inputs\example10.cs" />
     <None Include="sample inputs\example11.cs" />

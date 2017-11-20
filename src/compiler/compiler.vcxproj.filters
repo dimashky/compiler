@@ -81,6 +81,9 @@
     <None Include="sample inputs\example16.cs">
       <Filter>Source Files\I/O</Filter>
     </None>
+    <None Include="Parser\yacc.output">
+      <Filter>Source Files\Parser</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

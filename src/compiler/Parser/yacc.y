@@ -49,7 +49,7 @@
 %token RANK_SPECIFIER
 
 /* C.1.4 Tokens */
-%token IDENTIFIER "id" BAD_IDENTIFIER "bad_id"
+%token IDENTIFIER
 %token INTEGER_LITERAL "int_value" REAL_LITERAL "real_value" CHARACTER_LITERAL "char_value" STRING_LITERAL "str_value"
 
 
@@ -96,6 +96,8 @@
 
 %nonassoc THEN
 %nonassoc ELSE
+
+
 
 %start compilation_unit  /* I think */
 
@@ -288,17 +290,17 @@ sizeof_expression
   : SIZEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE		{l.a("sizeof_expression",1);}
   ;
 postfix_expression
-  : primary_expression			{l.a("postfix_expression primary_expression",1);}
-  | qualified_identifier		{l.a("postfix_expression qualified_identifier",1);}
-  | post_increment_expression	{l.a("postfix_expression post_increment_expression",1);}
-  | post_decrement_expression	{l.a("postfix_expression post_decrement_expression",1);}
-  | pointer_member_access		{l.a("postfix_expression pointer_member_access",1);}
+  : primary_expression			{l.a("postfix_expression",1);}
+  | qualified_identifier		{l.a("postfix_expression",1);}
+  | post_increment_expression	{l.a("postfix_expression",1);}
+  | post_decrement_expression	{l.a("postfix_expression",1);}
+  | pointer_member_access		{l.a("postfix_expression",1);}
   ;
 unary_expression_not_plusminus
-  : postfix_expression					{l.a("unary_expression_not_plusminus postfix_expression",1);}
-  | EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus EXCLAMATION_POINT",1);}
-  | TILDE unary_expression				{l.a("unary_expression_not_plusminus TILDE",1);}	
-  | cast_expression						{l.a("unary_expression_not_plusminus cast_expression",1);}
+  : EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus",1);}
+  | TILDE unary_expression				{l.a("unary_expression_not_plusminus",1);}	
+  | cast_expression						{l.a("unary_expression_not_plusminus",1);}
+  | postfix_expression					{l.a("unary_expression_not_plusminus",1);}
   ;
 pre_increment_expression
   : PLUSPLUS unary_expression	{l.a("pre_increment_expression",1);}
@@ -307,13 +309,13 @@ pre_decrement_expression
   : MINUSMINUS unary_expression	{l.a("pre_decrement_expression",1);}
   ;
 unary_expression
-  : unary_expression_not_plusminus	{l.a("unary_expression unary_expression_not_plusminus",1);}
-  | PLUS unary_expression			{l.a("unary_expression PLUS",1);}
-  | MINUS unary_expression			{l.a("unary_expression MINUS",1);}
-  | STAR unary_expression			{l.a("unary_expression STAR",1);}
-  | pre_increment_expression		{l.a("unary_expression pre_increment_expression",1);}
-  | pre_decrement_expression		{l.a("unary_expression pre_decrement_expression",1);}
-  | addressof_expression			{l.a("unary_expression addressof_expression",1);}
+  : PLUS unary_expression			{l.a("unary_expression",1);}
+  | MINUS unary_expression			{l.a("unary_expression",1);}
+  | STAR unary_expression			{l.a("unary_expression",1);}
+  | pre_increment_expression		{l.a("unary_expression",1);}
+  | pre_decrement_expression		{l.a("unary_expression",1);}
+  | addressof_expression			{l.a("unary_expression",1);}
+  | unary_expression_not_plusminus	{l.a("unary_expression",1);}
   ;
 /* For cast_expression we really just want a (type) in the brackets,
  * but have to do some factoring to get rid of conflict with expressions.
@@ -391,8 +393,8 @@ conditional_or_expression
   | conditional_or_expression OROR conditional_and_expression	    {l.a("conditional_or_expression",2);}
   ;
 conditional_expression
-  : conditional_or_expression											                      	{l.a("conditional_expression",1);}
-  | conditional_or_expression QUESTION_MARK expression COLON expression		{l.a("conditional_expression",3);}
+  : conditional_or_expression											                	{l.a("conditional_expression",1);}
+  | conditional_or_expression QUESTION_MARK expression COLON expression						{l.a("conditional_expression",3);}
   ;
 assignment
   : unary_expression assignment_operator expression                        	{l.a("assignment",3);}
@@ -443,6 +445,7 @@ embedded_statement
   ;
 block
   : LEFT_BRACKET_GROUP statement_list_opt RIGHT_BRACKET_GROUP	          {l.a("block",1);}
+  | LEFT_BRACKET_GROUP error			  RIGHT_BRACKET_GROUP			 {l.a("block",1,1);}
   ;
 statement_list_opt
   : /* Nothing */                                                     {l.a("statement_list_opt",0);}
@@ -494,14 +497,32 @@ constant_declarators
 constant_declarator
   : IDENTIFIER EQUAL constant_expression                            	{l.a("constant_declarator",1);}
   ;
+  /*
 expression_statement
-  : statement_expression SEMICOLON	                                  {l.a("expression_statement",1);}
-  |	statement_expression error		                                    {l.a("expression_statement",1,1);}
+  : statement_expression SEMICOLON									{l.a("expression_statement",1);}
+  |	statement_expression error		                                {l.a("expression_statement",1,1);}
+  ;
+  */
+  expression_statement
+  : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);}
+  | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);}
+  | assignment						SEMICOLON							  {l.a("expression_statement",1);}
+  | post_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
+  | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
+  | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
+  | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
+  | invocation_expression			error	                              {l.a("expression_statement",1,1);}
+  | object_creation_expression		error								  {l.a("expression_statement",1,1);}
+  | assignment						error								  {l.a("expression_statement",1,1);}
+  | post_increment_expression		error                                 {l.a("expression_statement",1,1);}
+  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);}
+  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);}
+  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);}
   ;
 statement_expression
-  : invocation_expression			                                        {l.a("statement_expression",1);}
-  | object_creation_expression	                                      {l.a("statement_expression",1);}
-  | assignment						                                            {l.a("statement_expression",1);}
+  : invocation_expression			                                      {l.a("statement_expression",1);}
+  | object_creation_expression											  {l.a("statement_expression",1);}
+  | assignment															  {l.a("statement_expression",1);}
   | post_increment_expression		                                      {l.a("statement_expression",1);}
   | post_decrement_expression		                                      {l.a("statement_expression",1);}
   | pre_increment_expression		                                      {l.a("statement_expression",1);}
@@ -557,9 +578,11 @@ do_statement
   | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{l.a("do_statement",2,1);}
   ;
 for_statement
-  : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("for_statement",4);}
-  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error for_condition_opt error for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",5,1);}
-  | FOR error				for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt error embedded_statement					{l.a("for_statement",5,1);}
+  : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4);}
+  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error		for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4,1);}
+  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON	for_condition_opt error		for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4,1);}
+  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error		for_condition_opt error		for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",5,1);}
+  | FOR error				for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt error				  embedded_statement			{l.a("for_statement",5,1);}
   ;
 for_initializer_opt
   : /* Nothing */   {l.a("for_initializer_opt",0);}
@@ -570,12 +593,12 @@ for_condition_opt
   | for_condition	{l.a("for_condition_opt",1);}
   ;
 for_iterator_opt
-  : /* Nothing */ {l.a("for_iterator_opt",0);}
+  : /* Nothing */	{l.a("for_iterator_opt",0);}
   | for_iterator	{l.a("for_iterator_opt",1);}
   ;
 for_initializer
-  : local_variable_declaration	{l.a("for_initializer",1);}
-  | statement_expression_list	  {l.a("for_initializer",1);}
+  : local_variable_declaration		{l.a("for_initializer",1);}
+  | statement_expression_list		{l.a("for_initializer",1);}
   ;
 for_condition
   : boolean_expression	{l.a("for_condition",1);}
@@ -699,7 +722,7 @@ comma_opt
 /*
 qualified_identifier
   : IDENTIFIER							            	{l.a("qualified_identifier",0);}
-  | qualified_identifier DOT IDENTIFIER		{l.a("qualified_identifier",1);}
+  | qualified_identifier DOT IDENTIFIER					{l.a("qualified_identifier",1);}
   ;
 */
 qualified_identifier

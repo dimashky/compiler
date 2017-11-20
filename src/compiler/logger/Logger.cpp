@@ -47,7 +47,7 @@ void Logger::print()
 	fprintf(nodeFile, "];");
 	fprintf(edgeFile, "];");
 	extern errorHandler error_handler;
-	if (!subnodes.empty() && error_handler.errorsNum() == 0) {
+	if (!subnodes.empty()) {
 		printf("There some ERRORS with 'subnodes' stack: [ ");
 		while (!subnodes.empty())
 		{
