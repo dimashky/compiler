@@ -1,3 +1,7 @@
-class xx
+class x
 {
+    void f()
+    {
+
+    }
 }

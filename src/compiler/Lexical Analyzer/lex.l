@@ -9,6 +9,7 @@
 	#include <ctime>
 	#include <ratio>
 	#include <chrono>
+	#include "../Error Handler/error_handler.h"
 
 	using namespace std;
 
@@ -101,6 +102,8 @@
 		strcpy(yylval.r.str, yytext);
 	}
 	std::chrono::system_clock::time_point start;
+	
+	extern errorHandler error_handler;
 %}
 
 %option noyywrap
@@ -210,11 +213,11 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "]"   { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ]\n",line_no,col_no);
+			error_handler.add(error(line_no, col_no, "unbalanced parenthesis, unexpected ]\n"));
 		else if(brackets.top().br != '[')
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ], expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
-		else
-			brackets.pop();
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, unexpected ], expected match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));
+
+		brackets.pop();
 		
 		t.push(RIGHT_BRACKET); 
 }
@@ -226,11 +229,11 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "}"   { add(NULL,NULL,NULL,NULL,yytext);  
 
 		if(brackets.empty())
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }\n",line_no,col_no);
+			error_handler.add(error(line_no, col_no, "unbalanced parenthesis, unexpected }\n"));
 		else if(brackets.top().br != '{')
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }, expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
-		else
-			brackets.pop();
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, unexpected }, expected match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));
+
+		brackets.pop();
 
 		t.push(RIGHT_BRACKET_GROUP); 
 }
@@ -242,11 +245,11 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 ")"   { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected )\n",line_no,col_no);
+			error_handler.add(error(line_no, col_no, "unbalanced parenthesis, unexpected )\n"));
 		else if(brackets.top().br != '(')
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ), expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
-		else
-			brackets.pop();
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, unexpected ), expected match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));
+		
+		brackets.pop();
 
 		t.push(RIGHT_BRACKET_CIRCLE); 
 }
@@ -287,8 +290,8 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "|="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(OREQ); }
 "<<"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLT); }
 ">>"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGT); }
-">>="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGTEQ); }
-"<<="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLTEQ); }
+">>=" { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGTEQ); }
+"<<=" { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLTEQ); }
 "=="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQEQ); }
 "!="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(NOTEQ); }
 "<="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LEQ); }
@@ -315,8 +318,15 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 	std::cout << "Statics:\n-> Finished Scan at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n============\n";
 
 
-	if(!brackets.empty() || invalid_token == true)
+	if(!brackets.empty()){
+		while(!brackets.empty()){
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, NO match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));		
+			brackets.pop();
+		}
 		yyterminate();
+		return 0;
+	}
+
 	t.push(0);
 	add(NULL,NULL,NULL,"END","END");
 	FILE *f = fopen("Lex.log","w");

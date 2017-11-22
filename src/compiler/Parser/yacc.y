@@ -122,9 +122,11 @@ boolean_literal
 namespace_name
   : qualified_identifier	{l.a("namespace_name",1);}	
   ;
+  
 type_name
   : qualified_identifier	{l.a("type_name",1);}
   ;
+  
 /***** C.2.2 Types *****/
 type
   : non_array_type	{l.a("type",1);}	
@@ -520,13 +522,20 @@ expression_statement
   | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);}
   ;
 statement_expression
-  : invocation_expression			                                      {l.a("statement_expression",1);}
-  | object_creation_expression											  {l.a("statement_expression",1);}
-  | assignment															  {l.a("statement_expression",1);}
-  | post_increment_expression		                                      {l.a("statement_expression",1);}
+  : invocation_expression	 	                                      {l.a("statement_expression",1);}
+  | object_creation_expression	 										  {l.a("statement_expression",1);}
+  | assignment				     										  {l.a("statement_expression",1);}
+  | post_increment_expression	 	                                      {l.a("statement_expression",1);}
   | post_decrement_expression		                                      {l.a("statement_expression",1);}
   | pre_increment_expression		                                      {l.a("statement_expression",1);}
   | pre_decrement_expression		                                      {l.a("statement_expression",1);}
+  | invocation_expression	  error		                                      {l.a("statement_expression",1,1);}
+  | object_creation_expression	error									  {l.a("statement_expression",1,1);}
+  | assignment					error								  {l.a("statement_expression",1,1);}
+  | post_increment_expression        error                             {l.a("statement_expression",1,1);}
+  | post_decrement_expression              error                        {l.a("statement_expression",1,1);}
+  | pre_increment_expression	                   error                   {l.a("statement_expression",1,1);}
+  | pre_decrement_expression						error              {l.a("statement_expression",1,1);}
   ;
 selection_statement
   : if_statement		                                                  {l.a("selection_statement",1);}
@@ -582,7 +591,11 @@ for_statement
   | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error		for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4,1);}
   | FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON	for_condition_opt error		for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4,1);}
   | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error		for_condition_opt error		for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",5,1);}
-  | FOR error				for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt error				  embedded_statement			{l.a("for_statement",5,1);}
+/*  
+  | FOR LEFT_BRACKET		for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET		  embedded_statement			{l.a("for_statement",4,1); yyerror("Syntax Error, Expected ()");}
+  | FOR LEFT_BRACKET_GROUP	for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_GROUP  embedded_statement			{l.a("for_statement",4,1); yyerror("Syntax Error, Expected ()");}
+*/
+  | FOR error		for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt error		  embedded_statement			{l.a("for_statement",5,1);}	
   ;
 for_initializer_opt
   : /* Nothing */   {l.a("for_initializer_opt",0);}
@@ -802,6 +815,8 @@ modifier
 /***** C.2.6 Classes *****/
 class_declaration
   : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
+  | attributes_opt modifiers_opt error IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",6,1);}
+  | attributes_opt modifiers_opt CLASS error	  class_base_opt class_body comma_opt	{l.a("class_declaration",7,1);}
   ;
 class_base_opt
   : /* Nothing */   {l.a("class_base_opt",0);}
@@ -855,6 +870,8 @@ method_declaration
 method_header
   : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",5);}
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);}
+  | attributes_opt modifiers_opt type error				   LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4,1);}
+  | attributes_opt modifiers_opt VOID error				   LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",3,1);}
   ;
 formal_parameter_list_opt
   : /* Nothing */         {l.a("formal_parameter_list_opt",0);}
