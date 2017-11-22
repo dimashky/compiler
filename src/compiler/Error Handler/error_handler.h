@@ -23,9 +23,15 @@ public:
 	void print() {
 		FILE* f = fopen(filename, "w");
 		fprintf(f, "Total Errors = %d\n", counter);
+		extern FILE* info;
+		fprintf(info, "var error_num = %d;\n", counter);
+		if(counter)
+			fprintf(info, "var errors = [];\n");
 		while (!errorList.empty()) {
 			error e = errorList.front();
 			fprintf(f, "Error#%d [%d, %d] -> %s\n",e.id,e.line_no, e.col_no, e.msg.c_str());
+			std::string ss = "errors.push({ line: "+ std::to_string(e.line_no) +", col : "+std::to_string(e.col_no)+", msg: '"+ e.msg+"'});\n";
+			fprintf(info, "%s", ss.c_str());
 			errorList.pop();
 		}
 		fclose(f);

@@ -18,3 +18,8 @@ body {
 .vis-configuration-wrapper {
     margin-left: 50px;
 }
+
+.main-section{
+    padding: 20px;
+    margin: 5px;
+}

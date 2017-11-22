@@ -101,7 +101,10 @@
 		yylval.r.str[0] = '\0';
 		strcpy(yylval.r.str, yytext);
 	}
+	extern string get_time_and_date();
+
 	std::chrono::system_clock::time_point start;
+	string start_str;
 	
 	extern errorHandler error_handler;
 %}
@@ -167,6 +170,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 %{
 		if(first_loop){
 		 start  = std::chrono::system_clock::now();
+		 start_str = get_time_and_date();
 		 first_loop = false;
 		}
 		FILE *f = fopen("Lex.log","a");
@@ -312,11 +316,16 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 <<EOF>> {
 	auto end = std::chrono::system_clock::now();
+	string end_str = get_time_and_date();
 	std::chrono::duration<double> elapsed_seconds = end - start;
+
+	std::time_t start_time = std::chrono::system_clock::to_time_t(start);
 	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-
+	
+	extern FILE* info;
 	std::cout << "Statics:\n-> Finished Scan at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n============\n";
-
+	
+	fprintf(info, "var compile_start = '%s'; var lex_end = '%s';var lex_elapsed = '%f';\n", start_str.c_str(), end_str.c_str(), elapsed_seconds.count());
 
 	if(!brackets.empty()){
 		while(!brackets.empty()){
