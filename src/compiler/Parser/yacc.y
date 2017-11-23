@@ -513,13 +513,13 @@ expression_statement
   | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
-  | invocation_expression			error	                              {l.a("expression_statement",1,1);}
-  | object_creation_expression		error								  {l.a("expression_statement",1,1);}
-  | assignment						error								  {l.a("expression_statement",1,1);}
-  | post_increment_expression		error                                 {l.a("expression_statement",1,1);}
-  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);}
-  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);}
-  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);}
+  | invocation_expression			error	                              {yyerrok; l.a("expression_statement",1,1);}
+  | object_creation_expression		error								  {yyerrok; l.a("expression_statement",1,1);}
+  | assignment						error								  {yyerrok; l.a("expression_statement",1,1);}
+  | post_increment_expression		error                                 {yyerrok; l.a("expression_statement",1,1);}
+  | post_decrement_expression		error                                 {yyerrok; l.a("expression_statement",1,1);}
+  | pre_increment_expression		error                                 {yyerrok; l.a("expression_statement",1,1);}
+  | pre_decrement_expression		error                                 {yyerrok; l.a("expression_statement",1,1);}
   ;
 statement_expression
   : invocation_expression	 	                                      {l.a("statement_expression",1);}
@@ -529,13 +529,15 @@ statement_expression
   | post_decrement_expression		                                      {l.a("statement_expression",1);}
   | pre_increment_expression		                                      {l.a("statement_expression",1);}
   | pre_decrement_expression		                                      {l.a("statement_expression",1);}
-  | invocation_expression	  error		                                      {l.a("statement_expression",1,1);}
-  | object_creation_expression	error									  {l.a("statement_expression",1,1);}
-  | assignment					error								  {l.a("statement_expression",1,1);}
-  | post_increment_expression        error                             {l.a("statement_expression",1,1);}
-  | post_decrement_expression              error                        {l.a("statement_expression",1,1);}
-  | pre_increment_expression	                   error                   {l.a("statement_expression",1,1);}
-  | pre_decrement_expression						error              {l.a("statement_expression",1,1);}
+  
+  | invocation_expression						error              {l.a("statement_expression",1,1);}
+  | object_creation_expression					error			   {l.a("statement_expression",1,1);}
+  | assignment									error			   {l.a("statement_expression",1,1);}
+  | post_increment_expression					error              {l.a("statement_expression",1,1);}
+  | post_decrement_expression					error              {l.a("statement_expression",1,1);}
+  | pre_increment_expression					error              {l.a("statement_expression",1,1);}
+  | pre_decrement_expression					error              {l.a("statement_expression",1,1);}
+  
   ;
 selection_statement
   : if_statement		                                                  {l.a("selection_statement",1);}
@@ -572,8 +574,8 @@ switch_label
   ;
 iteration_statement
   : while_statement		                                {l.a("iteration_statement",1);}
-  | do_statement		                                  {l.a("iteration_statement",1);}
-  | for_statement		                                  {l.a("iteration_statement",1);}
+  | do_statement		                                {l.a("iteration_statement",1);}
+  | for_statement		                                {l.a("iteration_statement",1);}
   | foreach_statement	                                {l.a("iteration_statement",1);}
   ;
 unsafe_statement
@@ -581,21 +583,19 @@ unsafe_statement
   ;
 while_statement
   : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
+  | WHILE LEFT_BRACKET_CIRCLE error				 RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2,1);}
+  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{ yyerrok; } {l.a("while_statement",2,1);}
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
-  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{l.a("do_statement",2,1);}
+  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{yyerrok; l.a("do_statement",2,1);}
   ;
 for_statement
   : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4);}
   | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error		for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4,1);}
   | FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON	for_condition_opt error		for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",4,1);}
   | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error		for_condition_opt error		for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",5,1);}
-/*  
-  | FOR LEFT_BRACKET		for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET		  embedded_statement			{l.a("for_statement",4,1); yyerror("Syntax Error, Expected ()");}
-  | FOR LEFT_BRACKET_GROUP	for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_GROUP  embedded_statement			{l.a("for_statement",4,1); yyerror("Syntax Error, Expected ()");}
-*/
-  | FOR error		for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt error		  embedded_statement			{l.a("for_statement",5,1);}	
+  | FOR error {yyclearin;}	for_initializer_opt SEMICOLON	for_condition_opt SEMICOLON for_iterator_opt  error 		  embedded_statement			{yyerrok; l.a("for_statement",4,1);}	
   ;
 for_initializer_opt
   : /* Nothing */   {l.a("for_initializer_opt",0);}

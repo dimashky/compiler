@@ -22,7 +22,7 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Compiler</a>
+      <a class="navbar-brand" href="index.html">Compiler</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
@@ -34,7 +34,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="Parse Tree.html">Parse Tree
                     </a>
-            
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/AST.html">AST</a>
@@ -56,6 +55,7 @@
       </div>
       <div class="main-section"> 
           <h2>Status <span id="status" class="badge badge-danger">Failed</span></h2>
+          <h4 id="ER_h">Recoverd Errors <span id="ER" class="badge badge-warning">NO</span></h4>
           <p>Input file: <span id="input_name"></span></p>
       </div>
 
@@ -66,9 +66,7 @@
             <thead class="thead-inverse">
                 <tr>
                     <th>#</th>
-                    <th>Event</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Phase</th>
                     <th>Elapsed</th>
                 </tr>
             </thead>
@@ -114,17 +112,22 @@
         $(function () {
             $('#input_name').html(input);
             if(error_num == 0){
+                $('#ER_h').remove();
                 $('#status').text('Success');
                 $('#status').removeClass('badge-danger').addClass('badge-success');
                 $('#errors').remove();
             }else{
+                if(error_recoverd === true)
+                {
+                    $('#ER').text("YES");
+                    $('#ER').removeClass("badge-warning").addClass("badge-success");
+                }
                 for (let i = 0; i < errors.length; ++i) {
                     $('#error_table').append('<tr><th scope = "row" > '+(i+1)+'</th ><td>' + errors[i].line + '</td><td>' + errors[i].col + '</td><td>' + errors[i].msg + '</td></tr>');
                 }
             }
-
-            $('#event_table').append('<tr><th scope = "row" > 1</th ><td>Scanner</td><td>'+ compile_start +'</td><td>'+ lex_end+'</td> <td>'+ lex_elapsed+'s</td></tr>');
-            $('#event_table').append('<tr><th scope = "row" > 2</th ><td>Parser</td><td>' + lex_end + '</td><td>' + parse_end + '</td> <td>' + parse_elapsed + 's</td></tr>');
+            $('#event_table').append('<tr><th scope = "row" > 1</th ><td>Scanner</td> <td>'+ lex_elapsed+'s</td></tr>');
+            $('#event_table').append('<tr><th scope = "row" > 2</th ><td>Parser</td> <td>' + parse_elapsed + 's</td></tr>');
         });
     </script>
   </body>

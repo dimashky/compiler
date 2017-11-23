@@ -1,3 +1,6 @@
-var input = 'example16.cs';var compile_start = '6:18:40:711:390:400'; var lex_end = '6:18:40:712:641:700';var lex_elapsed = '0.001255';
-var parse_end = '6:18:40:732:262:100';var parse_elapsed = '0.020991';
-var error_num = 0;
+var input = 'example16.cs';var compile_start = '3:16:56:406:985:300'; var lex_end = '3:16:56:407:569:400';var lex_elapsed = '0.000585';
+var parse_end = '3:16:56:422:727:600';var parse_elapsed = '0.015821';
+var error_recoverd = false;
+var error_num = 1;
+var errors = [];
+errors.push({ line: 5, col : 14, msg: 'syntax error, unexpected [, expecting ('});
