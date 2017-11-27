@@ -4,16 +4,8 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            
+            foreach[int i in a ]{int a = 1 }
         }
-        public class 12
-        {
-         void ff(){
-          for[int i=0;i<n;i+=1]
-          {
-
-          }
-        }
-    }
+        
     }
 }

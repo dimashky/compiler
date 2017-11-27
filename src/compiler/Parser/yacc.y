@@ -613,8 +613,9 @@ statement_expression_list
   | statement_expression_list COMMA statement_expression	{l.a("statement_expression_list",2);}
   ;
 foreach_statement
-  : FOREACH LEFT_BRACKET_CIRCLE type IDENTIFIER IN expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("foreach_statement",3);}
+  : FOREACH left_bracket_circle type identifier in expression right_bracket_circle embedded_statement	{l.a("foreach_statement",3);}
   ;
+  in : IN | error{yyerrok;yyclearin;} ; 
 jump_statement
   : break_statement		{l.a("jump_statement",1);}
   | continue_statement	{l.a("jump_statement",1);}
