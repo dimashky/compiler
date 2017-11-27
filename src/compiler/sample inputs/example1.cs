@@ -4,7 +4,7 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            foreach[int i in a ]{int a = 1 }
+            switch[i]{}
         }
         
     }

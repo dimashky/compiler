@@ -533,7 +533,7 @@ if_statement
   | IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement ELSE embedded_statement	{l.a("if_statement",3);}
   ;
 switch_statement
-  : SWITCH LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE switch_block		{l.a("switch_statement",2);}
+  : SWITCH left_bracket_circle expression right_bracket_circle switch_block		{l.a("switch_statement",2);}
   ;
 switch_block
   : LEFT_BRACKET_GROUP switch_sections_opt RIGHT_BRACKET_GROUP		{l.a("switch_block",1);}
