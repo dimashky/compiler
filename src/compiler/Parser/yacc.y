@@ -803,7 +803,7 @@ modifier
   ;
 /***** C.2.6 Classes *****/
 class_declaration
-  : attributes_opt modifiers_opt class errorIDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
+  : attributes_opt modifiers_opt class identifier class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
   ;
    identifier : IDENTIFIER | error{yyerrok;yyclearin;};; 
    class :  CLASS|error{yyerrok;yyclearin;}; ; 
@@ -1047,7 +1047,8 @@ constructor_body /*** Added by JP - same as method_body ***/
 
 /***** C.2.7 Structs *****/
 struct_declaration
-  : attributes_opt modifiers_opt STRUCT IDENTIFIER struct_interfaces_opt struct_body comma_opt	{l.a("struct_declaration",5);}
+  : attributes_opt modifiers_opt struct identifier struct_interfaces_opt struct_body comma_opt	{l.a("struct_declaration",5);}
+  struct : STRUCT |{yyerrok;yyclearin;}; 
   ;
 struct_interfaces_opt
   : /* Nothing */     {l.a("struct_interfaces_opt",0);}

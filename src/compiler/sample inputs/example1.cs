@@ -6,7 +6,7 @@ namespace ConsoleApplication2
         {
             
         }
-        public clas 12
+        public class 12
         {
          void ff(){
           for[int i=0;i<n;i+=1]
