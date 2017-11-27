@@ -30,7 +30,8 @@ int main()
 	yydebug = (debug == 0 ? 0 : 1);
 	
 	cout << "Enter example number : ";
-	*/cin >> num;
+	cin >> num;
+	*/
 	num = (num < 1 ? 1 : (num > 16 ? 16 : num));
 	yyin = fopen(string("sample inputs/example"+to_string(num)+".cs").c_str(),"r");
 	fprintf(info, "var input = '%s", string("example" + to_string(num) + ".cs';").c_str());

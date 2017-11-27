@@ -567,7 +567,9 @@ unsafe_statement
   : UNSAFE block	{l.a("unsafe_statement",1);}
   ;
 while_statement
-  : WHILE left_bracket_circle boolean_expression right_bracket_circle embedded_statement	{l.a("while_statement",2);}
+  : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
+  | WHILE LEFT_BRACKET_CIRCLE error				 RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2,1);}
+  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{ yyerrok; } {l.a("while_statement",2,1);}
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
@@ -801,10 +803,11 @@ modifier
   ;
 /***** C.2.6 Classes *****/
 class_declaration
-  : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
-  | attributes_opt modifiers_opt error IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",6,1);}
-  | attributes_opt modifiers_opt CLASS error	  class_base_opt class_body comma_opt	{l.a("class_declaration",7,1);}
+  : attributes_opt modifiers_opt class errorIDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
   ;
+   identifier : IDENTIFIER | error{yyerrok;yyclearin;};; 
+   class :  CLASS|error{yyerrok;yyclearin;}; ; 
+
 class_base_opt
   : /* Nothing */   {l.a("class_base_opt",0);}
   | class_base	{l.a("class_base_opt",1);}

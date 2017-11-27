@@ -4,7 +4,16 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            while[true]{}
+            
         }
+        public clas 12
+        {
+         void ff(){
+          for[int i=0;i<n;i+=1]
+          {
+
+          }
+        }
+    }
     }
 }
