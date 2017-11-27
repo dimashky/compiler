@@ -512,11 +512,11 @@ selection_statement
   | switch_statement	                                                {l.a("selection_statement",1);}
   ;
 if_statement
-  : IF lb boolean_expression rb embedded_statement %prec THEN				      {l.a("if_statement",2);}
-  | IF lb boolean_expression rb embedded_statement ELSE embedded_statement	{l.a("if_statement",3);}
+  : IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement %prec THEN				      {l.a("if_statement",2);}
+  | IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement ELSE embedded_statement	{l.a("if_statement",3);}
   ;
 switch_statement
-  : SWITCH lb expression rb switch_block		{l.a("switch_statement",2);}
+  : SWITCH LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE switch_block		{l.a("switch_statement",2);}
   ;
 switch_block
   : LEFT_BRACKET_GROUP switch_sections_opt RIGHT_BRACKET_GROUP		{l.a("switch_block",1);}
@@ -550,18 +550,17 @@ unsafe_statement
   : UNSAFE block	{l.a("unsafe_statement",1);}
   ;
 while_statement
-  : WHILE lb boolean_expression rb embedded_statement	{l.a("while_statement",2);}
+  : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
   | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{l.a("do_statement",2);}
   ;
 for_statement
-  : FOR lb for_initializer_opt sc for_condition_opt sc for_iterator_opt rb embedded_statement	{l.a("for_statement",3);}
+  : FOR LEFT_BRACKET_CIRCLE for_initializer_opt SEMICOLON for_condition_opt SEMICOLON for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("for_statement",3);}
+  | FOR LEFT_BRACKET_CIRCLE for_initializer_opt error for_condition_opt error for_iterator_opt RIGHT_BRACKET_CIRCLE embedded_statement			{l.a("for_statement",3);}
+
   ;
-  rb : RIGHT_BRACKET_CIRCLE | error{yyerrok; yyclearin;}  ;
-  lb : LEFT_BRACKET_CIRCLE  | error{yyerrok; yyclearin;}  ; 
-  sc : SEMICOLON | error ; 
 for_initializer_opt
   : /* Nothing */   {l.a("for_initializer_opt",0);}
   | for_initializer	{l.a("for_initializer_opt",1);}
