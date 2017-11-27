@@ -803,7 +803,7 @@ modifier
   ;
 /***** C.2.6 Classes *****/
 class_declaration
-  : attributes_opt modifiers_opt class errorIDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
+  : attributes_opt modifiers_opt class identifier class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
   ;
    identifier : IDENTIFIER | error{yyerrok;yyclearin;};; 
    class :  CLASS|error{yyerrok;yyclearin;}; ; 
