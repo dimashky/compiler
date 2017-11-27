@@ -4,7 +4,8 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            switch[i]{}
+            if[1==2]{int i = 1 int i = 1}
+            else{int i = 1 }
         }
         
     }

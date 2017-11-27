@@ -1,7 +1,10 @@
-var input = 'example1.cs';var compile_start = '3:22:51:37:944:500'; var lex_end = '3:22:51:38:922:700';var lex_elapsed = '0.000978';
-var parse_end = '3:22:51:50:934:700';var parse_elapsed = '0.012990';
+var input = 'example1.cs';var compile_start = '3:28:21:724:540:900'; var lex_end = '3:28:21:725:541:800';var lex_elapsed = '0.001001';
+var parse_end = '3:28:21:758:575:0';var parse_elapsed = '0.034034';
 var error_recoverd = true;
-var error_num = 2;
+var error_num = 5;
 var errors = [];
-errors.push({ line: 7, col : 19, msg: 'syntax error, unexpected [, expecting ('});
-errors.push({ line: 7, col : 21, msg: 'syntax error, unexpected ], expecting )'});
+errors.push({ line: 7, col : 15, msg: 'syntax error, unexpected [, expecting ('});
+errors.push({ line: 7, col : 20, msg: 'syntax error, unexpected ], expecting )'});
+errors.push({ line: 7, col : 32, msg: 'syntax error, unexpected INT, expecting ;'});
+errors.push({ line: 7, col : 41, msg: 'syntax error, unexpected }, expecting ;'});
+errors.push({ line: 8, col : 28, msg: 'syntax error, unexpected }, expecting ;'});

@@ -529,8 +529,8 @@ selection_statement
   | switch_statement	                                                {l.a("selection_statement",1);}
   ;
 if_statement
-  : IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement %prec THEN				      {l.a("if_statement",2);}
-  | IF LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement ELSE embedded_statement	{l.a("if_statement",3);}
+  : IF left_bracket_circle boolean_expression right_bracket_circle embedded_statement %prec THEN				      {l.a("if_statement",2);}
+  | IF left_bracket_circle boolean_expression right_bracket_circle embedded_statement ELSE embedded_statement	{l.a("if_statement",3);}
   ;
 switch_statement
   : SWITCH left_bracket_circle expression right_bracket_circle switch_block		{l.a("switch_statement",2);}
