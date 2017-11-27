@@ -567,9 +567,7 @@ unsafe_statement
   : UNSAFE block	{l.a("unsafe_statement",1);}
   ;
 while_statement
-  : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
-  | WHILE LEFT_BRACKET_CIRCLE error				 RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2,1);}
-  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{ yyerrok; } {l.a("while_statement",2,1);}
+  : WHILE left_bracket_circle boolean_expression right_bracket_circle embedded_statement	{l.a("while_statement",2);}
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}

@@ -11,9 +11,10 @@
 class errorHandler {
 	std::queue<error> errorList;
 	char* filename;
-	int counter = 0;
+	int counter ;
 public:
 	errorHandler(char* filename) {
+		counter = 0 ;
 		this->filename = filename;
 	}
 	void add(error e) {
