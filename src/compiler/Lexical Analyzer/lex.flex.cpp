@@ -712,9 +712,9 @@ char *yytext;
 #line 1 "lex.l"
 #line 2 "lex.l"
 	#include <string.h>
-	#include <unistd.h>
+	
 	#include <iostream>
-	#include <FlexLexer.h>
+	
 	#include <string>
 	#include <queue>
 	#include <stack>

@@ -23,7 +23,7 @@ int main()
 {
 
 	int debug=1;
-	int num=1;
+	int num=16;
 
 	/*cout << "Enter to bison debug mode? [ 0 (no) - other (yes)] ";
 	cin >> debug;
