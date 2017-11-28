@@ -290,7 +290,7 @@ unchecked_expression
   : UNCHECKED LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE	{l.a("unchecked_expression",1);}
   ;
 pointer_member_access
-  : postfix_expression ARROW IDENTIFIER		{l.a("pointer_member_access",1);}
+  :   postfix_expression  ARROW IDENTIFIER		{l.a("pointer_member_access",1);}
   ;
 addressof_expression
   : AND unary_expression		{l.a("addressof_expression",1);}
@@ -302,7 +302,7 @@ sizeof_expression
 postfix_expression
   : primary_expression			{l.a("postfix_expression",1);}
   | qualified_identifier		{l.a("postfix_expression",1);}
-  | post_increment_expression	{l.a("postfix_expression",1);}
+  | post_increment_expression  	{l.a("postfix_expression",1);}
   | post_decrement_expression	{l.a("postfix_expression",1);}
   | pointer_member_access		{l.a("postfix_expression",1);}
   ;
@@ -310,7 +310,7 @@ unary_expression_not_plusminus
   : EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus",1);}
   | TILDE unary_expression				{l.a("unary_expression_not_plusminus",1);}	
   | cast_expression						{l.a("unary_expression_not_plusminus",1);}
-  | postfix_expression					{l.a("unary_expression_not_plusminus",1);}
+  | postfix_expression				{l.a("unary_expression_not_plusminus",1);}
   ;
 pre_increment_expression
   : PLUSPLUS unary_expression	{l.a("pre_increment_expression",1);}
@@ -522,7 +522,7 @@ expression_statement
   : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);}
   | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);}
   | assignment						SEMICOLON							  {l.a("expression_statement",1);}
-  | post_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
+  | post_increment_expression 		SEMICOLON                             {l.a("expression_statement",1);}
   | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
@@ -530,8 +530,8 @@ expression_statement
 statement_expression
   : invocation_expression	 	                                      {l.a("statement_expression",1);}
   | object_creation_expression	 										  {l.a("statement_expression",1);}
-  | assignment				     										  {l.a("statement_expression",1);}
-  | post_increment_expression	 	                                      {l.a("statement_expression",1);}
+  | assignment		          									  {l.a("statement_expression",1);}
+  | post_increment_expression 	 	                                      {l.a("statement_expression",1);}
   | post_decrement_expression		                                      {l.a("statement_expression",1);}
   | pre_increment_expression		                                      {l.a("statement_expression",1);}
   | pre_decrement_expression		                                      {l.a("statement_expression",1);}

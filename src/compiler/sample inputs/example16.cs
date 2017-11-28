@@ -2,7 +2,7 @@ class x
 {
     void f()
     {
-        i++
-
+        i++;
+        for (int i = 3; i < n; i++) ;
     }
 }

@@ -1,6 +1,4 @@
-var input = 'example16.cs';var compile_start = '0:39:23:125:645:800'; var lex_end = '0:39:23:126:386:600';var lex_elapsed = '0.000743';
-var parse_end = '0:39:23:135:384:200';var parse_elapsed = '0.009777';
+var input = 'example16.cs';var compile_start = '4:20:56:227:594:100'; var lex_end = '4:20:56:228:523:500';var lex_elapsed = '0.000937';
+var parse_end = '4:20:56:271:11:900';var parse_elapsed = '0.043491';
 var error_recoverd = true;
-var error_num = 1;
-var errors = [];
-errors.push({ line: 7, col : 5, msg: 'syntax error, unexpected }'});
+var error_num = 0;
