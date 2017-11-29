@@ -35,7 +35,7 @@
 			this->i = i;
 			this->f = f;
 			this->c = c;
-							this->str = new char[255];	this->str[0] = '\0';
+			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);
 			}
@@ -314,6 +314,8 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 .					  {	lexical_error("invalid token", yytext);	}
 
+{bad_identifier}      {lexical_error("Bad IDENTIFIER", yytext);  add(NULL,NULL,NULL,yytext,yytext); t.push(IDENTIFIER);}
+
 <<EOF>> {
 	auto end = std::chrono::system_clock::now();
 	string end_str = get_time_and_date();
@@ -472,7 +474,6 @@ static int token_for(const char *lexeme)
 
 void lexical_error(const char *msg, char *yytext)
 {
-	extern bool invalid_token;
-	invalid_token = true;
-	fprintf(stderr,"[%d, %d] -> lexical error, %s [%s]\n",line_no,col_no,msg,yytext);
+	extern errorHandler error_handler;
+	error_handler.add(error(line_no, col_no, string(string(msg)+string(" ")+string(yytext)).c_str()));
 }
