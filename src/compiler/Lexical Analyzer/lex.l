@@ -27,11 +27,19 @@
 		char* str;
 		int line_no;
 		int col_no;
+		string *modifier,*base;
+		queue<string> *modifiers,*bases;
+
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
 			this->f = f;
 			this->c = c;
-							this->str = new char[255];	this->str[0] = '\0';
+			modifier = new string();
+			base = new string();
+			modifiers = new queue<string>();
+			bases = new queue<string>();
+			
+			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);
 			}

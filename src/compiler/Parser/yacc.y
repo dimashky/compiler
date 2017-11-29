@@ -15,8 +15,14 @@
 	#include <FlexLexer.h>
 	#include <stack>
 	#include <string>
+	#include<queue>
 	#include "../logger/Logger.h"
 	#include "../Error Handler/error_handler.h"
+
+	#include "../Symbol Table/symbol_parser.h"
+
+	symbolParser* SPL = new symbolParser();
+	queue<string>att;
 
 	using namespace std;
 	
@@ -39,6 +45,10 @@
 		char* str;
 		int line_no;
 		int col_no;
+
+		string *modifier,*base;
+		queue<string> *modifiers ,*bases;
+
 		}r;
 	}
 
@@ -121,7 +131,7 @@ namespace_name
   : qualified_identifier	{l.a("namespace_name",1);}	
   ;
 type_name
-  : qualified_identifier	{l.a("type_name",1);}
+  : qualified_identifier	{l.a("type_name",1);$<r.str>$ = $<r.str>1;}
   ;
 /***** C.2.2 Types *****/
 type
@@ -162,8 +172,8 @@ floating_point_type
   | DOUBLE	{l.a("floating_point_type",0);}
   ;
 class_type
-  : OBJECT  {l.a("class_type",0);}
-  | STRING  {l.a("class_type",0);}
+  : OBJECT  {l.a("class_type",0);printf("dasdasdasdas");$<r.str>$ = $<r.str>1;}
+  | STRING  {l.a("class_type",0);$<r.str>$ = $<r.str>1;}
   ;
 pointer_type
   : type STAR	{l.a("pointer_type",1);}
@@ -698,7 +708,7 @@ comma_opt
   ;	
 /*
 qualified_identifier
-  : IDENTIFIER							            	{l.a("qualified_identifier",0);}
+  : IDENTIFIER							    {l.a("qualified_identifier",0);}
   | qualified_identifier DOT IDENTIFIER		{l.a("qualified_identifier",1);}
   ;
 */
@@ -753,44 +763,70 @@ type_declaration
  * enum_modifier, delegate_modifier
  */
 modifiers_opt
-  : /* Nothing */       {l.a("modifiers_opt",0);}
-  | modifiers	          {l.a("modifiers_opt",1);}
+  : /* Nothing */       
+  {		
+		l.a("modifiers_opt",0);
+		$<r.modifiers>$ = NULL;
+  }
+  | modifiers	          
+  {	
+		l.a("modifiers_opt",1);
+		$<r.modifiers>$ = $<r.modifiers>1;
+  }
   ;
 modifiers
-  : modifier			          {l.a("modifiers",1);}
-  | modifiers modifier	    {l.a("modifiers",2);}
+  : modifier			          
+  {	
+		l.a("modifiers",1);
+		$<r.modifiers>$ = new queue<string>();
+		$<r.modifiers>$->push(*$<r.modifier>1);
+  }
+  | modifiers modifier			  
+  {
+		l.a("modifiers",2);
+		$<r.modifiers>$ = new queue<string>();
+		$<r.modifiers>$ = $<r.modifiers>1;
+		$<r.modifiers>$->push(*$<r.modifier>2);
+  }
   ;
 modifier
-  : ABSTRACT	              {l.a("modifier",0);}
-  | EXTERN		              {l.a("modifier",0);}
-  | INTERNAL	              {l.a("modifier",0);}
-  | NEW			                {l.a("modifier",0);}
-  | OVERRIDE	              {l.a("modifier",0);}
-  | PRIVATE		              {l.a("modifier",0);}
-  | PROTECTED	              {l.a("modifier",0);}
-  | PUBLIC		              {l.a("modifier",0);}
-  | READONLY	              {l.a("modifier",0);}
-  | SEALED		              {l.a("modifier",0);}
-  | STATIC		              {l.a("modifier",0);}
-  | UNSAFE		              {l.a("modifier",0);}
-  | VIRTUAL		              {l.a("modifier",0);}
-  | VOLATILE	              {l.a("modifier",0);}
+  : ABSTRACT	              {l.a("modifier",0);$<r.modifier>$ = new string("ABSTRACT");}
+  | EXTERN		              {l.a("modifier",0);$<r.modifier>$ = new string("EXTERN");}
+  | INTERNAL	              {l.a("modifier",0);$<r.modifier>$ = new string("INTERNAL");}
+  | NEW			              {l.a("modifier",0);$<r.modifier>$ = new string("NEW");}
+  | OVERRIDE	              {l.a("modifier",0);$<r.modifier>$ = new string("OVERRIDE");}
+  | PRIVATE		              {l.a("modifier",0);$<r.modifier>$ = new string("PRIVATE");}
+  | PROTECTED	              {l.a("modifier",0);$<r.modifier>$ = new string("PROTECTED");}
+  | PUBLIC		              {l.a("modifier",0);$<r.modifier>$ = new string("PUBLIC");}
+  | READONLY	              {l.a("modifier",0);$<r.modifier>$ = new string("READONLY");}
+  | SEALED		              {l.a("modifier",0);$<r.modifier>$ = new string("SEALED");}
+  | STATIC		              {l.a("modifier",0);$<r.modifier>$ = new string("STATIC");}
+  | UNSAFE		              {l.a("modifier",0);$<r.modifier>$ = new string("UNSAFE");}
+  | VIRTUAL		              {l.a("modifier",0);$<r.modifier>$ = new string("VIRTUAL");}
+  | VOLATILE	              {l.a("modifier",0);$<r.modifier>$ = new string("VOLATILE");}
   ;
 /***** C.2.6 Classes *****/
 class_declaration
-  : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
+  : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt 
+  {
+		if($<r.modifiers>2 != NULL)
+			cout << $<r.modifiers>2->size() << endl;
+		else cout << "There is no modifiers" << endl;
+		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),string($<r.str>5),$<r.line_no>4,$<r.col_no>4);
+  } 
+  class_body comma_opt	{l.a("class_declaration",5);}
   ;
 class_base_opt
-  : /* Nothing */   {l.a("class_base_opt",0);}
+  : /* Nothing */   {l.a("class_base_opt",0);$<r.str>$ = "NO INHERTINCE";}
   | class_base	{l.a("class_base_opt",1);}
   ;
 class_base
-  : COLON class_type							{l.a("class_base",1);}
-  | COLON interface_type_list					{l.a("class_base",1);}
-  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);}
+  : COLON class_type							{l.a("class_base",1);$<r.str>$ = "1";}
+  | COLON interface_type_list					{l.a("class_base",1);$<r.str>$ = $<r.str>2;}
+  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);$<r.str>$ = "3";}
   ;
 interface_type_list
-  : type_name								{l.a("interface_type_list",1);}
+  : type_name								{l.a("interface_type_list",1);$<r.str>$ = $<r.str>1;}
   | interface_type_list COMMA type_name		{l.a("interface_type_list",2);}
   ;
 class_body

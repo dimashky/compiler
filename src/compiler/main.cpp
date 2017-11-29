@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include<stack>
+#include "Symbol Table\symbolTable.h"
 #include "Error Handler\error_handler.h"
 #include "logger/Logger.h"
 
