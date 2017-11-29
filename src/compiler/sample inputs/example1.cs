@@ -2,10 +2,11 @@ namespace ConsoleApplication2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            if[1==2]{int i = 1 int i = 1}
-            else{int i = 1 }
+            for[;n < 2;i++]
+                i += 2
+            i++
         }
         
     }

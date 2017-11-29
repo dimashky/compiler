@@ -1,4 +1,10 @@
-var input = 'example16.cs';var compile_start = '4:20:56:227:594:100'; var lex_end = '4:20:56:228:523:500';var lex_elapsed = '0.000937';
-var parse_end = '4:20:56:271:11:900';var parse_elapsed = '0.043491';
+var input = 'example1.cs';var compile_start = '6:33:30:385:345:900'; var lex_end = '6:33:30:386:80:300';var lex_elapsed = '0.000736';
+var parse_end = '6:33:30:399:795:800';var parse_elapsed = '0.014502';
 var error_recoverd = true;
-var error_num = 0;
+var error_num = 5;
+var errors = [];
+errors.push({ line: 7, col : 16, msg: 'syntax error, unexpected [, expecting ('});
+errors.push({ line: 7, col : 27, msg: 'syntax error, unexpected ]'});
+errors.push({ line: 7, col : 27, msg: 'syntax error, unexpected ], expecting )'});
+errors.push({ line: 9, col : 13, msg: 'syntax error, unexpected IDENTIFIER, expecting ;'});
+errors.push({ line: 10, col : 9, msg: 'syntax error, unexpected }'});
