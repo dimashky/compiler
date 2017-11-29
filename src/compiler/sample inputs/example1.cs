@@ -1,6 +1,11 @@
 namespace ConsoleApplication2
 {
-    public static class Program : xx,aa,ee,qq
+    new internal static public static class Program : xx,aa,ee,qq
+    {
+
+    }
+
+    class Program
     {
 
     }

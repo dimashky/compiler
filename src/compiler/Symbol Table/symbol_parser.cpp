@@ -22,8 +22,5 @@ void symbolParser::addClass(queue<string>modifiers, string className, string bas
 	Symbol* newClass = new Class(className, baseClass, line_no, col_no);
 	((Class*)newClass)->add_attribute(modifiers);
 	symboltable->addSymbol(newClass);
-	cout << ((Class*)newClass)->getBaseName() << endl;
-
-
 	return;
 }

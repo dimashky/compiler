@@ -1,28 +1,27 @@
 #ifndef ATTRIBUTE_H
 #define ATTRIBUTE_H
-#include<iostream>
+#include<bits/stdc++.h>
 #include<string>
-#include<vector>
-#include<set>
-using namespace std;
 using namespace::std;
 class Attribute
 {
     public:
     Attribute(string type);
     virtual ~Attribute();
-    void addAttribute (string nameAtt);
+    bool add (string nameAtt) ;
     set<string> whatHave ;
     string typeKeyword ;
 
-    set<string > classModifiers;
-    set<string > methodModifiers;
-    set<string > virableModifiers ;
+    static set<string > classModifiers;
+	static set<string > methodModifiers;
+	static set<string > virableModifiers ;
     bool errorDuplicate ;
     bool errorAccess  ;
     bool oneAccess ;
     bool errorAbstract ;
     bool errorStaticSealed ;
+    bool errorPrivate ;
+    bool errorConst ;
 
 };
 

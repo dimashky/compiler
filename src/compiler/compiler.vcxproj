@@ -43,6 +43,7 @@
     <ClCompile Include="Parser\yacc.tab.cpp" />
     <ClCompile Include="Symbol Table\Attribute.cpp" />
     <ClCompile Include="Symbol Table\Class.cpp" />
+    <ClCompile Include="Symbol Table\Interface.cpp" />
     <ClCompile Include="Symbol Table\Namespace.cpp" />
     <ClCompile Include="Symbol Table\Symbol.cpp" />
     <ClCompile Include="Symbol Table\symbolTable.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="Parser\yacc.tab.h" />
     <ClInclude Include="Symbol Table\Attribute.h" />
     <ClInclude Include="Symbol Table\Class.h" />
+    <ClInclude Include="Symbol Table\Interface.h" />
     <ClInclude Include="Symbol Table\Namespace.h" />
     <ClInclude Include="Symbol Table\Symbol.h" />
     <ClInclude Include="Symbol Table\symbolTable.h" />

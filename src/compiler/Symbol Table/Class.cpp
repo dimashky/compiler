@@ -13,14 +13,14 @@ Class::~Class()
 
 void Class::add_attribute(string s)
 {
-	attribute->addAttribute(s);
+	attribute->add(s);
 	return;
 }
 void Class::add_attribute(queue<string>attributes)
 {
 	while (!attributes.empty())
 	{
-		attribute->addAttribute(attributes.front());
+		attribute->add(attributes.front());
 		attributes.pop();
 	}
 	return;

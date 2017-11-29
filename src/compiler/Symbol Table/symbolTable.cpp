@@ -55,11 +55,11 @@ void symbolTable::addSymbol(Symbol* symbol)
 	{
 		if (this->symbolMap.find(symbol) != this->symbolMap.end()) {
 
-			cout << endl << "error : fuck you there is an error in line " << symbol->getLineNo() << ", there is anoter class with Name '" << symbol->getName() << "'" << endl << endl;
+			cout << "error : fuck you there is an error in line " << symbol->getLineNo() << ", there is anoter class with Name '" << symbol->getName() << "'" << endl;
 		
 		}
 		else {
-			cout << endl << "ok accepted class with name '" << symbol->getName() << "' in line " << symbol->getLineNo() << endl;
+			//cout << endl << "ok accepted class with name '" << symbol->getName() << "' in line " << symbol->getLineNo() << endl;
 			addScope(symbol);
 		}
 	}

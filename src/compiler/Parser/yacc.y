@@ -766,7 +766,7 @@ modifiers_opt
   : /* Nothing */       
   {		
 		l.a("modifiers_opt",0);
-		$<r.modifiers>$ = NULL;
+		$<r.modifiers>$ = new queue<string>();
   }
   | modifiers	          
   {	
@@ -809,9 +809,6 @@ modifier
 class_declaration
   : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt 
   {
-		if($<r.modifiers>2 != NULL)
-			cout << $<r.modifiers>2->size() << endl;
-		else cout << "There is no modifiers" << endl;
 		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),string($<r.str>5),$<r.line_no>4,$<r.col_no>4);
   } 
   class_body comma_opt	{l.a("class_declaration",5);}
