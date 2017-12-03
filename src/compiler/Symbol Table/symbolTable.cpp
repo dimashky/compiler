@@ -42,29 +42,50 @@ void symbolTable::addScope()
 	
 
 }
+bool keke(Symbol* const &s1, Symbol* const &s2) { return  s1->getName() > s2->getName(); }
 
-void symbolTable::addSymbol(Symbol* symbol)
+void symbolTable::addClass(Symbol* symbol, queue<string>bases)
 {
 	symbolTable *parent = NULL;
 
 	if (openBrackets.empty())
 		parent = this;
+
 	else parent = openBrackets.top();
 
-	if (symbol->getType() != "local_var" && symbol->getType() != "data_member")
-	{
-		if (this->symbolMap.find(symbol) != this->symbolMap.end()) {
+	int cnt = 0;
 
-			cout << "error : fuck you there is an error in line " << symbol->getLineNo() << ", there is anoter class with Name '" << symbol->getName() << "'" << endl;
+
+	while (!bases.empty())
+	{
+		cnt++;
+		map<Symbol*, symbolTable*>::iterator it = parent->symbolMap.find(new Symbol(bases.front(), 3, 11));
 		
+		if (cnt != 1) {
+			if (it != parent->symbolMap.end()) {
+				if (it->first->getType() == "class")
+					cout << "error : there is an error in line " << symbol->getLineNo() << ", extended class should be no more than one and the first one after Colon." << endl;
+				else ((Class*)symbol)->add_base(symbol->getName(), symbol);
+			}
+			else ((Class*)symbol)->add_base(symbol->getName(), NULL);
 		}
 		else {
-			//cout << endl << "ok accepted class with name '" << symbol->getName() << "' in line " << symbol->getLineNo() << endl;
-			addScope(symbol);
+			if (it != parent->symbolMap.end())
+				((Class*)symbol)->add_base(symbol->getName(), symbol), cout << "i found my father thank you fucker..." << endl;
+
+			else ((Class*)symbol)->add_base(symbol->getName(), NULL);
 		}
+
+		bases.pop();
+
 	}
-	else parent->symbolMap[symbol] = NULL;
-	
+
+	if (parent->symbolMap.find(symbol) != parent->symbolMap.end())
+		cout << "error : there is an error in line " << symbol->getLineNo() << ", there is anoter class with Name '" << symbol->getName() << "'" << endl;
+		
+	else 
+		addScope(symbol);
+
 	return;
 }
 bool symbolTable::closeScope()
@@ -75,6 +96,13 @@ bool symbolTable::closeScope()
 		return true;
 	}
 	return false;
+}
+void symbolTable::closeBracket()
+{
+	if(!openBrackets.empty())
+		openBrackets.pop();
+	return;
+
 }
 
 symbolTable::~symbolTable()

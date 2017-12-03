@@ -131,7 +131,7 @@ namespace_name
   : qualified_identifier	{l.a("namespace_name",1);}	
   ;
 type_name
-  : qualified_identifier	{l.a("type_name",1);$<r.str>$ = $<r.str>1;}
+  : qualified_identifier	{l.a("type_name",1);$<r.base>$ = $<r.base>1;}
   ;
 /***** C.2.2 Types *****/
 type
@@ -708,18 +708,27 @@ comma_opt
   ;	
 /*
 qualified_identifier
-  : IDENTIFIER							    {l.a("qualified_identifier",0);}
-  | qualified_identifier DOT IDENTIFIER		{l.a("qualified_identifier",1);}
+  : IDENTIFIER | qualified_identifier DOT IDENTIFIER		
   ;
 */
+
 qualified_identifier
-  : IDENTIFIER				{l.a("qualified_identifier",0);}
-  | qualifier IDENTIFIER	{l.a("qualified_identifier",1);}
+  : IDENTIFIER				
+  {	
+		l.a("qualified_identifier",0);
+		$<r.base>$ = new string($<r.str>1);
+  }
+  | qualifier IDENTIFIER	
+    {
+		l.a("qualified_identifier",1);
+		$<r.base>$ = new string(string(*$<r.base>1) + string($<r.str>2));
+	}
   ;
 qualifier
-  : IDENTIFIER DOT				{l.a("qualifier",0);}
-  | qualifier IDENTIFIER DOT	{l.a("qualifier",1);}
+  : IDENTIFIER DOT				{l.a("qualifier",0);$<r.base>$ = new string(string($<r.str>1) + ".");}
+  | qualifier IDENTIFIER DOT	{l.a("qualifier",1);$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");}
   ;
+
 namespace_body
   : LEFT_BRACKET_GROUP using_directives_opt namespace_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("namespace_body",2);}
   ;
@@ -809,22 +818,32 @@ modifier
 class_declaration
   : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt 
   {
-		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),string($<r.str>5),$<r.line_no>4,$<r.col_no>4);
+		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
   } 
-  class_body comma_opt	{l.a("class_declaration",5);}
+  class_body {SPL->endScope();} comma_opt	{l.a("class_declaration",5);}
   ;
 class_base_opt
-  : /* Nothing */   {l.a("class_base_opt",0);$<r.str>$ = "NO INHERTINCE";}
-  | class_base	{l.a("class_base_opt",1);}
+  : /* Nothing */   {l.a("class_base_opt",0);$<r.bases>$ = new queue<string>();}
+  | class_base		{l.a("class_base_opt",1);$<r.bases>$ = $<r.bases>1;}
   ;
 class_base
-  : COLON class_type							{l.a("class_base",1);$<r.str>$ = "1";}
-  | COLON interface_type_list					{l.a("class_base",1);$<r.str>$ = $<r.str>2;}
-  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);$<r.str>$ = "3";}
+  : COLON class_type							{l.a("class_base",1);$<r.bases>$ = new queue<string>();}
+  | COLON interface_type_list					{l.a("class_base",1);$<r.bases>$ = $<r.bases>2;}
+  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);$<r.bases>$ = new queue<string>();}
   ;
 interface_type_list
-  : type_name								{l.a("interface_type_list",1);$<r.str>$ = $<r.str>1;}
-  | interface_type_list COMMA type_name		{l.a("interface_type_list",2);}
+  : type_name								
+  {
+		l.a("interface_type_list",1);
+		$<r.bases>$ = new queue<string>();
+		$<r.bases>$->push(*$<r.base>1);
+  }
+  | interface_type_list COMMA type_name		
+  {
+		l.a("interface_type_list",2);
+		$<r.bases>$ = $<r.bases>1;
+		$<r.bases>$->push(*$<r.base>3);
+  }
   ;
 class_body
   : LEFT_BRACKET_GROUP class_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("class_body",1);}
@@ -1112,7 +1131,7 @@ interface_body
   : LEFT_BRACKET_GROUP interface_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("interface_body",1);}
   ;
 interface_member_declarations_opt
-  : /* Nothing */                    	{l.a("interface_member_declarations_opt",0);}
+  : /* Nothing */                    		{l.a("interface_member_declarations_opt",0);}
   | interface_member_declarations			{l.a("interface_member_declarations_opt",1);}
   ;
 interface_member_declarations

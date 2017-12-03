@@ -13,7 +13,7 @@ private:
 	symbolTable* symboltable;
 public :
 	symbolParser();
-	
+	void endScope();
 	void print(queue<string>& s1, char* s2);
-	void addClass(queue<string>modifiers,string className,string baseClass,int line_no,int col_no);
+	void addClass(queue<string>modifiers,string className, queue<string> bases,int line_no,int col_no);
 };

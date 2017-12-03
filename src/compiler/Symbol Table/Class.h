@@ -11,14 +11,16 @@ class Class : public Symbol
 {
 private:
 	Class *basePtr;
-	string baseName;
+	vector<pair<string,Symbol*> > baseClassImpInterfaces;
 	Attribute* attribute;
+
+	void add_attributes(queue<string>attributes);
+
+
 public:
-	Class(string name, string baseName, int line_no, int col_no);
+	Class(string name, queue<string>attributes, int line_no, int col_no);
 	~Class();
-	void add_attribute(string s);
-	void add_attribute(queue<string>attributes);
-	string getBaseName();
+	void add_base(string name, Symbol* ref);
 	string getType();
 
 };

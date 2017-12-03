@@ -16,11 +16,14 @@ void symbolParser::print(queue<string> &s1, char* s2)
 	}
 	cout << s2 << endl;
 }
-
-void symbolParser::addClass(queue<string>modifiers, string className, string baseClass, int line_no, int col_no)
+void symbolParser::endScope()
 {
-	Symbol* newClass = new Class(className, baseClass, line_no, col_no);
-	((Class*)newClass)->add_attribute(modifiers);
-	symboltable->addSymbol(newClass);
+	symboltable->closeScope();
+}
+void symbolParser::addClass(queue<string>modifiers, string className, queue<string> bases, int line_no, int col_no)
+{
+	Symbol* newClass = new Class(className, modifiers, line_no, col_no);
+	symboltable->addClass(newClass, bases);
+
 	return;
 }

@@ -5,6 +5,7 @@
 #include<stack>
 #include "Symbol.h"
 #include "Attribute.h"
+#include"Class.h"
 using namespace::std;
 
 
@@ -26,9 +27,10 @@ public:
 	static stack<symbolTable*> openBrackets;
 	symbolTable(symbolTable* parent);
 	void addScope();
-	void addSymbol(Symbol* symbol);
+	void addClass(Symbol* symbol, queue<string>bases);
 	void addChild(symbolTable* st);
 	bool closeScope();
+	void closeBracket();
 	~symbolTable();
 	
 };

@@ -1,9 +1,12 @@
 #include "Class.h"
 
-Class::Class(string name, string baseName, int line_no, int col_no) : Symbol(name,line_no,col_no)
+Class::Class(string name, queue<string>attributes, int line_no, int col_no) : Symbol(name,line_no,col_no)
 {
-	this->baseName = baseName;
 	attribute = new Attribute(this->getType());
+
+	add_attributes(attributes);
+	
+
 }
 
 Class::~Class()
@@ -11,12 +14,8 @@ Class::~Class()
 
 }
 
-void Class::add_attribute(string s)
-{
-	attribute->add(s);
-	return;
-}
-void Class::add_attribute(queue<string>attributes)
+
+void Class::add_attributes(queue<string>attributes)
 {
 	while (!attributes.empty())
 	{
@@ -26,9 +25,10 @@ void Class::add_attribute(queue<string>attributes)
 	return;
 }
 
-string Class::getBaseName()
+void Class::add_base(string name, Symbol* ref)
 {
-	return baseName;
+	baseClassImpInterfaces.push_back(make_pair(name,ref));
+	return;
 }
 
 string Class::getType()
