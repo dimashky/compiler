@@ -820,7 +820,7 @@ class_declaration
   {
 		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
   } 
-  class_body {SPL->endScope();} comma_opt	{l.a("class_declaration",5);}
+  class_body comma_opt	{l.a("class_declaration",5);SPL->endScope();}
   ;
 class_base_opt
   : /* Nothing */   {l.a("class_base_opt",0);$<r.bases>$ = new queue<string>();}
@@ -845,11 +845,13 @@ interface_type_list
 		$<r.bases>$->push(*$<r.base>3);
   }
   ;
+
 class_body
   : LEFT_BRACKET_GROUP class_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("class_body",1);}
   ;
+
 class_member_declarations_opt
-  : /* Nothing */             {l.a("class_member_declarations_opt",0);}
+  : /* Nothing */               {l.a("class_member_declarations_opt",0);}
   | class_member_declarations	{l.a("class_member_declarations_opt",1);}
   ;
 class_member_declarations
@@ -866,11 +868,14 @@ class_member_declaration
   | operator_declaration				{l.a("class_member_declaration",1);}
   | constructor_declaration				{l.a("class_member_declaration",1);}
   | destructor_declaration				{l.a("class_member_declaration",1);}
-/*  | static_constructor_declaration */
   | type_declaration					{l.a("class_member_declaration",1);}
   ;
 constant_declaration
-  : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	{l.a("constant_declaration",4);}
+  : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
+  {		
+		l.a("constant_declaration",4);
+		SPL->add_var(*$<r.modifiers>2,1);
+  }
   | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
   ;
 field_declaration
@@ -1120,17 +1125,17 @@ variable_initializer_list
 interface_declaration
   : attributes_opt modifiers_opt INTERFACE IDENTIFIER interface_base_opt
   {
-		SPL->addInterface();		
+		SPL->addInterface(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);		
   }
   interface_body comma_opt	{l.a("interface_declaration",5);}
   ;
 
 interface_base_opt
-  : /* Nothing */	  {l.a("interface_base_opt",0);}
-  | interface_base	{l.a("interface_base_opt",1);}
+  : /* Nothing */	  {l.a("interface_base_opt",0);$<r.bases>$ = new queue<string>();}
+  | interface_base	  {l.a("interface_base_opt",1);$<r.bases>$ = $<r.bases>1;}
   ;
 interface_base
-  : COLON interface_type_list	{l.a("interface_base",1);}
+  : COLON interface_type_list	{l.a("interface_base",1);$<r.bases>$ = $<r.bases>2;}
   ;
 interface_body
   : LEFT_BRACKET_GROUP interface_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("interface_body",1);}

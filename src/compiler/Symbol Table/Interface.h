@@ -1,7 +1,10 @@
 #pragma once
 #include<iostream>
 #include<string>
+#include<vector>
 #include "Symbol.h"
+#include"Attribute.h"
+
 using namespace::std;
 
 class Interface : public Symbol

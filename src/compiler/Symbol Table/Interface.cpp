@@ -1,8 +1,5 @@
 #include "Interface.h"
 
-
-#include "Class.h"
-
 Interface::Interface(string name, queue<string>attributes, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
 	attribute = new Attribute(this->getType());
