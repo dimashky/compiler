@@ -10,12 +10,9 @@ using namespace::std;
 class Class : public Symbol
 {
 private:
-	Class *basePtr;
 	vector<pair<string,Symbol*> > baseClassImpInterfaces;
 	Attribute* attribute;
-
 	void add_attributes(queue<string>attributes);
-
 
 public:
 	Class(string name, queue<string>attributes, int line_no, int col_no);

@@ -24,6 +24,12 @@ void symbolParser::addClass(queue<string>modifiers, string className, queue<stri
 {
 	Symbol* newClass = new Class(className, modifiers, line_no, col_no);
 	symboltable->addClass(newClass, bases);
+	return;
+}
 
+void symbolParser::addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no)
+{
+	Symbol* newInterface = new Interface(interfaceName, modifiers, line_no, col_no);
+	symboltable->addInterface(newInterface, bases);
 	return;
 }

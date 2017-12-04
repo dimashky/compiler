@@ -28,9 +28,9 @@ public:
 	symbolTable(symbolTable* parent);
 	void addScope();
 	void addClass(Symbol* symbol, queue<string>bases);
+	void addInterface(Symbol* symbol, queue<string>bases);
 	void addChild(symbolTable* st);
 	bool closeScope();
-	void closeBracket();
 	~symbolTable();
 	
 };

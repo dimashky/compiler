@@ -5,9 +5,18 @@ namespace ConsoleApplication2
 
     }
 
-    class meme : Program
+
+
+    class meme : Program, Program
     {
-        
+        int xx()
+        {
+
+        }
+        interface aa : xx
+        {
+
+        }
     }
 
 }

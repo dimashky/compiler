@@ -1118,8 +1118,13 @@ variable_initializer_list
 
 /***** C.2.9 Interfaces *****/
 interface_declaration
-  : attributes_opt modifiers_opt INTERFACE IDENTIFIER interface_base_opt interface_body comma_opt	{l.a("interface_declaration",5);}
+  : attributes_opt modifiers_opt INTERFACE IDENTIFIER interface_base_opt
+  {
+		SPL->addInterface();		
+  }
+  interface_body comma_opt	{l.a("interface_declaration",5);}
   ;
+
 interface_base_opt
   : /* Nothing */	  {l.a("interface_base_opt",0);}
   | interface_base	{l.a("interface_base_opt",1);}
