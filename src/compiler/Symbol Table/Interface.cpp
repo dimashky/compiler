@@ -25,6 +25,12 @@ void Interface::add_attributes(queue<string>attributes)
 
 void Interface::add_base(string name, Symbol* ref)
 {
+	for (int i = 0;i < impInterfaces.size();i++)
+		if (impInterfaces[i].first == name)
+		{
+			cout << "error : " << name << " already listed in interface list." << endl;
+			return;
+		}
 	impInterfaces.push_back(make_pair(name, ref));
 	return;
 }

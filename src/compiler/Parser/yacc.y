@@ -874,7 +874,7 @@ constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
   {		
 		l.a("constant_declaration",4);
-		SPL->add_var(*$<r.modifiers>2,1);
+		//SPL->add_var(*$<r.modifiers>2,1);
   }
   | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
   ;
@@ -1008,15 +1008,15 @@ overloadable_operator_declarator
 overloadable_operator
   : PLUS					        {l.a("overloadable_operator",0);}
   | MINUS					        {l.a("overloadable_operator",0);}
-  | EXCLAMATION_POINT		  {l.a("overloadable_operator",0);}
+  | EXCLAMATION_POINT				{l.a("overloadable_operator",0);}
   | TILDE					        {l.a("overloadable_operator",0);}
-  | PLUSPLUS			      	{l.a("overloadable_operator",0);}
-  | MINUSMINUS		    		{l.a("overloadable_operator",0);}
+  | PLUSPLUS			      		{l.a("overloadable_operator",0);}
+  | MINUSMINUS		    			{l.a("overloadable_operator",0);}
   | TRUE					        {l.a("overloadable_operator",0);}
   | FALSE				        	{l.a("overloadable_operator",0);}
   | STAR				        	{l.a("overloadable_operator",0);}
   | SLASH				        	{l.a("overloadable_operator",0);}
-  | PERCENT			      		{l.a("overloadable_operator",0);}
+  | PERCENT			      			{l.a("overloadable_operator",0);}
   | AND						        {l.a("overloadable_operator",0);}
   | OR						        {l.a("overloadable_operator",0);}
   | POWER					        {l.a("overloadable_operator",0);}
@@ -1024,8 +1024,8 @@ overloadable_operator
   | GTGT					        {l.a("overloadable_operator",0);}
   | EQEQ					        {l.a("overloadable_operator",0);}
   | NOTEQ					        {l.a("overloadable_operator",0);}
-  | GREATER					      {l.a("overloadable_operator",0);}
-  | SMALLER					      {l.a("overloadable_operator",0);}
+  | GREATER							{l.a("overloadable_operator",0);}
+  | SMALLER							{l.a("overloadable_operator",0);}
   | GEQ						        {l.a("overloadable_operator",0);}
   | LEQ						        {l.a("overloadable_operator",0);}
   ;
@@ -1127,7 +1127,7 @@ interface_declaration
   {
 		SPL->addInterface(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);		
   }
-  interface_body comma_opt	{l.a("interface_declaration",5);}
+  interface_body comma_opt	{l.a("interface_declaration",5);SPL->endScope();}
   ;
 
 interface_base_opt

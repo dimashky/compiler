@@ -27,6 +27,12 @@ void Class::add_attributes(queue<string>attributes)
 
 void Class::add_base(string name, Symbol* ref)
 {
+	for (int i = 0;i < baseClassImpInterfaces.size();i++)
+		if (baseClassImpInterfaces[i].first == name)
+		{
+			cout << "error : " << name << " already listed in interface list." << endl;
+			return;
+		}
 	baseClassImpInterfaces.push_back(make_pair(name,ref));
 	return;
 }

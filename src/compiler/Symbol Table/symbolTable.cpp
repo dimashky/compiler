@@ -36,16 +36,16 @@ void symbolTable::addClass(Symbol* symbol, queue<string>bases)
 			if (it != parent->symbolMap.end()) {
 				if (it->first->getType() == "class")
 					cout << "error : there is an error in line " << symbol->getLineNo() << ", no more than one extended class and it should be the first one after Colon." << endl;
-				else if (it->first->getType() == "interface") ((Class*)symbol)->add_base(symbol->getName(), symbol);
-				else ((Class*)symbol)->add_base(symbol->getName(), NULL);
+				else if (it->first->getType() == "interface") ((Class*)symbol)->add_base(bases.front(), symbol);
+				else ((Class*)symbol)->add_base(bases.front(), NULL);
 			}
-			else ((Class*)symbol)->add_base(symbol->getName(), NULL);
+			else ((Class*)symbol)->add_base(bases.front(), NULL);
 		}
 		else {
 			if (it != parent->symbolMap.end())
-				((Class*)symbol)->add_base(symbol->getName(), symbol), cout << "i found my father thank you fucker..." << endl;
+				((Class*)symbol)->add_base(bases.front(), symbol), cout << "i found my father thank you fucker..." << endl;
 
-			else ((Class*)symbol)->add_base(symbol->getName(), NULL);
+			else ((Class*)symbol)->add_base(bases.front(), NULL);
 		}
 
 		bases.pop();
@@ -103,16 +103,17 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
 		if (it != parent->symbolMap.end()) {
 			if (it->first->getType() == "class")
 				cout << "error : there is an error in line " << symbol->getLineNo() << ", Interface can't implement classes." << endl;
-			else if(it->first->getType() == "interface") ((Interface*)symbol)->add_base(symbol->getName(), symbol);
-			else ((Interface*)symbol)->add_base(symbol->getName(), NULL);
+			else if(it->first->getType() == "interface") ((Interface*)symbol)->add_base(bases.front(), symbol);
+			else ((Interface*)symbol)->add_base(bases.front(), NULL);
 		}
-		else ((Interface*)symbol)->add_base(symbol->getName(), NULL);
+		else ((Interface*)symbol)->add_base(bases.front(), NULL);
 
 		bases.pop();
 
 	}
 	map<Symbol*, symbolTable*>::iterator it = parent->symbolMap.find(symbol);
 	
+
 	if (it != parent->symbolMap.end())
 	{
 		/*
@@ -138,7 +139,6 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
 	}
 	else
 		addScope(symbol);
-
 	return;
 }
 

@@ -25,6 +25,7 @@ private:
 
 public:
 	static stack<symbolTable*> openBrackets;
+
 	symbolTable(symbolTable* parent);
 	void addScope();
 	void addClass(Symbol* symbol, queue<string>bases);
