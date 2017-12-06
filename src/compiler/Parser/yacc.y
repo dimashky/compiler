@@ -22,7 +22,7 @@
 	#include "../Symbol Table/symbol_parser.h"
 
 	symbolParser* SPL = new symbolParser();
-	queue<string>att;
+	
 
 	using namespace std;
 	
@@ -684,8 +684,8 @@ fixed_pointer_declarator
   : IDENTIFIER EQUAL expression		{l.a("fixed_pointer_declarator",1);}
   ;
 compilation_unit
-  : using_directives_opt attributes_opt						{l.a("compilation_unit",2);}
-  | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);}
+  : using_directives_opt attributes_opt						{l.a("compilation_unit",2);SPL->check();}
+  | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);SPL->check();}
   ;
 using_directives_opt
   : /* Nothing */     {l.a("using_directives_opt",0);}
@@ -693,24 +693,20 @@ using_directives_opt
   ;
 attributes_opt
   : /* Nothing */	 {l.a("attributes_opt",0);}
-  | attributes	{l.a("attributes_opt",1);}
+  | attributes		 {l.a("attributes_opt",1);}
   ;
 namespace_member_declarations_opt
   : /* Nothing */                     {l.a("namespace_member_declarations_opt",0);}
   | namespace_member_declarations	    {l.a("namespace_member_declarations_opt",1);}
   ;
 namespace_declaration
-  : attributes_opt NAMESPACE qualified_identifier namespace_body comma_opt	{l.a("namespace_declaration",4);}
+  : attributes_opt NAMESPACE qualified_identifier {}
+    namespace_body comma_opt					  {l.a("namespace_declaration",4);}
   ;
 comma_opt
   : /* Nothing */ {l.a("comma_opt",0);}
   | SEMICOLON	{l.a("comma_opt",0);}
   ;	
-/*
-qualified_identifier
-  : IDENTIFIER | qualified_identifier DOT IDENTIFIER		
-  ;
-*/
 
 qualified_identifier
   : IDENTIFIER				
@@ -724,6 +720,7 @@ qualified_identifier
 		$<r.base>$ = new string(string(*$<r.base>1) + string($<r.str>2));
 	}
   ;
+
 qualifier
   : IDENTIFIER DOT				{l.a("qualifier",0);$<r.base>$ = new string(string($<r.str>1) + ".");}
   | qualifier IDENTIFIER DOT	{l.a("qualifier",1);$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");}
@@ -793,7 +790,6 @@ modifiers
   | modifiers modifier			  
   {
 		l.a("modifiers",2);
-		$<r.modifiers>$ = new queue<string>();
 		$<r.modifiers>$ = $<r.modifiers>1;
 		$<r.modifiers>$->push(*$<r.modifier>2);
   }
@@ -814,6 +810,8 @@ modifier
   | VIRTUAL		              {l.a("modifier",0);$<r.modifier>$ = new string("VIRTUAL");}
   | VOLATILE	              {l.a("modifier",0);$<r.modifier>$ = new string("VOLATILE");}
   ;
+
+
 /***** C.2.6 Classes *****/
 class_declaration
   : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt 

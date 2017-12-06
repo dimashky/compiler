@@ -17,21 +17,25 @@ public:
 class symbolTable
 {
 private:
-	map<Symbol*, symbolTable*, compare_1 > symbolMap;
+	map<Symbol*, pair<symbolTable*,symbolTable* >, compare_1 > symbolMap;
 	vector<symbolTable*>childs;
 	symbolTable *parent;
+	Symbol* owner;
+
 
 	void addScope(Symbol* symbol);
+	void addScope();
 
 public:
 	static stack<symbolTable*> openBrackets;
 
-	symbolTable(symbolTable* parent);
-	void addScope();
+	symbolTable(symbolTable* parent,Symbol* owner);
+	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>bases);
 	void addInterface(Symbol* symbol, queue<string>bases);
-	void addChild(symbolTable* st);
 	bool closeScope();
+
+	void addChild(symbolTable* st);
 	~symbolTable();
 	
 };

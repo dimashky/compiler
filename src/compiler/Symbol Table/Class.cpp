@@ -3,10 +3,8 @@
 Class::Class(string name, queue<string>attributes, int line_no, int col_no) : Symbol(name,line_no,col_no)
 {
 	attribute = new Attribute(this->getType());
-
+	isFinal = false;
 	add_attributes(attributes);
-	
-
 }
 
 Class::~Class()
@@ -19,6 +17,8 @@ void Class::add_attributes(queue<string>attributes)
 {
 	while (!attributes.empty())
 	{
+		if (attributes.front() == "SEALED")
+			isFinal = true;
 		attribute->add(attributes.front());
 		attributes.pop();
 	}
@@ -40,4 +40,7 @@ void Class::add_base(string name, Symbol* ref)
 string Class::getType()
 {
 	return "class";
+}
+bool Class::is_final() {
+	return isFinal;
 }

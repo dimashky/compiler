@@ -5,7 +5,7 @@ using namespace std;
 
 symbolParser::symbolParser()
 {
-	symboltable = new symbolTable(NULL);
+	symboltable = new symbolTable(NULL,NULL);
 }
 
 void symbolParser::print(queue<string> &s1, char* s2)
@@ -16,10 +16,21 @@ void symbolParser::print(queue<string> &s1, char* s2)
 	}
 	cout << s2 << endl;
 }
+
 void symbolParser::endScope()
 {
 	symboltable->closeScope();
 }
+
+
+
+void symbolParser::addNamespace(string name, int line_no, int col_no)
+{
+	//Symbol* newClass = new Namespace(name, line_no, col_no);
+	
+	return;
+}
+
 void symbolParser::addClass(queue<string>modifiers, string className, queue<string> bases, int line_no, int col_no)
 {
 	Symbol* newClass = new Class(className, modifiers, line_no, col_no);
@@ -27,9 +38,16 @@ void symbolParser::addClass(queue<string>modifiers, string className, queue<stri
 	return;
 }
 
+
+
 void symbolParser::addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no)
 {
 	Symbol* newInterface = new Interface(interfaceName, modifiers, line_no, col_no);
 	symboltable->addInterface(newInterface, bases);
 	return;
+}
+
+void symbolParser::check()
+{
+
 }
