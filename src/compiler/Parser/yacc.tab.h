@@ -184,7 +184,9 @@ extern int yydebug;
     PLUSPLUS = 394,
     MINUSMINUS = 395,
     ARROW = 396,
-    THEN = 397
+    THEN = 397,
+    POST1 = 398,
+    POST2 = 399
   };
 #endif
 
@@ -205,7 +207,7 @@ union YYSTYPE
 		}r;
 	
 
-#line 209 "yacc.tab.h" /* yacc.c:1909  */
+#line 211 "yacc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

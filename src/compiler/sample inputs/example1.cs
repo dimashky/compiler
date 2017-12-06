@@ -1,12 +1,23 @@
 namespace ConsoleApplication2
 {
-    class Program
+    clas x
     {
-        static void Main(string[] args)
+        static void 5Main()
         {
-            if[1==2]{int i = 1 int i = 1}
-            else{int i = 1 }
+            for [int i = 0; i < 10; i += 1]
+                i++
+            foreach[int x in xx]
+            {
+                int x = x + 1
+            }
         }
+    }
+
+    class 2co{
+        void if(){
+        }
+
+        int x = 1
         
     }
 }

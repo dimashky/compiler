@@ -2,6 +2,7 @@ class x
 {
     void f()
     {
-        while[int x];
+        i++;
+        for (int i = 3; i < n; i++) ;
     }
 }
