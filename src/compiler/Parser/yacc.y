@@ -96,8 +96,7 @@
 
 %nonassoc THEN
 %nonassoc ELSE
-%nonassoc POST1
-%nonassoc POST2 
+
 
 
 %start compilation_unit  /* I think */
@@ -637,8 +636,8 @@ statement_expression_list
   | statement_expression_list COMMA statement_expression	{l.a("statement_expression_list",2);}
   ;
 foreach_statement
-  : FOREACH left_bracket_circle type				 identifier in expression right_bracket_circle embedded_statement			{l.a("foreach_statement",7);}
-  | FOREACH left_bracket_circle qualified_identifier identifier in expression right_bracket_circle embedded_statement			{l.a("foreach_statement",7);}
+  : FOREACH left_bracket_circle type				 IDENTIFIER in expression right_bracket_circle embedded_statement			{l.a("foreach_statement",7);}
+  | FOREACH left_bracket_circle qualified_identifier IDENTIFIER in expression right_bracket_circle embedded_statement			{l.a("foreach_statement",7);}
   ;
 jump_statement
   : break_statement		{l.a("jump_statement",1);}
@@ -829,7 +828,7 @@ modifier
   ;
 /***** C.2.6 Classes *****/
 class_declaration
-  : attributes_opt modifiers_opt class identifier class_base_opt class_body comma_opt	{l.a("class_declaration",7);}
+  : attributes_opt modifiers_opt class IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",6);}
   ;
 
 
@@ -887,21 +886,23 @@ method_declaration
   ;
 /* Inline return_type to avoid conflict with field_declaration */
 method_header
-  : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",5);}
-  | attributes_opt modifiers_opt qualified_identifier qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",5);}
-  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);}
-  | attributes_opt modifiers_opt type error				   LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4,1);}
-  | attributes_opt modifiers_opt qualified_identifier error				   LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4,1);}
-  | attributes_opt modifiers_opt VOID error				   LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",3,1);}
+  : attributes_opt modifiers_opt type					qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",5);}
+  | attributes_opt modifiers_opt qualified_identifier	qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",5);}
+  | attributes_opt modifiers_opt VOID					qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);}
+  | attributes_opt modifiers_opt type					qualified_identifier LEFT_BRACKET_CIRCLE error					   RIGHT_BRACKET_CIRCLE	{l.a("method_header",4,1);}
+  | attributes_opt modifiers_opt qualified_identifier	qualified_identifier LEFT_BRACKET_CIRCLE error					   RIGHT_BRACKET_CIRCLE	{l.a("method_header",4,1);}
+  | attributes_opt modifiers_opt VOID					qualified_identifier LEFT_BRACKET_CIRCLE error					   RIGHT_BRACKET_CIRCLE	{l.a("method_header",3,1);}
   ;
 formal_parameter_list_opt
-  : /* Nothing */         {l.a("formal_parameter_list_opt",0);}
-  | formal_parameter_list	{l.a("formal_parameter_list_opt",1);}
+  : /* Nothing */												{l.a("formal_parameter_list_opt",0);}
+  | formal_parameter_list										{l.a("formal_parameter_list_opt",1);}
+  | formal_parameter_default_list								{l.a("formal_parameter_list_opt",1);}
+  | formal_parameter_list COMMA formal_parameter_default_list   {l.a("formal_parameter_list_opt",2);}
   ;
 return_type
-  : type	{l.a("return_type",1);}
+  : type					{l.a("return_type",1);}
   | qualified_identifier	{l.a("return_type",1);}
-  | VOID	{l.a("return_type",0);}
+  | VOID					{l.a("return_type",0);}
   ;
 method_body
   : block		{l.a("method_body",1);}
@@ -911,14 +912,24 @@ formal_parameter_list
   : formal_parameter								{l.a("formal_parameter_list",1);}
   | formal_parameter_list COMMA formal_parameter	{l.a("formal_parameter_list",2);}
   ;
+formal_parameter_default_list
+  : formal_parameter_default									  {l.a("formal_parameter_default_list",1);}
+  | formal_parameter_default_list COMMA formal_parameter_default  {l.a("formal_parameter_default_list",2);}
+  ;
 formal_parameter
   : fixed_parameter		{l.a("formal_parameter",1);}
   | parameter_array		{l.a("formal_parameter",1);}
   ;
 fixed_parameter
-  : attributes_opt parameter_modifier_opt type IDENTIFIER	{l.a("fixed_parameter",3);}
-  | attributes_opt parameter_modifier_opt qualified_identifier IDENTIFIER	{l.a("fixed_parameter",3);}
-  ;	
+  : attributes_opt parameter_modifier_opt type					IDENTIFIER	{l.a("fixed_parameter",3);}
+  | attributes_opt parameter_modifier_opt qualified_identifier	IDENTIFIER	{l.a("fixed_parameter",3);}
+  ;
+formal_parameter_default
+  : attributes_opt parameter_modifier_opt type					IDENTIFIER EQUAL variable_initializer	{l.a("formal_parameter_default",4);}
+  | attributes_opt parameter_modifier_opt qualified_identifier	IDENTIFIER EQUAL variable_initializer	{l.a("formal_parameter_default",4);}
+  | attributes_opt PARAMS				  type					IDENTIFIER EQUAL variable_initializer   {l.a("formal_parameter_default",4);}
+  | attributes_opt PARAMS				  qualified_identifier	IDENTIFIER EQUAL variable_initializer   {l.a("formal_parameter_default",4);}
+  ;
 parameter_modifier_opt
   : /* Nothing */             {l.a("parameter_modifier_opt",0);}
   | REF		                    {l.a("parameter_modifier_opt",0);}
@@ -1346,10 +1357,7 @@ EXIT_getset
 
 								/* Terminal Rules */
  
- identifier 
-   : IDENTIFIER										   {l.a("IDENTIFIER",0);} 
-   | error										       {l.a("IDENTIFIER",0,1); yyerrok;yyclearin;}
-   ;
+
  class 
    : CLASS												{l.a("CLASS",0);}	
    | error										        {l.a("CLASS",0,1);yyerrok;yyclearin;}
@@ -1363,8 +1371,8 @@ right_bracket_circle
   | error												{l.a("right_bracket_circle",0,1);yyerrok;yyclearin;}
   ;
 semicolon 
-  : SEMICOLON											{l.a("semicolon",0);}
-  | error												{l.a("semicolon",0,1);}
+  : SEMICOLON											{ l.a("semicolon",0);}
+  | error												{ l.a("semicolon",0,1);}
   ;
 in 
   : IN												    {l.a("in",0);}

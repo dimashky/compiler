@@ -1,25 +1,15 @@
-namespace ConsoleApplication2
+class Program
 {
-    class Program
+    static void f(xx.y x)
     {
-        static void Main(string[] args)
-        {
-            car KIA = new car();
-            KIA.id = 1;
-            KIA.name = " KIA RIO ";
-            MAZDA mazda = new MAZDA();
-            mazda.id = 1;
-            mazda.name = "MAZDA 83";
-            mazda.price = 1000;  
-        }
+
     }
-    class car
+}
+
+class xx
+{
+    public class y
     {
-        public int id;
-        public String name;
+
     }
-       class MAZDA:car
-      {
-        public int price; 
-      }
 }
