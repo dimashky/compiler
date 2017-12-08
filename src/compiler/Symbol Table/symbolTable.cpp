@@ -61,7 +61,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>bases)
 			if (it != parent->symbolMap.end())
 			{
 				if (((Class*)it->first)->is_final())
-					cout << "error :there is an error in line " << symbol->getLineNo() << ", cannot derive from sealed type '" << it->first->getName() << "'\n";
+					cout << "error : there is an error in line " << symbol->getLineNo() << ", cannot derive from sealed type '" << it->first->getName() << "'\n";
 				else ((Class*)symbol)->add_base(bases.front(), it->first);
 			}
 			else ((Class*)symbol)->add_base(bases.front(), NULL);
@@ -151,11 +151,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
 
 	if (it != parent->symbolMap.end())
 	{
-		/*
-			i think in case that there is duplicate in interfaces name ... we should push to the stack the same symbol table that reference to
-			the first declared interface !!! (the first case)
-		*/
-
+		
 		if (it->first->getType() == "interface")
 		{
 			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
@@ -239,6 +235,10 @@ bool symbolTable::closeScope()
 	}
 	return false;
 }
+
+
+
+
 
 symbolTable::~symbolTable()
 {

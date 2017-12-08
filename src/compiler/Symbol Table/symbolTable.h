@@ -18,6 +18,7 @@ class symbolTable
 {
 private:
 	map<Symbol*, pair<symbolTable*,symbolTable* >, compare_1 > symbolMap;
+	
 	vector<symbolTable*>childs;
 	symbolTable *parent;
 	Symbol* owner;
@@ -33,6 +34,11 @@ public:
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>bases);
 	void addInterface(Symbol* symbol, queue<string>bases);
+	Symbol* lookUp(string name)
+	{
+
+	}
+
 	bool closeScope();
 
 	void addChild(symbolTable* st);
