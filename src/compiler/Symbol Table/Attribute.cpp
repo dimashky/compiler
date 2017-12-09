@@ -4,6 +4,7 @@
 set<string > Attribute::classModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","ABSTRACT" });
 set<string > Attribute::methodModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","VIRTUAL","OVERRIDE","EXTERN","ABSTRACT" });
 set<string > Attribute::virableModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","READONLY","CONST","VOLATILE" });
+set<string > Attribute::interfaceModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "INTERNAL"});
 
 
 Attribute::Attribute(string type)
@@ -99,7 +100,46 @@ bool Attribute::add(string nameAtt)
           return false ;
         }
     }
+	else if (typeKeyword == "interface") {
+		set<string>::iterator it = interfaceModifiers.find(nameAtt);
+		if (it != classModifiers.end()) // inside type
+		{
+			set<string>::iterator it1 = whatHave.find(nameAtt);
+			if (it1 == whatHave.end() || whatHave.size() == 0) // not Duplicate
+			{
+				if ((nameAtt == "PUBLIC" || nameAtt == "PRIVATE" || nameAtt == "PROTECTED"))// not more Access
+				{
+					if ((oneAccess) && (!errorAccess)) {
+						cout << "error : More than one protection modifier" << endl;
+						errorAccess = true;
+						return false;
+					}
+					oneAccess = true;
+				}
+				else if (nameAtt == "INTERNAL") { // no more Access
+					set<string>::iterator it3 = whatHave.find("PRIVATE");
+					set<string>::iterator it4 = whatHave.find("PUBLIC");
+					if ((it3 != whatHave.end() || it4 != whatHave.end()) && !errorAccess) {
+						cout << "error : More than one protection modifier" << endl;
+						errorAccess = true;
+						return false;
+					}
+				}
 
+			}
+			else if (!errorDuplicate)
+			{
+				errorDuplicate = true;
+				cout << "error : Duplicate '" << nameAtt << "' modifier" << endl;
+				return false;
+			}
+		}
+		else
+		{
+			cout << "error : The modifier '" << nameAtt << "' is not valid for this item" << endl;
+			return false;
+		}
+	}
     else if(typeKeyword=="method"){
              set<string>::iterator it = methodModifiers.find(nameAtt);
         if(it != methodModifiers.end()) // inside type
