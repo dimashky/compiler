@@ -1,10 +1,13 @@
 #include "Class.h"
 
-Class::Class(string name, queue<string>attributes, int line_no, int col_no) : Symbol(name,line_no,col_no)
+Class::Class(string name, int line_no, int col_no) : Symbol(name,line_no,col_no)
 {
 	attribute = new Attribute(this->getType());
 	isFinal = false;
-	add_attributes(attributes);
+	is_public = false;
+	is_private = false;
+	is_protected = false;
+	owner_is_namespace = false;
 }
 
 Class::~Class()
@@ -13,12 +16,29 @@ Class::~Class()
 }
 
 
-void Class::add_attributes(queue<string>attributes)
+void Class::add_attributes(queue<string>&attributes)
 {
 	while (!attributes.empty())
 	{
 		if (attributes.front() == "SEALED")
 			isFinal = true;
+
+		if (owner_is_namespace)
+		{
+			is_public = true;
+			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE")
+				cout << "error : there is an error in line " << getLineNo() << ", elements defined in namespace cannot be private or protected." << endl;
+		}
+		else 
+		{
+			if (attributes.front() == "PUBLIC")
+				is_public = true, is_protected = is_private = false;
+			if (!is_public && attributes.front() == "PROTECTED")
+				is_protected = true, is_private = false;
+			if (!is_public && !is_protected && attributes.front() == "PRIVATE")
+				is_private = true;
+		}
+		
 		attribute->add(attributes.front());
 		attributes.pop();
 	}
@@ -41,6 +61,12 @@ string Class::getType()
 {
 	return "class";
 }
-bool Class::is_final() {
+void Class::set_namespace_owner()
+{
+	owner_is_namespace = true;
+}
+
+bool Class::is_final() 
+{
 	return isFinal;
 }

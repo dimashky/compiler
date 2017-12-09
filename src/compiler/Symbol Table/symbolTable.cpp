@@ -6,6 +6,7 @@ symbolTable::symbolTable(symbolTable* parent,Symbol* owner)
 {
 	this->parent = parent;
 	this->owner = owner;
+	type_defination_tree = new class_tree();
 }
 
 void symbolTable::addChild(symbolTable* st)
@@ -24,11 +25,22 @@ void symbolTable::addNamespace(Symbol* symbol)
 	else parent = openBrackets.top();
 
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
-	//complete pls
+
+	if (it != parent->symbolMap.end())
+	{
+		openBrackets.push(it->second.first);
+		type_defination_tree->down_specific_child(symbol->getName());
+	}
+	else
+	{
+		addScope(symbol);
+		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
+	}
+	return;
 }
 
 
-void symbolTable::addClass(Symbol* symbol, queue<string>bases)
+void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&modifiers)
 {
 	symbolTable *parent = NULL;
 
@@ -41,6 +53,11 @@ void symbolTable::addClass(Symbol* symbol, queue<string>bases)
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
 
 	int cnt = 0;
+
+	if (parent->owner != NULL && parent->owner->getType() == "namespace")
+		((Class*)symbol)->set_namespace_owner();
+
+	((Class*)symbol)->add_attributes(modifiers);
 
 
 	while (!bases.empty())
@@ -110,8 +127,10 @@ void symbolTable::addClass(Symbol* symbol, queue<string>bases)
 		}
 	}
 	else
+	{
 		addScope(symbol);
-
+		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
+	}
 	return;
 }
 
@@ -190,6 +209,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
 	else
 	{
 		addScope(symbol);
+		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
 	}
 	return;
 }
@@ -205,7 +225,6 @@ void symbolTable::addScope()
 	newst = new symbolTable(parent,NULL);
 	parent->addChild(newst);
 	openBrackets.push(newst);
-
 
 }
 
@@ -228,8 +247,11 @@ void symbolTable::addScope(Symbol* symbol)
 
 bool symbolTable::closeScope()
 {
+	
 	if (!openBrackets.empty())
 	{
+		if (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace")
+			type_defination_tree->end_node();
 		openBrackets.pop();
 		return true;
 	}
@@ -244,3 +266,8 @@ symbolTable::~symbolTable()
 {
 
 }
+
+
+
+
+

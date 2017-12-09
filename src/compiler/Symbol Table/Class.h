@@ -13,15 +13,20 @@ private:
 	vector<pair<string,Symbol*> > baseClassImpInterfaces;
 
 	Attribute* attribute;
-	void add_attributes(queue<string>attributes);
-	bool isFinal;
+	bool isFinal,is_public,is_private,is_protected,owner_is_namespace;
 
 
 public:
-	Class(string name, queue<string>attributes, int line_no, int col_no);
-	~Class();
-	void add_base(string name, Symbol* ref);
+	Class(string name, int line_no, int col_no);
 	string getType();
+
+	void add_base(string name, Symbol* ref);
+	void add_attributes(queue<string>&attributes);
+
+	void set_namespace_owner();
 	bool is_final();
+
+	~Class();
+
 };
 

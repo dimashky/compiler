@@ -26,15 +26,15 @@ void symbolParser::endScope()
 
 void symbolParser::addNamespace(string name, int line_no, int col_no)
 {
-	//Symbol* newClass = new Namespace(name, line_no, col_no);
-	
+	Symbol* newNamespace = new Namespace(name, line_no, col_no);
+	symboltable->addNamespace(newNamespace);
 	return;
 }
 
-void symbolParser::addClass(queue<string>modifiers, string className, queue<string> bases, int line_no, int col_no)
+void symbolParser::addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no)
 {
-	Symbol* newClass = new Class(className, modifiers, line_no, col_no);
-	symboltable->addClass(newClass, bases);
+	Symbol* newClass = new Class(className, line_no, col_no);
+	symboltable->addClass(newClass, bases, modifiers);
 	return;
 }
 

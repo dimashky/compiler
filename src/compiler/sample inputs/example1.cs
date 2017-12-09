@@ -1,14 +1,15 @@
-namespace ConsoleApplication2
+namespace aaaaa
 {
 
-    sealed class xx
-    {
-        
-    }
 
-    class xx : xx
+    private protected public class a
     {
-        
+        private class a1
+        {
+            class a
+            {
+
+            }
+        }
     }
-   
 }

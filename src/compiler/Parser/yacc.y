@@ -629,16 +629,16 @@ return_statement
   ;
 expression_opt
   : /* Nothing */ {l.a("expression_opt",0);}
-  | expression	{l.a("expression_opt",1);}
+  | expression	  {l.a("expression_opt",1);}
   ;
 throw_statement
-  : THROW expression_opt SEMICOLON	{l.a("throw_statement",1);}
+  : THROW expression_opt SEMICOLON	  {l.a("throw_statement",1);}
   | THROW expression_opt error		  {l.a("throw_statement",1);}
   ;
 try_statement
   : TRY block catch_clauses					        {l.a("try_statement",2);}
   | TRY block finally_clause				        {l.a("try_statement",2);}
-  | TRY block catch_clauses finally_clause	{l.a("try_statement",3);}
+  | TRY block catch_clauses finally_clause			{l.a("try_statement",3);}
   ;
 catch_clauses	
   : catch_clause				        {l.a("catch_clauses",1);}
@@ -688,7 +688,7 @@ compilation_unit
   | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);SPL->check();}
   ;
 using_directives_opt
-  : /* Nothing */     {l.a("using_directives_opt",0);}
+  : /* Nothing */       {l.a("using_directives_opt",0);}
   | using_directives	{l.a("using_directives_opt",1);}
   ;
 attributes_opt
@@ -696,16 +696,16 @@ attributes_opt
   | attributes		 {l.a("attributes_opt",1);}
   ;
 namespace_member_declarations_opt
-  : /* Nothing */                     {l.a("namespace_member_declarations_opt",0);}
+  : /* Nothing */                       {l.a("namespace_member_declarations_opt",0);}
   | namespace_member_declarations	    {l.a("namespace_member_declarations_opt",1);}
   ;
 namespace_declaration
-  : attributes_opt NAMESPACE qualified_identifier {}
-    namespace_body comma_opt					  {l.a("namespace_declaration",4);}
+  : attributes_opt NAMESPACE qualified_identifier {SPL->addNamespace(*$<r.base>3,$<r.line_no>3,$<r.col_no>3);}
+    namespace_body comma_opt					  {l.a("namespace_declaration",4);SPL->endScope();}
   ;
 comma_opt
   : /* Nothing */ {l.a("comma_opt",0);}
-  | SEMICOLON	{l.a("comma_opt",0);}
+  | SEMICOLON	  {l.a("comma_opt",0);}
   ;	
 
 qualified_identifier
@@ -795,21 +795,24 @@ modifiers
   }
   ;
 modifier
-  : ABSTRACT	              {l.a("modifier",0);$<r.modifier>$ = new string("ABSTRACT");}
-  | EXTERN		              {l.a("modifier",0);$<r.modifier>$ = new string("EXTERN");}
-  | INTERNAL	              {l.a("modifier",0);$<r.modifier>$ = new string("INTERNAL");}
-  | NEW			              {l.a("modifier",0);$<r.modifier>$ = new string("NEW");}
-  | OVERRIDE	              {l.a("modifier",0);$<r.modifier>$ = new string("OVERRIDE");}
-  | PRIVATE		              {l.a("modifier",0);$<r.modifier>$ = new string("PRIVATE");}
+  : ABSTRACT	              {l.a("modifier",0);$<r.modifier>$ = new string("ABSTRACT"); } 
+  | EXTERN		              {l.a("modifier",0);$<r.modifier>$ = new string("EXTERN");	  }
+  | INTERNAL	              {l.a("modifier",0);$<r.modifier>$ = new string("INTERNAL"); }
+  | NEW			              {l.a("modifier",0);$<r.modifier>$ = new string("NEW");      }
+  | OVERRIDE	              {l.a("modifier",0);$<r.modifier>$ = new string("OVERRIDE"); }
+  | PRIVATE		              {l.a("modifier",0);$<r.modifier>$ = new string("PRIVATE");  }
   | PROTECTED	              {l.a("modifier",0);$<r.modifier>$ = new string("PROTECTED");}
-  | PUBLIC		              {l.a("modifier",0);$<r.modifier>$ = new string("PUBLIC");}
-  | READONLY	              {l.a("modifier",0);$<r.modifier>$ = new string("READONLY");}
-  | SEALED		              {l.a("modifier",0);$<r.modifier>$ = new string("SEALED");}
-  | STATIC		              {l.a("modifier",0);$<r.modifier>$ = new string("STATIC");}
-  | UNSAFE		              {l.a("modifier",0);$<r.modifier>$ = new string("UNSAFE");}
-  | VIRTUAL		              {l.a("modifier",0);$<r.modifier>$ = new string("VIRTUAL");}
-  | VOLATILE	              {l.a("modifier",0);$<r.modifier>$ = new string("VOLATILE");}
+  | PUBLIC		              {l.a("modifier",0);$<r.modifier>$ = new string("PUBLIC");   }
+  | READONLY	              {l.a("modifier",0);$<r.modifier>$ = new string("READONLY"); }
+  | SEALED		              {l.a("modifier",0);$<r.modifier>$ = new string("SEALED");   }
+  | STATIC		              {l.a("modifier",0);$<r.modifier>$ = new string("STATIC");   }
+  | UNSAFE		              {l.a("modifier",0);$<r.modifier>$ = new string("UNSAFE");   }
+  | VIRTUAL		              {l.a("modifier",0);$<r.modifier>$ = new string("VIRTUAL");  }
+  | VOLATILE	              {l.a("modifier",0);$<r.modifier>$ = new string("VOLATILE"); }
   ;
+
+
+ 
 
 
 /***** C.2.6 Classes *****/

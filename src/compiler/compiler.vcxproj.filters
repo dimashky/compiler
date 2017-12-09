@@ -119,6 +119,9 @@
     <ClCompile Include="Symbol Table\Interface.cpp">
       <Filter>Source Files\Symbol Table</Filter>
     </ClCompile>
+    <ClCompile Include="Symbol Table\class_tree.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\yacc.tab.h">
@@ -152,6 +155,9 @@
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
     <ClInclude Include="Symbol Table\Interface.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\class_tree.h">
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
   </ItemGroup>
