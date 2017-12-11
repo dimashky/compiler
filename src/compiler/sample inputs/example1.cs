@@ -1,15 +1,29 @@
-namespace aaaaa
+namespace a
 {
-
-
-    private protected public class a
+    namespace y
     {
-        private class a1
+        sealed class a
         {
-            class a
-            {
 
-            }
+        }
+        
+    }
+    class x : y.a
+    {
+
+    }
+
+    namespace y
+    {
+        class a
+        {
+
         }
     }
+    
+
+
+
+
+
 }

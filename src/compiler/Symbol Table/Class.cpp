@@ -5,7 +5,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name,line_no,col_no)
 	attribute = new Attribute(this->getType());
 	isFinal = false;
 	is_public = false;
-	is_private = false;
+	is_private = true;
 	is_protected = false;
 	owner_is_namespace = false;
 }
@@ -25,7 +25,6 @@ void Class::add_attributes(queue<string>&attributes)
 
 		if (owner_is_namespace)
 		{
-			is_public = true;
 			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE")
 				cout << "error : there is an error in line " << getLineNo() << ", elements defined in namespace cannot be private or protected." << endl;
 		}
@@ -45,7 +44,7 @@ void Class::add_attributes(queue<string>&attributes)
 	return;
 }
 
-void Class::add_base(string name, Symbol* ref)
+void Class::add_base(string name, symbolTable* ref)
 {
 	for (int i = 0;i < baseClassImpInterfaces.size();i++)
 		if (baseClassImpInterfaces[i].first == name)
@@ -64,6 +63,8 @@ string Class::getType()
 void Class::set_namespace_owner()
 {
 	owner_is_namespace = true;
+	is_public = true;
+	is_protected = is_private = false;
 }
 
 bool Class::is_final() 
