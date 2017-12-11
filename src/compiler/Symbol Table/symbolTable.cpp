@@ -89,7 +89,9 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
-			//add current when adjust interface
+
+			current = ((Interface*)it->first)->get_type_graph_position();
+
 			openBrackets.push(it->second.second);
 		}
 		else
@@ -158,7 +160,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		}
 
 		else {
-			
+
 			if (find_base != nullptr)
 			{
 
@@ -168,11 +170,18 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 				else ((Class*)symbol)->add_base(bases.front(), find_base);
 
 			}
-			
-			else if (find_res.second)
-				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared or inaccessible type '" << bases.front() << "'." << endl;
 
-			else later_defination.push(make_pair(list, make_pair(current, symbol)));
+			else if (find_res.second)
+			{
+				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared or inaccessible type '" << bases.front() << "'." << endl;
+				((Class*)symbol)->add_base("", nullptr);
+			}
+			else 
+			{
+				((Class*)symbol)->add_base(symbol->getName(), nullptr);
+
+				later_defination.push(make_pair(list, make_pair(current, symbol)));
+			}
 		}
 
 		bases.pop();
@@ -181,7 +190,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	return;
 }
 
-void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
+void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers)
 {
 	symbolTable *parent = NULL;
 
@@ -190,56 +199,47 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
 
 	else parent = openBrackets.top();
 
-	int cnt = 0;
-
 	if (parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
-		cout << "error : there is an error in line " << symbol->getLineNo() << ", member names cannot be the same as their enclosing type." << endl;
+		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
 
-	while (!bases.empty())
-	{
-		cnt++;
-		map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(new Symbol(bases.front(), 3, 11));
+	if (parent->owner != NULL && parent->owner->getType() == "namespace")
+		((Interface*)symbol)->set_namespace_owner();
 
-		if (it != parent->symbolMap.end()) {
-			if (it->first->getType() == "class")
-				cout << "error : there is an error in line " << symbol->getLineNo() << ", Interface can't implement classes." << endl;
-			else if(it->first->getType() == "interface") ((Interface*)symbol)->add_base(bases.front(), symbol);
-			else ((Interface*)symbol)->add_base(bases.front(), NULL);
-		}
-		else ((Interface*)symbol)->add_base(bases.front(), NULL);
-
-		bases.pop();
-	}
-
+	((Interface*)symbol)->add_attributes(modifiers);
 
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
-	
+
+	node* current = nullptr;
 
 	if (it != parent->symbolMap.end())
 	{
-		
-		if (it->first->getType() == "interface")
+
+		if (it->first->getType() == "class")
 		{
 			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
-
+			//optimize delete data when duplicate is found(we didn't make this optization trick)
 			if (it->second.second != NULL)
 				delete it->second.second;
 
 			it->second.second = new symbolTable(parent, symbol);
 
+			current = ((Class*)it->first)->get_type_graph_position();
+
 			openBrackets.push(it->second.second);
+
 		}
-		else if (it->first->getType() == "class")
+		else if (it->first->getType() == "interface")
 		{
 			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
 
-			if (it->second.second != NULL)
-				delete it->second.second;
+			if (it->second.second != nullptr)
+				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
 
-			openBrackets.push(it->second.second);
+			current = ((Interface*)it->first)->get_type_graph_position();
 
+			openBrackets.push(it->second.second);
 		}
 		else
 		{
@@ -251,13 +251,62 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases)
 			symbolMap.erase(it);
 
 			addScope(symbol);
+
+			((Interface*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
+
+			current = ((Interface*)symbol)->get_type_graph_position()->parent;
 		}
 	}
 	else
 	{
 		addScope(symbol);
-		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
+
+		((Interface*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
+
+		current = ((Interface*)symbol)->get_type_graph_position()->parent;
+
 	}
+
+
+	while (!bases.empty())
+	{
+		queue<string>list;
+		string curr_part = "", str_list = bases.front();
+
+
+		for (int i = 0;i < str_list.length();i++)
+		{
+			if (str_list[i] == '.')
+				list.push(curr_part), curr_part = "";
+			else curr_part += str_list[i];
+		}
+
+		list.push(curr_part);
+
+		pair<void*, bool> find_res = type_defination_tree->find(current, list);
+
+		symbolTable* find_base = (symbolTable*)find_res.first;
+
+		if (find_base != nullptr) {
+
+			if (find_base->owner->getType() == "class")
+				cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is class and interfaces cant extend classes." << endl;
+
+			else if (find_base->owner->getType() == "interface")
+				((Interface*)symbol)->add_base(bases.front(), find_base);
+
+			else cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is a namespace." << endl;
+
+		}
+
+		else if (find_res.second)
+			cout << "error : there is an error in line " << symbol->getLineNo() << ", Implemented from non declared or inaccessible interface '" << bases.front() << "'." << endl;
+
+		else later_defination.push(make_pair(list, make_pair(current, symbol)));
+
+		bases.pop();
+	}
+
 	return;
 }
 

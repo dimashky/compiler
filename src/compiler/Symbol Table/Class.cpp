@@ -53,6 +53,7 @@ void Class::add_base(string name, symbolTable* ref)
 			return;
 		}
 	baseClassImpInterfaces.push_back(make_pair(name,ref));
+	
 	return;
 }
 

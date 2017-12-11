@@ -42,21 +42,58 @@ void symbolParser::addClass(queue<string>&modifiers, string className, queue<str
 
 void symbolParser::addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no)
 {
-	Symbol* newInterface = new Interface(interfaceName, modifiers, line_no, col_no);
-	symboltable->addInterface(newInterface, bases);
+	Symbol* newInterface = new Interface(interfaceName, line_no, col_no);
+	symboltable->addInterface(newInterface, bases, modifiers);
 	return;
 }
 
-void symbolParser::check()
+void symbolParser::check_later_defination()
 {
 	while (!symbolTable::later_defination.empty())
 	{
-		symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first).first;
-		
-		if (search != nullptr)
+		if (symbolTable::later_defination.front().second.second->getType() == "class")
 		{
+			symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first).first;
 
-			if (((Class*)search->get_owner())->is_final())
+			if (search != nullptr)
+			{
+
+				if (search->get_owner()->getType() == "class")
+				{
+
+					pair<string, symbolTable*> test = ((Class*)symbolTable::later_defination.front().second.second)->get_extended_class();
+
+					if (test.second != nullptr || test.first == "")
+						cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", no more than one extended class or it should be the first one after Colon." << endl;
+
+					else
+					{
+						if (((Class*)search->get_owner())->is_final())
+						{
+							string parent_name;
+							while (!symbolTable::later_defination.front().first.empty())
+							{
+								parent_name += symbolTable::later_defination.front().first.front();
+								symbolTable::later_defination.front().first.pop();
+								if (!symbolTable::later_defination.front().first.empty())
+									parent_name += '.';
+							}
+
+							cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
+						}
+
+						else ((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair(search->get_owner()->getName(), search));
+					}
+				}
+
+				else if (search->get_owner()->getType() == "interface")
+					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
+
+				else if (search->get_owner()->getType() == "namespace")
+					cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
+
+			}
+			else
 			{
 				string parent_name;
 				while (!symbolTable::later_defination.front().first.empty())
@@ -66,24 +103,52 @@ void symbolParser::check()
 					if (!symbolTable::later_defination.front().first.empty())
 						parent_name += '.';
 				}
-
-				cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
+				cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", inhertince from non declared or inaccessible type '" << parent_name << "'." << endl;
 			}
-
-			else ((Class*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
 		}
-		else 
+
+		else if (symbolTable::later_defination.front().second.second->getType() == "interface")
 		{
-			string parent_name;
-			while (!symbolTable::later_defination.front().first.empty())
+			symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first).first;
+
+			if (search != nullptr)
 			{
-				parent_name += symbolTable::later_defination.front().first.front();
-				symbolTable::later_defination.front().first.pop();
-				if (!symbolTable::later_defination.front().first.empty())
-					parent_name += '.';
+
+				if (search->get_owner()->getType() == "class")
+				{
+					cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", '" << search->get_owner()->getName() << "' is class and interfaces cant extend classes." << endl;
+				}
+
+				else if (search->get_owner()->getType() == "interface")
+					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
+
+				else if (search->get_owner()->getType() == "namespace")
+					cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
+
 			}
-			cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", inhertince from non declared or inaccessible type '" << parent_name << "'." << endl;
+			else
+			{
+				string parent_name;
+				while (!symbolTable::later_defination.front().first.empty())
+				{
+					parent_name += symbolTable::later_defination.front().first.front();
+					symbolTable::later_defination.front().first.pop();
+					if (!symbolTable::later_defination.front().first.empty())
+						parent_name += '.';
+				}
+				cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", implemented from non declared or inaccessible interface '" << parent_name << "'." << endl;
+			}
 		}
+
+
 		symbolTable::later_defination.pop();
 	}
+}
+
+
+
+
+void symbolParser::check()
+{
+	check_later_defination();
 }

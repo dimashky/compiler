@@ -1,29 +1,15 @@
-namespace a
+
+
+interface y : z,x
 {
-    namespace y
-    {
-        sealed class a
-        {
 
-        }
-        
-    }
-    class x : y.a
-    {
+}
+class x
+{
 
-    }
+}
 
-    namespace y
-    {
-        class a
-        {
-
-        }
-    }
-    
-
-
-
-
+class z
+{
 
 }

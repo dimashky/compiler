@@ -70,8 +70,19 @@ pair<void*,bool> class_tree::find(node* &curr, queue<string> list)
 			map<string, node*>::iterator it = find_top->childs.find(list.front());
 			if (it != find_top->childs.end())
 			{
-				if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
-					return make_pair(nullptr, true);
+				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "class") 
+				{
+					if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
+						return make_pair(nullptr, true);
+				}
+				
+				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "interface")
+				{
+					if (!((Interface*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
+						return make_pair(nullptr, true);
+				}
+
+
 				find_top = it->second, list.pop();
 			}
 			else return make_pair(nullptr, false);

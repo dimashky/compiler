@@ -33,7 +33,7 @@ public:
 	symbolTable(symbolTable* parent,Symbol* owner);
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
-	void addInterface(Symbol* symbol, queue<string>bases);
+	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
 	bool closeScope();
 	Symbol* get_owner()
 	{

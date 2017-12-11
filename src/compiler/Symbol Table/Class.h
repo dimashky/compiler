@@ -45,6 +45,17 @@ public:
 		return type_graph_position;
 	}
 
+	pair<string, symbolTable*> get_extended_class()
+	{
+		return baseClassImpInterfaces[0];
+	}
+
+	void set_extended_class(pair<string, symbolTable*>val)
+	{
+		baseClassImpInterfaces[0] = val;
+		return;
+	}
+
 	~Class();
 
 };
