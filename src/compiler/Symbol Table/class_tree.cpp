@@ -7,6 +7,7 @@ node::node(string name, node* parent, void* stPTR)
 	this->parent = parent;
 	this->name = name;
 	this->stPTR = stPTR;
+	this->visited = 0;
 }
 
 node::~node()
@@ -93,6 +94,11 @@ pair<void*,bool> class_tree::find(node* &curr, queue<string> list)
 		return make_pair(find_top->stPTR, true);
 	}
 	return make_pair(nullptr, false);
+}
+
+void class_tree::set_base_class(string name, node* child_ptr, node* parent_ptr)
+{
+	parent_ptr->base_class = (make_pair(name, child_ptr));	
 }
 
 class_tree::~class_tree()

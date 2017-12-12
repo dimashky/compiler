@@ -1,15 +1,42 @@
-class x
+class a : c
+{
+
+}
+class b : a
+{
+
+}
+
+class c : b
+{
+
+}
+
+class d : c
+{
+
+}
+
+class d1 : b
 {
     class c { class x { } }
 
     class a { }
 }
 
-interface y
+
+class fe : a
+
 {
 
 }
-namespace z
+
+class l : m
+{
+
+}
+
+class m : l
 {
 
 }

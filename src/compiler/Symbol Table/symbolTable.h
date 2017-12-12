@@ -23,6 +23,7 @@ private:
 	void add_scope();
 	static FILE *nodeFile, *edgeFile;
 public:
+	static vector<node*>parents;
 	static stack<symbolTable*> openBrackets;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination;
 	static class_tree *type_defination_tree;

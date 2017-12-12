@@ -39,6 +39,8 @@ queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_definati
 
 class_tree* symbolTable::type_defination_tree = new class_tree();
 
+vector<node*> symbolTable::parents = vector<node*>();
+
 symbolTable::symbolTable(symbolTable* parent,Symbol* owner)
 {
 	this->parent = parent;
@@ -89,6 +91,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 
 	node* current = nullptr;
+	bool valid_class = false;
 
 	if (it != parent->symbolMap.end())
 	{
@@ -144,6 +147,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		
 		current = ((Class*)symbol)->get_type_graph_position()->parent;
 
+		valid_class = true;
 	}
 
 	int cnt = 0;
@@ -193,8 +197,15 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 				if (((Class*)find_base->owner)->is_final())
 					cout << "error : there is an error in line " << symbol->getLineNo() << ", cannot derive from sealed type '" << find_base->owner->getName() << "'.\n";
 
-				else ((Class*)symbol)->add_base(bases.front(), find_base);
-
+				else
+				{
+					((Class*)symbol)->add_base(bases.front(), find_base);
+					if (valid_class)
+					{
+						parents.push_back(((Class*)find_base->owner)->get_type_graph_position());
+						type_defination_tree->set_base_class(((Class*)find_base->owner)->getName(), ((Class*)find_base->owner)->get_type_graph_position(), ((Class*)symbol)->get_type_graph_position());
+					}
+				}
 			}
 
 			else if (find_res.second)

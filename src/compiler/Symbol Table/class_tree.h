@@ -9,11 +9,11 @@ public:
 	string name;
 	void* stPTR;
 	map<string, node*> childs;
-
+	pair<string, node*> base_class;
+	int visited;
 	node(string name, node* parent, void* stPTR);
 	~node();
 };
-
 
 class class_tree
 {
@@ -26,7 +26,8 @@ public:
 	node* add_node(string name, void* stPTR);
 	void end_node();
 	void down_specific_child(string name);
-	pair<void*, bool> find(node* &curr, queue<string> list);	
+	pair<void*, bool> find(node* &curr, queue<string> list);
+	void set_base_class(string name, node* child_ptr, node* parent_ptr);
 	~class_tree();
 };
 
