@@ -41,12 +41,28 @@
     <ClCompile Include="logger\Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\yacc.tab.cpp" />
+    <ClCompile Include="Symbol Table\Attribute.cpp" />
+    <ClCompile Include="Symbol Table\Class.cpp" />
+    <ClCompile Include="Symbol Table\class_tree.cpp" />
+    <ClCompile Include="Symbol Table\Interface.cpp" />
+    <ClCompile Include="Symbol Table\Namespace.cpp" />
+    <ClCompile Include="Symbol Table\Symbol.cpp" />
+    <ClCompile Include="Symbol Table\symbolTable.cpp" />
+    <ClCompile Include="Symbol Table\symbol_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h" />
     <ClInclude Include="Error Handler\error_record.h" />
     <ClInclude Include="logger\Logger.h" />
     <ClInclude Include="Parser\yacc.tab.h" />
+    <ClInclude Include="Symbol Table\Attribute.h" />
+    <ClInclude Include="Symbol Table\Class.h" />
+    <ClInclude Include="Symbol Table\class_tree.h" />
+    <ClInclude Include="Symbol Table\Interface.h" />
+    <ClInclude Include="Symbol Table\Namespace.h" />
+    <ClInclude Include="Symbol Table\Symbol.h" />
+    <ClInclude Include="Symbol Table\symbolTable.h" />
+    <ClInclude Include="Symbol Table\symbol_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y">

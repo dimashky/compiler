@@ -15,8 +15,14 @@
 	#include <FlexLexer.h>
 	#include <stack>
 	#include <string>
+	#include<queue>
 	#include "../logger/Logger.h"
 	#include "../Error Handler/error_handler.h"
+
+	#include "../Symbol Table/symbol_parser.h"
+
+	symbolParser* SPL = new symbolParser();
+	
 
 	using namespace std;
 	
@@ -39,6 +45,10 @@
 		char* str;
 		int line_no;
 		int col_no;
+
+		string *modifier,*base;
+		queue<string> *modifiers ,*bases;
+
 		}r;
 	}
 
@@ -121,7 +131,7 @@ namespace_name
   : qualified_identifier	{l.a("namespace_name",1);}	
   ;
 type_name
-  : qualified_identifier	{l.a("type_name",1);}
+  : qualified_identifier	{l.a("type_name",1);$<r.base>$ = $<r.base>1;}
   ;
 /***** C.2.2 Types *****/
 type
@@ -162,8 +172,8 @@ floating_point_type
   | DOUBLE	{l.a("floating_point_type",0);}
   ;
 class_type
-  : OBJECT  {l.a("class_type",0);}
-  | STRING  {l.a("class_type",0);}
+  : OBJECT  {l.a("class_type",0);printf("dasdasdasdas");$<r.str>$ = $<r.str>1;}
+  | STRING  {l.a("class_type",0);$<r.str>$ = $<r.str>1;}
   ;
 pointer_type
   : type STAR	{l.a("pointer_type",1);}
@@ -619,16 +629,16 @@ return_statement
   ;
 expression_opt
   : /* Nothing */ {l.a("expression_opt",0);}
-  | expression	{l.a("expression_opt",1);}
+  | expression	  {l.a("expression_opt",1);}
   ;
 throw_statement
-  : THROW expression_opt SEMICOLON	{l.a("throw_statement",1);}
+  : THROW expression_opt SEMICOLON	  {l.a("throw_statement",1);}
   | THROW expression_opt error		  {l.a("throw_statement",1);}
   ;
 try_statement
   : TRY block catch_clauses					        {l.a("try_statement",2);}
   | TRY block finally_clause				        {l.a("try_statement",2);}
-  | TRY block catch_clauses finally_clause	{l.a("try_statement",3);}
+  | TRY block catch_clauses finally_clause			{l.a("try_statement",3);}
   ;
 catch_clauses	
   : catch_clause				        {l.a("catch_clauses",1);}
@@ -674,42 +684,48 @@ fixed_pointer_declarator
   : IDENTIFIER EQUAL expression		{l.a("fixed_pointer_declarator",1);}
   ;
 compilation_unit
-  : using_directives_opt attributes_opt						{l.a("compilation_unit",2);}
-  | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);}
+  : using_directives_opt attributes_opt						{l.a("compilation_unit",2);SPL->check();}
+  | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);SPL->check();}
   ;
 using_directives_opt
-  : /* Nothing */     {l.a("using_directives_opt",0);}
+  : /* Nothing */       {l.a("using_directives_opt",0);}
   | using_directives	{l.a("using_directives_opt",1);}
   ;
 attributes_opt
   : /* Nothing */	 {l.a("attributes_opt",0);}
-  | attributes	{l.a("attributes_opt",1);}
+  | attributes		 {l.a("attributes_opt",1);}
   ;
 namespace_member_declarations_opt
-  : /* Nothing */                     {l.a("namespace_member_declarations_opt",0);}
+  : /* Nothing */                       {l.a("namespace_member_declarations_opt",0);}
   | namespace_member_declarations	    {l.a("namespace_member_declarations_opt",1);}
   ;
 namespace_declaration
-  : attributes_opt NAMESPACE qualified_identifier namespace_body comma_opt	{l.a("namespace_declaration",4);}
+  : attributes_opt NAMESPACE qualified_identifier {SPL->addNamespace(*$<r.base>3,$<r.line_no>3,$<r.col_no>3);}
+    namespace_body comma_opt					  {l.a("namespace_declaration",4);SPL->endScope();}
   ;
 comma_opt
   : /* Nothing */ {l.a("comma_opt",0);}
-  | SEMICOLON	{l.a("comma_opt",0);}
+  | SEMICOLON	  {l.a("comma_opt",0);}
   ;	
-/*
+
 qualified_identifier
-  : IDENTIFIER							            	{l.a("qualified_identifier",0);}
-  | qualified_identifier DOT IDENTIFIER		{l.a("qualified_identifier",1);}
+  : IDENTIFIER				
+  {	
+		l.a("qualified_identifier",0);
+		$<r.base>$ = new string($<r.str>1);
+  }
+  | qualifier IDENTIFIER	
+    {
+		l.a("qualified_identifier",1);
+		$<r.base>$ = new string(string(*$<r.base>1) + string($<r.str>2));
+	}
   ;
-*/
-qualified_identifier
-  : IDENTIFIER				{l.a("qualified_identifier",0);}
-  | qualifier IDENTIFIER	{l.a("qualified_identifier",1);}
-  ;
+
 qualifier
-  : IDENTIFIER DOT				{l.a("qualifier",0);}
-  | qualifier IDENTIFIER DOT	{l.a("qualifier",1);}
+  : IDENTIFIER DOT				{l.a("qualifier",0);$<r.base>$ = new string(string($<r.str>1) + ".");}
+  | qualifier IDENTIFIER DOT	{l.a("qualifier",1);$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");}
   ;
+
 namespace_body
   : LEFT_BRACKET_GROUP using_directives_opt namespace_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("namespace_body",2);}
   ;
@@ -753,51 +769,90 @@ type_declaration
  * enum_modifier, delegate_modifier
  */
 modifiers_opt
-  : /* Nothing */       {l.a("modifiers_opt",0);}
-  | modifiers	          {l.a("modifiers_opt",1);}
+  : /* Nothing */       
+  {		
+		l.a("modifiers_opt",0);
+		$<r.modifiers>$ = new queue<string>();
+  }
+  | modifiers	          
+  {	
+		l.a("modifiers_opt",1);
+		$<r.modifiers>$ = $<r.modifiers>1;
+  }
   ;
 modifiers
-  : modifier			          {l.a("modifiers",1);}
-  | modifiers modifier	    {l.a("modifiers",2);}
+  : modifier			          
+  {	
+		l.a("modifiers",1);
+		$<r.modifiers>$ = new queue<string>();
+		$<r.modifiers>$->push(*$<r.modifier>1);
+  }
+  | modifiers modifier			  
+  {
+		l.a("modifiers",2);
+		$<r.modifiers>$ = $<r.modifiers>1;
+		$<r.modifiers>$->push(*$<r.modifier>2);
+  }
   ;
 modifier
-  : ABSTRACT	              {l.a("modifier",0);}
-  | EXTERN		              {l.a("modifier",0);}
-  | INTERNAL	              {l.a("modifier",0);}
-  | NEW			                {l.a("modifier",0);}
-  | OVERRIDE	              {l.a("modifier",0);}
-  | PRIVATE		              {l.a("modifier",0);}
-  | PROTECTED	              {l.a("modifier",0);}
-  | PUBLIC		              {l.a("modifier",0);}
-  | READONLY	              {l.a("modifier",0);}
-  | SEALED		              {l.a("modifier",0);}
-  | STATIC		              {l.a("modifier",0);}
-  | UNSAFE		              {l.a("modifier",0);}
-  | VIRTUAL		              {l.a("modifier",0);}
-  | VOLATILE	              {l.a("modifier",0);}
+  : ABSTRACT	              {l.a("modifier",0);$<r.modifier>$ = new string("ABSTRACT"); } 
+  | EXTERN		              {l.a("modifier",0);$<r.modifier>$ = new string("EXTERN");	  }
+  | INTERNAL	              {l.a("modifier",0);$<r.modifier>$ = new string("INTERNAL"); }
+  | NEW			              {l.a("modifier",0);$<r.modifier>$ = new string("NEW");      }
+  | OVERRIDE	              {l.a("modifier",0);$<r.modifier>$ = new string("OVERRIDE"); }
+  | PRIVATE		              {l.a("modifier",0);$<r.modifier>$ = new string("PRIVATE");  }
+  | PROTECTED	              {l.a("modifier",0);$<r.modifier>$ = new string("PROTECTED");}
+  | PUBLIC		              {l.a("modifier",0);$<r.modifier>$ = new string("PUBLIC");   }
+  | READONLY	              {l.a("modifier",0);$<r.modifier>$ = new string("READONLY"); }
+  | SEALED		              {l.a("modifier",0);$<r.modifier>$ = new string("SEALED");   }
+  | STATIC		              {l.a("modifier",0);$<r.modifier>$ = new string("STATIC");   }
+  | UNSAFE		              {l.a("modifier",0);$<r.modifier>$ = new string("UNSAFE");   }
+  | VIRTUAL		              {l.a("modifier",0);$<r.modifier>$ = new string("VIRTUAL");  }
+  | VOLATILE	              {l.a("modifier",0);$<r.modifier>$ = new string("VOLATILE"); }
   ;
+
+
+ 
+
+
 /***** C.2.6 Classes *****/
 class_declaration
-  : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt class_body comma_opt	{l.a("class_declaration",5);}
+  : attributes_opt modifiers_opt CLASS IDENTIFIER class_base_opt 
+  {
+		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
+  } 
+  class_body comma_opt	{l.a("class_declaration",5);SPL->endScope();}
   ;
 class_base_opt
-  : /* Nothing */   {l.a("class_base_opt",0);}
-  | class_base	{l.a("class_base_opt",1);}
+  : /* Nothing */   {l.a("class_base_opt",0);$<r.bases>$ = new queue<string>();}
+  | class_base		{l.a("class_base_opt",1);$<r.bases>$ = $<r.bases>1;}
   ;
 class_base
-  : COLON class_type							{l.a("class_base",1);}
-  | COLON interface_type_list					{l.a("class_base",1);}
-  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);}
+  : COLON class_type							{l.a("class_base",1);$<r.bases>$ = new queue<string>();}
+  | COLON interface_type_list					{l.a("class_base",1);$<r.bases>$ = $<r.bases>2;}
+  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);$<r.bases>$ = new queue<string>();}
   ;
 interface_type_list
-  : type_name								{l.a("interface_type_list",1);}
-  | interface_type_list COMMA type_name		{l.a("interface_type_list",2);}
+  : type_name								
+  {
+		l.a("interface_type_list",1);
+		$<r.bases>$ = new queue<string>();
+		$<r.bases>$->push(*$<r.base>1);
+  }
+  | interface_type_list COMMA type_name		
+  {
+		l.a("interface_type_list",2);
+		$<r.bases>$ = $<r.bases>1;
+		$<r.bases>$->push(*$<r.base>3);
+  }
   ;
+
 class_body
   : LEFT_BRACKET_GROUP class_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("class_body",1);}
   ;
+
 class_member_declarations_opt
-  : /* Nothing */             {l.a("class_member_declarations_opt",0);}
+  : /* Nothing */               {l.a("class_member_declarations_opt",0);}
   | class_member_declarations	{l.a("class_member_declarations_opt",1);}
   ;
 class_member_declarations
@@ -814,11 +869,14 @@ class_member_declaration
   | operator_declaration				{l.a("class_member_declaration",1);}
   | constructor_declaration				{l.a("class_member_declaration",1);}
   | destructor_declaration				{l.a("class_member_declaration",1);}
-/*  | static_constructor_declaration */
   | type_declaration					{l.a("class_member_declaration",1);}
   ;
 constant_declaration
-  : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	{l.a("constant_declaration",4);}
+  : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
+  {		
+		l.a("constant_declaration",4);
+		//SPL->add_var(*$<r.modifiers>2,1);
+  }
   | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
   ;
 field_declaration
@@ -951,15 +1009,15 @@ overloadable_operator_declarator
 overloadable_operator
   : PLUS					        {l.a("overloadable_operator",0);}
   | MINUS					        {l.a("overloadable_operator",0);}
-  | EXCLAMATION_POINT		  {l.a("overloadable_operator",0);}
+  | EXCLAMATION_POINT				{l.a("overloadable_operator",0);}
   | TILDE					        {l.a("overloadable_operator",0);}
-  | PLUSPLUS			      	{l.a("overloadable_operator",0);}
-  | MINUSMINUS		    		{l.a("overloadable_operator",0);}
+  | PLUSPLUS			      		{l.a("overloadable_operator",0);}
+  | MINUSMINUS		    			{l.a("overloadable_operator",0);}
   | TRUE					        {l.a("overloadable_operator",0);}
   | FALSE				        	{l.a("overloadable_operator",0);}
   | STAR				        	{l.a("overloadable_operator",0);}
   | SLASH				        	{l.a("overloadable_operator",0);}
-  | PERCENT			      		{l.a("overloadable_operator",0);}
+  | PERCENT			      			{l.a("overloadable_operator",0);}
   | AND						        {l.a("overloadable_operator",0);}
   | OR						        {l.a("overloadable_operator",0);}
   | POWER					        {l.a("overloadable_operator",0);}
@@ -967,8 +1025,8 @@ overloadable_operator
   | GTGT					        {l.a("overloadable_operator",0);}
   | EQEQ					        {l.a("overloadable_operator",0);}
   | NOTEQ					        {l.a("overloadable_operator",0);}
-  | GREATER					      {l.a("overloadable_operator",0);}
-  | SMALLER					      {l.a("overloadable_operator",0);}
+  | GREATER							{l.a("overloadable_operator",0);}
+  | SMALLER							{l.a("overloadable_operator",0);}
   | GEQ						        {l.a("overloadable_operator",0);}
   | LEQ						        {l.a("overloadable_operator",0);}
   ;
@@ -1066,20 +1124,25 @@ variable_initializer_list
 
 /***** C.2.9 Interfaces *****/
 interface_declaration
-  : attributes_opt modifiers_opt INTERFACE IDENTIFIER interface_base_opt interface_body comma_opt	{l.a("interface_declaration",5);}
+  : attributes_opt modifiers_opt INTERFACE IDENTIFIER interface_base_opt
+  {
+		SPL->addInterface(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);		
+  }
+  interface_body comma_opt	{l.a("interface_declaration",5);SPL->endScope();}
   ;
+
 interface_base_opt
-  : /* Nothing */	  {l.a("interface_base_opt",0);}
-  | interface_base	{l.a("interface_base_opt",1);}
+  : /* Nothing */	  {l.a("interface_base_opt",0);$<r.bases>$ = new queue<string>();}
+  | interface_base	  {l.a("interface_base_opt",1);$<r.bases>$ = $<r.bases>1;}
   ;
 interface_base
-  : COLON interface_type_list	{l.a("interface_base",1);}
+  : COLON interface_type_list	{l.a("interface_base",1);$<r.bases>$ = $<r.bases>2;}
   ;
 interface_body
   : LEFT_BRACKET_GROUP interface_member_declarations_opt RIGHT_BRACKET_GROUP	{l.a("interface_body",1);}
   ;
 interface_member_declarations_opt
-  : /* Nothing */                    	{l.a("interface_member_declarations_opt",0);}
+  : /* Nothing */                    		{l.a("interface_member_declarations_opt",0);}
   | interface_member_declarations			{l.a("interface_member_declarations_opt",1);}
   ;
 interface_member_declarations

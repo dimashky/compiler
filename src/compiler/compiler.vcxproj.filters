@@ -31,6 +31,9 @@
     <Filter Include="Source Files\logs">
       <UniqueIdentifier>{ef64ae75-534c-4b23-9106-40218af167b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Symbol Table">
+      <UniqueIdentifier>{7e420974-b1a0-4fad-b4e3-fa49a063d515}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\example1.cs">
@@ -95,6 +98,30 @@
     <ClCompile Include="logger\Logger.cpp">
       <Filter>Source Files\logger</Filter>
     </ClCompile>
+    <ClCompile Include="Symbol Table\symbol_parser.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Class.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Namespace.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Symbol.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\symbolTable.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Interface.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\class_tree.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Attribute.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\yacc.tab.h">
@@ -108,6 +135,30 @@
     </ClInclude>
     <ClInclude Include="logger\Logger.h">
       <Filter>Source Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\symbol_parser.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Class.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Attribute.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Namespace.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Symbol.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\symbolTable.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Interface.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\class_tree.h">
+      <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

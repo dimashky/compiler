@@ -194,7 +194,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 34 "yacc.y" /* yacc.c:1909  */
+#line 40 "yacc.y" /* yacc.c:1909  */
 
 	struct R{
 		int i;
@@ -203,10 +203,14 @@ union YYSTYPE
 		char* str;
 		int line_no;
 		int col_no;
+
+		string *modifier,*base;
+		queue<string> *modifiers ,*bases;
+
 		}r;
 	
 
-#line 210 "yacc.tab.h" /* yacc.c:1909  */
+#line 214 "yacc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
