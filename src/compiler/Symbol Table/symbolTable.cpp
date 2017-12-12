@@ -2,20 +2,47 @@
 #include "Class.h"
 #include "class_tree.h"
 
+void symbolTable::add_scope()
+{
+	symbolTable *parent = NULL, *newst = NULL;
+
+	if (openBrackets.empty())
+		return;
+	else parent = openBrackets.top();
+
+	newst = new symbolTable(parent, NULL);
+	parent->addChild(newst);
+	openBrackets.push(newst);
+
+}
+
+void symbolTable::add_scope(Symbol* symbol)
+{
+	symbolTable *parent = NULL, *newst = NULL;
+
+	if (openBrackets.empty())
+		parent = this;
+	else parent = openBrackets.top();
+
+	newst = new symbolTable(parent, symbol);
+	openBrackets.push(newst);
+	symbolTable* err = NULL;
+
+	parent->symbolMap.insert(make_pair(symbol, make_pair(newst, err)));
+
+	return;
+}
+
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
+
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
+
 class_tree* symbolTable::type_defination_tree = new class_tree();
 
 symbolTable::symbolTable(symbolTable* parent,Symbol* owner)
 {
 	this->parent = parent;
 	this->owner = owner;
-}
-
-void symbolTable::addChild(symbolTable* st)
-{
-	this->childs.push_back(st);
-	return;
 }
 
 void symbolTable::addNamespace(Symbol* symbol)
@@ -36,12 +63,11 @@ void symbolTable::addNamespace(Symbol* symbol)
 	}
 	else
 	{
-		addScope(symbol);
+		add_scope(symbol);
 		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
 	}
 	return;
 }
-
 
 void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&modifiers)
 {
@@ -103,7 +129,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 			delete it->second.second;
 			symbolMap.erase(it);
 
-			addScope(symbol);
+			add_scope(symbol);
 
 			((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 
@@ -112,7 +138,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	}
 	else
 	{
-		addScope(symbol);
+		add_scope(symbol);
 		
 		((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 		
@@ -250,7 +276,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 			delete it->second.second;
 			symbolMap.erase(it);
 
-			addScope(symbol);
+			add_scope(symbol);
 
 			((Interface*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 
@@ -259,7 +285,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 	}
 	else
 	{
-		addScope(symbol);
+		add_scope(symbol);
 
 		((Interface*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 
@@ -310,34 +336,9 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 	return;
 }
 
-void symbolTable::addScope()
+void symbolTable::addChild(symbolTable* st)
 {
-	symbolTable *parent = NULL, *newst = NULL;
-
-	if (openBrackets.empty())
-		return;
-	else parent = openBrackets.top();
-
-	newst = new symbolTable(parent,NULL);
-	parent->addChild(newst);
-	openBrackets.push(newst);
-
-}
-
-void symbolTable::addScope(Symbol* symbol)
-{
-	symbolTable *parent = NULL, *newst = NULL;
-
-	if (openBrackets.empty())
-		parent = this;
-	else parent = openBrackets.top();
-
-	newst = new symbolTable(parent,symbol);
-	openBrackets.push(newst);
-	symbolTable* err = NULL;
-
-	parent->symbolMap.insert(make_pair(symbol, make_pair(newst, err)));
-	
+	this->childs.push_back(st);
 	return;
 }
 
@@ -354,16 +355,18 @@ bool symbolTable::closeScope()
 	return false;
 }
 
+Symbol* symbolTable::get_owner()
+{
+	return owner;
+}
 
-
-
+string symbolTable::get_owner_name()
+{
+	return owner->getName();
+}
 
 symbolTable::~symbolTable()
 {
 
 }
-
-
-
-
 

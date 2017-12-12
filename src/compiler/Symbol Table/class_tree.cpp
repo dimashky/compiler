@@ -9,32 +9,10 @@ node::node(string name, node* parent, void* stPTR)
 	this->stPTR = stPTR;
 }
 
-class_tree::class_tree()
+node::~node()
 {
-	root = new node("Root", NULL, NULL);
-	current = root;
+
 }
-
-node* class_tree::add_node(string name, void* stPTR)
-{
-	node *newNode = new node(name, current, stPTR);
-	current->childs[name] = newNode;
-
-	return (current = newNode);
-}
-
-void class_tree::down_specific_child(string name)
-{
-	current = current->childs[name];
-}
-
-void class_tree::end_node()
-{
-	if (current->parent != NULL)
-		current = current->parent;
-	return;
-}
-
 
 void* class_tree::find(node* &curr, string &class_name)
 {
@@ -56,6 +34,31 @@ node* class_tree::find_in_graph(node* &curr, string &class_name)
 	return find_in_graph(curr->parent, class_name);
 }
 
+class_tree::class_tree()
+{
+	root = new node("Root", NULL, NULL);
+	current = root;
+}
+
+node* class_tree::add_node(string name, void* stPTR)
+{
+	node *newNode = new node(name, current, stPTR);
+	current->childs[name] = newNode;
+
+	return (current = newNode);
+}
+
+void class_tree::end_node()
+{
+	if (current->parent != NULL)
+		current = current->parent;
+	return;
+}
+
+void class_tree::down_specific_child(string name)
+{
+	current = current->childs[name];
+}
 
 pair<void*,bool> class_tree::find(node* &curr, queue<string> list)
 {
@@ -91,7 +94,6 @@ pair<void*,bool> class_tree::find(node* &curr, queue<string> list)
 	}
 	return make_pair(nullptr, false);
 }
-
 
 class_tree::~class_tree()
 {

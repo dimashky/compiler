@@ -22,8 +22,6 @@ void symbolParser::endScope()
 	symboltable->closeScope();
 }
 
-
-
 void symbolParser::addNamespace(string name, int line_no, int col_no)
 {
 	Symbol* newNamespace = new Namespace(name, line_no, col_no);
@@ -37,8 +35,6 @@ void symbolParser::addClass(queue<string>&modifiers, string className, queue<str
 	symboltable->addClass(newClass, bases, modifiers);
 	return;
 }
-
-
 
 void symbolParser::addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no)
 {
@@ -64,7 +60,7 @@ void symbolParser::check_later_defination()
 					pair<string, symbolTable*> test = ((Class*)symbolTable::later_defination.front().second.second)->get_extended_class();
 
 					if (test.second != nullptr || test.first == "")
-						cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", no more than one extended class or it should be the first one after Colon." << endl;
+						cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", no more than one extended class or it should be the first one after Colon." << endl;
 
 					else
 					{
@@ -79,7 +75,7 @@ void symbolParser::check_later_defination()
 									parent_name += '.';
 							}
 
-							cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
+							cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
 						}
 
 						else ((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair(search->get_owner()->getName(), search));
@@ -116,7 +112,7 @@ void symbolParser::check_later_defination()
 
 				if (search->get_owner()->getType() == "class")
 				{
-					cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", '" << search->get_owner()->getName() << "' is class and interfaces cant extend classes." << endl;
+					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is class and interfaces cant extend classes." << endl;
 				}
 
 				else if (search->get_owner()->getType() == "interface")
@@ -144,9 +140,6 @@ void symbolParser::check_later_defination()
 		symbolTable::later_defination.pop();
 	}
 }
-
-
-
 
 void symbolParser::check()
 {
