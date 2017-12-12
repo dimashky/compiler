@@ -1,15 +1,33 @@
-
-
-interface y : z,x
+namespace x1
 {
+    class a : b
+    {
 
+    }
+    class b : c
+    {
+
+    }
+
+    class c : 
+    {
+
+    }
 }
-class x
+
+namespace x2
 {
+    class a : b
+    {
 
-}
+    }
+    class b : c
+    {
 
-class z
-{
+    }
 
+    class c 
+    {
+
+    }
 }

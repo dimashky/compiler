@@ -9,6 +9,7 @@ public:
 	string name;
 	void* stPTR;
 	map<string, node*> childs;
+
 	node(string name, node* parent, void* stPTR);
 	~node() {}
 };

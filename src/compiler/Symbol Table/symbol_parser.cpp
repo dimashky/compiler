@@ -90,7 +90,7 @@ void symbolParser::check_later_defination()
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
 
 				else if (search->get_owner()->getType() == "namespace")
-					cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
+					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
 
 			}
 			else
@@ -123,7 +123,7 @@ void symbolParser::check_later_defination()
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
 
 				else if (search->get_owner()->getType() == "namespace")
-					cout << "error : there is an error in line " << search->get_owner()->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
+					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
 
 			}
 			else
