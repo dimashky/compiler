@@ -145,3 +145,8 @@ void symbolParser::check()
 {
 	check_later_defination();
 }
+
+symbolTable* symbolParser::getSymbolTableRoot()
+{
+	return this->symboltable;
+}

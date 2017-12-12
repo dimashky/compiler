@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include<stack>
 #include "Symbol Table\symbolTable.h"
+#include "Symbol Table\symbol_parser.h"
 #include "Error Handler\error_handler.h"
 #include "logger/Logger.h"
 
@@ -12,11 +13,11 @@ extern errorHandler error_handler("error.log");
 extern Logger l;
 extern FILE* yyin;
 extern int yydebug;
-
+extern symbolParser* SPL;
 
 int main()
 {
-
+	
 	int debug = 0;
 	int num = 1;
 
@@ -36,7 +37,15 @@ int main()
 	
 	error_handler.print();
 
+	if (! symbolTable::initPrintFiles())
+	{
+		cout << "the end is near";
+	}
+	else {
+		SPL->getSymbolTableRoot()->print(0);
 
+		symbolTable::closePrintFiles();
+	}
 	system("pause");
 	return 0;
 }

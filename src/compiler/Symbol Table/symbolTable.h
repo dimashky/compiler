@@ -4,7 +4,7 @@
 #include "Attribute.h"
 #include "class_tree.h"
 
-using namespace::std;
+using namespace std;
 
 
 class compare_1 {
@@ -21,6 +21,7 @@ private:
 	Symbol* owner;
 	void add_scope(Symbol* symbol);
 	void add_scope();
+	static FILE *nodeFile, *edgeFile;
 public:
 	static stack<symbolTable*> openBrackets;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination;
@@ -35,7 +36,9 @@ public:
 	Symbol* get_owner();
 	string get_owner_name();
 	~symbolTable();
-	
+	int print(int);
+	static bool initPrintFiles();
+	static void closePrintFiles();
 };
 
 

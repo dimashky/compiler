@@ -1,9 +1,11 @@
 class x
 {
+    class c { class x { } }
 
+    class a { }
 }
 
-interface y : z
+interface y
 {
 
 }
