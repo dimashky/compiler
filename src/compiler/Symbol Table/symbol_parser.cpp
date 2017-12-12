@@ -188,3 +188,8 @@ void symbolParser::check()
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 	cout << symboltable->parents.size() << endl;
 }
+
+symbolTable* symbolParser::getSymbolTableRoot()
+{
+	return this->symboltable;
+}

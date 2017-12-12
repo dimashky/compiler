@@ -21,7 +21,7 @@
 
 	#include "../Symbol Table/symbol_parser.h"
 
-	symbolParser* SPL = new symbolParser();
+	extern symbolParser* SPL = new symbolParser();
 	
 
 	using namespace std;

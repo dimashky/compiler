@@ -19,10 +19,14 @@ class d : c
 
 class d1 : b
 {
+    class c { class x { } }
 
+    class a { }
 }
 
+
 class fe : a
+
 {
 
 }
