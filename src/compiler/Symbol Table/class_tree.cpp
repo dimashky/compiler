@@ -96,9 +96,9 @@ pair<void*,bool> class_tree::find(node* &curr, queue<string> list)
 	return make_pair(nullptr, false);
 }
 
-void class_tree::set_base_class(string name, node* child_ptr, node* parent_ptr)
+void class_tree::add_base(string name, node* child_ptr, node* parent_ptr)
 {
-	parent_ptr->base_class = (make_pair(name, child_ptr));	
+	parent_ptr->bases.push_back(make_pair(name, child_ptr));
 }
 
 class_tree::~class_tree()

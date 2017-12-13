@@ -78,11 +78,16 @@ void symbolParser::check_later_defination()
 							cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
 						}
 
-						else 
+						else
 						{
+
 							((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair(search->get_owner()->getName(), search));
-							symboltable->type_defination_tree->set_base_class(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
-							symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+
+							if (((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position() != nullptr)
+							{
+								symboltable->type_defination_tree->add_base(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
+								symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+							}
 						}
 					}
 				}
@@ -166,7 +171,8 @@ void check_cycle(node* curr, node* parent)
 
 	curr->visited = 1;
 
-	check_cycle(curr->base_class.second, curr);
+	for (int i = 0;i < curr->bases.size();i++)
+		check_cycle(curr->bases[i].second, curr);
 	
 	curr->visited = 2;
 	

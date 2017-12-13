@@ -203,7 +203,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 					if (valid_class)
 					{
 						parents.push_back(((Class*)find_base->owner)->get_type_graph_position());
-						type_defination_tree->set_base_class(((Class*)find_base->owner)->getName(), ((Class*)find_base->owner)->get_type_graph_position(), ((Class*)symbol)->get_type_graph_position());
+						type_defination_tree->add_base(((Class*)find_base->owner)->getName(), ((Class*)find_base->owner)->get_type_graph_position(), ((Class*)symbol)->get_type_graph_position());
 					}
 				}
 			}
@@ -247,6 +247,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 
 	node* current = nullptr;
+
+	bool valid_interface = false;
 
 	if (it != parent->symbolMap.end())
 	{
@@ -301,6 +303,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 		((Interface*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 
 		current = ((Interface*)symbol)->get_type_graph_position()->parent;
+
+		valid_interface = true;
 
 	}
 
