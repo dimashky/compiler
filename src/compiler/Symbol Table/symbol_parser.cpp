@@ -147,24 +147,18 @@ void symbolParser::check_later_defination()
 vector<node*> cycle_path;
 void check_cycle(node* curr, node* parent)
 {
-
-
 	if (curr->visited == 2)
 		return;
 
 	else if (curr->visited == 1)
-	{
+	{		
+		cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these classes ";
 		
-		if (parent == nullptr)
-			return;
-		
-		for (int i = 0;i < cycle_path.size();i++)
-			cout << cycle_path[i]->name << " ";
-		
-		cout << endl;
-		
-		cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", there is a cycle between '" << ((symbolTable*)parent->stPTR)->get_owner()->getName() << "' '" << ((symbolTable*)curr->stPTR)->get_owner()->getName() << "'." << endl;
-		
+		for (int i = 0;i < cycle_path.size() - 1;i++)
+			cout << "'" << cycle_path[i]->name << "' , ";
+
+		cout << "'" << cycle_path[cycle_path.size() - 1]->name << "' form inhertince cycle." << endl;
+
 		return;
 	}
 
@@ -184,7 +178,8 @@ void check_cycle(node* curr, node* parent)
 void symbolParser::check()
 {
 	check_later_defination();
+
 	for (int i = 0;i < symboltable->parents.size();i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
-	cout << symboltable->parents.size() << endl;
+
 }
