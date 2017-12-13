@@ -1,7 +1,9 @@
 #include "symbolTable.h"
 #include "Class.h"
 #include "class_tree.h"
-
+#include"LocalVariable.h"
+#include"Field.h"
+#include"Method.h"
 void symbolTable::add_scope()
 {
 	symbolTable *parent = NULL, *newst = NULL;
@@ -70,7 +72,41 @@ void symbolTable::addNamespace(Symbol* symbol)
 	}
 	return;
 }
+void symbolTable::addField(Symbol* symbol)
+{
+	symbolTable *parent = NULL;
+	if (openBrackets.empty())		parent = this;
 
+	else parent = openBrackets.top();
+	 if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
+		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+	 add_scope(symbol);
+	 return;
+}
+void symbolTable::addLocalVariable(Symbol* symbol)
+{
+	symbolTable *parent = NULL;
+	if (openBrackets.empty())		parent = this;
+
+	else parent = openBrackets.top();
+	if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
+		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+	add_scope(symbol);
+	return;
+}
+void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<Parameter> parameters)
+{
+	symbolTable *parent = NULL;
+
+	if (openBrackets.empty())
+		parent = this;
+
+	else parent = openBrackets.top();
+
+
+		add_scope(symbol);
+	return;
+}
 void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&modifiers)
 {
 	symbolTable *parent = NULL;
@@ -411,6 +447,13 @@ int symbolTable::print(int nodeID)
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n_interface_', shape: 'box', color:'#015B98'},", nodeID, owner->getName().c_str());
 		else if(owner->getType() == "namespace")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
+		else if(owner->getType() == "field")
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`fields`', shape: 'box', color:'#4AA944'},", nodeID, ((Field*)owner)->getType_name().c_str());
+		else if (owner->getType() == "localvariable")
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`LocalVariable`', shape: 'box', color:'#4CA924'},", nodeID, ((LocalVariable*)owner)->getType_name().c_str());
+		else if (owner->getType() == "method")
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#4CD943'},", nodeID, ((Method*)owner)->getName().c_str());
+
 		/*
 			colors: 
 				fields: #4CB944
@@ -418,6 +461,7 @@ int symbolTable::print(int nodeID)
 				local var: #FFC07F
 		*/
 	}
+
 	if(parent == NULL)
 		fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\\n`namespace`', shape: 'box', color:'#182825'},", nodeID);
 	int nextID = nodeID;

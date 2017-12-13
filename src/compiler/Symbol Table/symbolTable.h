@@ -3,13 +3,13 @@
 #include "Symbol.h"
 #include "Attribute.h"
 #include "class_tree.h"
-
+#include"Parameter.h"
 using namespace std;
 
 
 class compare_1 {
 public:
-	bool operator()(Symbol* const &s1, Symbol* const &s2) { return  s1->getName() > s2->getName(); }
+	bool operator()(Symbol* const &s1, Symbol* const &s2) const { return  s1->getName() > s2->getName(); }
 };
 
 class symbolTable
@@ -32,6 +32,10 @@ public:
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
+	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<Parameter> parameters);
+	void addField(Symbol* symbol);
+	void addLocalVariable(Symbol* symbol);
+
 	void addChild(symbolTable* st);
 	bool closeScope();
 	Symbol* get_owner();

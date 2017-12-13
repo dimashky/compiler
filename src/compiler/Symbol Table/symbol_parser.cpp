@@ -2,7 +2,7 @@
 #include "symbol_parser.h"
 #include<queue>
 using namespace std;
-
+#include"Parameter.h"
 symbolParser::symbolParser()
 {
 	symboltable = new symbolTable(NULL,NULL);
@@ -192,4 +192,40 @@ void symbolParser::check()
 symbolTable* symbolParser::getSymbolTableRoot()
 {
 	return this->symboltable;
+}
+
+
+void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newField = new Field(modifiers ,typeIdentifier, identifiers.front(),line_no,col_no);
+	    symboltable->addField(newField);
+		identifiers.pop();
+
+	}
+	return;
+
+}
+void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), line_no, col_no);
+		 symboltable->addLocalVariable(newLocalVariable);
+		identifiers.pop();
+
+	}
+	return;
+
+
+}
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair<string, string > > types_ids_parameters, int line_no, int col_no)
+{
+	queue<Parameter> parameter;
+	while (!types_ids_parameters.empty()) {
+	Parameter p (types_ids_parameters.front().first , types_ids_parameters.front().second );
+	parameter.push(p); types_ids_parameters.pop();};
+ 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier , parameter, line_no, col_no);
+ 	symboltable->addMethod(newMethod , modifiers , parameter);
 }
