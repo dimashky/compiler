@@ -126,8 +126,14 @@ void symbolParser::check_later_defination()
 				}
 
 				else if (search->get_owner()->getType() == "interface")
+				{
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
-
+					if (((Interface*)symbolTable::later_defination.front().second.second)->get_type_graph_position() != nullptr)
+					{
+						symboltable->type_defination_tree->add_base(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
+						symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+					}
+				}
 				else if (search->get_owner()->getType() == "namespace")
 					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
 			}
@@ -157,7 +163,10 @@ void check_cycle(node* curr, node* parent)
 
 	else if (curr->visited == 1)
 	{		
-		cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these classes ";
+		if (((symbolTable*)curr->stPTR)->get_owner()->getType() == "class")
+			cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these classes ";
+		else 
+			cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these interfaces ";
 		
 		for (int i = 0;i < cycle_path.size() - 1;i++)
 			cout << "'" << cycle_path[i]->name << "' , ";

@@ -1,8 +1,8 @@
-class a
+interface a
 {
 
 }
 
-class a : b { }
+interface a : b { }
 
-class b { }
+interface b { }

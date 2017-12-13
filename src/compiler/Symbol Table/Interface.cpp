@@ -7,7 +7,7 @@ Interface::Interface(string name, int line_no, int col_no) : Symbol(name, line_n
 	is_private = true;
 	is_protected = false;
 	owner_is_namespace = false;
-
+	type_graph_position = nullptr;
 }
 
 Interface::~Interface()

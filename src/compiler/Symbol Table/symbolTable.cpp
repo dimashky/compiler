@@ -334,8 +334,14 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 				cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is class and interfaces cant extend classes." << endl;
 
 			else if (find_base->owner->getType() == "interface")
+			{
 				((Interface*)symbol)->add_base(bases.front(), find_base);
-
+				if (valid_interface)
+				{
+					parents.push_back(((Class*)find_base->owner)->get_type_graph_position());
+					type_defination_tree->add_base(((Class*)find_base->owner)->getName(), ((Interface*)find_base->owner)->get_type_graph_position(), ((Interface*)symbol)->get_type_graph_position());
+				}
+			}
 			else cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is a namespace." << endl;
 
 		}
@@ -343,7 +349,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 		else if (find_res.second)
 			cout << "error : there is an error in line " << symbol->getLineNo() << ", Implemented from non declared or inaccessible interface '" << bases.front() << "'." << endl;
 
-		else later_defination.push(make_pair(list, make_pair(current, symbol)));
+		else 
+			later_defination.push(make_pair(list, make_pair(current, symbol)));
 
 		bases.pop();
 	}
