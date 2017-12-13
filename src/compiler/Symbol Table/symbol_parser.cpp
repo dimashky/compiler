@@ -183,3 +183,8 @@ void symbolParser::check()
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 
 }
+
+symbolTable* symbolParser::getSymbolTableRoot()
+{
+	return this->symboltable;
+}

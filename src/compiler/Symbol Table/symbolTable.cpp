@@ -381,3 +381,53 @@ symbolTable::~symbolTable()
 
 }
 
+bool symbolTable::initPrintFiles()
+{
+	nodeFile = fopen("./visually output/js/SymbolTable/nodes.js","w");
+	edgeFile = fopen("./visually output/js/SymbolTable/edges.js","w");
+	if (nodeFile && edgeFile) {
+		fprintf(nodeFile, "var nodes = [");
+		fprintf(edgeFile, "var edges = [");
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void symbolTable::closePrintFiles()
+{
+	fprintf(nodeFile, "];");
+	fprintf(edgeFile, "];");
+	fclose(nodeFile);
+	fclose(edgeFile);
+}
+int symbolTable::print(int nodeID)
+{
+	if (owner != NULL) {
+		if(owner->getType() == "class")
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`class`', shape: 'box', color:'#016FB9'},", nodeID, owner->getName().c_str());
+		else if(owner->getType() == "interface")
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n_interface_', shape: 'box', color:'#015B98'},", nodeID, owner->getName().c_str());
+		else if(owner->getType() == "namespace")
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
+		/*
+			colors: 
+				fields: #4CB944
+				methods: #EF476F
+				local var: #FFC07F
+		*/
+	}
+	if(parent == NULL)
+		fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\\n`namespace`', shape: 'box', color:'#182825'},", nodeID);
+	int nextID = nodeID;
+	for (auto item : symbolMap)
+	{
+		fprintf(edgeFile, "{from:%d,to:%d, dashes:true},", nodeID, nextID + 1);
+		nextID = item.second.first->print(nextID + 1);
+	}
+	return nextID;
+}
+
+FILE* symbolTable::nodeFile;
+FILE* symbolTable::edgeFile;
