@@ -406,19 +406,25 @@ int symbolTable::print(int nodeID)
 {
 	if (owner != NULL) {
 		if(owner->getType() == "class")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md' }, label:'*%s*\\nclass', shape: 'box', color:'#03A9F4'},", nodeID, owner->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`class`', shape: 'box', color:'#016FB9'},", nodeID, owner->getName().c_str());
 		else if(owner->getType() == "interface")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md' }, label:'*%s*\\ninterface', shape: 'box', color:'#8BC34A'},", nodeID, owner->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n_interface_', shape: 'box', color:'#015B98'},", nodeID, owner->getName().c_str());
 		else if(owner->getType() == "namespace")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md' }, label:'*%s*\\nnamespace', shape: 'box', color:'#9E9E9E'},", nodeID, owner->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
+		/*
+			colors: 
+				fields: #4CB944
+				methods: #EF476F
+				local var: #FFC07F
+		*/
 	}
+	if(parent == NULL)
+		fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\\n`namespace`', shape: 'box', color:'#182825'},", nodeID);
 	int nextID = nodeID;
-	int prevID = nodeID;
 	for (auto item : symbolMap)
 	{
-		prevID = nextID;
-		nextID = item.second.first->print(prevID + 1);
-		fprintf(edgeFile, "{from:%d,to:%d, dashes:true},", nodeID, prevID+1);
+		fprintf(edgeFile, "{from:%d,to:%d, dashes:true},", nodeID, nextID + 1);
+		nextID = item.second.first->print(nextID + 1);
 	}
 	return nextID;
 }
