@@ -12,12 +12,11 @@ namespace testCSH
         {
         }
     }
-    class  aa
+    public class  aa
     {
-        public int a; 
-        class b
+      public  void ff()
         {
-           public  int a=3;
+             
         }
     }
 }

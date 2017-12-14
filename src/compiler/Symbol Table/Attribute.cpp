@@ -3,7 +3,7 @@
 
 set<string > Attribute::classModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","ABSTRACT" });
 set<string > Attribute::methodModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","VIRTUAL","OVERRIDE","EXTERN","ABSTRACT" });
-set<string > Attribute::virableModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","READONLY","CONST","VOLATILE" });
+set<string > Attribute::fieldModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "STATIC", "INTERNAL","NEW","SEALED","READONLY","CONST","VOLATILE" });
 set<string > Attribute::interfaceModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "INTERNAL"});
 
 
@@ -309,15 +309,17 @@ bool Attribute::add(string nameAtt)
         }
 
     }
-    else if(typeKeyword=="field" || typeKeyword=="localvariable"){
-                set<string>::iterator it = virableModifiers.find(nameAtt);
-        if(it != classModifiers.end()) // inside type
+    else if(typeKeyword=="field" ){
+                set<string>::iterator it = fieldModifiers.find(nameAtt);
+
+        if(it != fieldModifiers.end()) // inside type
         {
           set<string>::iterator it1 = whatHave.find(nameAtt);
           if(it1==whatHave.end() || whatHave.size()==0) // not Duplicate
           {
               if((nameAtt=="PUBLIC" || nameAtt=="PRIVATE" || nameAtt=="PROTECTED"))// not more Access
               {
+
                   if((oneAccess)&&(!errorAccess)){
                      cout <<"error : More than one protection modifier"<<endl;
                      errorAccess = true ;

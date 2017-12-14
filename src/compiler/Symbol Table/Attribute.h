@@ -14,8 +14,8 @@ class Attribute
 
     static set<string > classModifiers;
 	static set<string > methodModifiers;
-	static set<string > virableModifiers ;
-	static set<string > interfaceModifiers;
+	static set<string > fieldModifiers;
+	static set<string > interfaceModifiers; 
     bool errorDuplicate ;
     bool errorAccess  ;
     bool oneAccess ;
