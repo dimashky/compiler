@@ -4903,7 +4903,7 @@ yyreduce:
 
   case 386:
 #line 920 "yacc.y" /* yacc.c:1646  */
-    {l.a("method_declaration",2);}
+    {l.a("method_declaration",2); SPL->endScope();}
 #line 4908 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -4911,7 +4911,7 @@ yyreduce:
 #line 925 "yacc.y" /* yacc.c:1646  */
     {
       l.a("method_header",5); 
-	  {SPL->addMethod(*(yyvsp[-5].r.modifiers),string((yyvsp[-4].r.str)),string(*(yyvsp[-3].r.base)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no));}
+	  {SPL->addMethod(*(yyvsp[-5].r.modifiers),string((yyvsp[-4].r.str)),string(*(yyvsp[-3].r.base)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no));  }
   }
 #line 4917 "yacc.tab.cpp" /* yacc.c:1646  */
     break;

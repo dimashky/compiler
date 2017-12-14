@@ -459,11 +459,11 @@ int symbolTable::print(int nodeID)
 		else if(owner->getType() == "namespace")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
 		else if(owner->getType() == "field")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`fields`', shape: 'box', color:'#4AA944'},", nodeID, ((Field*)owner)->getType_name().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s fields`', shape: 'box', color:'#4CB944'},", nodeID, ((Field*)owner)->getName().c_str(), ((Field*)owner)->getType_name().c_str());
 		else if (owner->getType() == "localvariable")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`LocalVariable`', shape: 'box', color:'#4CA924'},", nodeID, ((LocalVariable*)owner)->getType_name().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s LocalVar`', shape: 'box', color:'#FFC07F'},", nodeID, ((LocalVariable*)owner)->getName().c_str(), ((LocalVariable*)owner)->getType_name().c_str());
 		else if (owner->getType() == "method")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#4CD943'},", nodeID, ((Method*)owner)->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
 
 		/*
 			colors: 
