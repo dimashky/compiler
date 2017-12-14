@@ -2,7 +2,7 @@
 #include "symbol_parser.h"
 #include<queue>
 using namespace std;
-
+#include"Parameter.h"
 symbolParser::symbolParser()
 {
 	symboltable = new symbolTable(NULL,NULL);
@@ -163,15 +163,22 @@ void check_cycle(node* curr, node* parent)
 
 	else if (curr->visited == 1)
 	{		
-		if (((symbolTable*)curr->stPTR)->get_owner()->getType() == "class")
-			cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these classes ";
-		else 
-			cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these interfaces ";
-		
-		for (int i = 0;i < cycle_path.size() - 1;i++)
-			cout << "'" << cycle_path[i]->name << "' , ";
 
-		cout << "'" << cycle_path[cycle_path.size() - 1]->name << "' form inhertince cycle." << endl;
+		
+		for (int i = 0;i < cycle_path.size();i++)
+		{
+			int next = (i + 1) % cycle_path.size();
+			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
+			if (((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getType() == "class")
+			{
+				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' class is in inheritence cycle." << endl;
+				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
+			}
+			else 
+			{
+				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' interface is in inheritence cycle." << endl;
+			}
+		}
 
 		return;
 	}
@@ -202,4 +209,40 @@ void symbolParser::check()
 symbolTable* symbolParser::getSymbolTableRoot()
 {
 	return this->symboltable;
+}
+
+
+void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newField = new Field(modifiers ,typeIdentifier, identifiers.front(),line_no,col_no);
+	    symboltable->addField(newField);
+		identifiers.pop();
+
+	}
+	return;
+
+}
+void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), line_no, col_no);
+		 symboltable->addLocalVariable(newLocalVariable);
+		identifiers.pop();
+
+	}
+	return;
+
+
+}
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair<string, string > > types_ids_parameters, int line_no, int col_no)
+{
+	queue<Parameter> parameter;
+	while (!types_ids_parameters.empty()) {
+	Parameter p (types_ids_parameters.front().first , types_ids_parameters.front().second );
+	parameter.push(p); types_ids_parameters.pop();};
+ 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier , parameter, line_no, col_no);
+ 	symboltable->addMethod(newMethod , modifiers , parameter);
 }

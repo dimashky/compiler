@@ -122,6 +122,18 @@
     <ClCompile Include="Symbol Table\Attribute.cpp">
       <Filter>Source Files\Symbol Table</Filter>
     </ClCompile>
+    <ClCompile Include="Symbol Table\LocalVariable.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Field.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Parameter.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbol Table\Method.cpp">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\yacc.tab.h">
@@ -158,6 +170,30 @@
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
     <ClInclude Include="Symbol Table\class_tree.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalVariable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\LocalVariable.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Field.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Parameter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Parameter.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="Method.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\Method.h">
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
   </ItemGroup>

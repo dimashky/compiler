@@ -1,8 +1,13 @@
-interface a
+namespace p
 {
-
+    class x
+    {
+        int name; 
+    }
+    class y {
+       inft fun()
+        {
+            int mm; 
+        }
+    }
 }
-
-interface a : b { }
-
-interface b { }
