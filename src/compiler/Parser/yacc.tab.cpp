@@ -661,7 +661,7 @@ static const yytype_uint16 yyrline[] =
      827,   828,   829,   830,   831,   832,   842,   841,   848,   849,
      852,   853,   854,   857,   863,   872,   876,   877,   880,   881,
      884,   885,   886,   887,   888,   889,   890,   891,   892,   893,
-     896,   901,   906,   904,   912,   910,   920,   924,   929,   936,
+     896,   901,   906,   904,   912,   910,   919,   923,   929,   936,
      939,   944,   945,   948,   949,   956,   960,   967,   968,   971,
      978,   979,   980,   984,   988,   994,   995,   998,   999,  1002,
     1003,  1006,  1012,  1018,  1019,  1022,  1023,  1029,  1030,  1033,
@@ -3756,7 +3756,7 @@ yyreduce:
   case 202:
 #line 482 "yacc.y" /* yacc.c:1646  */
     {l.a("local_variable_declaration",2);
-           SPL->addLocalVariable(string((yyvsp[-1].r.str)),*(yyvsp[0].r.identifiers),(yyvsp[0].r.line_no),(yyvsp[0].r.col_no)) , SPL->endScope();
+           SPL->addLocalVariable(string((yyvsp[-1].r.str)),*(yyvsp[0].r.identifiers),(yyvsp[0].r.line_no),(yyvsp[0].r.col_no)) ;
   }
 #line 3762 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
@@ -4882,7 +4882,7 @@ yyreduce:
 
   case 383:
 #line 907 "yacc.y" /* yacc.c:1646  */
-    {l.a("field_declaration",4); SPL->endScope(); }
+    {l.a("field_declaration",4); }
 #line 4887 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -4896,22 +4896,21 @@ yyreduce:
 #line 914 "yacc.y" /* yacc.c:1646  */
     {
        l.a("field_declaration",4,1);
-	   SPL->endScope();
   }
-#line 4902 "yacc.tab.cpp" /* yacc.c:1646  */
+#line 4901 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 386:
-#line 920 "yacc.y" /* yacc.c:1646  */
+#line 919 "yacc.y" /* yacc.c:1646  */
     {l.a("method_declaration",2); SPL->endScope();}
-
-#line 4908 "yacc.tab.cpp" /* yacc.c:1646  */
+#line 4907 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 387:
-#line 925 "yacc.y" /* yacc.c:1646  */
+#line 924 "yacc.y" /* yacc.c:1646  */
     {
       l.a("method_header",5); 
+
 	  {SPL->addMethod(*(yyvsp[-5].r.modifiers),string((yyvsp[-4].r.str)),string(*(yyvsp[-3].r.base)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no));}
   }
 #line 4917 "yacc.tab.cpp" /* yacc.c:1646  */

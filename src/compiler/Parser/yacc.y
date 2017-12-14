@@ -480,7 +480,7 @@ declaration_statement
   ;
 local_variable_declaration
   : type variable_declarators 		                                      {l.a("local_variable_declaration",2);
-           SPL->addLocalVariable(string($<r.str>1),*$<r.identifiers>2,$<r.line_no>2,$<r.col_no>2) , SPL->endScope();
+           SPL->addLocalVariable(string($<r.str>1),*$<r.identifiers>2,$<r.line_no>2,$<r.col_no>2) ;
   }
   ;
 variable_declarators
@@ -904,7 +904,7 @@ field_declaration
   : attributes_opt modifiers_opt type variable_declarators 
   
     {SPL->addField(*$<r.modifiers>2,string($<r.str>3),*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4);}
-  SEMICOLON		{l.a("field_declaration",4); SPL->endScope(); }
+  SEMICOLON		{l.a("field_declaration",4); }
      
   | 
   attributes_opt modifiers_opt type variable_declarators 
@@ -913,7 +913,6 @@ field_declaration
   error			
   {
        l.a("field_declaration",4,1);
-	   SPL->endScope();
   }
   ;
 method_declaration

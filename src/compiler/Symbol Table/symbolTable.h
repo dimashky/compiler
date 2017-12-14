@@ -21,6 +21,7 @@ private:
 	Symbol* owner;
 	void add_scope(Symbol* symbol);
 	void add_scope();
+	void add_scope_without_openBrackets(Symbol* symbol);
 	static FILE *nodeFile, *edgeFile;
 public:
 	static vector<node*>parents;

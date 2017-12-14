@@ -1,22 +1,9 @@
-namespace p
+class a
 {
-    class x
+    int x, y ,z , n ;
+    int ff()
     {
-
-        int name;
+        int v1, v2;
+        int v3;
     }
-    class y
-    {
-        int fun()
-        {
-            int x;   
-        }
-    }
-
-
-    class a : b { }
-
-    class b : c { }
-
-    class c : a { }
 }

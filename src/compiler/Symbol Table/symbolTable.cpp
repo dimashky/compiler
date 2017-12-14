@@ -34,6 +34,22 @@ void symbolTable::add_scope(Symbol* symbol)
 
 	return;
 }
+void symbolTable::add_scope_without_openBrackets(Symbol* symbol)
+{
+	symbolTable *parent = NULL, *newst = NULL;
+
+	if (openBrackets.empty())
+		parent = this;
+	else parent = openBrackets.top();
+
+	newst = new symbolTable(parent, symbol);
+	symbolTable* err = NULL;
+
+	parent->symbolMap.insert(make_pair(symbol, make_pair(newst, err)));
+
+	return;
+}
+
 
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 
@@ -80,7 +96,7 @@ void symbolTable::addField(Symbol* symbol)
 	else parent = openBrackets.top();
 	 if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
-	 add_scope(symbol);
+	 add_scope_without_openBrackets(symbol);
 	 return;
 }
 void symbolTable::addLocalVariable(Symbol* symbol)
@@ -92,7 +108,8 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 	else parent = openBrackets.top();
 	if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
-	add_scope(symbol);
+
+	add_scope_without_openBrackets(symbol);
 	return;
 }
 void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<Parameter> parameters)
