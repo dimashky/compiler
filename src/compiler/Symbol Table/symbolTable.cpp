@@ -88,6 +88,7 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 	symbolTable *parent = NULL;
 	if (openBrackets.empty())		parent = this;
 
+
 	else parent = openBrackets.top();
 	if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
@@ -102,6 +103,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<Param
 		parent = this;
 
 	else parent = openBrackets.top();
+
 
 
 		add_scope(symbol);
@@ -465,12 +467,6 @@ int symbolTable::print(int nodeID)
 		else if (owner->getType() == "method")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
 
-		/*
-			colors: 
-				fields: #4CB944
-				methods: #EF476F
-				local var: #FFC07F
-		*/
 	}
 
 	if(parent == NULL)
