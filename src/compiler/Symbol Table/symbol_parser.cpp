@@ -78,11 +78,16 @@ void symbolParser::check_later_defination()
 							cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
 						}
 
-						else 
+						else
 						{
+
 							((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair(search->get_owner()->getName(), search));
-							symboltable->type_defination_tree->set_base_class(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
-							symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+
+							if (((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position() != nullptr)
+							{
+								symboltable->type_defination_tree->add_base(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
+								symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+							}
 						}
 					}
 				}
@@ -121,8 +126,14 @@ void symbolParser::check_later_defination()
 				}
 
 				else if (search->get_owner()->getType() == "interface")
+				{
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
-
+					if (((Interface*)symbolTable::later_defination.front().second.second)->get_type_graph_position() != nullptr)
+					{
+						symboltable->type_defination_tree->add_base(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
+						symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+					}
+				}
 				else if (search->get_owner()->getType() == "namespace")
 					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
 			}
@@ -147,24 +158,28 @@ void symbolParser::check_later_defination()
 vector<node*> cycle_path;
 void check_cycle(node* curr, node* parent)
 {
-
-
 	if (curr->visited == 2)
 		return;
 
 	else if (curr->visited == 1)
-	{
-		
-		if (parent == nullptr)
-			return;
+	{		
+
 		
 		for (int i = 0;i < cycle_path.size();i++)
-			cout << cycle_path[i]->name << " ";
-		
-		cout << endl;
-		
-		cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", there is a cycle between '" << ((symbolTable*)parent->stPTR)->get_owner()->getName() << "' '" << ((symbolTable*)curr->stPTR)->get_owner()->getName() << "'." << endl;
-		
+		{
+			int next = (i + 1) % cycle_path.size();
+			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
+			if (((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getType() == "class")
+			{
+				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' class is in inheritence cycle." << endl;
+				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
+			}
+			else 
+			{
+				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' interface is in inheritence cycle." << endl;
+			}
+		}
+
 		return;
 	}
 
@@ -172,7 +187,8 @@ void check_cycle(node* curr, node* parent)
 
 	curr->visited = 1;
 
-	check_cycle(curr->base_class.second, curr);
+	for (int i = 0;i < curr->bases.size();i++)
+		check_cycle(curr->bases[i].second, curr);
 	
 	curr->visited = 2;
 	
@@ -184,9 +200,10 @@ void check_cycle(node* curr, node* parent)
 void symbolParser::check()
 {
 	check_later_defination();
+
 	for (int i = 0;i < symboltable->parents.size();i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
-	cout << symboltable->parents.size() << endl;
+
 }
 
 symbolTable* symbolParser::getSymbolTableRoot()

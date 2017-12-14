@@ -88,6 +88,7 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 	symbolTable *parent = NULL;
 	if (openBrackets.empty())		parent = this;
 
+
 	else parent = openBrackets.top();
 	if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
@@ -102,6 +103,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<Param
 		parent = this;
 
 	else parent = openBrackets.top();
+
 
 
 		add_scope(symbol);
@@ -239,7 +241,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 					if (valid_class)
 					{
 						parents.push_back(((Class*)find_base->owner)->get_type_graph_position());
-						type_defination_tree->set_base_class(((Class*)find_base->owner)->getName(), ((Class*)find_base->owner)->get_type_graph_position(), ((Class*)symbol)->get_type_graph_position());
+						type_defination_tree->add_base(((Class*)find_base->owner)->getName(), ((Class*)find_base->owner)->get_type_graph_position(), ((Class*)symbol)->get_type_graph_position());
 					}
 				}
 			}
@@ -283,6 +285,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 
 	node* current = nullptr;
+
+	bool valid_interface = false;
 
 	if (it != parent->symbolMap.end())
 	{
@@ -338,6 +342,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 
 		current = ((Interface*)symbol)->get_type_graph_position()->parent;
 
+		valid_interface = true;
+
 	}
 
 
@@ -366,8 +372,14 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 				cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is class and interfaces cant extend classes." << endl;
 
 			else if (find_base->owner->getType() == "interface")
+			{
 				((Interface*)symbol)->add_base(bases.front(), find_base);
-
+				if (valid_interface)
+				{
+					parents.push_back(((Class*)find_base->owner)->get_type_graph_position());
+					type_defination_tree->add_base(((Class*)find_base->owner)->getName(), ((Interface*)find_base->owner)->get_type_graph_position(), ((Interface*)symbol)->get_type_graph_position());
+				}
+			}
 			else cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is a namespace." << endl;
 
 		}
@@ -375,7 +387,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 		else if (find_res.second)
 			cout << "error : there is an error in line " << symbol->getLineNo() << ", Implemented from non declared or inaccessible interface '" << bases.front() << "'." << endl;
 
-		else later_defination.push(make_pair(list, make_pair(current, symbol)));
+		else 
+			later_defination.push(make_pair(list, make_pair(current, symbol)));
 
 		bases.pop();
 	}
@@ -448,18 +461,12 @@ int symbolTable::print(int nodeID)
 		else if(owner->getType() == "namespace")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
 		else if(owner->getType() == "field")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`fields`', shape: 'box', color:'#4AA944'},", nodeID, ((Field*)owner)->getType_name().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s fields`', shape: 'box', color:'#4CB944'},", nodeID, ((Field*)owner)->getName().c_str(), ((Field*)owner)->getType_name().c_str());
 		else if (owner->getType() == "localvariable")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`LocalVariable`', shape: 'box', color:'#4CA924'},", nodeID, ((LocalVariable*)owner)->getType_name().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s LocalVar`', shape: 'box', color:'#FFC07F'},", nodeID, ((LocalVariable*)owner)->getName().c_str(), ((LocalVariable*)owner)->getType_name().c_str());
 		else if (owner->getType() == "method")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#4CD943'},", nodeID, ((Method*)owner)->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
 
-		/*
-			colors: 
-				fields: #4CB944
-				methods: #EF476F
-				local var: #FFC07F
-		*/
 	}
 
 	if(parent == NULL)

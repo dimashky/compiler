@@ -9,7 +9,7 @@ public:
 	string name;
 	void* stPTR;
 	map<string, node*> childs;
-	pair<string, node*> base_class;
+	vector<pair<string, node*> > bases;
 	int visited;
 	node(string name, node* parent, void* stPTR);
 	~node();
@@ -27,7 +27,7 @@ public:
 	void end_node();
 	void down_specific_child(string name);
 	pair<void*, bool> find(node* &curr, queue<string> list);
-	void set_base_class(string name, node* child_ptr, node* parent_ptr);
+	void add_base(string name, node* child_ptr, node* parent_ptr);
 	~class_tree();
 };
 

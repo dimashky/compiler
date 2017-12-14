@@ -2,12 +2,21 @@ namespace p
 {
     class x
     {
-        int name; 
+
+        int name;
     }
-    class y {
-       inft fun()
+    class y
+    {
+        int fun()
         {
-            int mm; 
+            int x;   
         }
     }
+
+
+    class a : b { }
+
+    class b : c { }
+
+    class c : a { }
 }
