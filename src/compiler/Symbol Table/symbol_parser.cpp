@@ -163,15 +163,22 @@ void check_cycle(node* curr, node* parent)
 
 	else if (curr->visited == 1)
 	{		
-		if (((symbolTable*)curr->stPTR)->get_owner()->getType() == "class")
-			cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these classes ";
-		else 
-			cout << "error : there is an error in line " << ((symbolTable*)curr->stPTR)->get_owner()->getLineNo() << ", these interfaces ";
-		
-		for (int i = 0;i < cycle_path.size() - 1;i++)
-			cout << "'" << cycle_path[i]->name << "' , ";
 
-		cout << "'" << cycle_path[cycle_path.size() - 1]->name << "' form inhertince cycle." << endl;
+		
+		for (int i = 0;i < cycle_path.size();i++)
+		{
+			int next = (i + 1) % cycle_path.size();
+			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
+			if (((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getType() == "class")
+			{
+				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' class is in inheritence cycle." << endl;
+				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
+			}
+			else 
+			{
+				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' interface is in inheritence cycle." << endl;
+			}
+		}
 
 		return;
 	}

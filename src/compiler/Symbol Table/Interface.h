@@ -45,6 +45,17 @@ public:
 		return type_graph_position;
 	}
 
+	void delete_implemented_interface(symbolTable* ref)
+	{
+		for (int i = 0;i < impInterfaces.size();i++)
+		{
+			if (impInterfaces[i].second == ref)
+			{
+				cout << ref->get_owner()->getLineNo() << " " << impInterfaces[i].second->get_owner()->getLineNo() << endl;
+			}
+		}
+	}
+
 	string getType();
 
 };
