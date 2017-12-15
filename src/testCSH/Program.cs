@@ -14,9 +14,10 @@ namespace testCSH
     }
     public class  aa
     {
-      public  void ff()
+        int x(int y)
         {
-             
+            return 0;
         }
+        
     }
 }

@@ -1,4 +1,8 @@
-class a
+class x
 {
-    public private int a; 
+    int ff()
+    {
+        int x ,x ,  x;
+    
+    }
 }

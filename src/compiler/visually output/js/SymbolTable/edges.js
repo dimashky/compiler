@@ -1,1 +1,1 @@
-var edges = [{from:0,to:1, dashes:true},{from:1,to:2, dashes:true},];
+var edges = [{from:0,to:1, dashes:true},{from:1,to:2, dashes:true},{from:2,to:3, dashes:true},];
