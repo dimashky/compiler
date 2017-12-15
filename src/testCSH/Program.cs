@@ -14,10 +14,8 @@ namespace testCSH
     }
     public class  aa
     {
-        int x(int y)
-        {
-            return 0;
-        }
+        
+        
         
     }
 }

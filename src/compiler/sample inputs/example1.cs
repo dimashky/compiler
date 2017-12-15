@@ -1,8 +1,7 @@
 class x
 {
-    int ff()
+    int ff(int x ,int x,int y,int y ,int y)
     {
-        int x ,x ,  x;
     
     }
 }

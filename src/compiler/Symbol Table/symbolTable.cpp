@@ -117,7 +117,21 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 
 	else 
 		parent = openBrackets.top();
+	if (parent->owner->getType() == "method")
+	{
+		queue<Parameter> temp = (((Method*)parent->owner)->get_types_ids_parameter());
+		while (!temp.empty())
+		{
 
+			if (temp.front().name == symbol->getName())
+			{
+				cout << "error : there is an error in line " << symbol->getLineNo() <<" A local or parameter named '"<<symbol->getName()<<"' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter ."<< endl;
+
+				break; 
+			}
+			temp.pop();
+		}
+	}
 	for (int i = 0; i < parent->childs.size(); i++)
 	{
 		symbolTable * ss = parent->childs[i];
@@ -128,7 +142,6 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 		}
 
 	}
-
 	add_scope_without_openBrackets(symbol);
 	return;
 }
