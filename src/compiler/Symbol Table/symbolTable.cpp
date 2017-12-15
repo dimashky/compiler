@@ -110,7 +110,7 @@ void symbolTable::addField(Symbol* symbol)
 	 add_scope_without_openBrackets(symbol);
 	 return;
 }
-void symbolTable::addLocalVariable(Symbol* symbol)
+void symbolTable::addLocalVariable(Symbol* symbol ,bool isParameter)
 {
 	symbolTable *parent = NULL;
 	if (openBrackets.empty())		parent = this;
@@ -120,11 +120,12 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 	if (parent->owner->getType() == "method")
 	{
 		queue<Parameter> temp = (((Method*)parent->owner)->get_types_ids_parameter());
-		while (!temp.empty())
+		while (!temp.empty() && !isParameter)
 		{
 
 			if (temp.front().name == symbol->getName())
 			{
+				
 				cout << "error : there is an error in line " << symbol->getLineNo() <<" A local or parameter named '"<<symbol->getName()<<"' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter ."<< endl;
 
 				break; 
@@ -135,7 +136,7 @@ void symbolTable::addLocalVariable(Symbol* symbol)
 	for (int i = 0; i < parent->childs.size(); i++)
 	{
 		symbolTable * ss = parent->childs[i];
-		if (ss->get_owner()->getType() == "localvariable" &&ss->get_owner()->getName() == symbol->getName())
+		if (ss->get_owner()->getType() == "localvariable" &&ss->get_owner()->getName() == symbol->getName() && !((LocalVariable*)ss->get_owner())->is_parameter())
 		{
 			cout << "error : there is an error in line " << symbol->getLineNo() << " A local variable named '"<< symbol->getName() << "' is already defined in this scope." << endl;
 			break;

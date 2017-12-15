@@ -15,7 +15,9 @@ namespace testCSH
     public class  aa
     {
         
-        
+        void f(int x)
+        {
+        }
         
     }
 }

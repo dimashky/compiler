@@ -228,8 +228,8 @@ void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifi
 {
 	while (!identifiers.empty())
 	{
-		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), line_no, col_no);
-		 symboltable->addLocalVariable(newLocalVariable);
+ 		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(),false, line_no, col_no);
+		 symboltable->addLocalVariable(newLocalVariable,false);
 		identifiers.pop();
 
 	}
@@ -245,4 +245,12 @@ void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, stri
 	parameter.push(p); types_ids_parameters.pop();};
  	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier , parameter, line_no, col_no);
  	symboltable->addMethod(newMethod , modifiers , parameter);
+	while (!parameter.empty())
+	{
+		Symbol* newLocalVariable = new LocalVariable(parameter.front().type, parameter.front().name,true, line_no, col_no);
+		symboltable->addLocalVariable(newLocalVariable ,true);
+
+		parameter.pop();
+	}
+
 }

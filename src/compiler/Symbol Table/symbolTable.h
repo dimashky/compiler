@@ -35,7 +35,7 @@ public:
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
 	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<Parameter> parameters);
 	void addField(Symbol* symbol);
-	void addLocalVariable(Symbol* symbol);
+	void addLocalVariable(Symbol* symbol, bool isParameter);
 
 	void addChild(symbolTable* st);
 	bool closeScope();
