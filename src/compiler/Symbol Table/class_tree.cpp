@@ -61,11 +61,18 @@ void class_tree::down_specific_child(string name)
 	current = current->childs[name];
 }
 
-pair<void*,bool> class_tree::find(node* &curr, queue<string> list)
+pair<void*, bool> class_tree::find(node* &curr, queue<string> list, node* current_class)
 {
+
 	if (list.size() == 0 || curr == nullptr)
-		return make_pair(nullptr,false);
+		return make_pair(nullptr, false);
+	
 	node* find_top = find_in_graph(curr, list.front());
+
+	//this if for check circular class depedency
+	if (find_top == current_class)
+		return make_pair(nullptr, true);
+
 	if (find_top != nullptr)
 	{
 		list.pop();

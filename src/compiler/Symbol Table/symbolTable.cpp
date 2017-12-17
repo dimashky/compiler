@@ -168,9 +168,10 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 
 		list.push(curr_part);
 
-		pair<void*, bool> find_res = type_defination_tree->find(current, list);
+		pair<void*, bool> find_res = type_defination_tree->find(current, list, ((Class*)symbol)->get_type_graph_position());
 
 		symbolTable* find_base = (symbolTable*)find_res.first;
+		
 
 		if (cnt != 1) {
 			if (find_base != nullptr) {
@@ -210,7 +211,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 
 			else if (find_res.second)
 			{
-				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared or inaccessible type '" << bases.front() << "'." << endl;
+				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared , inaccessible type or it's form circular base class depedency '" << bases.front() << "'." << endl;
 				((Class*)symbol)->add_base("", nullptr);
 			}
 			else 
@@ -226,6 +227,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 
 	return;
 }
+
+
 
 void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers)
 {
@@ -324,7 +327,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 
 		list.push(curr_part);
 
-		pair<void*, bool> find_res = type_defination_tree->find(current, list);
+		pair<void*, bool> find_res = type_defination_tree->find(current, list, ((Interface*)symbol)->get_type_graph_position());
 
 		symbolTable* find_base = (symbolTable*)find_res.first;
 

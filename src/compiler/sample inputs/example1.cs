@@ -1,6 +1,13 @@
-class a :c
-{
 
+class a1
+{
+     class b
+    {
+        public class a : a1.b
+        {
+
+        }
+
+
+    }
 }
-class b : a { }
-class c : b { }

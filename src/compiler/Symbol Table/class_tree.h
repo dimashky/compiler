@@ -26,7 +26,7 @@ public:
 	node* add_node(string name, void* stPTR);
 	void end_node();
 	void down_specific_child(string name);
-	pair<void*, bool> find(node* &curr, queue<string> list);
+	pair<void*, bool> find(node* &curr, queue<string> list, node* current_class);
 	void add_base(string name, node* child_ptr, node* parent_ptr);
 	~class_tree();
 };
