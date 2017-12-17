@@ -9,6 +9,14 @@ class a1
 
         }
 
+        class c1
+        {
+            class d1
+            {
+
+            }
+        }
+
 
     }
 }

@@ -15,14 +15,13 @@ node::~node()
 
 }
 
-void* class_tree::find(node* &curr, string &class_name)
+bool class_tree::is_parent(node* &child, node* &parent)
 {
-	if (curr == nullptr)
-		return nullptr;
-	map<string, node*>::iterator it = curr->childs.find(class_name);
-	if (it != curr->childs.end())
-		return it->second->stPTR;
-	return find(curr->parent, class_name);
+	if (child == parent)
+		return true;
+	if (child == nullptr)
+		return false;
+	return is_parent(child->parent, parent);
 }
 
 node* class_tree::find_in_graph(node* &curr, string &class_name)
@@ -75,6 +74,7 @@ pair<void*, bool> class_tree::find(node* &curr, queue<string> list, node* curren
 
 	if (find_top != nullptr)
 	{
+		bool can_access = true;
 		list.pop();
 		while (!list.empty())
 		{
@@ -82,21 +82,23 @@ pair<void*, bool> class_tree::find(node* &curr, queue<string> list, node* curren
 			if (it != find_top->childs.end())
 			{
 				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "class") 
-				{
 					if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
-						return make_pair(nullptr, true);
-				}
+						can_access = false;
 				
 				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "interface")
-				{
 					if (!((Interface*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
-						return make_pair(nullptr, true);
-				}
-
+						can_access = false;
 
 				find_top = it->second, list.pop();
 			}
 			else return make_pair(nullptr, false);
+		}
+		if (!can_access)
+		{
+			if(is_parent(current_class,find_top))
+				return make_pair(find_top->stPTR, true);
+
+			return make_pair(nullptr, true);
 		}
 		return make_pair(find_top->stPTR, true);
 	}
