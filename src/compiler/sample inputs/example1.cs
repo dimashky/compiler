@@ -1,7 +1,18 @@
-class x
-{
-    int ff(int x ,int y)
+namespace a {
+    class  r
     {
-        int zx;  
+       void f1()
+        {
+
+        }
+       void f2()
+        {
+
+        }
+        void f3()
+        {
+
+        }
+
     }
 }

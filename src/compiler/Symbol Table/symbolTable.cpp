@@ -29,7 +29,6 @@ void symbolTable::add_scope(Symbol* symbol)
 	newst = new symbolTable(parent, symbol);
 	openBrackets.push(newst);
 	symbolTable* err = NULL;
-
 	parent->symbolMap.insert(make_pair(symbol, make_pair(newst, err)));
 
 	return;
@@ -44,7 +43,6 @@ void symbolTable::add_scope_without_openBrackets(Symbol* symbol)
 
 	newst = new symbolTable(parent, symbol);
 	symbolTable* err = NULL;
-	parent->addChild(newst);
 	parent->symbolMap.insert(make_pair(symbol, make_pair(newst, err)));
 
 	return;
@@ -96,18 +94,18 @@ void symbolTable::addField(Symbol* symbol)
 	else parent = openBrackets.top();
 	 if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
-	 for (int i = 0; i < parent->childs.size(); i++)
-	 {
-		 symbolTable * ss = parent->childs[i];
-		 if (ss->get_owner()->getType() == "field" &&ss->get_owner()->getName() == symbol->getName())
+	 map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
+	
+		 if (it != parent->symbolMap.end() )
 		 {	
-			 cout << "error : there is an error in line " << symbol->getLineNo() << " The type '" << parent->owner->getName() << "' already contains a definition for '" << symbol->getName() << "'." << endl;
-			 break; 
-		 }
 
-	 }
-	 
-	 add_scope_without_openBrackets(symbol);
+			 if (it->first->getType() == "field")
+			 cout << "error : there is an error in line " << symbol->getLineNo() << " The type '" << parent->owner->getName() << "' already contains a definition for '" << symbol->getName() << "'." << endl;
+			 else if (it->first->getType() == "class");
+			 else if (it->first->getType() == "method");
+		 }
+		 else 
+     	 add_scope_without_openBrackets(symbol);
 	 return;
 }
 void symbolTable::addLocalVariable(Symbol* symbol ,bool isParameter)
@@ -133,14 +131,12 @@ void symbolTable::addLocalVariable(Symbol* symbol ,bool isParameter)
 			temp.pop();
 		}
 	}
-	for (int i = 0; i < parent->childs.size(); i++)
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
+	if (it != parent->symbolMap.end())
 	{
-		symbolTable * ss = parent->childs[i];
-		if (ss->get_owner()->getType() == "localvariable" &&ss->get_owner()->getName() == symbol->getName() && !((LocalVariable*)ss->get_owner())->is_parameter())
-		{
+		if (it->first->getType() == "localvariable" && !((LocalVariable*)it->first)->is_parameter())
 			cout << "error : there is an error in line " << symbol->getLineNo() << " A local variable named '"<< symbol->getName() << "' is already defined in this scope." << endl;
-			break;
-		}
+	
 
 	}
 	add_scope_without_openBrackets(symbol);
@@ -154,9 +150,10 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<Param
 		parent = this;
 
 	else parent = openBrackets.top();
+	if (parent->owner != NULL && parent->owner->getType() =="class"&& parent->owner->getName() == symbol->getName())
+		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
 
-
-
+	    
 		add_scope(symbol);
 	return;
 }
