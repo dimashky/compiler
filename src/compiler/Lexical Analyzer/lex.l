@@ -1,8 +1,6 @@
 %{
 	#include <string.h>
-	#include <unistd.h>
 	#include <iostream>
-	#include <FlexLexer.h>
 	#include <string>
 	#include <queue>
 	#include <stack>

@@ -12,7 +12,6 @@
 	#define YYDEBUG 1
 	
 	#include <iostream>
-	#include <FlexLexer.h>
 	#include <stack>
 	#include <string>
 	#include<queue>
@@ -49,6 +48,10 @@
 		string *modifier,*base;
 		queue<string> *modifiers ,*bases;
 
+		string *identifier;
+		queue<string> *identifiers ;
+		queue<pair<string ,string > > * types_ids;
+        
 		}r;
 	}
 
@@ -476,15 +479,33 @@ declaration_statement
   | local_constant_declaration error		                              {l.a("declaration_statement",1,1);}
   ;
 local_variable_declaration
-  : type variable_declarators		                                      {l.a("local_variable_declaration",2);}
+  : type variable_declarators 		                                      {l.a("local_variable_declaration",2);
+           SPL->addLocalVariable(string($<r.str>1),*$<r.identifiers>2,$<r.line_no>2,$<r.col_no>2) , SPL->endScope();
+  }
   ;
 variable_declarators
-  : variable_declarator									                              {l.a("variable_declarators",1);}
-  | variable_declarators COMMA variable_declarator		                {l.a("variable_declarators",2);}
+  : variable_declarator			       
+    {
+         l.a("variable_declarators",1); 
+         $<r.identifiers>$ = new queue<string>();
+		 $<r.identifiers>$->push(*$<r.identifier>1);
+   }
+  | variable_declarators COMMA variable_declarator		                
+   {     
+          l.a("variable_declarators",2);
+		  $<r.identifiers>$ = $<r.identifiers>1;
+		  $<r.identifiers>$->push(*$<r.identifier>3);
+   }
   ;
 variable_declarator
-  : IDENTIFIER								                                        {l.a("variable_declarator",0);}
-  | IDENTIFIER EQUAL variable_initializer	                            {l.a("variable_declarator",1);}
+  : IDENTIFIER                
+  {          l.a("variable_declarator",0); 
+         $<r.identifier>$ = new string ($<r.str>1) ; 
+  }
+  | IDENTIFIER EQUAL variable_initializer	        
+   {l.a("variable_declarator",1); 
+           $<r.identifier>$ = new string ($<r.str>1);
+   }
   ;
 variable_initializer
   : expression				                                                {l.a("variable_initializer",1);}
@@ -880,20 +901,45 @@ constant_declaration
   | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
   ;
 field_declaration
-  : attributes_opt modifiers_opt type variable_declarators SEMICOLON		{l.a("field_declaration",4);}
-  | attributes_opt modifiers_opt type variable_declarators error			{l.a("field_declaration",4,1);}
+  : attributes_opt modifiers_opt type variable_declarators 
+  
+    {SPL->addField(*$<r.modifiers>2,string($<r.str>3),*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4);}
+  SEMICOLON		{l.a("field_declaration",4); SPL->endScope(); }
+     
+  | 
+  attributes_opt modifiers_opt type variable_declarators 
+  
+    {SPL->addField(*$<r.modifiers>2,string($<r.str>3),*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4);}
+  error			
+  {
+       l.a("field_declaration",4,1);
+	   SPL->endScope();
+  }
   ;
 method_declaration
-  : method_header method_body		{l.a("method_declaration",2);}
+  : method_header method_body		{l.a("method_declaration",2); SPL->endScope();}
   ;
 /* Inline return_type to avoid conflict with field_declaration */
 method_header
-  : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",5);}
-  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);}
+  : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	
+  {
+      l.a("method_header",5); 
+
+	  {SPL->addMethod(*$<r.modifiers>2,string($<r.str>3),string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4);}
+  }
+  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);
+  
+  	SPL->addMethod(*$<r.modifiers>2,string($<r.str>3),string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4);
+
+  }
   ;
 formal_parameter_list_opt
-  : /* Nothing */         {l.a("formal_parameter_list_opt",0);}
-  | formal_parameter_list	{l.a("formal_parameter_list_opt",1);}
+  : /* Nothing */         {l.a("formal_parameter_list_opt",0);
+       $<r.types_ids>$ = new queue<pair<string ,string> >();
+  }
+  | formal_parameter_list	{l.a("formal_parameter_list_opt",1);
+       $<r.types_ids>$ = $<r.types_ids>1 ;
+  }
   ;
 return_type
   : type	{l.a("return_type",1);}
@@ -903,16 +949,31 @@ method_body
   : block		{l.a("method_body",1);}
   | SEMICOLON	{l.a("method_body",0);}
   ;
+
+  
+
+
 formal_parameter_list
-  : formal_parameter								{l.a("formal_parameter_list",1);}
-  | formal_parameter_list COMMA formal_parameter	{l.a("formal_parameter_list",2);}
+  : formal_parameter								{l.a("formal_parameter_list",1);
+        $<r.types_ids>$ = new queue<pair<string ,string> >(); 
+		$<r.types_ids>$->push(make_pair(*(new string ($<r.str>1)) ,*$<r.identifier>1));
+  }
+  | formal_parameter_list COMMA formal_parameter	{l.a("formal_parameter_list",2);
+   
+		$<r.types_ids>$ = $<r.types_ids>1;
+		$<r.types_ids>$->push(make_pair(*(new string ($<r.str>3)),*$<r.identifier>3)); 
+  }
   ;
 formal_parameter
-  : fixed_parameter		{l.a("formal_parameter",1);}
-  | parameter_array		{l.a("formal_parameter",1);}
+  : fixed_parameter		{l.a("formal_parameter",1); $<r.str>$ = $<r.str>1 ;$<r.identifier>$ = $<r.identifier>1;}
+  | parameter_array		{l.a("formal_parameter",1);$<r.str>$ = $<r.str>1 ;$<r.identifier>$ = $<r.identifier>1;}
   ;
 fixed_parameter
-  : attributes_opt parameter_modifier_opt type IDENTIFIER	{l.a("fixed_parameter",3);}
+  : attributes_opt parameter_modifier_opt type IDENTIFIER	{l.a("fixed_parameter",3);
+	    $<r.str>$ = $<r.str>3  , $<r.identifier>$ = new string ($<r.str>4);  
+	 	 
+
+  }
   ;	
 parameter_modifier_opt
   : /* Nothing */             {l.a("parameter_modifier_opt",0);}
@@ -921,7 +982,8 @@ parameter_modifier_opt
   ;
 parameter_array
 /*!  : attributes_opt PARAMS array_type IDENTIFIER */
-  : attributes_opt PARAMS type IDENTIFIER					{l.a("parameter_array",2);}
+  : attributes_opt PARAMS type IDENTIFIER					{l.a("parameter_array",2);
+  $<r.str>$ = $<r.str>3  ,$<r.identifier>$ = new string ($<r.str>4);}
   ;
 property_declaration
   : attributes_opt modifiers_opt type qualified_identifier 

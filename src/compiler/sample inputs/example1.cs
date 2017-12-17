@@ -1,7 +1,8 @@
 
+
 class a1
 {
-     class b
+    class b
     {
         public class a : a1.b
         {

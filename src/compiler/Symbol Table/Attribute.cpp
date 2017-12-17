@@ -309,7 +309,7 @@ bool Attribute::add(string nameAtt)
         }
 
     }
-    else if(typeKeyword=="dataMember" || typeKeyword=="localVar"){
+    else if(typeKeyword=="field" || typeKeyword=="localvariable"){
                 set<string>::iterator it = virableModifiers.find(nameAtt);
         if(it != classModifiers.end()) // inside type
         {
