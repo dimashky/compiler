@@ -209,12 +209,14 @@ union YYSTYPE
 
 		string *identifier;
 		queue<string> *identifiers ;
-		queue<pair<pair<string ,string > ,pair<int,int> > > * types_ids;
+		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+
+		bool known_type;
         
 		}r;
 	
 
-#line 218 "yacc.tab.h" /* yacc.c:1909  */
+#line 220 "yacc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

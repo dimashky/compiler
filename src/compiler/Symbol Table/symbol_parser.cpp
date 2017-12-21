@@ -41,6 +41,38 @@ void symbolParser::addInterface(queue<string>modifiers, string interfaceName, qu
 	symboltable->addInterface(newInterface, bases, modifiers);
 	return;
 }
+void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), line_no, col_no);
+		symboltable->addField(newField, known_type);
+		identifiers.pop();
+
+	}
+	return;
+
+}
+void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, line_no, col_no);
+		symboltable->addLocalVariable(newLocalVariable, false);
+		identifiers.pop();
+
+	}
+	return;
+
+
+}
+
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no,bool known_type)
+{
+	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters,known_type);
+}
+
 
 void symbolParser::check_later_defination()
 {
@@ -197,6 +229,33 @@ void check_cycle(node* curr, node* parent)
 	return;
 }
 
+
+void check_later_def_var()
+{
+	while (!symbolTable::later_defination_var.empty())
+	{
+		pair<queue<string>, pair<node*, Symbol* > > p = symbolTable::later_defination_var.front();
+		pair<void*, bool> ref = symbolTable::type_defination_tree->find(p.second.first, p.first);
+		if (ref.first != nullptr)
+		{
+			if (p.second.second->getType() == "field")
+				((Field*)p.second.second)->set_type(((symbolTable*)ref.first)->get_owner());
+			else if (p.second.second->getType() == "localvariable")
+				((LocalVariable*)p.second.second)->set_type(((symbolTable*)ref.first)->get_owner());
+		}
+		else
+		{
+			if (p.second.second->getType() == "field")
+				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((Field*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
+			else if(p.second.second->getType() == "localvariable")
+
+				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((LocalVariable*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
+		}
+		symbolTable::later_defination_var.pop();
+	}
+}
+
+
 void symbolParser::check()
 {
 	check_later_defination();
@@ -204,6 +263,7 @@ void symbolParser::check()
 	for (int i = 0;i < symboltable->parents.size();i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 
+	check_later_def_var();
 }
 
 symbolTable* symbolParser::getSymbolTableRoot()
@@ -212,36 +272,4 @@ symbolTable* symbolParser::getSymbolTableRoot()
 }
 
 
-void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
-{
-	while (!identifiers.empty())
-	{
-		Symbol* newField = new Field(modifiers ,typeIdentifier, identifiers.front(),line_no,col_no);
-	    symboltable->addField(newField);
-		identifiers.pop();
 
-	}
-	return;
-
-}
-void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
-{
-	while (!identifiers.empty())
-	{
- 		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(),false, line_no, col_no);
-		 symboltable->addLocalVariable(newLocalVariable,false);
-		identifiers.pop();
-
-	}
-	return;
-
-
-}
-
-void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair<pair<string, string > , pair<int,int> > > types_ids_parameters, int line_no, int col_no)
-{
-	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
-	symboltable->addMethod(newMethod, modifiers, types_ids_parameters);
-	
-
-}

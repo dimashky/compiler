@@ -4,6 +4,25 @@
 #include"LocalVariable.h"
 #include"Field.h"
 #include"Method.h"
+
+
+
+stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
+
+queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
+
+queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
+
+class_tree* symbolTable::type_defination_tree = new class_tree();
+
+vector<node*> symbolTable::parents = vector<node*>();
+
+
+
+
+
+
+
 void symbolTable::add_scope()
 {
 	symbolTable *parent = NULL, *newst = NULL;
@@ -49,13 +68,7 @@ void symbolTable::add_symbol_without_open_brackets(Symbol* symbol)
 }
 
 
-stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 
-queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
-
-class_tree* symbolTable::type_defination_tree = new class_tree();
-
-vector<node*> symbolTable::parents = vector<node*>();
 
 symbolTable::symbolTable(symbolTable* parent,Symbol* owner)
 {
@@ -87,12 +100,36 @@ void symbolTable::addNamespace(Symbol* symbol)
 	return;
 }
 
-void symbolTable::addField(Symbol* symbol)
+void symbolTable::addField(Symbol* symbol, bool known_type)
 {
 	symbolTable *parent = NULL;
 	if (openBrackets.empty())		
 		parent = this;
 	else parent = openBrackets.top();
+
+	if (!known_type)
+	{
+		queue<string>list;
+		string curr_part = "", str_list = ((Field*)symbol)->get_type_name();
+
+
+		for (int i = 0;i < str_list.length();i++)
+		{
+			if (str_list[i] == '.')
+				list.push(curr_part), curr_part = "";
+			else curr_part += str_list[i];
+		}
+
+		list.push(curr_part);
+
+		pair<void*,bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		if (ref.first != nullptr)
+			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
+		else if (ref.second)
+			cout << "error : there is an error in line " << symbol->getLineNo() << ", the type name '" << ((Field*)symbol)->get_type_name() << "' couldn't be found." << endl;
+		else 
+			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
+	}
 
 	if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 	{
@@ -147,7 +184,7 @@ void symbolTable::addLocalVariable(Symbol* symbol ,bool isParameter)
 	return;
 }
 
-void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair<pair<string, string >, pair<int, int> > > parameters)
+void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type)
 {
 	symbolTable *parent = NULL;
 
@@ -161,7 +198,29 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair<
 	
 	((Method*)symbol)->add_parametars(parameters);
 
+	if (!known_type)
+	{
+		queue<string>list;
+		string curr_part = "", str_list = ((Field*)symbol)->get_type_name();
 
+
+		for (int i = 0;i < str_list.length();i++)
+		{
+			if (str_list[i] == '.')
+				list.push(curr_part), curr_part = "";
+			else curr_part += str_list[i];
+		}
+
+		list.push(curr_part);
+
+		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		if (ref.first != nullptr)
+			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
+		else if (ref.second)
+			cout << "error : there is an error in line " << symbol->getLineNo() << ", the type name '" << ((Field*)symbol)->get_type_name() << "' couldn't be found." << endl;
+		else
+			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
+	}
 	
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 	
@@ -181,19 +240,43 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair<
 		add_scope(symbol);
 	
 	symbolTable *top = openBrackets.top();
-
-	while (!parameters.empty())
+	vector<LocalVariable*>  &par  = ((Method*)symbol)->get_parameters();
+	for (int i = 0;i < par.size();i++)
 	{
-		LocalVariable *parameter = new LocalVariable(parameters.front().first.first, parameters.front().first.second, true, parameters.front().second.first, parameters.front().second.second);
-		map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = top->symbolMap.find(parameter);
+		if (!parameters.front().second)
+		{
+			queue<string>list;
+			string curr_part = "", str_list = par[i]->get_type_name();
 
+
+			for (int i = 0;i < str_list.length();i++)
+			{
+				if (str_list[i] == '.')
+					list.push(curr_part), curr_part = "";
+				else curr_part += str_list[i];
+			}
+
+			list.push(curr_part);
+
+			pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+			if (ref.first != nullptr)
+				par[i]->set_type(((symbolTable*)ref.first)->owner);
+			else if (ref.second)
+				cout << "error : there is an error in line " << par[i]->getLineNo() << ", the type name '" << par[i]->get_type_name() << "' couldn't be found." << endl;
+			else
+				later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), par[i])));
+		}
+
+		map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = top->symbolMap.find(par[i]);
 		if (it2 != top->symbolMap.end())
-			cout << "error : there is an error in line " << parameter->getLineNo() << ", The parametar name '" << parameter->getName() << "' is duplicate." << endl;
+			cout << "error : there is an error in line " << par[i]->getLineNo() << ", The parametar name '" << par[i]->getName() << "' is duplicate." << endl;
 		else
-			add_symbol_without_open_brackets(parameter);
-		
+			add_symbol_without_open_brackets(par[i]);
+
 		parameters.pop();
 	}
+	
+
 
 	return;
 }

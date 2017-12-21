@@ -35,7 +35,7 @@ bool Method::is_final()
 	return isFinal;
 }
 
-vector<LocalVariable>& Method::get_parameters()
+vector<LocalVariable*>& Method::get_parameters()
 {
 	return types_ids_parameter; 
 }

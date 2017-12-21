@@ -50,7 +50,9 @@
 
 		string *identifier;
 		queue<string> *identifiers ;
-		queue<pair<pair<string ,string > ,pair<int,int> > > * types_ids;
+		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+
+		bool known_type;
         
 		}r;
 	}
@@ -138,12 +140,12 @@ type_name
   ;
 /***** C.2.2 Types *****/
 type
-  : non_array_type	{l.a("type",1);}	
-  | array_type		{l.a("type",1);}	
+  : non_array_type	{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}	
+  | array_type		{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}	
   ;
 non_array_type
-  : simple_type		{l.a("non_array_type",1);}
-  | type_name		{l.a("non_array_type",1);}
+  : simple_type		{l.a("non_array_type",1);$<r.known_type>$ = true;$<r.base>$ = new string("");}
+  | type_name		{l.a("non_array_type",1);$<r.known_type>$ = false;$<r.base>$ = $<r.base>1;}
   ;
 simple_type
   : primitive_type	{l.a("simple_type",1);}
@@ -175,7 +177,7 @@ floating_point_type
   | DOUBLE	{l.a("floating_point_type",0);}
   ;
 class_type
-  : OBJECT  {l.a("class_type",0);printf("dasdasdasdas");$<r.str>$ = $<r.str>1;}
+  : OBJECT  {l.a("class_type",0);$<r.str>$ = $<r.str>1;}
   | STRING  {l.a("class_type",0);$<r.str>$ = $<r.str>1;}
   ;
 pointer_type
@@ -183,9 +185,9 @@ pointer_type
   | VOID STAR	{l.a("pointer_type",0);}
   ;
 array_type
-  : array_type rank_specifier				{l.a("array_type",2);}
-  | simple_type rank_specifier				{l.a("array_type",2);}
-  | qualified_identifier rank_specifier		{l.a("array_type",2);}
+  : array_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = true;}
+  | simple_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = true;}
+  | qualified_identifier rank_specifier		{l.a("array_type",2);$<r.known_type>$ = false;}
   ;
 rank_specifiers_opt
   : /* Nothing */							{l.a("rank_specifiers_opt",0);}
@@ -901,34 +903,33 @@ constant_declaration
   | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
   ;
 field_declaration
-  : attributes_opt modifiers_opt type variable_declarators 
-  
-    {SPL->addField(*$<r.modifiers>2,string($<r.str>3),*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4);}
-  SEMICOLON		{l.a("field_declaration",4); }
-     
-  | 
-  attributes_opt modifiers_opt type variable_declarators 
-  
-    {SPL->addField(*$<r.modifiers>2,string($<r.str>3),*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4);}
-  error			
+  : attributes_opt modifiers_opt type variable_declarators SEMICOLON
+	{
+		SPL->addField(*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+  		l.a("field_declaration",4);
+	}
+  |
+  attributes_opt modifiers_opt type variable_declarators error			
   {
        l.a("field_declaration",4,1);
+	   SPL->addField(*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
   }
   ;
+
 method_declaration
   : method_header method_body		{l.a("method_declaration",2); SPL->endScope();}
   ;
-/* Inline return_type to avoid conflict with field_declaration */
+
 method_header
   : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	
   {
       l.a("method_header",5); 
 
-	  {SPL->addMethod(*$<r.modifiers>2,string($<r.str>3),string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4);}
+	  {SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);}
   }
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);
   
-  	SPL->addMethod(*$<r.modifiers>2,string($<r.str>3),string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4);
+  	SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
 
   }
   ;
@@ -936,7 +937,7 @@ formal_parameter_list_opt
   : /* Nothing */         
   {	   
 	   l.a("formal_parameter_list_opt",0);
-       $<r.types_ids>$ = new queue<pair<pair<string ,string>,pair<int,int> > >();
+       $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >();
   }
   | formal_parameter_list	
   {
@@ -960,42 +961,44 @@ formal_parameter_list
   : formal_parameter								
   { 
         l.a("formal_parameter_list",1);
-        $<r.types_ids>$ = new queue<pair<pair<string ,string> , pair<int,int> > >(); 
-		$<r.types_ids>$->push(make_pair(make_pair(*(new string ($<r.str>1)) ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)));
+        $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
+		$<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>1 ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)),$<r.known_type>1));
   }
   | formal_parameter_list COMMA formal_parameter	{l.a("formal_parameter_list",2);
    
 		$<r.types_ids>$ = $<r.types_ids>1;
-		$<r.types_ids>$->push(make_pair(make_pair(*(new string ($<r.str>3)) ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3))); 
+		$<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>3 ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3)),$<r.known_type>3)); 
   }
   ;
 formal_parameter
   : fixed_parameter		
   {	
 		l.a("formal_parameter",1); 
-		$<r.str>$ = $<r.str>1 ;
+		$<r.base>$ = $<r.base>1 ;
 		$<r.identifier>$ = $<r.identifier>1;
 		$<r.line_no>$ = $<r.line_no>1;
 		$<r.col_no>$ = $<r.col_no>1;
+		$<r.known_type>$ = $<r.known_type>1;
   }
   | parameter_array		
   {
 		l.a("formal_parameter",1);
-		$<r.str>$ = $<r.str>1;
+		$<r.base>$ = $<r.base>1;
 		$<r.identifier>$ = $<r.identifier>1;
 		$<r.line_no>$ = $<r.line_no>1;
 		$<r.col_no>$ = $<r.col_no>1;
+		$<r.known_type>$ = $<r.known_type>1;
   }
   ;
 fixed_parameter
   : attributes_opt parameter_modifier_opt type IDENTIFIER	
   {
 		l.a("fixed_parameter",3);
-	    $<r.str>$ = $<r.str>3;
+	    $<r.base>$ = $<r.base>3;
 		$<r.identifier>$ = new string ($<r.str>4);  
 	 	$<r.line_no>$ = $<r.line_no>4;
 		$<r.col_no>$ = $<r.col_no>4; 
-
+		$<r.known_type>$ = $<r.known_type>3;
   }
   ;	
 parameter_modifier_opt
@@ -1007,10 +1010,11 @@ parameter_array
   : attributes_opt PARAMS type IDENTIFIER					
   {
 		l.a("parameter_array",2);
-		$<r.str>$ = $<r.str>3;
+		$<r.base>$ = $<r.base>3;
 		$<r.identifier>$ = new string ($<r.str>4);
   		$<r.line_no>$ = $<r.line_no>4;
 		$<r.col_no>$ = $<r.col_no>4;
+		$<r.known_type>$ = $<r.known_type>3;
   }
   ;
 property_declaration

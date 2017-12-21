@@ -10,6 +10,7 @@ class LocalVariable : public Symbol
 {
 private:
 	string type_variable;
+	Symbol* type_ref;
 	bool isFinal,isParameter;
 public:
 	LocalVariable(string type_variable, string name,bool isParameter, int line_no, int col_no);
@@ -17,6 +18,10 @@ public:
 	string get_type_name();
 	bool is_final();
 	bool is_parameter();
+	void set_type(Symbol* type_ref)
+	{
+		this->type_ref = type_ref;
+	}
 	~LocalVariable();
 
 };

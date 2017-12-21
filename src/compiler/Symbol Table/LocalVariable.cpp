@@ -3,6 +3,7 @@ LocalVariable::LocalVariable(string type_variable, string name, bool isParameter
 {
 	this->type_variable = type_variable;
 	this->isParameter = isParameter;
+	this->type_ref = nullptr;
 }
 string LocalVariable::getType()
 {

@@ -4,7 +4,7 @@ Field::Field(queue<string>&modifiers , string type_variable, string name, int li
 {
 	attribute = new Attribute(this->getType());
 	this->type_variable = type_variable; 
-
+	this->type_ref = nullptr;
 	add_attributes(modifiers);
 }
 

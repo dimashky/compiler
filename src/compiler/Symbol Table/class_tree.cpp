@@ -60,12 +60,12 @@ void class_tree::down_specific_child(string name)
 	current = current->childs[name];
 }
 
-pair<void*, bool> class_tree::find(node* &curr, queue<string> list, node* current_class)
+pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current_class)
 {
 
 	if (list.size() == 0 || curr == nullptr)
 		return make_pair(nullptr, false);
-	
+
 	node* find_top = find_in_graph(curr, list.front());
 
 	//this if for check circular class depedency
@@ -81,10 +81,10 @@ pair<void*, bool> class_tree::find(node* &curr, queue<string> list, node* curren
 			map<string, node*>::iterator it = find_top->childs.find(list.front());
 			if (it != find_top->childs.end())
 			{
-				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "class") 
+				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "class")
 					if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
 						can_access = false;
-				
+
 				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "interface")
 					if (!((Interface*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
 						can_access = false;
@@ -95,7 +95,50 @@ pair<void*, bool> class_tree::find(node* &curr, queue<string> list, node* curren
 		}
 		if (!can_access)
 		{
-			if(is_parent(current_class,find_top))
+			if (is_parent(current_class, find_top) || current_class->parent == find_top->parent)
+				return make_pair(find_top->stPTR, true);
+
+			return make_pair(nullptr, true);
+		}
+		return make_pair(find_top->stPTR, true);
+	}
+	return make_pair(nullptr, false);
+}
+
+
+pair<void*, bool> class_tree::find(node* curr, queue<string> list)
+{
+
+	if (list.size() == 0 || curr == nullptr)
+		return make_pair(nullptr, false);
+
+	node* find_top = find_in_graph(curr, list.front());
+	
+
+	if (find_top != nullptr)
+	{
+		bool can_access = true;
+		list.pop();
+		while (!list.empty())
+		{
+			map<string, node*>::iterator it = find_top->childs.find(list.front());
+			if (it != find_top->childs.end())
+			{
+				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "class")
+					if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
+						can_access = false;
+
+				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "interface")
+					if (!((Interface*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
+						can_access = false;
+
+				find_top = it->second, list.pop();
+			}
+			else return make_pair(nullptr, false);
+		}
+		if (!can_access)
+		{
+			if (is_parent(curr, find_top) || curr->parent == find_top->parent)
 				return make_pair(find_top->stPTR, true);
 
 			return make_pair(nullptr, true);

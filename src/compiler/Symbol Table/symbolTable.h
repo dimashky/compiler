@@ -28,15 +28,15 @@ private:
 public:
 	static vector<node*>parents;
 	static stack<symbolTable*> openBrackets;
-	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination;
+	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
 	static class_tree *type_defination_tree;
 
 	symbolTable(symbolTable* parent,Symbol* owner);
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
-	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<pair<pair<string, string >, pair<int, int> > > parameters);
-	void addField(Symbol* symbol);
+	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type);
+	void addField(Symbol* symbol, bool known_type);
 	void addLocalVariable(Symbol* symbol, bool isParameter);
 
 	void addChild(symbolTable* st);
