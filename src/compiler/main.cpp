@@ -38,10 +38,12 @@ int main()
 	scan("sample inputs/input");
 	for (auto x : files) {
 		line_no = col_no = 1;
+		cout << endl << x.c_str() << " errors :" << endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
 	}
 
+	SPL->check();
 
 	l.print();
 	

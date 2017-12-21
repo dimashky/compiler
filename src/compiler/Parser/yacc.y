@@ -707,8 +707,8 @@ fixed_pointer_declarator
   : IDENTIFIER EQUAL expression		{l.a("fixed_pointer_declarator",1);}
   ;
 compilation_unit
-  : using_directives_opt attributes_opt						{l.a("compilation_unit",2);SPL->check();}
-  | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);SPL->check();}
+  : using_directives_opt attributes_opt						{l.a("compilation_unit",2);}
+  | using_directives_opt namespace_member_declarations		{l.a("compilation_unit",2);}
   ;
 using_directives_opt
   : /* Nothing */       {l.a("using_directives_opt",0);}

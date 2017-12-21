@@ -4362,13 +4362,13 @@ yyreduce:
 
   case 304:
 #line 710 "yacc.y" /* yacc.c:1646  */
-    {l.a("compilation_unit",2);SPL->check();}
+    {l.a("compilation_unit",2);}
 #line 4367 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 305:
 #line 711 "yacc.y" /* yacc.c:1646  */
-    {l.a("compilation_unit",2);SPL->check();}
+    {l.a("compilation_unit",2);}
 #line 4373 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
