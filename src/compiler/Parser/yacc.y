@@ -185,9 +185,9 @@ pointer_type
   | VOID STAR	{l.a("pointer_type",0);}
   ;
 array_type
-  : array_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = true;}
-  | simple_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = true;}
-  | qualified_identifier rank_specifier		{l.a("array_type",2);$<r.known_type>$ = false;}
+  : array_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}
+  | simple_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = true;$<r.base>$ = new string("");}
+  | qualified_identifier rank_specifier		{l.a("array_type",2);$<r.known_type>$ = false;$<r.base>$ = $<r.base>1;}
   ;
 rank_specifiers_opt
   : /* Nothing */							{l.a("rank_specifiers_opt",0);}
@@ -929,7 +929,7 @@ method_header
   }
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	{l.a("method_header",4);
   
-  	SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+  	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1);
 
   }
   ;

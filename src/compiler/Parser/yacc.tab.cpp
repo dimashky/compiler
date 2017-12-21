@@ -2770,19 +2770,19 @@ yyreduce:
 
   case 39:
 #line 188 "yacc.y" /* yacc.c:1646  */
-    {l.a("array_type",2);(yyval.r.known_type) = true;}
+    {l.a("array_type",2);(yyval.r.known_type) = (yyvsp[-1].r.known_type);(yyval.r.base) = (yyvsp[-1].r.base);}
 #line 2775 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
 #line 189 "yacc.y" /* yacc.c:1646  */
-    {l.a("array_type",2);(yyval.r.known_type) = true;}
+    {l.a("array_type",2);(yyval.r.known_type) = true;(yyval.r.base) = new string("");}
 #line 2781 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
 #line 190 "yacc.y" /* yacc.c:1646  */
-    {l.a("array_type",2);(yyval.r.known_type) = false;}
+    {l.a("array_type",2);(yyval.r.known_type) = false;(yyval.r.base) = (yyvsp[-1].r.base);}
 #line 2787 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -4899,7 +4899,7 @@ yyreduce:
 #line 930 "yacc.y" /* yacc.c:1646  */
     {l.a("method_header",4);
   
-  	SPL->addMethod(*(yyvsp[-5].r.modifiers),*(yyvsp[-4].r.base),string(*(yyvsp[-3].r.base)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no),(yyvsp[-4].r.known_type));
+  	SPL->addMethod(*(yyvsp[-5].r.modifiers),"VOID",string(*(yyvsp[-3].r.base)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no),1);
 
   }
 #line 4906 "yacc.tab.cpp" /* yacc.c:1646  */
