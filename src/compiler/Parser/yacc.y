@@ -50,7 +50,7 @@
 
 		string *identifier;
 		queue<string> *identifiers ;
-		queue<pair<string ,string > > * types_ids;
+		queue<pair<pair<string ,string > ,pair<int,int> > > * types_ids;
         
 		}r;
 	}
@@ -480,7 +480,7 @@ declaration_statement
   ;
 local_variable_declaration
   : type variable_declarators 		                                      {l.a("local_variable_declaration",2);
-           SPL->addLocalVariable(string($<r.str>1),*$<r.identifiers>2,$<r.line_no>2,$<r.col_no>2) , SPL->endScope();
+           SPL->addLocalVariable(string($<r.str>1),*$<r.identifiers>2,$<r.line_no>2,$<r.col_no>2) ;
   }
   ;
 variable_declarators
@@ -904,7 +904,7 @@ field_declaration
   : attributes_opt modifiers_opt type variable_declarators 
   
     {SPL->addField(*$<r.modifiers>2,string($<r.str>3),*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4);}
-  SEMICOLON		{l.a("field_declaration",4); SPL->endScope(); }
+  SEMICOLON		{l.a("field_declaration",4); }
      
   | 
   attributes_opt modifiers_opt type variable_declarators 
@@ -913,7 +913,6 @@ field_declaration
   error			
   {
        l.a("field_declaration",4,1);
-	   SPL->endScope();
   }
   ;
 method_declaration
@@ -934,10 +933,14 @@ method_header
   }
   ;
 formal_parameter_list_opt
-  : /* Nothing */         {l.a("formal_parameter_list_opt",0);
-       $<r.types_ids>$ = new queue<pair<string ,string> >();
+  : /* Nothing */         
+  {	   
+	   l.a("formal_parameter_list_opt",0);
+       $<r.types_ids>$ = new queue<pair<pair<string ,string>,pair<int,int> > >();
   }
-  | formal_parameter_list	{l.a("formal_parameter_list_opt",1);
+  | formal_parameter_list	
+  {
+	   l.a("formal_parameter_list_opt",1);
        $<r.types_ids>$ = $<r.types_ids>1 ;
   }
   ;
@@ -954,36 +957,61 @@ method_body
 
 
 formal_parameter_list
-  : formal_parameter								{l.a("formal_parameter_list",1);
-        $<r.types_ids>$ = new queue<pair<string ,string> >(); 
-		$<r.types_ids>$->push(make_pair(*(new string ($<r.str>1)) ,*$<r.identifier>1));
+  : formal_parameter								
+  { 
+        l.a("formal_parameter_list",1);
+        $<r.types_ids>$ = new queue<pair<pair<string ,string> , pair<int,int> > >(); 
+		$<r.types_ids>$->push(make_pair(make_pair(*(new string ($<r.str>1)) ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)));
   }
   | formal_parameter_list COMMA formal_parameter	{l.a("formal_parameter_list",2);
    
 		$<r.types_ids>$ = $<r.types_ids>1;
-		$<r.types_ids>$->push(make_pair(*(new string ($<r.str>3)),*$<r.identifier>3)); 
+		$<r.types_ids>$->push(make_pair(make_pair(*(new string ($<r.str>3)) ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3))); 
   }
   ;
 formal_parameter
-  : fixed_parameter		{l.a("formal_parameter",1); $<r.str>$ = $<r.str>1 ;$<r.identifier>$ = $<r.identifier>1;}
-  | parameter_array		{l.a("formal_parameter",1);$<r.str>$ = $<r.str>1 ;$<r.identifier>$ = $<r.identifier>1;}
+  : fixed_parameter		
+  {	
+		l.a("formal_parameter",1); 
+		$<r.str>$ = $<r.str>1 ;
+		$<r.identifier>$ = $<r.identifier>1;
+		$<r.line_no>$ = $<r.line_no>1;
+		$<r.col_no>$ = $<r.col_no>1;
+  }
+  | parameter_array		
+  {
+		l.a("formal_parameter",1);
+		$<r.str>$ = $<r.str>1;
+		$<r.identifier>$ = $<r.identifier>1;
+		$<r.line_no>$ = $<r.line_no>1;
+		$<r.col_no>$ = $<r.col_no>1;
+  }
   ;
 fixed_parameter
-  : attributes_opt parameter_modifier_opt type IDENTIFIER	{l.a("fixed_parameter",3);
-	    $<r.str>$ = $<r.str>3  , $<r.identifier>$ = new string ($<r.str>4);  
-	 	 
+  : attributes_opt parameter_modifier_opt type IDENTIFIER	
+  {
+		l.a("fixed_parameter",3);
+	    $<r.str>$ = $<r.str>3;
+		$<r.identifier>$ = new string ($<r.str>4);  
+	 	$<r.line_no>$ = $<r.line_no>4;
+		$<r.col_no>$ = $<r.col_no>4; 
 
   }
   ;	
 parameter_modifier_opt
-  : /* Nothing */             {l.a("parameter_modifier_opt",0);}
+  : /* Nothing */               {l.a("parameter_modifier_opt",0);}
   | REF		                    {l.a("parameter_modifier_opt",0);}
   | OUT		                    {l.a("parameter_modifier_opt",0);}
   ;
 parameter_array
-/*!  : attributes_opt PARAMS array_type IDENTIFIER */
-  : attributes_opt PARAMS type IDENTIFIER					{l.a("parameter_array",2);
-  $<r.str>$ = $<r.str>3  ,$<r.identifier>$ = new string ($<r.str>4);}
+  : attributes_opt PARAMS type IDENTIFIER					
+  {
+		l.a("parameter_array",2);
+		$<r.str>$ = $<r.str>3;
+		$<r.identifier>$ = new string ($<r.str>4);
+  		$<r.line_no>$ = $<r.line_no>4;
+		$<r.col_no>$ = $<r.col_no>4;
+  }
   ;
 property_declaration
   : attributes_opt modifiers_opt type qualified_identifier 

@@ -3,13 +3,15 @@
 #include "Symbol.h"
 #include "Attribute.h"
 #include "class_tree.h"
-#include"Parameter.h"
 using namespace std;
 
 
 class compare_1 {
 public:
-	bool operator()(Symbol* const &s1, Symbol* const &s2) const { return  s1->getName() > s2->getName(); }
+	bool operator()(Symbol* const &s1, Symbol* const &s2) const 
+	{
+		return s1->compare(s2);
+	}
 };
 
 class symbolTable
@@ -21,6 +23,7 @@ private:
 	Symbol* owner;
 	void add_scope(Symbol* symbol);
 	void add_scope();
+	void add_symbol_without_open_brackets(Symbol* symbol);
 	static FILE *nodeFile, *edgeFile;
 public:
 	static vector<node*>parents;
@@ -32,9 +35,9 @@ public:
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
-	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<Parameter> parameters);
+	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<pair<pair<string, string >, pair<int, int> > > parameters);
 	void addField(Symbol* symbol);
-	void addLocalVariable(Symbol* symbol);
+	void addLocalVariable(Symbol* symbol, bool isParameter);
 
 	void addChild(symbolTable* st);
 	bool closeScope();

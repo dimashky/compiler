@@ -1,8 +1,7 @@
 #include<iostream>
+#include<vector>
 #include "symbol_parser.h"
-#include<queue>
 using namespace std;
-#include"Parameter.h"
 symbolParser::symbolParser()
 {
 	symboltable = new symbolTable(NULL,NULL);
@@ -229,8 +228,8 @@ void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifi
 {
 	while (!identifiers.empty())
 	{
-		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), line_no, col_no);
-		 symboltable->addLocalVariable(newLocalVariable);
+ 		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(),false, line_no, col_no);
+		 symboltable->addLocalVariable(newLocalVariable,false);
 		identifiers.pop();
 
 	}
@@ -238,12 +237,11 @@ void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifi
 
 
 }
-void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair<string, string > > types_ids_parameters, int line_no, int col_no)
+
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair<pair<string, string > , pair<int,int> > > types_ids_parameters, int line_no, int col_no)
 {
-	queue<Parameter> parameter;
-	while (!types_ids_parameters.empty()) {
-	Parameter p (types_ids_parameters.front().first , types_ids_parameters.front().second );
-	parameter.push(p); types_ids_parameters.pop();};
- 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier , parameter, line_no, col_no);
- 	symboltable->addMethod(newMethod , modifiers , parameter);
+	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters);
+	
+
 }

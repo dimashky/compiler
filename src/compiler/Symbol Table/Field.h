@@ -11,13 +11,11 @@ class Field : public Symbol
 private:
 	Attribute* attribute;
 	string type_variable;
-	bool isFinal;
 public:
 
 	Field(queue<string>&modifiers , string type_variable,string name, int line_no, int col_no);
     string getType();
-	string getType_name();
-	bool is_final();
+	string get_type_name();
 	void add_attributes(queue<string>&attributes);
 	~Field();
 

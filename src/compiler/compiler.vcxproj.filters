@@ -128,9 +128,6 @@
     <ClCompile Include="Symbol Table\Field.cpp">
       <Filter>Source Files\Symbol Table</Filter>
     </ClCompile>
-    <ClCompile Include="Symbol Table\Parameter.cpp">
-      <Filter>Source Files\Symbol Table</Filter>
-    </ClCompile>
     <ClCompile Include="Symbol Table\Method.cpp">
       <Filter>Source Files\Symbol Table</Filter>
     </ClCompile>
@@ -186,9 +183,6 @@
     </ClInclude>
     <ClInclude Include="Parameter.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Symbol Table\Parameter.h">
-      <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
     <ClInclude Include="Method.h">
       <Filter>Header Files</Filter>

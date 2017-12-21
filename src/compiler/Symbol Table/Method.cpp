@@ -1,10 +1,13 @@
 #include "Method.h"
-Method::Method(queue<string>&modifiers, string type_variable, string name, queue<Parameter> types_ids_parameter, int line_no, int col_no) : Symbol(name, line_no, col_no)
+
+Method::Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no): Symbol(name, line_no, col_no)
 {
 	attribute = new Attribute(this->getType());
-	this->type_variable = type_variable;
+	this->return_type = return_type;
 	add_attributes(modifiers);
+	this->types_ids_parameter = types_ids_parameter; 
 }
+
 void Method::add_attributes(queue<string>&attributes)
 {
 	while (!attributes.empty())
@@ -16,18 +19,27 @@ void Method::add_attributes(queue<string>&attributes)
 	}
 	return;
 }
+
 string Method::getType()
 {
 	return "method";
 }
-string Method::getType_name()
+
+string Method::get_return_type()
 {
-	return type_variable;
+	return return_type;
 }
+
 bool Method::is_final()
 {
 	return isFinal;
 }
+
+vector<LocalVariable>& Method::get_parameters()
+{
+	return types_ids_parameter; 
+}
+
 Method::~Method()
 {
 }

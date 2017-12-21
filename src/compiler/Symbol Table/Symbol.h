@@ -14,5 +14,9 @@ public:
 	string getName();
 	int getLineNo();
 	int getColNo();
+	virtual bool compare(Symbol* comp)
+	{
+		return this->name > comp->name;
+	}
 	
 };

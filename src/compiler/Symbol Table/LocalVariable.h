@@ -10,13 +10,13 @@ class LocalVariable : public Symbol
 {
 private:
 	string type_variable;
-	bool isFinal;
+	bool isFinal,isParameter;
 public:
-
-	LocalVariable(string type_variable, string name, int line_no, int col_no);
+	LocalVariable(string type_variable, string name,bool isParameter, int line_no, int col_no);
 	string getType();
-	string getType_name();
+	string get_type_name();
 	bool is_final();
+	bool is_parameter();
 	~LocalVariable();
 
 };

@@ -209,7 +209,7 @@ union YYSTYPE
 
 		string *identifier;
 		queue<string> *identifiers ;
-		queue<pair<string ,string > > * types_ids;
+		queue<pair<pair<string ,string > ,pair<int,int> > > * types_ids;
         
 		}r;
 	
