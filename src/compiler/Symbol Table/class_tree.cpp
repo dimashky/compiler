@@ -10,10 +10,7 @@ node::node(string name, node* parent, void* stPTR)
 	this->visited = 0;
 }
 
-node::~node()
-{
-
-}
+node::~node(){}
 
 bool class_tree::is_parent(node* &child, node* &parent)
 {
@@ -102,7 +99,7 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 				find_top = it->second, list.pop();
 
 				if (!branch)
-				{
+				
 					if (!path.empty())
 					{
 						if (path.top() != find_top)
@@ -110,14 +107,11 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 						path.pop();//for equal or not equal state
 					}
 					else 
-					{
-						//make shure for this !!
 						branch = can_access = true;
-					}
 					
-				}
 				else if (!can_access)
 					return make_pair(nullptr, true);
+
 			}
 			else return make_pair(nullptr, false);
 		}
@@ -133,12 +127,20 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list)
 	if (list.size() == 0 || curr == nullptr)
 		return make_pair(nullptr, false);
 
-	node* find_top = find_in_graph(curr, list.front(), stack<node*>());
+
+	stack<node*>path;
+
 	
+	node* find_top = find_in_graph(curr, list.front(), path);
+
+	if (path.size() == 0)
+		path.push(curr);
 
 	if (find_top != nullptr)
 	{
-		bool can_access = true;
+		bool can_access = true, branch = false;
+
+		path.pop();
 		list.pop();
 		while (!list.empty())
 		{
@@ -154,15 +156,23 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list)
 						can_access = false;
 
 				find_top = it->second, list.pop();
+
+				if (!branch)
+
+					if (!path.empty())
+					{
+						if (path.top() != find_top)
+							branch = can_access = true;
+						path.pop();//for equal or not equal state
+					}
+					else
+						branch = can_access = true;
+
+				else if (!can_access)
+					return make_pair(nullptr, true);
+
 			}
 			else return make_pair(nullptr, false);
-		}
-		if (!can_access)
-		{
-			if (is_parent(curr, find_top) || curr->parent == find_top->parent)
-				return make_pair(find_top->stPTR, true);
-
-			return make_pair(nullptr, true);
 		}
 		return make_pair(find_top->stPTR, true);
 	}
