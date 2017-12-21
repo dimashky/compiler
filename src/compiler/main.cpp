@@ -4,6 +4,8 @@
 #include "Symbol Table\symbol_parser.h"
 #include "Error Handler\error_handler.h"
 #include "logger/Logger.h"
+#include"tools/dirent.h"
+#include<regex>
 
 using namespace std;
 
@@ -13,7 +15,12 @@ extern errorHandler error_handler("error.log");
 extern Logger l;
 extern FILE* yyin;
 extern int yydebug;
-extern symbolParser* SPL;
+extern symbolParser* SPL = new symbolParser();
+vector<string> files;
+void scan(char*);
+extern int line_no;
+extern int col_no;
+
 
 int main()
 {
@@ -28,10 +35,13 @@ int main()
 	cout << "Enter example number : ";
 	cin >> num;
 	num = (num < 1 ? 1 : (num > 16 ? 16 : num));*/
+	scan("sample inputs/input");
+	for (auto x : files) {
+		line_no = col_no = 1;
+		yyin = fopen(x.c_str(), "r");
+		yyparse();
+	}
 
-	yyin = fopen(string("sample inputs/example"+to_string(num)+".cs").c_str(),"r");
-
-	yyparse();
 
 	l.print();
 	
@@ -48,4 +58,30 @@ int main()
 	}
 	system("pause");
 	return 0;
+}
+
+
+
+regex reg(".*.cs");
+void scan(char *path) {
+	DIR *dir;
+	struct dirent *ent;
+	if ((dir = opendir(path)) != NULL) {
+		/* print all the files and directories within directory */
+		while ((ent = readdir(dir)) != NULL) {
+			if (ent->d_namlen < 3)
+				continue;
+			char location[55];
+			strcpy(location, path);strcat(location, "/");strcat(location, ent->d_name);
+			if (regex_match(string(ent->d_name), reg))
+				files.push_back(string(location));
+			if (opendir(location) != NULL)
+				scan(location);
+		}
+		closedir(dir);
+	}
+	else {
+		/* could not open directory */
+		perror("error");
+	}
 }

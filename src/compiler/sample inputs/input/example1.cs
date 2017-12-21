@@ -6,6 +6,8 @@ namespace std
         {
 
         }
+		
+		public class z{};
 
     }
 

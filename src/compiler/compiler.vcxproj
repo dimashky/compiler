@@ -73,6 +73,7 @@
     <ClInclude Include="Symbol Table\Symbol.h" />
     <ClInclude Include="Symbol Table\symbolTable.h" />
     <ClInclude Include="Symbol Table\symbol_parser.h" />
+    <ClInclude Include="tools\dirent.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y">

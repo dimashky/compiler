@@ -76,7 +76,7 @@
 
 	#include "../Symbol Table/symbol_parser.h"
 
-	extern symbolParser* SPL = new symbolParser();
+	extern symbolParser* SPL;
 	
 
 	using namespace std;

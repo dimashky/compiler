@@ -758,8 +758,8 @@ char *yytext;
 		}
 	};
 
-	int line_no = 1;
-	int col_no = 1;
+	extern int line_no = 1;
+	extern int col_no = 1;
 	static bool invalid_token = false;
 	queue <int> t;
 	queue <r> q;

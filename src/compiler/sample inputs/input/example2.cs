@@ -16,7 +16,7 @@ namespace ConsoleApplication2
     class car
     {
         public int id;
-        public string name;
+        public std.x.z name;
     }
        class MAZDA:car
       {

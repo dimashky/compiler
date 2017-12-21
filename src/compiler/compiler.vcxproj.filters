@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Symbol Table">
       <UniqueIdentifier>{7e420974-b1a0-4fad-b4e3-fa49a063d515}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Tools">
+      <UniqueIdentifier>{084973da-9cb3-425b-a6f4-229f38b2bbc0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\example1.cs">
@@ -189,6 +192,9 @@
     </ClInclude>
     <ClInclude Include="Symbol Table\Method.h">
       <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\dirent.h">
+      <Filter>Source Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
