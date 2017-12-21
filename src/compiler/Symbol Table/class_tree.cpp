@@ -24,14 +24,15 @@ bool class_tree::is_parent(node* &child, node* &parent)
 	return is_parent(child->parent, parent);
 }
 
-node* class_tree::find_in_graph(node* &curr, string &class_name)
+node* class_tree::find_in_graph(node* &curr, string &class_name, stack<node*>&path)
 {
 	if (curr == nullptr)
 		return nullptr;
 	map<string, node*>::iterator it = curr->childs.find(class_name);
 	if (it != curr->childs.end())
 		return it->second;
-	return find_in_graph(curr->parent, class_name);
+	path.push(curr);
+	return find_in_graph(curr->parent, class_name,path);
 }
 
 class_tree::class_tree()
@@ -60,22 +61,31 @@ void class_tree::down_specific_child(string name)
 	current = current->childs[name];
 }
 
+
+
 pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current_class)
 {
 
 	if (list.size() == 0 || curr == nullptr)
 		return make_pair(nullptr, false);
+	
 
-	node* find_top = find_in_graph(curr, list.front());
+	stack<node*>path;
 
-	//this if for check circular class depedency
+	path.push(current_class);
+	
+	node* find_top = find_in_graph(curr, list.front(), path);
+	
 	if (find_top == current_class)
 		return make_pair(nullptr, true);
 
 	if (find_top != nullptr)
 	{
-		bool can_access = true;
+		bool can_access = true, branch = false;
+
+		path.pop();
 		list.pop();
+
 		while (!list.empty())
 		{
 			map<string, node*>::iterator it = find_top->childs.find(list.front());
@@ -90,15 +100,26 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 						can_access = false;
 
 				find_top = it->second, list.pop();
+
+				if (!branch)
+				{
+					if (!path.empty())
+					{
+						if (path.top() != find_top)
+							branch = can_access = true;
+						path.pop();//for equal or not equal state
+					}
+					else 
+					{
+						//make shure for this !!
+						branch = can_access = true;
+					}
+					
+				}
+				else if (!can_access)
+					return make_pair(nullptr, true);
 			}
 			else return make_pair(nullptr, false);
-		}
-		if (!can_access)
-		{
-			if (is_parent(current_class, find_top) || current_class->parent == find_top->parent)
-				return make_pair(find_top->stPTR, true);
-
-			return make_pair(nullptr, true);
 		}
 		return make_pair(find_top->stPTR, true);
 	}
@@ -106,13 +127,13 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 }
 
 
+
 pair<void*, bool> class_tree::find(node* curr, queue<string> list)
 {
-
 	if (list.size() == 0 || curr == nullptr)
 		return make_pair(nullptr, false);
 
-	node* find_top = find_in_graph(curr, list.front());
+	node* find_top = find_in_graph(curr, list.front(), stack<node*>());
 	
 
 	if (find_top != nullptr)

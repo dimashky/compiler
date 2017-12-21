@@ -20,7 +20,7 @@ class class_tree
 private:
 	node *root, *current;
 	bool is_parent(node* &child, node* &parent);
-	node* find_in_graph(node* &curr, string &class_name);
+	node* find_in_graph(node* &curr, string &class_name, stack<node*>&path);
 
 public:
 	class_tree();

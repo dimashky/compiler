@@ -35,6 +35,8 @@
     <None Include="sample inputs\example8.cs" />
     <None Include="sample inputs\example9.cs" />
     <None Include="sample inputs\example16.cs" />
+    <None Include="sample inputs\input\example1.cs" />
+    <None Include="sample inputs\input\example2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp" />

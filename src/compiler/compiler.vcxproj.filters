@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Tools">
       <UniqueIdentifier>{084973da-9cb3-425b-a6f4-229f38b2bbc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\I/O\input">
+      <UniqueIdentifier>{97c22513-d26d-4791-840d-74d7923f7fe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\example1.cs">
@@ -86,6 +89,12 @@
     </None>
     <None Include="sample inputs\example16.cs">
       <Filter>Source Files\I/O</Filter>
+    </None>
+    <None Include="sample inputs\input\example1.cs">
+      <Filter>Source Files\I/O\input</Filter>
+    </None>
+    <None Include="sample inputs\input\example2.cs">
+      <Filter>Source Files\I/O\input</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

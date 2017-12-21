@@ -85,7 +85,6 @@ void symbolParser::check_later_defination()
 
 			if (search != nullptr)
 			{
-
 				if (search->get_owner()->getType() == "class")
 				{
 
