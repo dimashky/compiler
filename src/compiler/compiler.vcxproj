@@ -63,7 +63,6 @@
     <ClInclude Include="LocalVariable.h" />
     <ClInclude Include="logger\Logger.h" />
     <ClInclude Include="Method.h" />
-    <ClInclude Include="Parameter.h" />
     <ClInclude Include="Parser\yacc.tab.h" />
     <ClInclude Include="Symbol Table\Attribute.h" />
     <ClInclude Include="Symbol Table\Class.h" />

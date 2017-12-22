@@ -1,11 +1,16 @@
-namespace testCSH
+class xx
 {
-     class c
+    void ff(float x)
     {
-        c1()
-        {
-
-        }
+        int x;
     }
+
+    void ff(float x)
+    {
+        int x;
+    }
+}
+class xx1
+{
 
 }

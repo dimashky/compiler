@@ -205,9 +205,6 @@
     <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="Parameter.h">
-      <Filter>Source Files\I/O\input</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y" />

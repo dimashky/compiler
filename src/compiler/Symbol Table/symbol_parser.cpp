@@ -53,12 +53,14 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 	return;
 
 }
-void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, int line_no, int col_no)
+void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
 {
+	cout << "Asssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" << endl;
 	while (!identifiers.empty())
 	{
-		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, line_no, col_no);
-		symboltable->addLocalVariable(newLocalVariable, false);
+		cout << typeIdentifier << " " << identifiers.front() << " " << known_type << " " << constant << endl;
+		//Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, line_no, col_no);
+		//symboltable->addLocalVariable(newLocalVariable, false);
 		identifiers.pop();
 
 	}
