@@ -6,7 +6,7 @@
 #include"Method.h"
 
 
-
+int symbolTable::is_main=0;
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
@@ -196,7 +196,13 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	if (((Method*)symbol)->get_return_type()!="" && parent->owner != NULL && parent->owner->getType() =="class"&& parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
-	
+	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
+	{
+		if (symbolTable::is_main != 0) {
+			cout << "error : there is an error in line " << symbol->getLineNo() << " a program has more Main method ." << endl;
+		}
+		symbolTable::is_main++;
+	}
 	((Method*)symbol)->add_parametars(parameters);
 
 

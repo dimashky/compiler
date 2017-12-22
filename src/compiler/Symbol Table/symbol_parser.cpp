@@ -261,8 +261,11 @@ void symbolParser::check()
 
 	for (int i = 0;i < symboltable->parents.size();i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
-
 	check_later_def_var();
+	if (symbolTable::is_main == 0)	{
+		cout << "error : there is an error in line 1 " << "Program does not contain a static 'Main' method suitable for an entry point." << endl;
+
+    }
 }
 
 symbolTable* symbolParser::getSymbolTableRoot()

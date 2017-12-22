@@ -1,11 +1,17 @@
 namespace testCSH
 {
-     class c
+     class Program
     {
-        c1()
+        class r
+        {
+            static void Main(string[] args)
+            {
+
+            }
+        }
+         void Main(string[] args)
         {
 
         }
     }
-
 }
