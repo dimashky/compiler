@@ -12,8 +12,5 @@ namespace testCSH
         {
         }
     }
-    private class c{
-
-    }
 
 }

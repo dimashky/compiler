@@ -30,7 +30,6 @@ public:
 	static stack<symbolTable*> openBrackets;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
 	static class_tree *type_defination_tree;
-
 	symbolTable(symbolTable* parent,Symbol* owner);
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);

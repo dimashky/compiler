@@ -5598,7 +5598,7 @@ yyreduce:
   case 474:
 #line 1193 "yacc.y" /* yacc.c:1646  */
     {
-  SPL->addMethod(*(yyvsp[-4].r.modifiers),"constructor",string((yyvsp[-3].r.str)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no),1);
+  SPL->addMethod(*(yyvsp[-4].r.modifiers),"",string((yyvsp[-3].r.str)),*(yyvsp[-1].r.types_ids),(yyvsp[-3].r.line_no),(yyvsp[-3].r.col_no),1);
   }
 #line 5604 "yacc.tab.cpp" /* yacc.c:1646  */
     break;

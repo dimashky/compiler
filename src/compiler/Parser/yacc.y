@@ -1191,7 +1191,7 @@ conversion_operator_declarator
 constructor_declaration
   : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE 
   {
-  SPL->addMethod(*$<r.modifiers>2,"constructor",string($<r.str>3),*$<r.types_ids>5,$<r.line_no>3,$<r.col_no>3,1);
+  SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,$<r.line_no>3,$<r.col_no>3,1);
   }
   constructor_initializer_opt constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
   ;

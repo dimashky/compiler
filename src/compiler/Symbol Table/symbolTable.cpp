@@ -22,7 +22,6 @@ vector<node*> symbolTable::parents = vector<node*>();
 
 
 
-
 void symbolTable::add_scope()
 {
 	symbolTable *parent = NULL, *newst = NULL;
@@ -192,13 +191,15 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		parent = this;
 
 	else parent = openBrackets.top();
-	if (((Method*)symbol)->get_return_type() == "constructor" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
+	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " Method must have a return type or member names must be the same a class name." << endl;
 
-	if (((Method*)symbol)->get_return_type()!="constructor" && parent->owner != NULL && parent->owner->getType() =="class"&& parent->owner->getName() == symbol->getName())
+	if (((Method*)symbol)->get_return_type()!="" && parent->owner != NULL && parent->owner->getType() =="class"&& parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
 	
 	((Method*)symbol)->add_parametars(parameters);
+
+
 
 	if (!known_type)
 	{
