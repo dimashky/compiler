@@ -55,7 +55,6 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 }
 void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
 {
-	cout << "Asssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" << endl;
 	while (!identifiers.empty())
 	{
 		cout << typeIdentifier << " " << identifiers.front() << " " << known_type << " " << constant << endl;
@@ -195,9 +194,7 @@ void check_cycle(node* curr, node* parent)
 		return;
 
 	else if (curr->visited == 1)
-	{		
-
-		
+	{	
 		for (int i = 0;i < cycle_path.size();i++)
 		{
 			int next = (i + 1) % cycle_path.size();
@@ -263,8 +260,11 @@ void symbolParser::check()
 
 	for (int i = 0;i < symboltable->parents.size();i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
-
 	check_later_def_var();
+	if (symbolTable::is_main == 0)	{
+		cout << "error : there is an error in line 1 " << "Program does not contain a static 'Main' method suitable for an entry point." << endl;
+
+    }
 }
 
 symbolTable* symbolParser::getSymbolTableRoot()

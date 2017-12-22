@@ -3936,7 +3936,7 @@ yyreduce:
 #line 529 "yacc.y" /* yacc.c:1646  */
     {
 		l.a("local_constant_declaration",2);
-		SPL->addLocalVariable(*(yyvsp[-1].r.base),*(yyvsp[0].r.identifiers),(yyvsp[-1].r.known_type),false,(yyvsp[-1].r.line_no),(yyvsp[-1].r.col_no)) ;
+		SPL->addLocalVariable(*(yyvsp[-1].r.base),*(yyvsp[0].r.identifiers),(yyvsp[-1].r.known_type),true,(yyvsp[-1].r.line_no),(yyvsp[-1].r.col_no)) ;
   }
 #line 3942 "yacc.tab.cpp" /* yacc.c:1646  */
     break;

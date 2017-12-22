@@ -27,6 +27,7 @@ private:
 	static FILE *nodeFile, *edgeFile;
 public:
 	static vector<node*>parents;
+	static int is_main;
 	static stack<symbolTable*> openBrackets;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
 	static class_tree *type_defination_tree;

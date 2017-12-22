@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace testCSH
 {
-     class Program
+    class r { 
+  private  class a
+    {
+       private class Program
+        {
+            static void Main(string[] args)
+            {
+            }
+        }
+    }
+  }
+    public class ss
     {
         static void Main(string[] args)
         {

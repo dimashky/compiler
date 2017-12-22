@@ -13,7 +13,7 @@ private:
 	Attribute* attribute;
 	string return_type;
 	Symbol* return_type_ref;
-	bool isFinal;
+	bool isFinal,is_static;
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
@@ -57,6 +57,9 @@ public:
 	{
 		return_type_ref = ref;
 		return;
+	}
+	bool get_is_static() {
+		return is_static; 
 	}
 	bool is_final();
 	~Method();

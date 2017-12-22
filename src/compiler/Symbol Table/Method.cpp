@@ -14,6 +14,8 @@ void Method::add_attributes(queue<string>&attributes)
 	{
 		if (attributes.front() == "SEALED")
 			isFinal = true;
+		if (attributes.front() == "STATIC")
+			is_static = true;
 		attribute->add(attributes.front());
 		attributes.pop();
 	}

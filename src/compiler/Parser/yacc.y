@@ -528,7 +528,7 @@ local_constant_declaration
   : CONST type constant_declarators														
   {
 		l.a("local_constant_declaration",2);
-		SPL->addLocalVariable(*$<r.base>2,*$<r.identifiers>3,$<r.known_type>2,false,$<r.line_no>2,$<r.col_no>2) ;
+		SPL->addLocalVariable(*$<r.base>2,*$<r.identifiers>3,$<r.known_type>2,true,$<r.line_no>2,$<r.col_no>2) ;
   }
   ;
 constant_declarators
