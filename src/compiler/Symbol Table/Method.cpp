@@ -2,7 +2,7 @@
 
 Method::Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no): Symbol(name, line_no, col_no)
 {
-	attribute = new Attribute(this->getType());
+	attribute = new Attribute(this->getType(),return_type);
 	this->return_type = return_type;
 	add_attributes(modifiers);
 	this->types_ids_parameter = types_ids_parameter; 

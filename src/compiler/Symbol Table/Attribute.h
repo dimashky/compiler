@@ -7,11 +7,12 @@ class Attribute
 {
     public:
     Attribute(string type);
+	Attribute(string type,string return_type);
     virtual ~Attribute();
     bool add (string nameAtt) ;
     set<string> whatHave ;
     string typeKeyword ;
-
+	string return_type; 
     static set<string > classModifiers;
 	static set<string > methodModifiers;
 	static set<string > fieldModifiers;

@@ -193,9 +193,6 @@
     <ClInclude Include="Symbol Table\Field.h">
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
-    <ClInclude Include="Parameter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Method.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parameter.h">
+      <Filter>Source Files\I/O\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,8 @@
-
-class a : a.b
+class a
 {
-    class b { }
-}
+    int x;
+    int x;
+    int a;
+    int a;
 
+}

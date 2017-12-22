@@ -18,7 +18,8 @@ private:
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
 	void add_attributes(queue<string>&attributes);
-
+	string get_return_type();
+	string getType();
 
 	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters)
 	{
@@ -33,8 +34,6 @@ public:
 		return types_ids_parameter.size();
 	}
 
-	string get_return_type();
-	string getType();
 	bool compare(Symbol* comp)
 	{
 		

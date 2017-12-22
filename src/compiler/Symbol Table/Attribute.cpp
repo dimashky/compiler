@@ -18,6 +18,18 @@ Attribute::Attribute(string type)
     errorPrivate = false ;
     errorConst = false;
 }
+Attribute::Attribute(string type, string return_type)
+{
+	typeKeyword = type;
+	errorDuplicate = false;
+	errorAccess = false;
+	oneAccess = false;
+	errorAbstract = false;
+	errorStaticSealed = false;
+	errorPrivate = false;
+	errorConst = false;
+	this->return_type = return_type; 
+}
 bool Attribute::add(string nameAtt)
 {
     int number = whatHave.size() ;
@@ -140,9 +152,9 @@ bool Attribute::add(string nameAtt)
 			return false;
 		}
 	}
-    else if(typeKeyword=="method"){
+	else if (typeKeyword == "method") {
              set<string>::iterator it = methodModifiers.find(nameAtt);
-        if(it != methodModifiers.end()) // inside type
+        if(it != methodModifiers.end() && ((return_type=="constructor")&&(nameAtt!="NEW" && nameAtt != "SEALED" &&  nameAtt != "VIRTUAL" && nameAtt != "OVERRIDE" &&  nameAtt != "EXTERN" &&  nameAtt != "ABSTRACT"))) // inside type
         {
           set<string>::iterator it1 = whatHave.find(nameAtt);
           if(it1==whatHave.end() || whatHave.size()==0) // not Duplicate

@@ -1,6 +1,6 @@
-namespace asd
+class a
 {
-    class a
+    sealed a()
     {
 
     }

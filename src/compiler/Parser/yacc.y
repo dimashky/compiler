@@ -1189,10 +1189,11 @@ conversion_operator_declarator
   | EXPLICIT OPERATOR type LEFT_BRACKET_CIRCLE type IDENTIFIER RIGHT_BRACKET_CIRCLE		{l.a("conversion_operator_declarator",2);}
   ;
 constructor_declaration
-  : attributes_opt modifiers_opt constructor_declarator constructor_body		{l.a("constructor_declaration",4);}
-  ;
-constructor_declarator
-  : IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE constructor_initializer_opt		{l.a("constructor_declarator",2);}
+  : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE 
+  {
+  SPL->addMethod(*$<r.modifiers>2,"constructor",string($<r.str>3),*$<r.types_ids>5,$<r.line_no>3,$<r.col_no>3,1);
+  }
+  constructor_initializer_opt constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
   ;
 constructor_initializer_opt
   : /* Nothing */             {l.a("constructor_initializer_opt",0);}
