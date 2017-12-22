@@ -90,12 +90,14 @@
     <None Include="sample inputs\example16.cs">
       <Filter>Source Files\I/O</Filter>
     </None>
-
     <None Include="sample inputs\input\example1.cs">
       <Filter>Source Files\I/O\input</Filter>
     </None>
     <None Include="sample inputs\input\example2.cs">
       <Filter>Source Files\I/O\input</Filter>
+    </None>
+    <None Include="Parser\yacc.output">
+      <Filter>Source Files\Parser</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +106,6 @@
     </ClCompile>
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp">
       <Filter>Source Files\Lexical Analyzer</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser\yacc.tab.cpp">
-      <Filter>Source Files\Parser</Filter>
     </ClCompile>
     <ClCompile Include="logger\Logger.cpp">
       <Filter>Source Files\logger</Filter>
@@ -144,11 +143,11 @@
     <ClCompile Include="Symbol Table\Method.cpp">
       <Filter>Source Files\Symbol Table</Filter>
     </ClCompile>
+    <ClCompile Include="Parser\yacc.tab.cpp">
+      <Filter>Source Files\Parser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parser\yacc.tab.h">
-      <Filter>Source Files\Parser</Filter>
-    </ClInclude>
     <ClInclude Include="Error Handler\error_handler.h">
       <Filter>Source Files\Error Handler</Filter>
     </ClInclude>
@@ -205,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="tools\dirent.h">
       <Filter>Source Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\yacc.tab.h">
+      <Filter>Source Files\Parser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

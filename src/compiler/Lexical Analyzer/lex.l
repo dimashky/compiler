@@ -11,8 +11,7 @@
 
 	using namespace std;
 
-	#define YY_DECL int yylex()
-
+	
 	#include "../parser/yacc.tab.h"
 
 
@@ -332,7 +331,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 	
 	extern FILE* info;
-	std::cout << "Statics:\n-> Finished Scan at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n============\n";
+//	std::cout << "Statics:\n-> Finished Scan at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n============\n";
 	
 	fprintf(info, "var compile_start = '%s'; var lex_end = '%s';var lex_elapsed = '%f';\n", start_str.c_str(), end_str.c_str(), elapsed_seconds.count());
 

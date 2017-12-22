@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include<stack>
+#include <stack>
 #include "Symbol Table\symbolTable.h"
 #include "Symbol Table\symbol_parser.h"
 #include <chrono>
 #include <ctime>
 #include "Error Handler\error_handler.h"
 #include "logger/Logger.h"
-#include"tools/dirent.h"
-#include<regex>
+#include "tools/dirent.h"
+#include <regex>
 
 #include <Windows.h>
 
@@ -36,11 +36,13 @@ int main()
 
   fprintf(info, "var input = 'sample inputs/input'");
 
-  auto start = std::chrono::system_clock::now();
+	auto start = std::chrono::system_clock::now();
+	printf("-------------------------\nC# Compiler\n-------------------------\n");
+	printf("START Parsing....\n");
 	scan("sample inputs/input");
 	for (auto x : files) {
 		line_no = col_no = 1;
-		cout << "===> Compiling " << x << endl;
+		cout << "===> Parsing\t\t'" << x <<"'"<< endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
 	}
@@ -48,10 +50,10 @@ int main()
   std::chrono::duration<double> elapsed_seconds = end - start;
 	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 	string end_time_str = get_time_and_date();
-	std::cout << "-> Finished Parsing at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n";
+	std::cout << "\nFINISHED Parsing at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n";
 	fprintf(info, "var parse_end = '%s';var parse_elapsed = '%f';\n", end_time_str.c_str(), elapsed_seconds.count());
 	int error_cnt = error_handler.errorsNum();
-	cout<< (error_cnt == 0 ? "With NO errors" : ("-> With Errors :\t"+to_string(error_cnt)) )<<"\n============\n";
+	cout<< (error_cnt == 0 ? "\nWith NO errors" : ("\n-> With Errors :\t"+to_string(error_cnt)) )<<"\n============\n";
   
   
 	SPL->check();
