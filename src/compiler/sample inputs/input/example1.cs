@@ -1,7 +1,15 @@
-class a
+namespace testCSH
 {
-    sealed a()
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+        }
+    }
+     class c
     {
 
     }
+
 }

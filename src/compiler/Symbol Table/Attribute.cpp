@@ -154,7 +154,8 @@ bool Attribute::add(string nameAtt)
 	}
 	else if (typeKeyword == "method") {
              set<string>::iterator it = methodModifiers.find(nameAtt);
-        if(it != methodModifiers.end() && ((return_type=="constructor")&&(nameAtt!="NEW" && nameAtt != "SEALED" &&  nameAtt != "VIRTUAL" && nameAtt != "OVERRIDE" &&  nameAtt != "EXTERN" &&  nameAtt != "ABSTRACT"))) // inside type
+
+        if(it != methodModifiers.end() && (return_type != "constructor"||(return_type=="constructor")&&(nameAtt!="NEW" && nameAtt != "SEALED" &&  nameAtt != "VIRTUAL" && nameAtt != "OVERRIDE" &&  nameAtt != "EXTERN" &&  nameAtt != "ABSTRACT"))) // inside type
         {
           set<string>::iterator it1 = whatHave.find(nameAtt);
           if(it1==whatHave.end() || whatHave.size()==0) // not Duplicate
