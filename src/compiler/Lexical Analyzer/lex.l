@@ -1,8 +1,6 @@
 %{
 	#include <string.h>
-	
 	#include <iostream>
-	
 	#include <string>
 	#include <queue>
 	#include <stack>
@@ -31,10 +29,17 @@
 		char* str;
 		int line_no;
 		int col_no;
+		string *modifier,*base;
+		queue<string> *modifiers,*bases;
+
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
 			this->f = f;
 			this->c = c;
+			modifier = new string();
+			base = new string();
+			modifiers = new queue<string>();
+			bases = new queue<string>();
 			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);
@@ -44,9 +49,11 @@
 		}
 	};
 
-	bool first_loop = true;
-	int line_no = 1;
-	int col_no = 1;
+
+  bool first_loop = true;
+	extern int line_no = 1;
+	extern int col_no = 1;
+  
 	static bool invalid_token = false;
 	queue <int> t;
 	queue <r> q;

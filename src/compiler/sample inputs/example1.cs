@@ -1,9 +1,6 @@
-namespace ConsoleApplication2
+
+class a : a.b
 {
-    class x
-    {
-        void Main(int [] x = 2)
-        {
-        }
-    }
+    class b { }
 }
+

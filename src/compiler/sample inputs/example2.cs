@@ -10,6 +10,7 @@ class xx
 {
     public class y
     {
-
+        public int id;
+        public string name;
     }
 }

@@ -1,0 +1,7 @@
+namespace asd
+{
+    class a
+    {
+
+    }
+}
