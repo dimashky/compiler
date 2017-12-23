@@ -58,10 +58,6 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 }
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> e980efea4089972742209c8e59719ffdeaae1144
 void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type)
 {
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
@@ -209,13 +205,8 @@ void check_cycle(node* curr, node* parent)
 		return;
 
 	else if (curr->visited == 1)
-<<<<<<< HEAD
-	{
-		for (int i = 0;i < cycle_path.size();i++)
-=======
 	{	
 		for (int i = 0; i < cycle_path.size(); i++)
->>>>>>> e980efea4089972742209c8e59719ffdeaae1144
 		{
 			int next = (i + 1) % cycle_path.size();
 			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
@@ -265,7 +256,6 @@ void check_later_def_var()
 		}
 		else
 		{
-<<<<<<< HEAD
 			if (p.second.second->getType() == "field") {
 				string m = "error, the type name '" + ((Field*)p.second.second)->get_type_name() + "' couldn't be found.";
 				error_handler.add(error(p.second.second->getLineNo(), -1, m.c_str()));
@@ -274,13 +264,6 @@ void check_later_def_var()
 				string m = "error, the type name '" + ((LocalVariable*)p.second.second)->get_type_name() + "' couldn't be found.";
 				error_handler.add(error(p.second.second->getLineNo(), -1, m.c_str()));
 			}
-=======
-			if (p.second.second->getType() == "field")
-				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((Field*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
-			else if (p.second.second->getType() == "localvariable")
-
-				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((LocalVariable*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
->>>>>>> e980efea4089972742209c8e59719ffdeaae1144
 		}
 		symbolTable::later_defination_var.pop();
 	}
@@ -301,12 +284,7 @@ void symbolParser::check()
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 	check_later_def_var();
 	if (symbolTable::is_main == 0) {
-<<<<<<< HEAD
 		error_handler.add(error(1, -1, "error Program does not contain a static \"Main\" method suitable for an entry point."));
-=======
-		cout << "error : there is an error in line 1 " << "Program does not contain a static 'Main' method suitable for an entry point." << endl;
-
->>>>>>> e980efea4089972742209c8e59719ffdeaae1144
 	}
 }
 
