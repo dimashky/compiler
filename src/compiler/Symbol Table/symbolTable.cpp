@@ -254,15 +254,42 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	}
 
 	/// error for override method 
-	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_override())
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_override()) // if override
 	{
-		if (((Class *)parent->owner)->get_extended_class().second == nullptr)
-			cout << "error : there is an error in line " << symbol->getLineNo() << " no suitable method found to override." << endl;
+		if (((Class *)parent->owner)->get_extended_class().second == nullptr) // if extend
+			error_handler.add(error(symbol->getLineNo(), -1, "error, no suitable method found to override."));
 		else {
+			symbolTable* extedntSymbol = ((Class *)parent->owner)->get_extended_class().second;
+			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = extedntSymbol->symbolMap.find(symbol);
+			if (itex != extedntSymbol->symbolMap.end()) { // if is method 
+				
+				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
+				else 
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
+				
+				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override());// is virtual or abstract or override
+				else 
+					error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
+				
+				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal()); //  is same modifiers
+				else 
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
+				
+				if (((Method*)itex->first)->is_final()) 
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
+				
 
+				
+			}
+			else {
+				error_handler.add(error(symbol->getLineNo(), -1, "error, no suitable method found to override."));
+			}
 		}
 
 	}
+
+
+
 	((Method*)symbol)->add_parametars(parameters);
 
 	if (!known_type)

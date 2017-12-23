@@ -4,7 +4,7 @@ extern errorHandler error_handler;
 
 Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
-	attribute = new Attribute(this->getType());
+	attribute = new Attribute(this->getType(),line_no,col_no);
 	isFinal = false;
 	is_public = false;
 	is_private = true;
@@ -46,7 +46,7 @@ void Class::add_attributes(queue<string>&attributes)
 				is_private = true;
 		}
 
-		attribute->add(attributes.front());
+		attribute->add(attributes.front(), attributes.size());
 		attributes.pop();
 	}
 	return;

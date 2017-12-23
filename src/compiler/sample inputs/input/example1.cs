@@ -1,8 +1,24 @@
-
-class x
+class f
 {
-    void ff()
+    class Program
     {
-		int x
-	}
+        static void Main(string[] args)
+        {
+
+        }
+    }
+
+    class t
+    {
+        protected sealed virtual void f()
+        {
+
+        }
+
+    }
+    class y : t
+    {
+
+    }
+
 }

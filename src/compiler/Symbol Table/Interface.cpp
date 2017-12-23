@@ -4,7 +4,7 @@ extern errorHandler error_handler;
 
 Interface::Interface(string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
-	attribute = new Attribute(this->getType());
+	attribute = new Attribute(this->getType(),line_no , col_no);
 	is_public = false;
 	is_private = true;
 	is_protected = false;
@@ -58,7 +58,7 @@ void Interface::add_attributes(queue<string>&attributes)
 				is_private = true;
 		}
 
-		attribute->add(attributes.front());
+		attribute->add(attributes.front(), attributes.size());
 		attributes.pop();
 	}
 	return;

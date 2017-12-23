@@ -14,7 +14,7 @@ private:
 	string return_type;
 	Symbol* return_type_ref;
 	bool isFinal,is_static,is_abstract,is_override , is_virtual;
-	
+	bool is_public, is_private , is_protected , is_internal; 
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
@@ -72,6 +72,18 @@ public:
 	bool get_is_virtual()
 	{
 		return is_virtual;
+	}
+	bool get_is_public() {
+		return is_public; 
+	}
+	bool get_is_private(){
+		return is_private; 
+	}
+	bool get_is_protected(){
+		return is_protected;
+	}
+	bool get_is_internal(){
+		return is_internal; 
 	}
 	~Method();
 

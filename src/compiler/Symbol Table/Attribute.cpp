@@ -8,7 +8,7 @@ set<string > Attribute::fieldModifiers = set<string>({ "PUBLIC", "PRIVATE", "PRO
 set<string > Attribute::interfaceModifiers = set<string>({ "PUBLIC", "PRIVATE", "PROTECTED", "INTERNAL" });
 extern errorHandler error_handler;
 
-Attribute::Attribute(string type)
+Attribute::Attribute(string type, int line_no, int col_no)
 {
 	typeKeyword = type;
 	errorDuplicate = false;
@@ -18,8 +18,10 @@ Attribute::Attribute(string type)
 	errorStaticSealed = false;
 	errorPrivate = false;
 	errorConst = false;
+	this->line_no = line_no;
+	this->col_no = col_no;
 }
-Attribute::Attribute(string type, string return_type)
+Attribute::Attribute(string type, string return_type,int line_no,int col_no)
 {
 	typeKeyword = type;
 	errorDuplicate = false;
@@ -29,9 +31,11 @@ Attribute::Attribute(string type, string return_type)
 	errorStaticSealed = false;
 	errorPrivate = false;
 	errorConst = false;
+	this->line_no = line_no;
+	this->col_no = col_no; 
 	this->return_type = return_type;
 }
-bool Attribute::add(string nameAtt)
+bool Attribute::add(string nameAtt,int sizeAtt)
 {
 	int number = whatHave.size();
 	if (typeKeyword == "class")
@@ -159,7 +163,6 @@ bool Attribute::add(string nameAtt)
 	}
 	else if (typeKeyword == "method") {
 		set<string>::iterator it = methodModifiers.find(nameAtt);
-
 		if (it != methodModifiers.end() && (return_type != "" || (return_type == "") && (nameAtt != "NEW" && nameAtt != "SEALED" &&  nameAtt != "VIRTUAL" && nameAtt != "OVERRIDE" &&  nameAtt != "EXTERN" &&  nameAtt != "ABSTRACT"))) // inside type
 		{
 			set<string>::iterator it1 = whatHave.find(nameAtt);
@@ -227,13 +230,7 @@ bool Attribute::add(string nameAtt)
 					}
 
 				}
-				else if (nameAtt == "SEALED") {
-					set<string>::iterator iti = whatHave.find("OVERRIDE");
-					if (iti == whatHave.end()) {
-						error_handler.add(error(line_no, col_no, "attribute error, cannot be sealed because it is not an override"));
-						return false;
-					}
-				}
+				else if (nameAtt == "SEALED" );
 				else if (nameAtt == "OVERRIDE") {
 					set<string>::iterator itr1 = whatHave.find("PUBLIC");
 					set<string>::iterator itr2 = whatHave.find("PROTECTED");
@@ -433,6 +430,17 @@ bool Attribute::add(string nameAtt)
 
 	}
 	whatHave.insert(nameAtt);
+	if (sizeAtt == 1 && typeKeyword=="method") {
+		set<string>::iterator itiS = whatHave.find("SEALED");
+		if (itiS != whatHave.end()) {
+			set<string>::iterator iti = whatHave.find("OVERRIDE");
+			if (iti == whatHave.end()) {
+				error_handler.add(error(line_no, col_no, "attribute error, cannot be sealed because it is not an override"));
+				return false;
+			}
+		}
+
+	}
 	return true;
 }
 Attribute::~Attribute()
