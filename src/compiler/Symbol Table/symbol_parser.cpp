@@ -55,10 +55,11 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 }
 
 
+
 void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type)
 {
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
-	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type);
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters,known_type);
 }
 
 
@@ -199,7 +200,7 @@ void check_cycle(node* curr, node* parent)
 		return;
 
 	else if (curr->visited == 1)
-	{
+	{	
 		for (int i = 0; i < cycle_path.size(); i++)
 		{
 			int next = (i + 1) % cycle_path.size();
@@ -256,6 +257,11 @@ void check_later_def_var()
 		}
 		symbolTable::later_defination_var.pop();
 	}
+}
+
+void symbolParser::check_function()
+{
+	symboltable->check_method(symbolTable::openBrackets.top() , map<string, bool> () );
 }
 
 

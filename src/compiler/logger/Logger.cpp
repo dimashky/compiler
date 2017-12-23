@@ -46,6 +46,7 @@ void Logger::print()
 {
 	fprintf(nodeFile, "];");
 	fprintf(edgeFile, "];");
+	/*
 	if (!subnodes.empty()) {
 		printf("There some ERRORS with 'subnodes' stack: [ ");
 		while (!subnodes.empty())
@@ -55,6 +56,7 @@ void Logger::print()
 		}
 		printf("]\n");
 	}
+	*/
 	fclose(nodeFile);
 	fclose(edgeFile);
 	stack<string>pr = stprint;

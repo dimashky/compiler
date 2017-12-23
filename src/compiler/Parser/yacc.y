@@ -26,7 +26,7 @@
 	extern int yyparse();
 	extern FILE* yyin;
 
-	Logger l("parser.log");
+	Logger l("logs/parser.log");
 	void yyerror(const char *);
 		
 
@@ -958,7 +958,7 @@ field_declaration
   ;
 
 method_declaration
-  : method_header method_body		{l.a("method_declaration",2); SPL->endScope();}
+  : method_header method_body		{l.a("method_declaration",2);SPL->check_function(); SPL->endScope();}
   ;
 
 method_header

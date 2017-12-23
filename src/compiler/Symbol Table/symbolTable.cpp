@@ -24,10 +24,12 @@ vector<node*> symbolTable::parents = vector<node*>();
 
 void symbolTable::add_scope()
 {
+
 	symbolTable *parent = NULL, *newst = NULL;
 
 	if (openBrackets.empty())
 		return;
+
 	else parent = openBrackets.top();
 
 	newst = new symbolTable(parent, NULL);
@@ -147,39 +149,74 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 	return;
 }
 
-void symbolTable::addLocalVariable(Symbol* symbol ,bool isParameter)
+void symbolTable::addLocalVariable(Symbol* symbol ,bool known_type)
 {
-	/*symbolTable *parent = NULL;
-	if (openBrackets.empty())		parent = this;
+	symbolTable *parent = NULL;
 
-	else 
-		parent = openBrackets.top();
-	if (parent->owner->getType() == "method")
+	if (openBrackets.empty())
+		parent = this;
+
+	else parent = openBrackets.top();
+
+	if (!known_type)
 	{
-		queue<Parameter> temp = (((Method*)parent->owner)->get_types_ids_parameter());
-		while (!temp.empty() && !isParameter)
+		queue<string>list;
+		string curr_part = "", str_list = ((Field*)symbol)->get_type_name();
+
+
+		for (int i = 0;i < str_list.length();i++)
+		{
+			if (str_list[i] == '.')
+				list.push(curr_part), curr_part = "";
+			else curr_part += str_list[i];
+		}
+
+		list.push(curr_part);
+
+		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		if (ref.first != nullptr)
+			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
+		else if (ref.second)
+			cout << "error : there is an error in line " << symbol->getLineNo() << ", the type name '" << ((Field*)symbol)->get_type_name() << "' couldn't be found." << endl;
+		else
+			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
+	}
+
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = parent->symbolMap.find(symbol);
+	if (it2 != parent->symbolMap.end())
+		cout << "error : there is an error in line " << symbol->getLineNo() << ", The local variable name '" << symbol->getName() << "' is duplicate." << endl;
+	else
+		add_symbol_without_open_brackets(symbol);
+
+	return;
+}
+
+
+void symbolTable::check_method(symbolTable* curr,map<string, bool>check_map)
+{
+	for (map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > ::iterator it = curr->symbolMap.begin(); it != curr->symbolMap.end();)
+		if (check_map.find(it->first->getName()) != check_map.end())
 		{
 
-			if (temp.front().name == symbol->getName())
+			cout << "error : there is an error in line " << it->first->getLineNo() << ", The local variable name '" << it->first->getName() << "' is duplicate." << endl;
+			if (it == curr->symbolMap.begin())
 			{
-				
-				cout << "error : there is an error in line " << symbol->getLineNo() <<" A local or parameter named '"<<symbol->getName()<<"' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter ."<< endl;
-
-				break; 
+				curr->symbolMap.erase(it);
+				it = curr->symbolMap.begin();
 			}
-			temp.pop();
+			else
+			{
+				map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > ::iterator it2 = it;
+				it++;
+				curr->symbolMap.erase(it2);
+			}
 		}
-	}
-	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
-	if (it != parent->symbolMap.end())
-	{
-		if (it->first->getType() == "localvariable" && !((LocalVariable*)it->first)->is_parameter())
-			cout << "error : there is an error in line " << symbol->getLineNo() << " A local variable named '"<< symbol->getName() << "' is already defined in this scope." << endl;
+		else
+			check_map[it->first->getName() ] = true,it++; 
 	
-
-	}
-	add_scope_without_openBrackets(symbol);
-	*/
+	for (int i = 0; i < curr->childs.size(); i++)
+		check_method(curr->childs[i] ,check_map);
+	
 	return;
 }
 
@@ -191,7 +228,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		parent = this;
 
 	else parent = openBrackets.top();
-	
+
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " Method must have a return type or member names must be the same a class name." << endl;
 	
@@ -435,7 +472,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 			if (find_base != nullptr)
 			{
-
 				if (find_base->owner->getType() == "class")
 				{
 					if (((Class*)find_base->owner)->is_final())
@@ -451,11 +487,12 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 						}
 					}
 				}
-				else if (find_base->owner->getType() == "namespace")
+				else if (find_base->owner->getType() == "namespace") 
 					cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << find_base->owner->getName() << "' is a namespace.\n";
-
+				
 				else if (find_base->owner->getType() == "interface")
 					((Class*)symbol)->add_base(bases.front(), find_base);
+				
 
 				else
 					cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared , inaccessible type or it's form circular base class depedency '" << bases.front() << "'." << endl;
@@ -628,7 +665,7 @@ bool symbolTable::closeScope()
 	
 	if (!openBrackets.empty())
 	{
-		if (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace")
+		if (openBrackets.top()->owner != nullptr && (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace"))
 			type_defination_tree->end_node();
 		openBrackets.pop();
 		return true;

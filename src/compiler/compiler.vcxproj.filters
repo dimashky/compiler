@@ -205,8 +205,8 @@
     <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="Parameter.h">
-      <Filter>Source Files\I/O\input</Filter>
+    <ClInclude Include="tools\tools.h">
+      <Filter>Source Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,13 +216,13 @@
     <Flex Include="Lexical Analyzer\lex.l" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="error.log">
+    <Text Include="logs\error.log">
       <Filter>Source Files\logs</Filter>
     </Text>
-    <Text Include="Lex.log">
+    <Text Include="logs\Lex.log">
       <Filter>Source Files\logs</Filter>
     </Text>
-    <Text Include="parser.log">
+    <Text Include="logs\parser.log">
       <Filter>Source Files\logs</Filter>
     </Text>
   </ItemGroup>

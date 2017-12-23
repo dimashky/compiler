@@ -26,7 +26,7 @@ private:
 	static FILE *nodeFile, *edgeFile;
 public:
 	static vector<node*>parents;
-	static int is_main; 
+	static int is_main;
 	static stack<symbolTable*> openBrackets;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
 	static class_tree *type_defination_tree;
@@ -38,6 +38,8 @@ public:
 	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type);
 	void addField(Symbol* symbol, bool known_type);
 	void addLocalVariable(Symbol* symbol, bool isParameter);
+
+	void check_method(symbolTable* curr, map<string, bool>check_map);
 
 	void addChild(symbolTable* st);
 	bool closeScope();

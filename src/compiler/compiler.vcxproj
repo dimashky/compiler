@@ -63,7 +63,6 @@
     <ClInclude Include="LocalVariable.h" />
     <ClInclude Include="logger\Logger.h" />
     <ClInclude Include="Method.h" />
-    <ClInclude Include="Parameter.h" />
     <ClInclude Include="Parser\yacc.tab.h" />
     <ClInclude Include="Symbol Table\Attribute.h" />
     <ClInclude Include="Symbol Table\Class.h" />
@@ -77,6 +76,7 @@
     <ClInclude Include="Symbol Table\symbolTable.h" />
     <ClInclude Include="Symbol Table\symbol_parser.h" />
     <ClInclude Include="tools\dirent.h" />
+    <ClInclude Include="tools\tools.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y">
@@ -89,9 +89,9 @@
     </Flex>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="error.log" />
-    <Text Include="Lex.log" />
-    <Text Include="parser.log" />
+    <Text Include="logs\error.log" />
+    <Text Include="logs\Lex.log" />
+    <Text Include="logs\parser.log" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0C1C1964-4DB0-4C41-9A12-A9FDCAEB9628}</ProjectGuid>
