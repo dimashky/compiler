@@ -267,7 +267,6 @@ bool Attribute::add(string nameAtt)
               }
 
               else if(nameAtt=="ABSTRACT"){
-
                   set<string>::iterator itr1 = whatHave.find("PUBLIC");
                   set<string>::iterator itr2 = whatHave.find("PROTECTED");
                   set<string>::iterator itr3 = whatHave.find("INTERNAL");
@@ -293,7 +292,7 @@ bool Attribute::add(string nameAtt)
                       }
                     }
                else {
-                cout <<"error : cannot be sealed because it is not an override"<<endl;
+                cout <<"error : virtual or abstract members cannot be private"<<endl;
                 return false ;
               }
 

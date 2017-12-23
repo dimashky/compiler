@@ -4,7 +4,7 @@
 using namespace std;
 symbolParser::symbolParser()
 {
-	symboltable = new symbolTable(NULL,NULL);
+	symboltable = new symbolTable(NULL, NULL);
 }
 
 void symbolParser::print(queue<string> &s1, char* s2)
@@ -55,7 +55,8 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 }
 
 
-void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no,bool known_type)
+
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type)
 {
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters,known_type);
@@ -200,7 +201,7 @@ void check_cycle(node* curr, node* parent)
 
 	else if (curr->visited == 1)
 	{	
-		for (int i = 0;i < cycle_path.size();i++)
+		for (int i = 0; i < cycle_path.size(); i++)
 		{
 			int next = (i + 1) % cycle_path.size();
 			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
@@ -209,7 +210,7 @@ void check_cycle(node* curr, node* parent)
 				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' class is in inheritence cycle." << endl;
 				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
 			}
-			else 
+			else
 			{
 				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' interface is in inheritence cycle." << endl;
 			}
@@ -222,13 +223,13 @@ void check_cycle(node* curr, node* parent)
 
 	curr->visited = 1;
 
-	for (int i = 0;i < curr->bases.size();i++)
+	for (int i = 0; i < curr->bases.size(); i++)
 		check_cycle(curr->bases[i].second, curr);
-	
+
 	curr->visited = 2;
-	
+
 	cycle_path.pop_back();
-	
+
 	return;
 }
 
@@ -250,7 +251,7 @@ void check_later_def_var()
 		{
 			if (p.second.second->getType() == "field")
 				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((Field*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
-			else if(p.second.second->getType() == "localvariable")
+			else if (p.second.second->getType() == "localvariable")
 
 				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((LocalVariable*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
 		}
@@ -264,17 +265,18 @@ void symbolParser::check_function()
 }
 
 
+
 void symbolParser::check()
 {
 	check_later_defination();
 
-	for (int i = 0;i < symboltable->parents.size();i++)
+	for (int i = 0; i < symboltable->parents.size(); i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 	check_later_def_var();
-	if (symbolTable::is_main == 0)	{
+	if (symbolTable::is_main == 0) {
 		cout << "error : there is an error in line 1 " << "Program does not contain a static 'Main' method suitable for an entry point." << endl;
 
-    }
+	}
 }
 
 symbolTable* symbolParser::getSymbolTableRoot()

@@ -7,6 +7,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name,line_no,col_no)
 	is_public = false;
 	is_private = true;
 	is_protected = false;
+	is_abstract = false;
 	owner_is_namespace = false;
 	type_graph_position = nullptr;
 	baseClassImpInterfaces.push_back(make_pair("", nullptr));
@@ -24,6 +25,8 @@ void Class::add_attributes(queue<string>&attributes)
 	{
 		if (attributes.front() == "SEALED")
 			isFinal = true;
+		if (attributes.front() == "ABSTRACT")
+			is_abstract = true;
 
 		if (owner_is_namespace)
 		{

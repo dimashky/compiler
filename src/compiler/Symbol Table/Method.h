@@ -13,7 +13,8 @@ private:
 	Attribute* attribute;
 	string return_type;
 	Symbol* return_type_ref;
-	bool isFinal,is_static;
+	bool isFinal,is_static,is_abstract,is_override , is_virtual;
+	
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
@@ -26,7 +27,6 @@ public:
 		while (!parameters.empty())
 			types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, true, false, parameters.front().first.second.first, parameters.front().first.second.second)), parameters.pop();
 	}
-
 	vector<LocalVariable*>& get_parameters();
 	
 	int get_parametars_count()
@@ -61,7 +61,18 @@ public:
 	bool get_is_static() {
 		return is_static; 
 	}
+	
+	bool get_is_abstract() {
+		return is_abstract;
+	}
 	bool is_final();
+	bool get_is_override() {
+		return is_override; 
+	}
+	bool get_is_virtual()
+	{
+		return is_virtual;
+	}
 	~Method();
 
 };

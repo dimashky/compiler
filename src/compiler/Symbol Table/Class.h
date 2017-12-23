@@ -14,7 +14,7 @@ private:
 	vector<pair<string, symbolTable*> > baseClassImpInterfaces;
 
 	Attribute* attribute;
-	bool isFinal,is_public,is_private,is_protected,owner_is_namespace;
+	bool isFinal,is_public,is_private,is_protected,owner_is_namespace, is_abstract;
 	node* type_graph_position;
 
 
@@ -55,7 +55,9 @@ public:
 		baseClassImpInterfaces[0] = val;
 		return;
 	}
-
+	bool get_is_abstract() {
+		return is_abstract; 
+	}
 	~Class();
 
 };

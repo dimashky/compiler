@@ -231,9 +231,16 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " Method must have a return type or member names must be the same a class name." << endl;
+	
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "interface" && ((Method*)symbol)->get_is_abstract())
+		cout << "error : there is an error in line " << symbol->getLineNo() << " The modifier 'abstract' is not valid for this item." << endl;
 
 	if (((Method*)symbol)->get_return_type()!="" && parent->owner != NULL && parent->owner->getType() =="class"&& parent->owner->getName() == symbol->getName())
 		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+	
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_abstract() && !((Class*)parent->owner)->get_is_abstract())
+		cout << "error : there is an error in line " << symbol->getLineNo() << " '"<<((Method*)symbol)->getName()<< "' is abstract but it is contained in non-abstract class '"<< ((Class*)parent->owner)->getName()<<"'." << endl;
+	
 	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
 	{
 		if (symbolTable::is_main != 0) {
@@ -241,9 +248,18 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		}
 		symbolTable::is_main++;
 	}
+
+	/// error for override method 
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_override())
+	{
+		if(((Class *)parent->owner)->get_extended_class().second == nullptr)
+			cout << "error : there is an error in line " << symbol->getLineNo() << " no suitable method found to override." << endl;
+		else {
+
+		}
+
+	}
 	((Method*)symbol)->add_parametars(parameters);
-
-
 
 	if (!known_type)
 	{
@@ -328,7 +344,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	return;
 }
 
-void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&modifiers)
+void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers)
 {
 	symbolTable *parent = NULL;
 
@@ -369,7 +385,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		else if (it->first->getType() == "interface")
 		{
 			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
-			
+
 			if (it->second.second != nullptr)
 				it->second.second = nullptr;
 
@@ -393,7 +409,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 				parent->symbolMap.erase(it);
 				it = parent->symbolMap.find(symbol);
 			}
-			
+
 			add_scope(symbol);
 
 			((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
@@ -404,9 +420,9 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	else
 	{
 		add_scope(symbol);
-		
+
 		((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
-		
+
 		current = ((Class*)symbol)->get_type_graph_position()->parent;
 
 		valid_class = true;
@@ -419,9 +435,9 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		cnt++;
 		queue<string>list;
 		string curr_part = "", str_list = bases.front();
-		
 
-		for (int i = 0;i < str_list.length();i++)
+
+		for (int i = 0; i < str_list.length(); i++)
 		{
 			if (str_list[i] == '.')
 				list.push(curr_part), curr_part = "";
@@ -433,20 +449,20 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		pair<void*, bool> find_res = type_defination_tree->find(current, list, ((Class*)symbol)->get_type_graph_position());
 
 		symbolTable* find_base = (symbolTable*)find_res.first;
-		
+
 
 		if (cnt != 1) {
 			if (find_base != nullptr) {
-				
+
 				if (find_base->owner->getType() == "class")
 					cout << "error : there is an error in line " << symbol->getLineNo() << ", no more than one extended class and it should be the first one after Colon." << endl;
-				
+
 				else if (find_base->owner->getType() == "interface")
 					((Class*)symbol)->add_base(bases.front(), find_base);
 				else cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is a namespace." << endl;
 
 			}
-			else if(find_res.second)
+			else if (find_res.second)
 				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared or inaccessible type '" << bases.front() << "'." << endl;
 
 			else later_defination.push(make_pair(list, make_pair(current, symbol)));
@@ -456,7 +472,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 
 			if (find_base != nullptr)
 			{
-				
 				if (find_base->owner->getType() == "class")
 				{
 					if (((Class*)find_base->owner)->is_final())
@@ -478,6 +493,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 				else if (find_base->owner->getType() == "interface")
 					((Class*)symbol)->add_base(bases.front(), find_base);
 				
+
 				else
 					cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared , inaccessible type or it's form circular base class depedency '" << bases.front() << "'." << endl;
 			}
@@ -486,7 +502,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 			{
 				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared , inaccessible type or it's form circular base class depedency '" << bases.front() << "'." << endl;
 			}
-			else 
+			else
 			{
 				((Class*)symbol)->set_extended_class(make_pair(symbol->getName(), nullptr));
 
