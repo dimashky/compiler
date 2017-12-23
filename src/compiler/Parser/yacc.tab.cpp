@@ -84,7 +84,7 @@
 	extern int yyparse();
 	extern FILE* yyin;
 
-	Logger l("parser.log");
+	Logger l("logs/parser.log");
 	void yyerror(const char *);
 		
 

@@ -1132,7 +1132,7 @@ YY_DECL
 		 start_str = get_time_and_date();
 		 first_loop = false;
 		}
-		FILE *f = fopen("Lex.log","a");
+		FILE *f = fopen("logs/Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
 			r y = q.front();
