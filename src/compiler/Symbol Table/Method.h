@@ -25,9 +25,8 @@ public:
 	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters)
 	{
 		while (!parameters.empty())
-			types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, true, parameters.front().first.second.first, parameters.front().first.second.second)), parameters.pop();
+			types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, true, false, parameters.front().first.second.first, parameters.front().first.second.second)), parameters.pop();
 	}
-
 	vector<LocalVariable*>& get_parameters();
 	
 	int get_parametars_count()

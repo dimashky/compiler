@@ -1,9 +1,10 @@
 #include "LocalVariable.h"
-LocalVariable::LocalVariable(string type_variable, string name, bool isParameter, int line_no, int col_no) : Symbol(name, line_no, col_no)
+LocalVariable::LocalVariable(string type_variable, string name, bool isParameter, bool is_const, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
 	this->type_variable = type_variable;
 	this->isParameter = isParameter;
 	this->type_ref = nullptr;
+	this->is_const = is_const;
 }
 string LocalVariable::getType()
 {
@@ -19,7 +20,7 @@ bool LocalVariable::is_final()
 }
 bool LocalVariable::is_parameter()
 {
-	return isParameter; 
+	return isParameter;
 }
 
 LocalVariable::~LocalVariable()

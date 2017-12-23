@@ -22,7 +22,6 @@ private:
 	symbolTable *parent;
 	Symbol* owner;
 	void add_scope(Symbol* symbol);
-	void add_scope();
 	void add_symbol_without_open_brackets(Symbol* symbol);
 	static FILE *nodeFile, *edgeFile;
 public:
@@ -32,6 +31,7 @@ public:
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
 	static class_tree *type_defination_tree;
 	symbolTable(symbolTable* parent,Symbol* owner);
+	void add_scope();
 	void addNamespace(Symbol* symbol);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
