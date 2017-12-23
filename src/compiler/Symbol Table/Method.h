@@ -13,7 +13,8 @@ private:
 	Attribute* attribute;
 	string return_type;
 	Symbol* return_type_ref;
-	bool isFinal,is_static;
+	bool isFinal,is_static,is_abstract,is_override , is_virtual;
+	
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
@@ -61,7 +62,18 @@ public:
 	bool get_is_static() {
 		return is_static; 
 	}
+	
+	bool get_is_abstract() {
+		return is_abstract;
+	}
 	bool is_final();
+	bool get_is_override() {
+		return is_override; 
+	}
+	bool get_is_virtual()
+	{
+		return is_virtual;
+	}
 	~Method();
 
 };

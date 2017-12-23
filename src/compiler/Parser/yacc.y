@@ -140,50 +140,50 @@ type_name
   
 /***** C.2.2 Types *****/
 type
-  : non_array_type	{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}	
-  | array_type		{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}	
+  : non_array_type	{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}
+  | array_type		{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}
   ;
   
 non_array_type
-  : simple_type		{l.a("non_array_type",1);$<r.known_type>$ = true;$<r.base>$ = new string("");}
+  : simple_type		{l.a("non_array_type",1);$<r.known_type>$ = true;$<r.base>$ = $<r.base>1;}
   | type_name		{l.a("non_array_type",1);$<r.known_type>$ = false;$<r.base>$ = $<r.base>1;}
   ;
   
 simple_type
-  : primitive_type	{l.a("simple_type",1);}
-  | class_type		{l.a("simple_type",1);}
-  | pointer_type	{l.a("simple_type",1);}
+  : primitive_type	{l.a("simple_type",1);$<r.base>$ = $<r.base>1;}
+  | class_type		{l.a("simple_type",1);$<r.base>$ = $<r.base>1;}
+  | pointer_type	{l.a("simple_type",1);$<r.base>$ = $<r.base>1;}
   ;
 
 primitive_type
-  : numeric_type	{l.a("primitive_type",1);}
-  | BOOL			{l.a("primitive_type",0);}
+  : numeric_type	{l.a("primitive_type",1);$<r.base>$ = $<r.base>1;}
+  | BOOL			{l.a("primitive_type",0);$<r.base>$ = new string("bool");}
   ;
 
 numeric_type
-  : integral_type			{l.a("numeric_type",1);}
-  | floating_point_type		{l.a("numeric_type",1);}
-  | DECIMAL					{l.a("numeric_type",0);}
+  : integral_type			{l.a("numeric_type",1);$<r.base>$ = $<r.base>1;}
+  | floating_point_type		{l.a("numeric_type",1);$<r.base>$ = $<r.base>1;}
+  | DECIMAL					{l.a("numeric_type",0);$<r.base>$ = new string("decimal");}
   ;
 
 integral_type
-  : SBYTE	 {l.a("integral_type",0);}
-  | BYTE	 {l.a("integral_type",0);}
-  | SHORT	 {l.a("integral_type",0);}
-  | USHORT	 {l.a("integral_type",0);}
-  | INT		 {l.a("integral_type",0);}
-  | UINT	 {l.a("integral_type",0);}
-  | LONG	 {l.a("integral_type",0);}
-  | ULONG	 {l.a("integral_type",0);}
-  | CHAR	 {l.a("integral_type",0);}
+  : SBYTE	 {l.a("integral_type",0);$<r.base>$ = new string("sbyte");}
+  | BYTE	 {l.a("integral_type",0);$<r.base>$ = new string("byte");}
+  | SHORT	 {l.a("integral_type",0);$<r.base>$ = new string("short");}
+  | USHORT	 {l.a("integral_type",0);$<r.base>$ = new string("ushort");}
+  | INT		 {l.a("integral_type",0);$<r.base>$ = new string("int");}
+  | UINT	 {l.a("integral_type",0);$<r.base>$ = new string("uint");}
+  | LONG	 {l.a("integral_type",0);$<r.base>$ = new string("long");}
+  | ULONG	 {l.a("integral_type",0);$<r.base>$ = new string("ulong");}
+  | CHAR	 {l.a("integral_type",0);$<r.base>$ = new string("char");}
   ;
 floating_point_type
-  : FLOAT	{l.a("floating_point_type",0);}
-  | DOUBLE	{l.a("floating_point_type",0);}
+  : FLOAT	{l.a("floating_point_type",0);$<r.base>$ = new string("float");}
+  | DOUBLE	{l.a("floating_point_type",0);$<r.base>$ = new string("double");}
   ;
 class_type
-  : OBJECT									{l.a("class_type",0);$<r.str>$ = $<r.str>1;}
-  | STRING									{l.a("class_type",0);$<r.str>$ = $<r.str>1;}
+  : OBJECT									{l.a("class_type",0);$<r.base>$ = new string("object");}
+  | STRING									{l.a("class_type",0);$<r.base>$ = new string("string");}
   ;
 pointer_type
   : type STAR								{l.a("pointer_type",1);}
@@ -443,27 +443,27 @@ boolean_expression
 /***** C.2.5 Statements *****/
 statement
   : labeled_statement		                                              {l.a("statement",1);}
-  | declaration_statement	                                            {l.a("statement",1);}
-  | embedded_statement		                                            {l.a("statement",1);}
+  | declaration_statement	                                              {l.a("statement",1);}
+  | embedded_statement		                                              {l.a("statement",1);}
   ;
 embedded_statement
-  : block					                                                     {l.a("embedded_statement",1);}
-  | empty_statement			                                               {l.a("embedded_statement",1);}
+  : block					                                             {l.a("embedded_statement",1);}
+  | empty_statement			                                             {l.a("embedded_statement",1);}
   | expression_statement	                                             {l.a("embedded_statement",1);}
   | selection_statement		                                             {l.a("embedded_statement",1);}
   | iteration_statement		                                             {l.a("embedded_statement",1);}
-  | jump_statement			                                               {l.a("embedded_statement",1);}
-  | try_statement			                                                 {l.a("embedded_statement",1);}
-  | checked_statement		                                               {l.a("embedded_statement",1);}
+  | jump_statement			                                             {l.a("embedded_statement",1);}
+  | try_statement			                                             {l.a("embedded_statement",1);}
+  | checked_statement		                                             {l.a("embedded_statement",1);}
   | unchecked_statement		                                             {l.a("embedded_statement",1);}
-  | lock_statement			                                               {l.a("embedded_statement",1);}
-  | using_statement			                                               {l.a("embedded_statement",1);}
-  | unsafe_statement		                                               {l.a("embedded_statement",1);}
-  | fixed_statement			                                               {l.a("embedded_statement",1);}
+  | lock_statement			                                             {l.a("embedded_statement",1);}
+  | using_statement			                                             {l.a("embedded_statement",1);}
+  | unsafe_statement		                                             {l.a("embedded_statement",1);}
+  | fixed_statement			                                             {l.a("embedded_statement",1);}
   ;
 block
-  : LEFT_BRACKET_GROUP statement_list_opt RIGHT_BRACKET_GROUP	          {l.a("block",1);}
-  | LEFT_BRACKET_GROUP error			  RIGHT_BRACKET_GROUP			 {l.a("block",1,1);}
+  : LEFT_BRACKET_GROUP  { SPL->add_scope(); }  statement_list_opt  RIGHT_BRACKET_GROUP	             {l.a("block",1);  SPL->endScope();}
+  | LEFT_BRACKET_GROUP     error			                       RIGHT_BRACKET_GROUP			     {l.a("block",1,1);}
   ;
 statement_list_opt
   : /* Nothing */                                                     {l.a("statement_list_opt",0);}
@@ -471,7 +471,7 @@ statement_list_opt
   ;
 
 statement_list
-  : statement					                                                {l.a("statement_list",1);}
+  : statement					                                        {l.a("statement_list",1);}
   | statement_list statement	                                        {l.a("statement_list",2);}
   ;
 empty_statement
@@ -481,16 +481,18 @@ labeled_statement
   : IDENTIFIER COLON statement	                                      {l.a("labeled_statement",1);}
   ;
 declaration_statement
-  : local_variable_declaration SEMICOLON	                            {l.a("declaration_statement",1);}
-  | local_constant_declaration SEMICOLON	                            {l.a("declaration_statement",1);}
+  : local_variable_declaration SEMICOLON	                              {l.a("declaration_statement",1);}
+  | local_constant_declaration SEMICOLON	                              {l.a("declaration_statement",1);}
   | local_variable_declaration error		                              {yyerrok; l.a("declaration_statement",1,1);}
   | local_constant_declaration error		                              {yyerrok; l.a("declaration_statement",1,1);}
   ;
 local_variable_declaration
   : type variable_declarators 		                                      
-			{	l.a("local_variable_declaration",2);
-				SPL->addLocalVariable(string($<r.str>1),*$<r.identifiers>2,$<r.line_no>2,$<r.col_no>2) ;
-			}
+	{
+		l.a("local_variable_declaration",2);
+
+		SPL->addLocalVariable(*$<r.base>1,*$<r.identifiers>2,$<r.known_type>1,false,$<r.line_no>2,$<r.col_no>2) ;
+	}
   ;
 variable_declarators
   : variable_declarator			       
@@ -523,14 +525,28 @@ stackalloc_initializer
   : STACKALLOC type  LEFT_BRACKET expression RIGHT_BRACKET								{l.a("stackalloc_initializer",2);}
   ; 
 local_constant_declaration
-  : CONST type constant_declarators														{l.a("local_constant_declaration",2);}
+  : CONST type constant_declarators														
+  {
+		l.a("local_constant_declaration",2);
+		SPL->addLocalVariable(*$<r.base>2,*$<r.identifiers>3,$<r.known_type>2,true,$<r.line_no>2,$<r.col_no>2) ;
+  }
   ;
 constant_declarators
-  : constant_declarator																	{l.a("constant_declarators",1);}
-  | constant_declarators COMMA constant_declarator										{l.a("constant_declarators",2);}
+  : constant_declarator																	
+  {
+		l.a("constant_declarators",1);
+  		$<r.identifiers>$ = new queue<string>();
+		$<r.identifiers>$->push(*$<r.identifier>1);
+  }
+  | constant_declarators COMMA constant_declarator										
+  {
+		l.a("constant_declarators",2);
+	  	$<r.identifiers>$ = $<r.identifiers>1;
+		$<r.identifiers>$->push(*$<r.identifier>3);	
+  }
   ;
 constant_declarator
-  : IDENTIFIER EQUAL constant_expression                            					{l.a("constant_declarator",1);}
+  : IDENTIFIER EQUAL constant_expression                            					{l.a("constant_declarator",1);$<r.identifier>$ = new string($<r.str>1);}
   ;
   /*
 expression_statement
@@ -959,7 +975,7 @@ method_header
 formal_parameter_list_opt
   : /* Nothing */												
         {	   l.a("formal_parameter_list_opt",0);
-             $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
+               $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
         }
   | formal_parameter_list									
         {   l.a("formal_parameter_list_opt",1);

@@ -9,9 +9,9 @@ namespace testCSH
 
             }
         }
-         void Main(string[] args)
-        {
-
-        }
+    }
+    class t 
+    {
+        override void f();
     }
 }
