@@ -1,3 +1,4 @@
+
 class x
 {
     void ff()

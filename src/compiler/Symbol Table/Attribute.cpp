@@ -168,7 +168,7 @@ bool Attribute::add(string nameAtt)
 				if ((nameAtt == "PUBLIC" || nameAtt == "PRIVATE" || nameAtt == "PROTECTED"))// not more Access
 				{
 					if ((oneAccess) && (!errorAccess)) {
-						error_handler.add(error(line_no, col_no, "attribute error, More than one protection modifier"));
+						cout << "error : More than one protection modifier" << endl;
 						errorAccess = true;
 						return false;
 					}
@@ -177,7 +177,7 @@ bool Attribute::add(string nameAtt)
 						set<string>::iterator iti1 = whatHave.find("ABSTRACT");
 						set<string>::iterator iti2 = whatHave.find("OVERRIDE");
 						if ((iti != whatHave.end() || iti1 != whatHave.end() || iti2 != whatHave.end()) && (!errorPrivate)) {
-							error_handler.add(error(line_no, col_no, "attribute error, virtual or abstract members cannot be private"));
+							cout << "error : virtual or abstract members cannot be private" << endl;
 							errorPrivate = true;
 							return false;
 						}
@@ -188,7 +188,7 @@ bool Attribute::add(string nameAtt)
 					set<string>::iterator it3 = whatHave.find("PRIVATE");
 					set<string>::iterator it4 = whatHave.find("PUBLIC");
 					if ((it3 != whatHave.end() || it4 != whatHave.end()) && !errorAccess) {
-						error_handler.add(error(line_no, col_no, "attribute error, More than one protection modifier"));
+						cout << "error : More than one protection modifier" << endl;
 						errorAccess = true;
 						return false;
 					}
@@ -197,25 +197,117 @@ bool Attribute::add(string nameAtt)
 				{
 					set<string>::iterator it5 = whatHave.find("PRIVATE");
 					if (it5 != whatHave.end()) {
-						error_handler.add(error(line_no, col_no, "attribute error, virtual or abstract members cannot be private"));
+						cout << "error : virtual or abstract members cannot be private" << endl;
 						return false;
 					}
 					set<string>::iterator it6 = whatHave.find("STATIC");
 					if (it6 != whatHave.end()) {
-						error_handler.add(error(line_no, col_no, "attribute error, STATIC member cannot be marked as override, virtual, or abstract"));
+						cout << "error : STATIC member cannot be marked as override, virtual, or abstract" << endl;
 						return false;
 					}
 					set<string>::iterator it7 = whatHave.find("ABSTRACT");
 					if (it7 != whatHave.end()) {
-						error_handler.add(error(line_no, col_no, "attribute error, The abstract method cannot be marked virtual"));
+						cout << "error : The abstract method cannot be marked virtual" << endl;
 						return false;
 					}
 					set<string>::iterator it8 = whatHave.find("OVERRIDE");
 					if (it8 != whatHave.end()) {
-						error_handler.add(error(line_no, col_no, "attribute error, member marked as override cannot be marked as new or virtual"));
+						cout << "error : member marked as override cannot be marked as new or virtual" << endl;
 						return false;
 					}
 
+				}
+				else if (nameAtt == "STATIC") { // no sealed or STATIC
+					set<string>::iterator iti = whatHave.find("VIRTUAL");
+					set<string>::iterator iti1 = whatHave.find("ABSTRACT");
+					set<string>::iterator iti2 = whatHave.find("OVERRIDE");
+					if (iti != whatHave.end() || iti1 != whatHave.end() || iti2 != whatHave.end()) {
+						cout << "error : STATIC member cannot be marked as override, virtual, or abstract" << endl;
+						return false;
+					}
+
+				}
+				else if (nameAtt == "SEALED") {
+					set<string>::iterator iti = whatHave.find("OVERRIDE");
+					if (iti == whatHave.end()) {
+						cout << "error : cannot be sealed because it is not an override" << endl;
+						return false;
+					}
+				}
+				else if (nameAtt == "OVERRIDE") {
+					set<string>::iterator itr1 = whatHave.find("PUBLIC");
+					set<string>::iterator itr2 = whatHave.find("PROTECTED");
+					set<string>::iterator itr3 = whatHave.find("INTERNAL");
+					if (itr1 != whatHave.end() || itr2 != whatHave.end() || itr3 != whatHave.end()) {
+						set<string>::iterator ite1 = whatHave.find("NEW");
+						set<string>::iterator ite2 = whatHave.find("VIRTUAL");
+						if (ite1 != whatHave.end() || ite2 != whatHave.end()) {
+							cout << "error : member marked as override cannot be marked as new or virtual" << endl;
+							return false;
+						}
+						else {
+							set<string>::iterator ite4 = whatHave.find("STATIC");
+							if (ite4 != whatHave.end()) {
+								cout << "error : STATIC member cannot be marked as override, virtual, or abstract" << endl;
+								return false;
+							}
+
+						}
+
+					}
+					else if (!errorPrivate) {
+						cout << "error : virtual or abstract members cannot be PRIVATE" << endl;
+						errorPrivate = true;
+						return false;
+					}
+
+				}
+				else if (nameAtt == "NEW") {
+					set<string>::iterator ite32 = whatHave.find("OVERRIDE");
+					if (ite32 != whatHave.end()) {
+						cout << "error : member marked as override cannot be marked as NEW or virtual" << endl;
+						return false;
+					}
+
+				}
+
+				else if (nameAtt == "ABSTRACT") {
+					set<string>::iterator itr1 = whatHave.find("PUBLIC");
+					set<string>::iterator itr2 = whatHave.find("PROTECTED");
+					set<string>::iterator itr3 = whatHave.find("INTERNAL");
+					if (itr1 != whatHave.end() || itr2 != whatHave.end() || itr3 != whatHave.end()) {
+						set<string>::iterator ite2 = whatHave.find("VIRTUAL");
+						if (ite2 != whatHave.end()) {
+							cout << "error : The abstract method cannot be marked virtual" << endl;
+							return false;
+						}
+						else {
+							set<string>::iterator ite34 = whatHave.find("SEALED");
+							if (ite34 != whatHave.end()) {
+								cout << "error : cannot be both abstract and sealed" << endl;
+								return false;
+							}
+							else {
+								set<string>::iterator ite324 = whatHave.find("EXTERN");
+								if (ite324 != whatHave.end()) {
+									cout << "error : cannot be both abstract and extern" << endl;
+									return false;
+								}
+							}
+						}
+					}
+					else {
+						cout << "error : virtual or abstract members cannot be private" << endl;
+						return false;
+					}
+
+				}
+				else if (nameAtt == "EXTERN") {
+					set<string>::iterator ite324 = whatHave.find("ABSTRACT");
+					if (ite324 != whatHave.end()) {
+						cout << "error : cannot be both abstract and extern" << endl;
+						return false;
+					}
 				}
 				else if (nameAtt == "STATIC") { // no sealed or STATIC
 					set<string>::iterator iti = whatHave.find("VIRTUAL");
@@ -320,7 +412,7 @@ bool Attribute::add(string nameAtt)
 		}
 		else
 		{
-			string m = "attribute error, The modifier '" + nameAtt +"' is not valid for this item";
+			string m = "attribute error, The modifier '" + nameAtt + "' is not valid for this item";
 			error_handler.add(error(line_no, col_no, m.c_str()));
 			return false;
 		}
@@ -418,7 +510,7 @@ bool Attribute::add(string nameAtt)
 			else if (!errorDuplicate)
 			{
 				errorDuplicate = true;
-				string m =  "attribute error, Duplicate '"+ nameAtt + "' modifier";
+				string m = "attribute error, Duplicate '" + nameAtt + "' modifier";
 				error_handler.add(error(line_no, col_no, m.c_str()));
 				return false;
 			}

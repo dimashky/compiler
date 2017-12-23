@@ -14,7 +14,7 @@ class symbolParser
 {
 private:
 	symbolTable* symboltable;
-public :
+public:
 	symbolParser();
 	void endScope();
 	void print(queue<string>& s1, char* s2);

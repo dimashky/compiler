@@ -235,6 +235,15 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() == symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
 
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "interface" && ((Method*)symbol)->get_is_abstract())
+		error_handler.add(error(symbol->getLineNo(), -1, "error, The modifier 'abstract' is not valid for this item."));
+
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() == symbol->getName())
+		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
+
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_abstract() && !((Class*)parent->owner)->get_is_abstract())
+		error_handler.add(error(symbol->getLineNo(), -1, "error, '" + ((Method*)symbol)->getName() + "' is abstract but it is contained in non-abstract class '" + ((Class*)parent->owner)->getName() + "'.."));
+
 	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
 	{
 		if (symbolTable::is_main != 0) {
@@ -243,9 +252,18 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		}
 		symbolTable::is_main++;
 	}
+
+	/// error for override method 
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_override())
+	{
+		if (((Class *)parent->owner)->get_extended_class().second == nullptr)
+			cout << "error : there is an error in line " << symbol->getLineNo() << " no suitable method found to override." << endl;
+		else {
+
+		}
+
+	}
 	((Method*)symbol)->add_parametars(parameters);
-
-
 
 	if (!known_type)
 	{
@@ -427,8 +445,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 		queue<string>list;
 		string curr_part = "", str_list = bases.front();
 
-
-		for (int i = 0;i < str_list.length();i++)
+		for (int i = 0; i < str_list.length(); i++)
 		{
 			if (str_list[i] == '.')
 				list.push(curr_part), curr_part = "";
@@ -446,7 +463,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			if (find_base != nullptr) {
 
 				if (find_base->owner->getType() == "class")
-
 					error_handler.add(error(symbol->getLineNo(), -1, "error, no more than one extended class and it should be the first one after Colon."));
 
 				else if (find_base->owner->getType() == "interface")
@@ -465,7 +481,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 			if (find_base != nullptr)
 			{
-
 				if (find_base->owner->getType() == "class")
 				{
 					if (((Class*)find_base->owner)->is_final())
@@ -486,6 +501,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 				else if (find_base->owner->getType() == "interface")
 					((Class*)symbol)->add_base(bases.front(), find_base);
+
 
 				else
 					error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
