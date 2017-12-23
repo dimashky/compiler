@@ -462,8 +462,8 @@ embedded_statement
   | fixed_statement			                                             {l.a("embedded_statement",1);}
   ;
 block
-  : LEFT_BRACKET_GROUP statement_list_opt RIGHT_BRACKET_GROUP	          {l.a("block",1);}
-  | LEFT_BRACKET_GROUP error			  RIGHT_BRACKET_GROUP			 {l.a("block",1,1);}
+  : LEFT_BRACKET_GROUP  { SPL->add_scope(); }  statement_list_opt  RIGHT_BRACKET_GROUP	             {l.a("block",1);  SPL->endScope();}
+  | LEFT_BRACKET_GROUP     error			                       RIGHT_BRACKET_GROUP			     {l.a("block",1,1);}
   ;
 statement_list_opt
   : /* Nothing */                                                     {l.a("statement_list_opt",0);}
@@ -958,7 +958,7 @@ field_declaration
   ;
 
 method_declaration
-  : method_header method_body		{l.a("method_declaration",2); SPL->endScope();}
+  : method_header method_body		{l.a("method_declaration",2);SPL->check_function(); SPL->endScope();}
   ;
 
 method_header

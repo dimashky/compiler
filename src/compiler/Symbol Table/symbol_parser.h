@@ -24,8 +24,9 @@ public :
 	void addField(queue<string>modifiers , string typeIdentifier, queue<string>identifier , int line_no, int col_no, bool known_type );
 	void addLocalVariable(string typeIdentifier, queue<string>identifier, bool known_type,bool constant, int line_no, int col_no);
 	void addMethod(queue<string>modifiers  , string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, int line_no, int col_no, bool known_type);
-	
+	void add_scope();
 	void check();
+	void check_function();
 	void check_later_defination();
 	symbolTable* getSymbolTableRoot();
 };

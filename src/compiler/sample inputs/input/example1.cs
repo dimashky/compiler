@@ -1,10 +1,29 @@
-class xx
+class x
 {
-    void ff(float x)
+    void ff()
     {
+        
+        {
+            {
+                int x;
+            }
+        }
+        {
+            int x;
+            {
+                {
+                    {
+                        {
+                            {
+                                {
+                                    int x;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         int x;
-        xx qwe;
-        float asd, asd12;
-        const float qweknm = 123;
     }
 }

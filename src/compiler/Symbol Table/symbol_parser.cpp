@@ -53,20 +53,7 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 	return;
 
 }
-void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
-{
-	while (!identifiers.empty())
-	{
-		cout << typeIdentifier << " " << identifiers.front() << " " << known_type << " " << constant << endl;
-		//Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, line_no, col_no);
-		//symboltable->addLocalVariable(newLocalVariable, false);
-		identifiers.pop();
 
-	}
-	return;
-
-
-}
 
 void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no,bool known_type)
 {
@@ -74,6 +61,24 @@ void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, stri
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters,known_type);
 }
 
+
+void symbolParser::add_scope()
+{
+	symboltable->add_scope();
+}
+
+void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
+{
+	while (!identifiers.empty())
+	{
+		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, constant, line_no, col_no);
+		symboltable->addLocalVariable(newLocalVariable, known_type);
+		identifiers.pop();
+	}
+	return;
+
+
+}
 
 void symbolParser::check_later_defination()
 {
@@ -251,6 +256,11 @@ void check_later_def_var()
 		}
 		symbolTable::later_defination_var.pop();
 	}
+}
+
+void symbolParser::check_function()
+{
+	symboltable->check_method(symbolTable::openBrackets.top() , map<string, bool> () );
 }
 
 

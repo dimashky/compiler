@@ -9,6 +9,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name,line_no,col_no)
 	is_protected = false;
 	owner_is_namespace = false;
 	type_graph_position = nullptr;
+	baseClassImpInterfaces.push_back(make_pair("", nullptr));
 }
 
 Class::~Class()

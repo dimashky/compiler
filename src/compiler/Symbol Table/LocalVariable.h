@@ -11,9 +11,9 @@ class LocalVariable : public Symbol
 private:
 	string type_variable;
 	Symbol* type_ref;
-	bool isFinal,isParameter;
+	bool isFinal,isParameter,is_const;
 public:
-	LocalVariable(string type_variable, string name,bool isParameter, int line_no, int col_no);
+	LocalVariable(string type_variable, string name,bool isParameter,bool is_const, int line_no, int col_no);
 	string getType();
 	string get_type_name();
 	bool is_final();
