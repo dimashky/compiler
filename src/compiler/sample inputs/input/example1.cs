@@ -10,15 +10,20 @@ class f
 
     class t
     {
-        protected sealed virtual void f()
+        public sealed virtual void f()
         {
 
         }
 
     }
+
     class y : t
     {
+        protected override void f()
+        {
 
+        }
     }
+
 
 }
