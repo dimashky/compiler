@@ -27,7 +27,7 @@ void Logger::a(string s, int subnodes_number, bool err)
 	else
 		fprintf(nodeFile, "{ id:%d, label:'%s', shape: 'ellipse', color:'%s'},", nodeCnt, s.c_str(),color);
 	if (subnodes_number != 0) { // non terminal node
-		for (int i = 0;  i < subnodes_number - 1; ++i) {
+		for (int i = 0;  !subnodes.empty() && i < subnodes_number - 1; ++i) {
 			fprintf(edgeFile, "{from:%d,to:%d,id:'e%d', label: '%d', dashes:true},", nodeCnt, subnodes.top(), edgeCnt, edgeCnt);
 			subnodes.pop();
 			edgeCnt++;
@@ -35,7 +35,7 @@ void Logger::a(string s, int subnodes_number, bool err)
 		fprintf(edgeFile, "{from:%d,to:%d,id:'e%d', label: '%d', dashes:true},", nodeCnt, nodeCnt - 1, edgeCnt, edgeCnt);
 		edgeCnt++;
 	}
-	else {
+	else if(subnodes_number == 0 && nodeCnt != 1){
 		subnodes.push(nodeCnt - 1);
 	}
 	nodeCnt++;
@@ -46,15 +46,38 @@ void Logger::print()
 {
 	fprintf(nodeFile, "];");
 	fprintf(edgeFile, "];");
+	/*
+	if (!subnodes.empty()) {
+		printf("There some ERRORS with 'subnodes' stack: [ ");
+		while (!subnodes.empty())
+		{
+			printf("%d ", subnodes.top());
+			subnodes.pop();
+		}
+		printf("]\n");
+	}
+	*/
 	fclose(nodeFile);
 	fclose(edgeFile);
 	stack<string>pr = stprint;
 	ofstream out;
 	out.open(file);
+	bool error_recoverd = false;
 	while (!pr.empty())
 	{
 		out << pr.top() << endl;
+		if (pr.top() == "compilation_unit") {
+			error_recoverd = true;
+		}
 		pr.pop();
+	}
+	if (error_recoverd == false) {
+		extern FILE* info;
+		fprintf(info, "var error_recoverd = false;\n");
+	}
+	else {
+		extern FILE* info;
+		fprintf(info, "var error_recoverd = true;\n");
 	}
 	return;
 }

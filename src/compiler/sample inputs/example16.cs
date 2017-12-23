@@ -1,6 +1,8 @@
-class xx
+class x
 {
-    int x
-    
-    int y = 1
+    void f()
+    {
+        i++;
+        for (int i = 3; i < n; i++) ;
+    }
 }

@@ -1,16 +1,17 @@
 %{
 	#include <string.h>
-	#include <unistd.h>
 	#include <iostream>
-	#include <FlexLexer.h>
 	#include <string>
 	#include <queue>
 	#include <stack>
-	#define mp(x,y) make_pair(x,y)
+	#include <ctime>
+	#include <ratio>
+	#include <chrono>
+	#include "../Error Handler/error_handler.h"
+
 	using namespace std;
 
-	#define YY_DECL int yylex()
-
+	
 	#include "../parser/yacc.tab.h"
 
 
@@ -27,11 +28,18 @@
 		char* str;
 		int line_no;
 		int col_no;
+		string *modifier,*base;
+		queue<string> *modifiers,*bases;
+
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
 			this->f = f;
 			this->c = c;
-							this->str = new char[255];	this->str[0] = '\0';
+			modifier = new string();
+			base = new string();
+			modifiers = new queue<string>();
+			bases = new queue<string>();
+			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);
 			}
@@ -40,8 +48,11 @@
 		}
 	};
 
-	int line_no = 1;
-	int col_no = 1;
+
+  bool first_loop = true;
+	extern int line_no = 1;
+	extern int col_no = 1;
+  
 	static bool invalid_token = false;
 	queue <int> t;
 	queue <r> q;
@@ -96,6 +107,12 @@
 		yylval.r.str[0] = '\0';
 		strcpy(yylval.r.str, yytext);
 	}
+	extern string get_time_and_date();
+
+	std::chrono::system_clock::time_point start;
+	string start_str;
+	
+	extern errorHandler error_handler;
 %}
 
 %option noyywrap
@@ -157,7 +174,12 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 %%
 
 %{
-		FILE *f = fopen("Lex.log","a");
+		if(first_loop){
+		 start  = std::chrono::system_clock::now();
+		 start_str = get_time_and_date();
+		 first_loop = false;
+		}
+		FILE *f = fopen("logs/Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
 			r y = q.front();
@@ -201,11 +223,11 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "]"   { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ]\n",line_no,col_no);
+			error_handler.add(error(line_no, col_no, "unbalanced parenthesis, unexpected ]\n"));
 		else if(brackets.top().br != '[')
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ], expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
-		else
-			brackets.pop();
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, unexpected ], expected match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));
+
+		brackets.pop();
 		
 		t.push(RIGHT_BRACKET); 
 }
@@ -217,11 +239,11 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "}"   { add(NULL,NULL,NULL,NULL,yytext);  
 
 		if(brackets.empty())
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }\n",line_no,col_no);
+			error_handler.add(error(line_no, col_no, "unbalanced parenthesis, unexpected }\n"));
 		else if(brackets.top().br != '{')
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected }, expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
-		else
-			brackets.pop();
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, unexpected }, expected match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));
+
+		brackets.pop();
 
 		t.push(RIGHT_BRACKET_GROUP); 
 }
@@ -233,11 +255,11 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 ")"   { add(NULL,NULL,NULL,NULL,yytext);  
 	
 		if(brackets.empty())
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected )\n",line_no,col_no);
+			error_handler.add(error(line_no, col_no, "unbalanced parenthesis, unexpected )\n"));
 		else if(brackets.top().br != '(')
-			fprintf(stderr,"[%d, %d] -> unbalanced parenthesis, unexpected ), expected %c in line %d\n",line_no,col_no,brackets.top().br,brackets.top().line_no);
-		else
-			brackets.pop();
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, unexpected ), expected match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));
+		
+		brackets.pop();
 
 		t.push(RIGHT_BRACKET_CIRCLE); 
 }
@@ -278,8 +300,8 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "|="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(OREQ); }
 "<<"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLT); }
 ">>"  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGT); }
-">>="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGTEQ); }
-"<<="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLTEQ); }
+">>=" { add(NULL,NULL,NULL,NULL,yytext);  t.push(GTGTEQ); }
+"<<=" { add(NULL,NULL,NULL,NULL,yytext);  t.push(LTLTEQ); }
 "=="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQEQ); }
 "!="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(NOTEQ); }
 "<="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(LEQ); }
@@ -298,9 +320,30 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 .					  {	lexical_error("invalid token", yytext);	}
 
+{bad_identifier}      {lexical_error("Bad IDENTIFIER", yytext);  add(NULL,NULL,NULL,yytext,yytext); t.push(IDENTIFIER);}
+
 <<EOF>> {
-	if(!brackets.empty() || invalid_token == true)
+	auto end = std::chrono::system_clock::now();
+	string end_str = get_time_and_date();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+
+	std::time_t start_time = std::chrono::system_clock::to_time_t(start);
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+	
+	extern FILE* info;
+//	std::cout << "Statics:\n-> Finished Scan at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n============\n";
+	
+	fprintf(info, "var compile_start = '%s'; var lex_end = '%s';var lex_elapsed = '%f';\n", start_str.c_str(), end_str.c_str(), elapsed_seconds.count());
+
+	if(!brackets.empty()){
+		while(!brackets.empty()){
+			error_handler.add(error(line_no, col_no, ("unbalanced parenthesis, NO match for "+string(1,(brackets.top().br))+" in line "+to_string(brackets.top().line_no)).c_str()));		
+			brackets.pop();
+		}
 		yyterminate();
+		return 0;
+	}
+
 	t.push(0);
 	add(NULL,NULL,NULL,"END","END");
 	FILE *f = fopen("Lex.log","w");
@@ -437,7 +480,6 @@ static int token_for(const char *lexeme)
 
 void lexical_error(const char *msg, char *yytext)
 {
-	extern bool invalid_token;
-	invalid_token = true;
-	fprintf(stderr,"[%d, %d] -> lexical error, %s [%s]\n",line_no,col_no,msg,yytext);
+	extern errorHandler error_handler;
+	error_handler.add(error(line_no, col_no, string(string(msg)+string(" ")+string(yytext)).c_str()));
 }

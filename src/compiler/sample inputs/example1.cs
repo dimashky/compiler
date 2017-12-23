@@ -1,24 +1,8 @@
-namespace ConsoleApplication2
+class a
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            int x=10, y=0; 
-           for(int i=0;i<x;i++)
-            {
-               
-               if(i%2==0)
-                {
-                    y += x; 
-                } 
-            }
+    int x;
+    int x;
+    int a;
+    int a;
 
-           while(y > 0 )
-            {
-                y--;
-            }
-
-        }
-    }
 }
