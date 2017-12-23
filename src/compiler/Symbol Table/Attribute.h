@@ -24,7 +24,8 @@ class Attribute
     bool errorStaticSealed ;
     bool errorPrivate ;
     bool errorConst ;
-
+	int col_no;
+	int line_no;
 };
 
 #endif // ATTRIBUTE_H

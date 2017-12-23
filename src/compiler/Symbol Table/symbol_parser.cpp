@@ -1,10 +1,13 @@
 #include<iostream>
 #include<vector>
 #include "symbol_parser.h"
+#include "../Error Handler/error_handler.h"
+extern errorHandler error_handler;
+
 using namespace std;
 symbolParser::symbolParser()
 {
-	symboltable = new symbolTable(NULL,NULL);
+	symboltable = new symbolTable(NULL, NULL);
 }
 
 void symbolParser::print(queue<string> &s1, char* s2)
@@ -55,10 +58,10 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 }
 
 
-void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no,bool known_type)
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type)
 {
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
-	symboltable->addMethod(newMethod, modifiers, types_ids_parameters,known_type);
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type);
 }
 
 
@@ -97,8 +100,7 @@ void symbolParser::check_later_defination()
 					pair<string, symbolTable*> test = ((Class*)symbolTable::later_defination.front().second.second)->get_extended_class();
 
 					if (test.second != nullptr || test.first == "")
-						cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", no more than one extended class or it should be the first one after Colon." << endl;
-
+						error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, "symbol parser error, no more than one extended class or it should be the first one after Colon."));
 					else
 					{
 						if (((Class*)search->get_owner())->is_final())
@@ -111,8 +113,8 @@ void symbolParser::check_later_defination()
 								if (!symbolTable::later_defination.front().first.empty())
 									parent_name += '.';
 							}
-
-							cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", cannot derive from sealed type '" << parent_name << "'.\n";
+							string m = "symbol parser error, cannot derive from sealed type '" + parent_name + "'.";
+							error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 						}
 
 						else
@@ -132,9 +134,10 @@ void symbolParser::check_later_defination()
 				else if (search->get_owner()->getType() == "interface")
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
 
-				else if (search->get_owner()->getType() == "namespace")
-					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
-
+				else if (search->get_owner()->getType() == "namespace") {
+					string m = "symmbol parser error, '" + search->get_owner()->getName() + "' is a namespace.";
+					error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
+				}
 			}
 			else
 			{
@@ -146,7 +149,8 @@ void symbolParser::check_later_defination()
 					if (!symbolTable::later_defination.front().first.empty())
 						parent_name += '.';
 				}
-				cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", inhertince from non declared or inaccessible type '" << parent_name << "'." << endl;
+				string m = " symmbol parser error, inhertince from non declared or inaccessible type '" + parent_name + "'.";
+				error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 			}
 		}
 
@@ -159,7 +163,8 @@ void symbolParser::check_later_defination()
 
 				if (search->get_owner()->getType() == "class")
 				{
-					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is class and interfaces cant extend classes." << endl;
+					string m = " symmbol parser error, '" + search->get_owner()->getName() + "' is class and interfaces cant extend classes.";
+					error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 				}
 
 				else if (search->get_owner()->getType() == "interface")
@@ -171,8 +176,10 @@ void symbolParser::check_later_defination()
 						symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
 					}
 				}
-				else if (search->get_owner()->getType() == "namespace")
-					cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", '" << search->get_owner()->getName() << "' is a namespace." << endl;
+				else if (search->get_owner()->getType() == "namespace") {
+					string m = "symmbol parser error, '" + search->get_owner()->getName() + "' is a namespace.";
+					error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
+				}
 			}
 			else
 			{
@@ -184,11 +191,10 @@ void symbolParser::check_later_defination()
 					if (!symbolTable::later_defination.front().first.empty())
 						parent_name += '.';
 				}
-				cout << "error : there is an error in line " << symbolTable::later_defination.front().second.second->getLineNo() << ", implemented from non declared or inaccessible interface '" << parent_name << "'." << endl;
+				string m = "symmbol parser error, implemented from non declared or inaccessible interface '" + parent_name + "'.";
+				error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 			}
 		}
-
-
 		symbolTable::later_defination.pop();
 	}
 }
@@ -199,19 +205,21 @@ void check_cycle(node* curr, node* parent)
 		return;
 
 	else if (curr->visited == 1)
-	{	
+	{
 		for (int i = 0;i < cycle_path.size();i++)
 		{
 			int next = (i + 1) % cycle_path.size();
 			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
 			if (((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getType() == "class")
 			{
-				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' class is in inheritence cycle." << endl;
+				string m = "symmbol parser error, '" + cycle_path[i]->name + "' class is in inheritence cycle.";
+				error_handler.add(error(((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo(), -1, m.c_str()));
 				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
 			}
-			else 
+			else
 			{
-				cout << "error : there is an error in line " << ((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo() << ", '" << cycle_path[i]->name << "' interface is in inheritence cycle." << endl;
+				string m = "symmbol parser error, '" + cycle_path[i]->name + "' interface is in inheritence cycle.";
+				error_handler.add(error(((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo(), -1, m.c_str()));
 			}
 		}
 
@@ -224,11 +232,11 @@ void check_cycle(node* curr, node* parent)
 
 	for (int i = 0;i < curr->bases.size();i++)
 		check_cycle(curr->bases[i].second, curr);
-	
+
 	curr->visited = 2;
-	
+
 	cycle_path.pop_back();
-	
+
 	return;
 }
 
@@ -248,11 +256,14 @@ void check_later_def_var()
 		}
 		else
 		{
-			if (p.second.second->getType() == "field")
-				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((Field*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
-			else if(p.second.second->getType() == "localvariable")
-
-				cout << "error : there is an error in line " << p.second.second->getLineNo() << ", the type name '" << ((LocalVariable*)p.second.second)->get_type_name() << "' couldn't be found." << endl;
+			if (p.second.second->getType() == "field") {
+				string m = "error, the type name '" + ((Field*)p.second.second)->get_type_name() + "' couldn't be found.";
+				error_handler.add(error(p.second.second->getLineNo(), -1, m.c_str()));
+			}
+			else if (p.second.second->getType() == "localvariable") {
+				string m = "error, the type name '" + ((LocalVariable*)p.second.second)->get_type_name() + "' couldn't be found.";
+				error_handler.add(error(p.second.second->getLineNo(), -1, m.c_str()));
+			}
 		}
 		symbolTable::later_defination_var.pop();
 	}
@@ -260,7 +271,7 @@ void check_later_def_var()
 
 void symbolParser::check_function()
 {
-	symboltable->check_method(symbolTable::openBrackets.top() , map<string, bool> () );
+	symboltable->check_method(symbolTable::openBrackets.top(), map<string, bool>());
 }
 
 
@@ -271,10 +282,9 @@ void symbolParser::check()
 	for (int i = 0;i < symboltable->parents.size();i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 	check_later_def_var();
-	if (symbolTable::is_main == 0)	{
-		cout << "error : there is an error in line 1 " << "Program does not contain a static 'Main' method suitable for an entry point." << endl;
-
-    }
+	if (symbolTable::is_main == 0) {
+		error_handler.add(error(1, -1, "error Program does not contain a static \"Main\" method suitable for an entry point."));
+	}
 }
 
 symbolTable* symbolParser::getSymbolTableRoot()

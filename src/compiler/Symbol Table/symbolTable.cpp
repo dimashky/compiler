@@ -4,9 +4,10 @@
 #include"LocalVariable.h"
 #include"Field.h"
 #include"Method.h"
+#include "../Error Handler/error_handler.h"
+extern errorHandler error_handler;
 
-
-int symbolTable::is_main=0;
+int symbolTable::is_main = 0;
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
@@ -71,7 +72,7 @@ void symbolTable::add_symbol_without_open_brackets(Symbol* symbol)
 
 
 
-symbolTable::symbolTable(symbolTable* parent,Symbol* owner)
+symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
 {
 	this->parent = parent;
 	this->owner = owner;
@@ -104,7 +105,7 @@ void symbolTable::addNamespace(Symbol* symbol)
 void symbolTable::addField(Symbol* symbol, bool known_type)
 {
 	symbolTable *parent = NULL;
-	if (openBrackets.empty())		
+	if (openBrackets.empty())
 		parent = this;
 	else parent = openBrackets.top();
 
@@ -123,33 +124,32 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 
 		list.push(curr_part);
 
-		pair<void*,bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
 		if (ref.first != nullptr)
 			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
 		else if (ref.second)
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", the type name '" << ((Field*)symbol)->get_type_name() << "' couldn't be found." << endl;
-		else 
+			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found."));
+		else
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
 	}
 
 	if (parent->owner != NULL && parent->owner->getName() == symbol->getName())
 	{
-		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+		error_handler.add(error(symbol->getLineNo(), -1, "error,  member names cannot be the same as their enclosing type."));
 		return;
 	}
-	 
-	 map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
-	
+
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
+
 	if (it != parent->symbolMap.end())
-		cout << "error : there is an error in line " << symbol->getLineNo() << " The type '" << parent->owner->getName() << "' already contains a definition for '" << symbol->getName() << "'." << endl;
-	
-	else 
+		error_handler.add(error(symbol->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
+	else
 		add_symbol_without_open_brackets(symbol);
-	 
+
 	return;
 }
 
-void symbolTable::addLocalVariable(Symbol* symbol ,bool known_type)
+void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 {
 	symbolTable *parent = NULL;
 
@@ -177,14 +177,14 @@ void symbolTable::addLocalVariable(Symbol* symbol ,bool known_type)
 		if (ref.first != nullptr)
 			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
 		else if (ref.second)
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", the type name '" << ((Field*)symbol)->get_type_name() << "' couldn't be found." << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found."));
 		else
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
 	}
 
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = parent->symbolMap.find(symbol);
 	if (it2 != parent->symbolMap.end())
-		cout << "error : there is an error in line " << symbol->getLineNo() << ", The local variable name '" << symbol->getName() << "' is duplicate." << endl;
+		error_handler.add(error(symbol->getLineNo(), -1, "error, The local variable name '" + symbol->getName() + "' is duplicate."));
 	else
 		add_symbol_without_open_brackets(symbol);
 
@@ -192,13 +192,13 @@ void symbolTable::addLocalVariable(Symbol* symbol ,bool known_type)
 }
 
 
-void symbolTable::check_method(symbolTable* curr,map<string, bool>check_map)
+void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 {
 	for (map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > ::iterator it = curr->symbolMap.begin(); it != curr->symbolMap.end();)
 		if (check_map.find(it->first->getName()) != check_map.end())
 		{
+			error_handler.add(error(it->first->getLineNo(), -1, "error, The local variable name '" + it->first->getName() + "' is duplicate."));
 
-			cout << "error : there is an error in line " << it->first->getLineNo() << ", The local variable name '" << it->first->getName() << "' is duplicate." << endl;
 			if (it == curr->symbolMap.begin())
 			{
 				curr->symbolMap.erase(it);
@@ -212,11 +212,11 @@ void symbolTable::check_method(symbolTable* curr,map<string, bool>check_map)
 			}
 		}
 		else
-			check_map[it->first->getName() ] = true,it++; 
-	
+			check_map[it->first->getName()] = true, it++;
+
 	for (int i = 0; i < curr->childs.size(); i++)
-		check_method(curr->childs[i] ,check_map);
-	
+		check_method(curr->childs[i], check_map);
+
 	return;
 }
 
@@ -230,14 +230,16 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	else parent = openBrackets.top();
 
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
-		cout << "error : there is an error in line " << symbol->getLineNo() << " Method must have a return type or member names must be the same a class name." << endl;
+		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
 
-	if (((Method*)symbol)->get_return_type()!="" && parent->owner != NULL && parent->owner->getType() =="class"&& parent->owner->getName() == symbol->getName())
-		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() == symbol->getName())
+		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
+
 	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
 	{
 		if (symbolTable::is_main != 0) {
-			cout << "error : there is an error in line " << symbol->getLineNo() << " a program has more Main method ." << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error, a program has more Main method ."));
+
 		}
 		symbolTable::is_main++;
 	}
@@ -264,30 +266,32 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		if (ref.first != nullptr)
 			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
 		else if (ref.second)
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", the type name '" << ((Field*)symbol)->get_type_name() << "' couldn't be found." << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error,  the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found"));
+
 		else
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
 	}
-	
+
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
-	
+
 
 	if (it != parent->symbolMap.end())
 	{
 		if (it->first->getType() != "method")
-			cout << "error : there is an error in line " << symbol->getLineNo() << " The type '" << parent->owner->getName() << "' already contains a definition for '" << symbol->getName() << "'." << endl;
-		else 
-			cout << "error : there is an error in line " << symbol->getLineNo() << " The type '" << parent->owner->getName() << "' already defines a member called  '" << symbol->getName() << "' with same parametars." << endl;
-		
+			error_handler.add(error(symbol->getLineNo(), -1, " The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
+
+		else
+			error_handler.add(error(symbol->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already defines a member called  '" + symbol->getName() + "' with same parametars."));
+
 		it->second.second = new symbolTable(parent, symbol);
 
 		openBrackets.push(it->second.second);
 	}
 	else
 		add_scope(symbol);
-	
+
 	symbolTable *top = openBrackets.top();
-	vector<LocalVariable*>  &par  = ((Method*)symbol)->get_parameters();
+	vector<LocalVariable*>  &par = ((Method*)symbol)->get_parameters();
 	for (int i = 0;i < par.size();i++)
 	{
 		if (!parameters.front().second)
@@ -309,26 +313,28 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			if (ref.first != nullptr)
 				par[i]->set_type(((symbolTable*)ref.first)->owner);
 			else if (ref.second)
-				cout << "error : there is an error in line " << par[i]->getLineNo() << ", the type name '" << par[i]->get_type_name() << "' couldn't be found." << endl;
+				error_handler.add(error(par[i]->getLineNo(), -1, "error, the type name '" + par[i]->get_type_name() + "' couldn't be found."));
+
 			else
 				later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), par[i])));
 		}
 
 		map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = top->symbolMap.find(par[i]);
 		if (it2 != top->symbolMap.end())
-			cout << "error : there is an error in line " << par[i]->getLineNo() << ", The parametar name '" << par[i]->getName() << "' is duplicate." << endl;
+			error_handler.add(error(par[i]->getLineNo(), -1, "error, The parametar name '" + par[i]->getName() + "' is duplicate."));
+
 		else
 			add_symbol_without_open_brackets(par[i]);
 
 		parameters.pop();
 	}
-	
+
 
 
 	return;
 }
 
-void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&modifiers)
+void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers)
 {
 	symbolTable *parent = NULL;
 
@@ -338,7 +344,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	else parent = openBrackets.top();
 
 	if (parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
-		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
 
 	if (parent->owner != NULL && parent->owner->getType() == "namespace")
 		((Class*)symbol)->set_namespace_owner();
@@ -354,7 +360,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	{
 		if (it->first->getType() == "class")
 		{
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'"));
+
 			//optimize delete data when duplicate is found(we didn't make this optization trick)
 			if (it->second.second != NULL)
 				delete it->second.second;
@@ -368,8 +375,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		}
 		else if (it->first->getType() == "interface")
 		{
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
-			
+			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'."));
+
 			if (it->second.second != nullptr)
 				it->second.second = nullptr;
 
@@ -384,7 +391,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 
 			while (it != parent->symbolMap.end())
 			{
-				cout << "error : there is an error in line " << it->first->getLineNo() << " The type '" << parent->owner->getName() << "' already contains a definition for '" << symbol->getName() << "'." << endl;
+				error_handler.add(error(it->first->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
 
 				delete it->first;
 				delete it->second.first;
@@ -393,7 +400,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 				parent->symbolMap.erase(it);
 				it = parent->symbolMap.find(symbol);
 			}
-			
+
 			add_scope(symbol);
 
 			((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
@@ -404,9 +411,9 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 	else
 	{
 		add_scope(symbol);
-		
+
 		((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
-		
+
 		current = ((Class*)symbol)->get_type_graph_position()->parent;
 
 		valid_class = true;
@@ -419,7 +426,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		cnt++;
 		queue<string>list;
 		string curr_part = "", str_list = bases.front();
-		
+
 
 		for (int i = 0;i < str_list.length();i++)
 		{
@@ -433,21 +440,23 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 		pair<void*, bool> find_res = type_defination_tree->find(current, list, ((Class*)symbol)->get_type_graph_position());
 
 		symbolTable* find_base = (symbolTable*)find_res.first;
-		
+
 
 		if (cnt != 1) {
 			if (find_base != nullptr) {
-				
+
 				if (find_base->owner->getType() == "class")
-					cout << "error : there is an error in line " << symbol->getLineNo() << ", no more than one extended class and it should be the first one after Colon." << endl;
-				
+
+					error_handler.add(error(symbol->getLineNo(), -1, "error, no more than one extended class and it should be the first one after Colon."));
+
 				else if (find_base->owner->getType() == "interface")
 					((Class*)symbol)->add_base(bases.front(), find_base);
-				else cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is a namespace." << endl;
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, The local variable name '" + bases.front() + "' is a namespace."));
 
 			}
-			else if(find_res.second)
-				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared or inaccessible type '" << bases.front() << "'." << endl;
+			else if (find_res.second)
+				error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared or inaccessible type '" + bases.front() + "'."));
 
 			else later_defination.push(make_pair(list, make_pair(current, symbol)));
 		}
@@ -456,11 +465,11 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 
 			if (find_base != nullptr)
 			{
-				
+
 				if (find_base->owner->getType() == "class")
 				{
 					if (((Class*)find_base->owner)->is_final())
-						cout << "error : there is an error in line " << symbol->getLineNo() << ", cannot derive from sealed type '" << find_base->owner->getName() << "'.\n";
+						error_handler.add(error(symbol->getLineNo(), -1, "error, cannot derive from sealed type '" + find_base->owner->getName() + "'."));
 
 					else
 					{
@@ -472,21 +481,22 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases,queue<string>&mod
 						}
 					}
 				}
-				else if (find_base->owner->getType() == "namespace") 
-					cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << find_base->owner->getName() << "' is a namespace.\n";
-				
+				else if (find_base->owner->getType() == "namespace")
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + find_base->owner->getName() + "' is a namespace."));
+
 				else if (find_base->owner->getType() == "interface")
 					((Class*)symbol)->add_base(bases.front(), find_base);
-				
+
 				else
-					cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared , inaccessible type or it's form circular base class depedency '" << bases.front() << "'." << endl;
+					error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
+
 			}
 
 			else if (find_res.second)
 			{
-				cout << "error : there is an error in line " << symbol->getLineNo() << ", inhertince from non declared , inaccessible type or it's form circular base class depedency '" << bases.front() << "'." << endl;
+				error_handler.add(error(symbol->getLineNo(), -1, "error,  inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
 			}
-			else 
+			else
 			{
 				((Class*)symbol)->set_extended_class(make_pair(symbol->getName(), nullptr));
 
@@ -512,7 +522,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 	else parent = openBrackets.top();
 
 	if (parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
-		cout << "error : there is an error in line " << symbol->getLineNo() << " member names cannot be the same as their enclosing type." << endl;
+		error_handler.add(error(symbol->getLineNo(), -1, "error,  member names cannot be the same as their enclosing type."));
 
 	if (parent->owner != NULL && parent->owner->getType() == "namespace")
 		((Interface*)symbol)->set_namespace_owner();
@@ -530,7 +540,8 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 
 		if (it->first->getType() == "class")
 		{
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'"));
+
 			//optimize delete data when duplicate is found(we didn't make this optization trick)
 			if (it->second.second != NULL)
 				delete it->second.second;
@@ -544,7 +555,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 		}
 		else if (it->first->getType() == "interface")
 		{
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", there is defination with same name '" << symbol->getName() << "'" << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'"));
 
 			if (it->second.second != nullptr)
 				it->second.second = nullptr;
@@ -559,7 +570,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 		{
 			while (it != parent->symbolMap.end())
 			{
-				cout << "error : there is an error in line " << it->first->getLineNo() << " The type '" << parent->owner->getName() << "' already contains a definition for '" << symbol->getName() << "'." << endl;
+				error_handler.add(error(it->first->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
 
 				delete it->first;
 				delete it->second.first;
@@ -611,7 +622,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 		if (find_base != nullptr) {
 
 			if (find_base->owner->getType() == "class")
-				cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is class and interfaces cant extend classes." << endl;
+				error_handler.add(error(symbol->getLineNo(), -1, "error,  '" + bases.front() + "' is class and interfaces cant extend classes."));
 
 			else if (find_base->owner->getType() == "interface")
 			{
@@ -622,14 +633,15 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 					type_defination_tree->add_base(((Class*)find_base->owner)->getName(), ((Interface*)find_base->owner)->get_type_graph_position(), ((Interface*)symbol)->get_type_graph_position());
 				}
 			}
-			else cout << "error : there is an error in line " << symbol->getLineNo() << ", '" << bases.front() << "' is a namespace." << endl;
+			else
+				error_handler.add(error(symbol->getLineNo(), -1, "error, '" + bases.front() + "' is a namespace."));
 
 		}
 
 		else if (find_res.second)
-			cout << "error : there is an error in line " << symbol->getLineNo() << ", Implemented from non declared or inaccessible interface '" << bases.front() << "'." << endl;
+			error_handler.add(error(symbol->getLineNo(), -1, "error,  Implemented from non declared or inaccessible interface '" + bases.front() + "'."));
 
-		else 
+		else
 			later_defination.push(make_pair(list, make_pair(current, symbol)));
 
 		bases.pop();
@@ -646,7 +658,7 @@ void symbolTable::addChild(symbolTable* st)
 
 bool symbolTable::closeScope()
 {
-	
+
 	if (!openBrackets.empty())
 	{
 		if (openBrackets.top()->owner != nullptr && (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace"))
@@ -674,8 +686,8 @@ symbolTable::~symbolTable()
 
 bool symbolTable::initPrintFiles()
 {
-	nodeFile = fopen("./visually output/js/SymbolTable/nodes.js","w");
-	edgeFile = fopen("./visually output/js/SymbolTable/edges.js","w");
+	nodeFile = fopen("./visually output/js/SymbolTable/nodes.js", "w");
+	edgeFile = fopen("./visually output/js/SymbolTable/edges.js", "w");
 	if (nodeFile && edgeFile) {
 		fprintf(nodeFile, "var nodes = [");
 		fprintf(edgeFile, "var edges = [");
@@ -696,13 +708,13 @@ void symbolTable::closePrintFiles()
 int symbolTable::print(int nodeID)
 {
 	if (owner != NULL) {
-		if(owner->getType() == "class")
+		if (owner->getType() == "class")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`class`', shape: 'box', color:'#016FB9'},", nodeID, owner->getName().c_str());
-		else if(owner->getType() == "interface")
+		else if (owner->getType() == "interface")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n_interface_', shape: 'box', color:'#015B98'},", nodeID, owner->getName().c_str());
-		else if(owner->getType() == "namespace")
+		else if (owner->getType() == "namespace")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
-		else if(owner->getType() == "field")
+		else if (owner->getType() == "field")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s fields`', shape: 'box', color:'#4CB944'},", nodeID, ((Field*)owner)->getName().c_str(), ((Field*)owner)->get_type_name().c_str());
 		else if (owner->getType() == "localvariable")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s LocalVar`', shape: 'box', color:'#FFC07F'},", nodeID, ((LocalVariable*)owner)->getName().c_str(), ((LocalVariable*)owner)->get_type_name().c_str());
@@ -710,7 +722,7 @@ int symbolTable::print(int nodeID)
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
 	}
 
-	if(parent == NULL)
+	if (parent == NULL)
 		fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\\n`namespace`', shape: 'box', color:'#182825'},", nodeID);
 	int nextID = nodeID;
 	for (auto item : symbolMap)

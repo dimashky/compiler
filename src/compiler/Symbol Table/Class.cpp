@@ -1,6 +1,8 @@
 #include "Class.h"
+#include "../Error Handler/error_handler.h"
+extern errorHandler error_handler;
 
-Class::Class(string name, int line_no, int col_no) : Symbol(name,line_no,col_no)
+Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
 	attribute = new Attribute(this->getType());
 	isFinal = false;
@@ -27,10 +29,11 @@ void Class::add_attributes(queue<string>&attributes)
 
 		if (owner_is_namespace)
 		{
-			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE")
-				cout << "error : there is an error in line " << getLineNo() << ", elements defined in namespace cannot be private or protected." << endl;
+			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE") {
+				error_handler.add(error(getLineNo(), -1, "class error, elements defined in namespace cannot be private or protected."));
+			}
 		}
-		else 
+		else
 		{
 			if (attributes.front() == "PUBLIC")
 				is_public = true, is_protected = is_private = false;
@@ -39,7 +42,7 @@ void Class::add_attributes(queue<string>&attributes)
 			if (!is_public && !is_protected && attributes.front() == "PRIVATE")
 				is_private = true;
 		}
-		
+
 		attribute->add(attributes.front());
 		attributes.pop();
 	}
@@ -51,11 +54,12 @@ void Class::add_base(string name, symbolTable* ref)
 	for (int i = 0;i < baseClassImpInterfaces.size();i++)
 		if (baseClassImpInterfaces[i].first == name)
 		{
-			cout << "error : " << name << " already listed in interface list." << endl;
+			string m = "class error, '"+ name +"' already listed in interface list.";
+			error_handler.add(error(getLineNo(), -1, m.c_str()));
 			return;
 		}
-	baseClassImpInterfaces.push_back(make_pair(name,ref));
-	
+	baseClassImpInterfaces.push_back(make_pair(name, ref));
+
 	return;
 }
 
@@ -70,7 +74,7 @@ void Class::set_namespace_owner()
 	is_protected = is_private = false;
 }
 
-bool Class::is_final() 
+bool Class::is_final()
 {
 	return isFinal;
 }

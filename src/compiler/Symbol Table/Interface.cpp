@@ -1,4 +1,6 @@
 #include "Interface.h"
+#include "../Error Handler/error_handler.h"
+extern errorHandler error_handler;
 
 Interface::Interface(string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
@@ -21,7 +23,8 @@ void Interface::add_base(string name, symbolTable* ref)
 	for (int i = 0;i < impInterfaces.size();i++)
 		if (impInterfaces[i].first == name)
 		{
-			cout << "error : " << name << " already listed in interface list." << endl;
+			string m = "interface error, "+ name + " already listed in interface list.";
+			error_handler.add(error(getLineNo(), -1, m.c_str()));
 			return;
 		}
 	impInterfaces.push_back(make_pair(name, ref));
@@ -43,7 +46,7 @@ void Interface::add_attributes(queue<string>&attributes)
 		if (owner_is_namespace)
 		{
 			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE")
-				cout << "error : there is an error in line " << getLineNo() << ", elements defined in namespace cannot be private or protected." << endl;
+				error_handler.add(error(getLineNo(), -1, "interface error, elements defined in namespace cannot be private or protected."));
 		}
 		else
 		{
