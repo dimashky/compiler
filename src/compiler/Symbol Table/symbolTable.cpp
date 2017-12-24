@@ -8,20 +8,24 @@
 extern errorHandler error_handler;
 
 int symbolTable::is_main = 0;
+vector<node*> symbolTable::parents = vector<node*>();
+class_tree* symbolTable::type_defination_tree = new class_tree();
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
-
+queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
-
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 
-class_tree* symbolTable::type_defination_tree = new class_tree();
-queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
-
-vector<node*> symbolTable::parents = vector<node*>();
 
 
+map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>& symbolTable::get_symbolMap()
+{
+	return symbolMap;
+}
 
-
+symbolTable* symbolTable::get_parent() 
+{
+	return parent;
+}
 
 
 void symbolTable::add_scope()
@@ -230,6 +234,9 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	else parent = openBrackets.top();
 
+	((Method*)symbol)->add_parametars(parameters);
+
+
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
 
@@ -294,7 +301,6 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 
 
-	((Method*)symbol)->add_parametars(parameters);
 
 	if (!known_type)
 	{

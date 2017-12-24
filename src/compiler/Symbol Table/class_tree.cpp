@@ -1,6 +1,10 @@
 #include "class_tree.h"
 #include "symbolTable.h"
 #include "Class.h"
+#include "../Error Handler/error_handler.h"
+
+extern errorHandler error_handler;
+
 
 node::node(string name, node* parent, void* stPTR)
 {
@@ -11,6 +15,11 @@ node::node(string name, node* parent, void* stPTR)
 }
 
 node::~node(){}
+
+node* class_tree::get_root()
+{
+	return root;
+}
 
 bool class_tree::is_parent(node* &child, node* &parent)
 {
@@ -183,29 +192,73 @@ void class_tree::add_base(string name, node* child_ptr, node* parent_ptr)
 {
 	parent_ptr->bases.push_back(make_pair(name, child_ptr));
 }
-void class_tree::print_tree(node *curr) 
+void class_tree::print_defination_tree(node *curr)
 {
 	if (curr == nullptr) return;
 	for (map<string, node*>::iterator it = curr->childs.begin(); it != curr->childs.end(); it++)
 	{
 		cout << ((symbolTable*)it->second->stPTR)->get_owner()->getName() << endl;
-		class_tree::print_tree(it->second);
+		print_defination_tree(it->second);
 		
 	}
-	cout << "----------------"<<endl;
 }
-/*
-node* class_tree::find_in_graph(node* &curr, string &class_name, stack<node*>&path)
+
+void class_tree::print_inhertince_tree(node *curr)
 {
-	if (curr == nullptr)
-		return nullptr;
-	map<string, node*>::iterator it = curr->childs.find(class_name);
-	if (it != curr->childs.end())
-		return it->second;
-	path.push(curr);
-	return find_in_graph(curr->parent, class_name, path);
+	if (curr == nullptr) 
+		return;
+	
+	for (map<string, node*>::iterator it = curr->childs.begin(); it != curr->childs.end(); it++)
+	{
+		cout << ((symbolTable*)it->second->stPTR)->get_owner()->getName() << endl;
+		print_defination_tree(it->second);
+
+	}
 }
-*/
+
+
+void class_tree::check_cycle(node* curr, node* parent, vector<node*> &cycle_path)
+{
+	if (curr->visited == 2)
+		return;
+
+	else if (curr->visited == 1)
+	{
+		for (int i = 0; i < cycle_path.size(); i++)
+		{
+			int next = (i + 1) % cycle_path.size();
+			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
+			if (((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getType() == "class")
+			{
+				string m = "symmbol parser error, '" + cycle_path[i]->name + "' class is in inheritence cycle.";
+				error_handler.add(error(((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo(), -1, m.c_str()));
+				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
+			}
+			else
+			{
+				string m = "symmbol parser error, '" + cycle_path[i]->name + "' interface is in inheritence cycle.";
+				error_handler.add(error(((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo(), -1, m.c_str()));
+			}
+		}
+
+		return;
+	}
+
+	cycle_path.push_back(curr);
+
+	curr->visited = 1;
+
+	for (int i = 0; i < curr->bases.size(); i++)
+		check_cycle(curr->bases[i].second, curr, cycle_path);
+
+	curr->visited = 2;
+
+	cycle_path.pop_back();
+
+	return;
+}
+
+
 class_tree::~class_tree()
 {
 

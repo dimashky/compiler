@@ -197,47 +197,7 @@ void symbolParser::check_later_defination()
 		symbolTable::later_defination.pop();
 	}
 }
-vector<node*> cycle_path;
-void check_cycle(node* curr, node* parent)
-{
-	if (curr->visited == 2)
-		return;
 
-	else if (curr->visited == 1)
-	{	
-		for (int i = 0; i < cycle_path.size(); i++)
-		{
-			int next = (i + 1) % cycle_path.size();
-			int last = (((i - 1) % cycle_path.size()) + cycle_path.size()) % cycle_path.size();
-			if (((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getType() == "class")
-			{
-				string m = "symmbol parser error, '" + cycle_path[i]->name + "' class is in inheritence cycle.";
-				error_handler.add(error(((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo(), -1, m.c_str()));
-				((Class*)((symbolTable*)cycle_path[i]->stPTR)->get_owner())->set_extended_class(make_pair("", nullptr));
-			}
-			else
-			{
-				string m = "symmbol parser error, '" + cycle_path[i]->name + "' interface is in inheritence cycle.";
-				error_handler.add(error(((symbolTable*)cycle_path[i]->stPTR)->get_owner()->getLineNo(), -1, m.c_str()));
-			}
-		}
-
-		return;
-	}
-
-	cycle_path.push_back(curr);
-
-	curr->visited = 1;
-
-	for (int i = 0; i < curr->bases.size(); i++)
-		check_cycle(curr->bases[i].second, curr);
-
-	curr->visited = 2;
-
-	cycle_path.pop_back();
-
-	return;
-}
 
 
 void check_later_def_var()
@@ -279,14 +239,23 @@ void check_later_def_override()
 	while (!symbolTable::later_defination_override.empty()) 
 	{
 
-		symbolTable* parent = symbolTable::later_defination_override.front().second;
 		Symbol* symbol = symbolTable::later_defination_override.front().first;
 
+		symbolTable* parent = symbolTable::later_defination_override.front().second;
+		
+		
 		symbolTable* tempEx = ((Class *)parent->get_owner())->get_extended_class().second;
-		//cout << ((Method*)symbol)->getName() << " " << ((Class*)parent->get_owner())->getName() << "  " << ((Class*)tempEx->get_owner())->getName() << endl;
+		
+		
+		
 		while (tempEx != nullptr)
 		{
-			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = tempEx->get_symbolMap().find(symbol);
+			
+			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator itex = tempEx->get_symbolMap().find(symbol);
+
+
+			
+			
 			if (itex != tempEx->get_symbolMap().end() && !((Method*)itex->first)->get_is_private()) { // if is method 
 
 				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
@@ -324,15 +293,14 @@ void symbolParser::check()
 	check_later_defination();
 
 	for (int i = 0; i < symboltable->parents.size(); i++)
-		check_cycle(symboltable->parents[i], symboltable->parents[i]);
+		symbolTable::type_defination_tree->check_cycle(symboltable->parents[i], symboltable->parents[i], vector<node*>());
+
 	check_later_def_var();
 
-	if (symbolTable::is_main == 0) {
-		error_handler.add(error(1, -1, "error Program does not contain a static \"Main\" method suitable for an entry point."));
-	}
 	check_later_def_override();
-	symbolTable::type_defination_tree->print_tree(symbolTable::type_defination_tree->get_root());
-
+	
+	if (symbolTable::is_main == 0)
+		error_handler.add(error(0, -1, "error Program does not contain a static \"Main\" method suitable for an entry point."));
 }
 symbolTable* symbolParser::getSymbolTableRoot()
 {

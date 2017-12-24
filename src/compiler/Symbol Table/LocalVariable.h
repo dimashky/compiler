@@ -14,14 +14,15 @@ private:
 	bool isFinal,isParameter,is_const;
 public:
 	LocalVariable(string type_variable, string name, bool isParameter, bool is_const, int line_no, int col_no);
+	
+	void set_type(Symbol* type_ref);
+
 	string getType();
 	string get_type_name();
+	
 	bool is_final();
 	bool is_parameter();
-	void set_type(Symbol* type_ref)
-	{
-		this->type_ref = type_ref;
-	}
+
 	~LocalVariable();
 
 };

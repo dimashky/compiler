@@ -1,33 +1,12 @@
-class x
+class a : c
 {
-    class x1
-    {
-        class x2
-        {
 
-        }
-    }
 }
-class r
+class b : a
 {
-    class r1
-    {
-        class r2
-        {
 
-        }
-    }
 }
-class t
+class c : b
 {
-    class t1
-    {
-       class t2
-        {
-             void f()
-            {
 
-            }
-        }
-    }
 }

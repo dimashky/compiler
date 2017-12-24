@@ -15,12 +15,6 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 	baseClassImpInterfaces.push_back(make_pair("", nullptr));
 }
 
-Class::~Class()
-{
-
-}
-
-
 void Class::add_attributes(queue<string>&attributes)
 {
 	while (!attributes.empty())
@@ -66,10 +60,6 @@ void Class::add_base(string name, symbolTable* ref)
 	return;
 }
 
-string Class::getType()
-{
-	return "class";
-}
 void Class::set_namespace_owner()
 {
 	owner_is_namespace = true;
@@ -77,7 +67,52 @@ void Class::set_namespace_owner()
 	is_protected = is_private = false;
 }
 
+void Class::set_type_graph_position(node* pos)
+{
+	type_graph_position = pos;
+	return;
+}
+
+void Class::set_extended_class(pair<string, symbolTable*>val)
+{
+	baseClassImpInterfaces[0] = val;
+	return;
+}
+
+string Class::getType()
+{
+	return "class";
+}
+
+
 bool Class::is_final()
 {
 	return isFinal;
+}
+
+bool Class::get_is_public()
+{
+	return is_public;
+}
+
+
+node* Class::get_type_graph_position()
+{
+	return type_graph_position;
+}
+
+pair<string, symbolTable*> Class::get_extended_class()
+{
+	return baseClassImpInterfaces[0];
+}
+
+bool Class::get_is_abstract()
+{
+	return is_abstract;
+}
+
+
+Class::~Class()
+{
+
 }

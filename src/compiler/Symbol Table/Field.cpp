@@ -28,6 +28,11 @@ string Field::get_type_name()
 	return type_variable;
 }
 
+void Field::set_type(Symbol* type_ref)
+{
+	this->type_ref = type_ref;
+}
+
 Field::~Field()
 {
 }

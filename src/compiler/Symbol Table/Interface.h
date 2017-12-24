@@ -22,41 +22,17 @@ private:
 public:
 	Interface(string name, int line_no, int col_no);
 	~Interface();
+
 	void add_base(string name, symbolTable* ref);
-
 	void add_attributes(queue<string>&attributes);
-
+	
 	void set_namespace_owner();
-
-
-	bool get_is_public()
-	{
-		return is_public;
-	}
-
-	void set_type_graph_position(node* pos)
-	{
-		type_graph_position = pos;
-		return;
-	}
-
-	node* get_type_graph_position()
-	{
-		return type_graph_position;
-	}
-
-	void delete_implemented_interface(symbolTable* ref)
-	{
-		for (int i = 0;i < impInterfaces.size();i++)
-		{
-			if (impInterfaces[i].second == ref)
-			{
-				cout << ref->get_owner()->getLineNo() << " " << impInterfaces[i].second->get_owner()->getLineNo() << endl;
-			}
-		}
-	}
+	void set_type_graph_position(node* pos);
 
 	string getType();
+	bool get_is_public();	
+	node* get_type_graph_position();
 
+	void delete_implemented_interface(symbolTable* ref);//please delete implemented interface
 };
 

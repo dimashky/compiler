@@ -5109,9 +5109,7 @@ yyreduce:
 
   case 401:
 #line 961 "yacc.y" /* yacc.c:1646  */
-
     {l.a("method_declaration",2);SPL->check_function(); SPL->endScope();}
-
 #line 5114 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
