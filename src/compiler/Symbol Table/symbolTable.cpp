@@ -15,7 +15,11 @@ queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queu
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 
-
+symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
+{
+	this->parent = parent;
+	this->owner = owner;
+}
 
 map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>& symbolTable::get_symbolMap()
 {
@@ -59,6 +63,7 @@ void symbolTable::add_scope(Symbol* symbol)
 
 	return;
 }
+
 void symbolTable::add_symbol_without_open_brackets(Symbol* symbol)
 {
 	symbolTable *parent = NULL, *newst = NULL;
@@ -74,14 +79,6 @@ void symbolTable::add_symbol_without_open_brackets(Symbol* symbol)
 	return;
 }
 
-
-
-
-symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
-{
-	this->parent = parent;
-	this->owner = owner;
-}
 
 void symbolTable::addNamespace(Symbol* symbol)
 {
@@ -196,7 +193,6 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 	return;
 }
 
-
 void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 {
 	for (map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > ::iterator it = curr->symbolMap.begin(); it != curr->symbolMap.end();)
@@ -254,10 +250,9 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
 	{
-		if (symbolTable::is_main != 0) {
+		if (symbolTable::is_main != 0)
 			error_handler.add(error(symbol->getLineNo(), -1, "error, a program has more Main method ."));
 
-		}
 		symbolTable::is_main++;
 	}
 
@@ -292,14 +287,10 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		  }
 		}
 
-		if (tempEx == nullptr) { // letar defination for override  
+		if (tempEx == nullptr) 
 			later_defination_override.push(make_pair(symbol, parent));
-		//	error_handler.add(error(symbol->getLineNo(), -1, "error, no suitable method found to override."));
-		}
 
 	}
-
-
 
 
 	if (!known_type)
