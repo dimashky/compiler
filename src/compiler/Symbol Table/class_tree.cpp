@@ -183,7 +183,29 @@ void class_tree::add_base(string name, node* child_ptr, node* parent_ptr)
 {
 	parent_ptr->bases.push_back(make_pair(name, child_ptr));
 }
-
+void class_tree::print_tree(node *curr) 
+{
+	if (curr == nullptr) return;
+	for (map<string, node*>::iterator it = curr->childs.begin(); it != curr->childs.end(); it++)
+	{
+		cout << ((symbolTable*)it->second->stPTR)->get_owner()->getName() << endl;
+		class_tree::print_tree(it->second);
+		
+	}
+	cout << "----------------"<<endl;
+}
+/*
+node* class_tree::find_in_graph(node* &curr, string &class_name, stack<node*>&path)
+{
+	if (curr == nullptr)
+		return nullptr;
+	map<string, node*>::iterator it = curr->childs.find(class_name);
+	if (it != curr->childs.end())
+		return it->second;
+	path.push(curr);
+	return find_in_graph(curr->parent, class_name, path);
+}
+*/
 class_tree::~class_tree()
 {
 

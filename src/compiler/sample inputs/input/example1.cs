@@ -1,29 +1,33 @@
-class f
+class x
 {
-    class Program
+    class x1
     {
-        static void Main(string[] args)
+        class x2
         {
 
         }
     }
-
-    class t
+}
+class r
+{
+    class r1
     {
-        public sealed virtual void f()
-        {
-
-        }
-
-    }
-
-    class y : t
-    {
-        protected override void f()
+        class r2
         {
 
         }
     }
+}
+class t
+{
+    class t1
+    {
+       class t2
+        {
+             void f()
+            {
 
-
+            }
+        }
+    }
 }

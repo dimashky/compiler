@@ -9,7 +9,6 @@ symbolParser::symbolParser()
 {
 	symboltable = new symbolTable(NULL, NULL);
 }
-
 void symbolParser::print(queue<string> &s1, char* s2)
 {
 	while (!s1.empty()) {
@@ -275,6 +274,50 @@ void symbolParser::check_function()
 }
 
 
+void check_later_def_override()
+{
+	while (!symbolTable::later_defination_override.empty()) 
+	{
+
+		symbolTable* parent = symbolTable::later_defination_override.front().second;
+		Symbol* symbol = symbolTable::later_defination_override.front().first;
+
+		symbolTable* tempEx = ((Class *)parent->get_owner())->get_extended_class().second;
+		//cout << ((Method*)symbol)->getName() << " " << ((Class*)parent->get_owner())->getName() << "  " << ((Class*)tempEx->get_owner())->getName() << endl;
+		while (tempEx != nullptr)
+		{
+			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = tempEx->get_symbolMap().find(symbol);
+			if (itex != tempEx->get_symbolMap().end() && !((Method*)itex->first)->get_is_private()) { // if is method 
+
+				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
+
+				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override());// is virtual or abstract or override
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
+
+				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal()); //  is same modifiers
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
+
+				if (((Method*)itex->first)->is_final())
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
+
+				break;
+			}
+			else {
+				tempEx = ((Class *)tempEx->get_owner())->get_extended_class().second;
+			}
+		}
+
+		if (tempEx == nullptr) { // letar defination for override  
+			error_handler.add(error(symbol->getLineNo(), -1, "error, no suitable method found to override."));
+		}
+
+		symbolTable::later_defination_override.pop();
+	}
+}
 
 void symbolParser::check()
 {
@@ -283,11 +326,14 @@ void symbolParser::check()
 	for (int i = 0; i < symboltable->parents.size(); i++)
 		check_cycle(symboltable->parents[i], symboltable->parents[i]);
 	check_later_def_var();
+
 	if (symbolTable::is_main == 0) {
 		error_handler.add(error(1, -1, "error Program does not contain a static \"Main\" method suitable for an entry point."));
 	}
-}
+	check_later_def_override();
+	symbolTable::type_defination_tree->print_tree(symbolTable::type_defination_tree->get_root());
 
+}
 symbolTable* symbolParser::getSymbolTableRoot()
 {
 	return this->symboltable;

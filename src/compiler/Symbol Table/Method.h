@@ -36,7 +36,6 @@ public:
 
 	bool compare(Symbol* comp)
 	{
-		
 		if (getName() == comp->getName() && comp->getType() == "method")
 		{
 			if (get_parametars_count() != ((Method*)comp)->get_parametars_count())

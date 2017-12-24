@@ -29,7 +29,11 @@ public:
 	void down_specific_child(string name);
 	pair<void*, bool> find(node* curr, queue<string> list, node* current_class);
 	pair<void*, bool> find(node* curr, queue<string> list);
+	node* get_root() {
+		return root;
+	}
 	void add_base(string name, node* child_ptr, node* parent_ptr);
+	void print_tree(node *curr);
 	~class_tree();
 };
 

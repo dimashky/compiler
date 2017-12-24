@@ -6,7 +6,7 @@
 using namespace std;
 
 
-class compare_1 {
+ class compare_1 {
 public:
 	bool operator()(Symbol* const &s1, Symbol* const &s2) const 
 	{
@@ -29,6 +29,7 @@ public:
 	static int is_main;
 	static stack<symbolTable*> openBrackets;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
+	static queue<pair<Symbol*, symbolTable*>> later_defination_override;
 	static class_tree *type_defination_tree;
 	symbolTable(symbolTable* parent,Symbol* owner);
 	void add_scope();
@@ -40,11 +41,17 @@ public:
 	void addLocalVariable(Symbol* symbol, bool isParameter);
 
 	void check_method(symbolTable* curr, map<string, bool>check_map);
-
+       
 	void addChild(symbolTable* st);
 	bool closeScope();
 	Symbol* get_owner();
 	string get_owner_name();
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1> get_symbolMap() {
+		return symbolMap; 
+	}
+	symbolTable * get_parent() {
+		return parent; 
+	}
 	~symbolTable();
 	int print(int);
 	static bool initPrintFiles();

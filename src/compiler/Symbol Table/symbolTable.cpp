@@ -15,6 +15,7 @@ queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_definati
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 
 class_tree* symbolTable::type_defination_tree = new class_tree();
+queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
 
 vector<node*> symbolTable::parents = vector<node*>();
 
@@ -284,8 +285,10 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		  }
 		}
 
-		if(tempEx==nullptr)			 
-			error_handler.add(error(symbol->getLineNo(), -1, "error, no suitable method found to override."));
+		if (tempEx == nullptr) { // letar defination for override  
+			later_defination_override.push(make_pair(symbol, parent));
+		//	error_handler.add(error(symbol->getLineNo(), -1, "error, no suitable method found to override."));
+		}
 
 	}
 
