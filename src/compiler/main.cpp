@@ -38,7 +38,7 @@ int main()
 	scan_for_cs_files("sample inputs/input",&files);
 	for (auto x : files) {
 		line_no = col_no = 1;
-		cout << "===> Parsing\t\t'" << x <<"'"<< endl;
+		//cout << "===> Parsing\t\t'" << x <<"'"<< endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
 		fclose(yyin);
@@ -56,8 +56,27 @@ int main()
     
   
 	SPL->check();
-  
-  
+	
+
+	/* Print type_defination_tree */
+	vector<string> nodes, edges;
+	// push root of tree
+	nodes.push_back(string("{ id:" + to_string(0) + ", font: { multi: 'md', color:'white' }, label:'`ROOT`', shape: 'box', color:'#016FB9'},"));
+	// traverse around the tree
+	symbolTable::type_defination_tree->print_defination_tree(symbolTable::type_defination_tree->get_root(),0,&nodes,&edges);
+	// Print to the files
+	FILE *type_defination_tree_file = fopen("visually output/js/Type_Defination_Tree/nodes.js", "w");
+	fprintf(type_defination_tree_file, "var nodes=[");
+	for (auto i : nodes)
+		fprintf(type_defination_tree_file, i.c_str());
+	fprintf(type_defination_tree_file, "];");
+	fclose(type_defination_tree_file);
+	type_defination_tree_file = fopen("visually output/js/Type_Defination_Tree/edges.js", "w");
+	fprintf(type_defination_tree_file, "var edges=[");
+	for (auto i : edges)
+		fprintf(type_defination_tree_file, i.c_str());
+	fprintf(type_defination_tree_file, "];");
+	fclose(type_defination_tree_file);
 	l.print();
 	
 	error_handler.print();

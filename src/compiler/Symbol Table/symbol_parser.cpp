@@ -32,7 +32,6 @@ void symbolParser::addNamespace(string name, int line_no, int col_no)
 
 void symbolParser::addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no)
 {
-	cout << "Class" << endl;
 	Symbol* newClass = new Class(className, line_no, col_no);
 	symboltable->addClass(newClass, bases, modifiers);
 	return;

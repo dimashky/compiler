@@ -199,14 +199,18 @@ void class_tree::add_base(string name, node* child_ptr, node* parent_ptr)
 {
 	parent_ptr->bases.push_back(make_pair(name, child_ptr));
 }
-void class_tree::print_defination_tree(node *curr)
+int class_tree::print_defination_tree(node *curr, int id, vector<string>* nodes, vector<string>* edges)
 {
-	if (curr == nullptr) return;
+	if (curr == nullptr) 
+		return id;
+
+	int next_id = id;
 	for (map<string, node*>::iterator it = curr->childs.begin(); it != curr->childs.end(); it++)
 	{
-		cout << ((symbolTable*)it->second->stPTR)->get_owner()->getName() << endl;
-		print_defination_tree(it->second);
+		nodes->push_back(string("{ id:" + to_string(next_id+1) + ", font: { multi: 'md', color:'white' }, label:'*"+ ((symbolTable*)it->second->stPTR)->get_owner()->getName() +"*\\n`class`', shape: 'box', color:'#016FB9'},"));
+		edges->push_back(string("{from:"+to_string(id)+",to:"+to_string(next_id+1)+", dashes:true},"));
 		
+		next_id = print_defination_tree(it->second, next_id + 1, nodes, edges);
 	}
 }
 
@@ -218,7 +222,7 @@ void class_tree::print_inhertince_tree(node *curr)
 	for (map<string, node*>::iterator it = curr->childs.begin(); it != curr->childs.end(); it++)
 	{
 		cout << ((symbolTable*)it->second->stPTR)->get_owner()->getName() << endl;
-		print_defination_tree(it->second);
+//		print_defination_tree(it->second);
 
 	}
 }

@@ -40,7 +40,7 @@ public:
 
 	node* get_root();	
 	
-	void print_defination_tree(node *curr);
+	int print_defination_tree(node *curr, int id, vector<string>* nodes, vector<string>* edges);
 	void print_inhertince_tree(node *curr);
 
 	~class_tree();
