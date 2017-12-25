@@ -35,7 +35,7 @@ int Symbol::getColNo()
 	return col_no;
 }
 
-virtual bool Symbol::compare(Symbol* comp)
+bool Symbol::compare(Symbol* comp)
 {
 	return this->name > comp->name;
 }
