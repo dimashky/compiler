@@ -1,12 +1,5 @@
 using x.y.z;
-using y.z.y;
-using Attribute.b.s;
-using x.y.q;
-using y.z.asd;
-using x.qwe.qwe.refa;
-using qwe.asd.asd;
-using y.dd.x;
-
+using x2.y.z;
 
 namespace x
 {
@@ -14,39 +7,23 @@ namespace x
     {
         namespace z
         {
-
+            interface a { }
         }
-    }
-    class a
-    {
-        class b
-        {
-
-        }
-    }
-    class b
-    {
-
     }
 }
-namespace y
+namespace x2
 {
-    namespace z
+    namespace y
     {
-        namespace y
+        namespace z
         {
-
+            interface a { }
         }
-    }
-    class a
-    {
-        class b
-        {
-
-        }
-    }
-    class b
-    {
-
     }
 }
+
+interface b : a
+{
+
+}
+

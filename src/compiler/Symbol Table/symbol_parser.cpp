@@ -107,7 +107,30 @@ void symbolParser::check_later_defination()
 		{
 			symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first, ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position()).first;
 
-			if (search != nullptr)
+			int cnt = 0;
+
+			if (search == nullptr)
+				for (int nsp = 0;nsp < symbolTable::using_namespaces.size();nsp++)
+				{
+					symbolTable* curr_type = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp], symbolTable::later_defination.front().first).first;
+					if (curr_type != nullptr)
+						cnt++, search = curr_type;
+				}
+
+			if (cnt > 1)
+			{
+				string parent_name;
+				while (!symbolTable::later_defination.front().first.empty())
+				{
+					parent_name += symbolTable::later_defination.front().first.front();
+					symbolTable::later_defination.front().first.pop();
+					if (!symbolTable::later_defination.front().first.empty())
+						parent_name += '.';
+				}
+				error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, "'" + parent_name + "' is ambiguous reference."));
+			}
+
+			else if (search != nullptr)
 			{
 				if (search->get_owner()->getType() == "class")
 				{
@@ -172,8 +195,31 @@ void symbolParser::check_later_defination()
 		else if (symbolTable::later_defination.front().second.second->getType() == "interface")
 		{
 			symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first, ((Interface*)symbolTable::later_defination.front().second.second)->get_type_graph_position()).first;
+			
+			int cnt = 0;
 
-			if (search != nullptr)
+			if (search == nullptr)
+				for (int nsp = 0;nsp < symbolTable::using_namespaces.size();nsp++)
+				{
+					symbolTable* curr_type = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp], symbolTable::later_defination.front().first).first;
+					if (curr_type != nullptr)
+						cnt++, search = curr_type;
+				}
+
+			if (cnt > 1)
+			{
+				string parent_name;
+				while (!symbolTable::later_defination.front().first.empty())
+				{
+					parent_name += symbolTable::later_defination.front().first.front();
+					symbolTable::later_defination.front().first.pop();
+					if (!symbolTable::later_defination.front().first.empty())
+						parent_name += '.';
+				}
+				error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, "'" + parent_name + "' is ambiguous reference."));
+			}
+
+			else if (search != nullptr)
 			{
 
 				if (search->get_owner()->getType() == "class")
@@ -238,15 +284,37 @@ void check_later_def_var()
 		}
 		else
 		{
-			if (p.second.second->getType() == "field")
-				error_handler.add(error(p.second.second->getLineNo(), -1, "error, the type name '" + ((Field*)p.second.second)->get_type_name() + "' couldn't be found."));
+			bool find_type = false;
 
-			else if (p.second.second->getType() == "localvariable")
-				error_handler.add(error(p.second.second->getLineNo(), -1, "error, the type name '" + ((LocalVariable*)p.second.second)->get_type_name() + "' couldn't be found."));
-			
-			else if (p.second.second->getType() == "method")
-				error_handler.add(error(p.second.second->getLineNo(), -1, "error, the return type name '" + ((Method*)p.second.second)->get_return_type() + "' couldn't be found."));
-			
+			for (int nsp = 0;nsp < symbolTable::using_namespaces.size();nsp++)
+			{
+				ref = symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp], p.first);
+				if (ref.first != nullptr)
+				{
+					if (p.second.second->getType() == "field")
+						((Field*)p.second.second)->set_type(((symbolTable*)ref.first)->get_owner());
+
+					else if (p.second.second->getType() == "localvariable")
+						((LocalVariable*)p.second.second)->set_type(((symbolTable*)ref.first)->get_owner());
+
+					else if (p.second.second->getType() == "method")
+						((Method*)p.second.second)->set_return_type(((symbolTable*)ref.first)->get_owner());
+
+					find_type = true;
+					break;
+				}
+			}
+			if (!find_type)
+			{
+				if (p.second.second->getType() == "field")
+					error_handler.add(error(p.second.second->getLineNo(), -1, "error, the type name '" + ((Field*)p.second.second)->get_type_name() + "' couldn't be found."));
+
+				else if (p.second.second->getType() == "localvariable")
+					error_handler.add(error(p.second.second->getLineNo(), -1, "error, the type name '" + ((LocalVariable*)p.second.second)->get_type_name() + "' couldn't be found."));
+
+				else if (p.second.second->getType() == "method")
+					error_handler.add(error(p.second.second->getLineNo(), -1, "error, the return type name '" + ((Method*)p.second.second)->get_return_type() + "' couldn't be found."));
+			}
 		}
 		symbolTable::later_defination_var.pop();
 	}
@@ -337,7 +405,6 @@ void symbolParser::check()
 		else
 			error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
 	}
-
 
 	check_later_defination();
 
