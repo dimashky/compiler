@@ -175,13 +175,19 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 
 		list.push(curr_part);
 
-		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		symbolTable* parent_class = parent;
+
+		while (parent_class->owner == nullptr || parent_class->owner != nullptr && parent_class->owner->getType() != "class")
+			parent_class = parent_class->parent;
+
+		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent_class->owner)->get_type_graph_position(), list);
+
 		if (ref.first != nullptr)
 			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found."));
 		else
-			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
+			later_defination_var.push(make_pair(list, make_pair(((Class*)parent_class->owner)->get_type_graph_position(), symbol)));
 	}
 
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = parent->symbolMap.find(symbol);
@@ -192,7 +198,6 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 
 	return;
 }
-
 void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 {
 	for (map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > ::iterator it = curr->symbolMap.begin(); it != curr->symbolMap.end();)

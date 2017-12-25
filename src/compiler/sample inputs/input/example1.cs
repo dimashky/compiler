@@ -1,9 +1,25 @@
-class x{
-	public class a{
-		
-	}
-}
+namespace ConsoleApplication2
+{
+    class Program
+    {
+        static void Main()
+        {
 
-class z : x.a{
-	
+        }
+    }
+    class a
+    {
+        void f(int aa)
+        {
+            aa a;
+        }
+        private class aa
+        {
+
+        }
+        private class bb : aa
+        {
+
+        }
+    }
 }
