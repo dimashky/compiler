@@ -272,7 +272,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
 
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_abstract() && !((Class*)parent->owner)->get_is_abstract())
-		error_handler.add(error(symbol->getLineNo(), -1, "error, '" + ((Method*)symbol)->getName() + "' is abstract but it is contained in non-abstract class '" + ((Class*)parent->owner)->getName() + "'.."));
+		error_handler.add(error(symbol->getLineNo(), -1, "error, '" + ((Method*)symbol)->getName() + "' is abstract but it is contained in non-abstract class '" + ((Class*)parent->owner)->getName() + "'."));
 
 	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
 	{

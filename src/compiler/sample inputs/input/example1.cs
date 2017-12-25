@@ -1,29 +1,4 @@
-using x.y.z;
-using x2.y.z;
-
-namespace x
+ class x
 {
-    namespace y
-    {
-        namespace z
-        {
-            interface a { }
-        }
-    }
+    public  void ttt();
 }
-namespace x2
-{
-    namespace y
-    {
-        namespace z
-        {
-            interface a { }
-        }
-    }
-}
-
-interface b : a
-{
-
-}
-
