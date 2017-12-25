@@ -483,8 +483,8 @@ labeled_statement
 declaration_statement
   : local_variable_declaration SEMICOLON	                              {l.a("declaration_statement",1);}
   | local_constant_declaration SEMICOLON	                              {l.a("declaration_statement",1);}
-  | local_variable_declaration error		                              {yyerrok; l.a("declaration_statement",1,1);}
-  | local_constant_declaration error		                              {yyerrok; l.a("declaration_statement",1,1);}
+  | local_variable_declaration error		                              { l.a("declaration_statement",1,1);}
+  | local_constant_declaration error		                              { l.a("declaration_statement",1,1);}
   ;
 local_variable_declaration
   : type variable_declarators 		                                      
@@ -551,7 +551,7 @@ constant_declarator
   /*
 expression_statement
   : statement_expression SEMICOLON									{l.a("expression_statement",1);}
-  |	statement_expression error		                                {yyerrok;l.a("expression_statement",1,1);}
+  |	statement_expression error		                                {l.a("expression_statement",1,1);}
   ;
   */
   expression_statement
@@ -562,13 +562,13 @@ expression_statement
   | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
-  | invocation_expression			error                             {yyerrok; l.a("expression_statement",1,1);}
-  | object_creation_expression		error							  {yyerrok;l.a("expression_statement",1,1);}
-  | assignment						error							  {yyerrok;l.a("expression_statement",1,1);}
-  | post_increment_expression 		error                             {yyerrok;l.a("expression_statement",1,1);}
-  | post_decrement_expression		error                             {yyerrok;l.a("expression_statement",1,1);}
-  | pre_increment_expression		error                             {yyerrok;l.a("expression_statement",1,1);}
-  | pre_decrement_expression		error                             {yyerrok;l.a("expression_statement",1,1);}
+  | invocation_expression			error                             { l.a("expression_statement",1,1);}
+  | object_creation_expression		error							  {l.a("expression_statement",1,1);}
+  | assignment						error							  {l.a("expression_statement",1,1);}
+  | post_increment_expression 		error                             {l.a("expression_statement",1,1);}
+  | post_decrement_expression		error                             {l.a("expression_statement",1,1);}
+  | pre_increment_expression		error                             {l.a("expression_statement",1,1);}
+  | pre_decrement_expression		error                             {l.a("expression_statement",1,1);}
   ;
 statement_expression
   : invocation_expression	 										{l.a("statement_expression",1);}
@@ -624,11 +624,11 @@ unsafe_statement
 while_statement
   : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
   | WHILE LEFT_BRACKET_CIRCLE error				 RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2,1);}
-  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{ yyerrok; } {l.a("while_statement",2,1);}
+  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{  } {l.a("while_statement",2,1);}
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
-  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{yyerrok; l.a("do_statement",2,1);}
+  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{ l.a("do_statement",2,1);}
   ;
 
 for_statement
@@ -886,6 +886,11 @@ class_declaration
 		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
   } 
   class_body comma_opt	{l.a("class_declaration",5);SPL->endScope();}
+  | attributes_opt modifiers_opt class IDENTIFIER class_base_opt 
+  {
+		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
+  } 
+  error comma_opt	{l.a("class_declaration",5);SPL->endScope();}
   ;
 
 
@@ -1487,15 +1492,15 @@ EXIT_getset
 
  class 
    : CLASS												{l.a("CLASS",0);}	
-   | error										        {l.a("CLASS",0,1);yyerrok;yyclearin;}
+   | error										        {l.a("CLASS",0,1);yyclearin;}
    ;
 left_bracket_circle 
   : LEFT_BRACKET_CIRCLE									{l.a("left_bracket_circle",0);}
-  | error												{l.a("left_bracket_circle",0,1);yyerrok;yyclearin;}
+  | error												{l.a("left_bracket_circle",0,1);yyclearin;}
   ;
 right_bracket_circle 
   : RIGHT_BRACKET_CIRCLE								{l.a("right_bracket_circle",0);}
-  | error												{l.a("right_bracket_circle",0,1);yyerrok;yyclearin;}
+  | error												{l.a("right_bracket_circle",0,1);yyclearin;}
   ;
 semicolon 
   : SEMICOLON											{ l.a("semicolon",0);}
@@ -1503,7 +1508,7 @@ semicolon
   ;
 in 
   : IN												    {l.a("in",0);}
-  | error											    {l.a("in",0,1);yyerrok;} 
+  | error											    {l.a("in",0,1);} 
   ; 
 
 
