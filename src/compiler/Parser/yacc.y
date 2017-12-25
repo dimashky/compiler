@@ -832,7 +832,7 @@ type_declaration
  * enum_modifier, delegate_modifier
  */
 modifiers_opt
-  : /* Nothing */       
+  : /* Nothing  medo */       
   {		
 		l.a("modifiers_opt",0);
 		$<r.modifiers>$ = new queue<string>();
@@ -1328,13 +1328,13 @@ interface_member_declaration
   ;
 /* inline return_type to avoid conflict with interface_property_declaration */
 interface_method_declaration
-  : attributes_opt modifiers_opt type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
+  : attributes_opt new_opt type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
     {
      l.a("interface_method_declaration",5);
 	 SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string($<r.str>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
 	 SPL->endScope();
     }
-  | attributes_opt modifiers_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
+  | attributes_opt new_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
     {
 	  l.a("interface_method_declaration",4);
 	  SPL->addMethod(*$<r.modifiers>2,"VOID",string($<r.str>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1);
@@ -1343,8 +1343,7 @@ interface_method_declaration
   ;
 new_opt 
   : /* Nothing */  {l.a("new_opt",0); $<r.modifiers>$ = new queue<string>();}
-  | NEW            {l.a("new_opt",0);$<r.modifiers>$ = new queue<string>() ; $<r.modifiers>$->push("NEW");}
-  | 
+  | NEW            {l.a("new_opt",0);$<r.modifiers>$ = new queue<string>() ; $<r.modifiers>$->push("NEW");} 
   ;
 interface_property_declaration
   : attributes_opt new_opt type IDENTIFIER 
