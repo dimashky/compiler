@@ -15,7 +15,7 @@ extern FILE* yyin;
 // Extern for Logs
 extern errorHandler error_handler("logs/error.log");
 extern Logger l;
-
+extern FILE *lexLogger = fopen("logs/lex.log","w");
 // Extern for website
 extern FILE* info = fopen("./visually output/js/info.js","w");
 
@@ -38,11 +38,11 @@ int main()
 	scan_for_cs_files("sample inputs/input",&files);
 	for (auto x : files) {
 		line_no = col_no = 1;
-		//	cout << "===> Parsing\t\t'" << x <<"'"<< endl;
+		cout << "===> Parsing\t\t'" << x <<"'"<< endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
 	}
-	
+	fclose(lexLogger);
 	auto end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
 	std::time_t end_time = std::chrono::system_clock::to_time_t(end);

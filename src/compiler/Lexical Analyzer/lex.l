@@ -9,6 +9,7 @@
 	#include <chrono>
 	#include "../Error Handler/error_handler.h"
 
+	extern FILE* lexLogger;
 	using namespace std;
 
 	
@@ -163,7 +164,7 @@ letter_char            [A-Za-z]
 ident_char             {dec_digit}|{letter_char}|"_"|"@"
 identifier             ({letter_char}|"_"){ident_char}*
 at_identifier          \@{identifier}
-bad_identifier			[&^%$#@!~{}"?,|\/{}0-9]*{identifier}
+bad_identifier			[&^%$#@!~{}"?|\/{}0-9]*{identifier}
 
 rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
@@ -178,18 +179,17 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 		 start  = std::chrono::system_clock::now();
 		 start_str = get_time_and_date();
 		 first_loop = false;
+
 		}
-		FILE *f = fopen("logs/Lex.log","a");
 		while(!t.empty()){
 			int x = t.front();
 			r y = q.front();
-			print(f, &y);
+			print(lexLogger, &y);
 			yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.col_no = y.col_no , yylval.r.line_no = y.line_no;
 			q.pop();
 			t.pop();
 			return x;
 		}
-		fclose(f);
 %}
 					/***** White comments *****/
 \n				{ col_no=1; line_no++; }
@@ -208,9 +208,8 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
                       /***** Literals *****/
 {integer_literal}     { add(atoi(yytext),NULL,NULL,NULL,yytext); t.push(INTEGER_LITERAL); }
 {real_literal}        { add(NULL,atof(yytext),NULL,NULL,yytext); t.push(REAL_LITERAL); }
-{character_literal}   { add(NULL,NULL,yytext[0],NULL,yytext);	  t.push(CHARACTER_LITERAL); }
-{string_literal}      { add(NULL,NULL,NULL,yytext,yytext);	  // printstr(stdout, yytext);
-																 t.push(STRING_LITERAL); }
+{character_literal}   { add(NULL,NULL,yytext[0],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
+{string_literal}      { add(NULL,NULL,NULL,yytext,yytext);		 t.push(STRING_LITERAL); }
 
 
 
@@ -346,17 +345,15 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 	t.push(0);
 	add(NULL,NULL,NULL,"END","END");
-	FILE *f = fopen("Lex.log","w");
-	while(!t.empty()){
+	if(!t.empty()){
 		int x = t.front();
 		r y = q.front();
-		print(f,&y);
+		print(lexLogger,&y);
 		yylval.r.i = y.i; yylval.r.f = y.f; yylval.r.c = y.c; yylval.r.str = y.str; yylval.r.line_no = y.col_no;
 		q.pop();
 		t.pop();
 		return x;
 	}
-	fclose(f);
 }
 %%
 
@@ -365,6 +362,9 @@ static struct name_value {
   char *name;
   int value;
 } name_value;
+
+
+
 static struct name_value keywords [] = {
  /* This list must remain sorted!!! */
     {"abstract", ABSTRACT},
