@@ -55,7 +55,19 @@ void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue
 	return;
 
 }
+void symbolParser::addFieldConst(queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+{
+	modifiers.push(modifier_const);
+	while (!identifiers.empty())
+	{
+		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), line_no, col_no);
+		symboltable->addField(newField, known_type);
+		identifiers.pop();
 
+	}
+	return;
+
+}
 
 void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type)
 {

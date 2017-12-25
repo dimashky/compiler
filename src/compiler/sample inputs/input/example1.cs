@@ -1,24 +1,4 @@
-class c
+class y
 {
-
-}
-
-
-class c13
-{
-    
-}
-
-class c2
-{
-    
-}
-
-class c3
-{
-}
-
-class c4
-{
-
+    const int x=0; 
 }

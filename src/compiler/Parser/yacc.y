@@ -944,10 +944,16 @@ class_member_declaration
   ;
 constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
-		  {		l.a("constant_declaration",4);
-				//SPL->add_var(*$<r.modifiers>2,1);
+		  {		
+		         l.a("constant_declaration",4);
+	          SPL->addFieldConst(*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
 		  }
-  | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
+  | attributes_opt modifiers_opt CONST type constant_declarators error		
+         {
+		    l.a("constant_declaration",4,1);
+         SPL->addFieldConst(*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
+
+		 }
   ;
 field_declaration
   : attributes_opt modifiers_opt type variable_declarators SEMICOLON

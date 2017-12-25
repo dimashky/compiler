@@ -330,7 +330,6 @@ bool Attribute::add(string nameAtt,int sizeAtt)
 	}
 	else if (typeKeyword == "field") {
 		set<string>::iterator it = fieldModifiers.find(nameAtt);
-
 		if (it != fieldModifiers.end()) // inside type
 		{
 			set<string>::iterator it1 = whatHave.find(nameAtt);
