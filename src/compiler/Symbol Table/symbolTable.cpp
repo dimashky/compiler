@@ -26,7 +26,7 @@ map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>& symbolTable::get_sym
 	return symbolMap;
 }
 
-symbolTable* symbolTable::get_parent() 
+symbolTable* symbolTable::get_parent()
 {
 	return parent;
 }
@@ -263,31 +263,31 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 		while (tempEx != nullptr)
 		{
-		  map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = tempEx->symbolMap.find(symbol);
-		  if (itex != tempEx->symbolMap.end() && !((Method*)itex->first)->get_is_private()) { // if is method 
+			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = tempEx->symbolMap.find(symbol);
+			if (itex != tempEx->symbolMap.end() && !((Method*)itex->first)->get_is_private()) { // if is method 
 
-			  if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
-			  else
-				  error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
+				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
 
-			  if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override());// is virtual or abstract or override
-			  else
-				  error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
+				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override());// is virtual or abstract or override
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
 
-			  if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal()); //  is same modifiers
-			  else
-				  error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
+				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal()); //  is same modifiers
+				else
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
 
-			  if (((Method*)itex->first)->is_final())
-				  error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
-			  break;
-		  }
-		  else {
-			  tempEx = ((Class *)tempEx->owner)->get_extended_class().second;
-		  }
+				if (((Method*)itex->first)->is_final())
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
+				break;
+			}
+			else {
+				tempEx = ((Class *)tempEx->owner)->get_extended_class().second;
+			}
 		}
 
-		if (tempEx == nullptr) 
+		if (tempEx == nullptr)
 			later_defination_override.push(make_pair(symbol, parent));
 
 	}
@@ -765,14 +765,27 @@ int symbolTable::print(int nodeID)
 		else if (owner->getType() == "method")
 			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
 	}
-
+	// scope
+	if (owner == NULL && parent != NULL) {
+		// skip empty scopes
+		if (childs.size() != 0 || symbolMap.size() != 0)
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'black' }, label: '`scope`', shape: 'box', color:'#fff'},", nodeID);
+	}
+	// global namespace
 	if (parent == NULL)
 		fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\\n`namespace`', shape: 'box', color:'#182825'},", nodeID);
+
 	int nextID = nodeID;
+
 	for (auto item : symbolMap)
 	{
 		fprintf(edgeFile, "{from:%d,to:%d, dashes:true},", nodeID, nextID + 1);
 		nextID = item.second.first->print(nextID + 1);
+	}
+	for (auto item : childs)
+	{
+		fprintf(edgeFile, "{from:%d,to:%d, dashes:true},", nodeID, nextID + 1);
+		nextID = item->print(nextID + 1);
 	}
 	return nextID;
 }
