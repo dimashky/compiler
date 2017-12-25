@@ -41,7 +41,9 @@ int main()
 		//	cout << "===> Parsing\t\t'" << x <<"'"<< endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
+		fclose(yyin);
 	}
+	
 	
 	auto end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;

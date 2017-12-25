@@ -120,8 +120,9 @@ bool Attribute::add(string nameAtt,int sizeAtt)
 		}
 	}
 	else if (typeKeyword == "interface") {
+		
 		set<string>::iterator it = interfaceModifiers.find(nameAtt);
-		if (it != classModifiers.end()) // inside type
+		if (it != interfaceModifiers.end()) // inside type
 		{
 			set<string>::iterator it1 = whatHave.find(nameAtt);
 			if (it1 == whatHave.end() || whatHave.size() == 0) // not Duplicate

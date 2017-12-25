@@ -565,23 +565,26 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 
 	else parent = openBrackets.top();
 
+
 	if (parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error,  member names cannot be the same as their enclosing type."));
 
 	if (parent->owner != NULL && parent->owner->getType() == "namespace")
 		((Interface*)symbol)->set_namespace_owner();
 
+
 	((Interface*)symbol)->add_attributes(modifiers);
 
+	
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 
 	node* current = nullptr;
 
 	bool valid_interface = false;
 
+
 	if (it != parent->symbolMap.end())
 	{
-
 		if (it->first->getType() == "class")
 		{
 			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'"));

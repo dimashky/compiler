@@ -82,8 +82,10 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 	
 	node* find_top = find_in_graph(curr, list.front(), path);
 	
+	bool maybe_circular_base_dep = false;
+
 	if (find_top == current_class)
-		return make_pair(nullptr, true);
+		maybe_circular_base_dep = true;
 
 	if (find_top != nullptr)
 	{
@@ -124,6 +126,11 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 			}
 			else return make_pair(nullptr, false);
 		}
+		if (!maybe_circular_base_dep)
+			return make_pair(find_top->stPTR, true);
+		
+		if (((symbolTable*)find_top->stPTR)->get_owner()->getType() == "class")
+			return make_pair(nullptr, true);
 		return make_pair(find_top->stPTR, true);
 	}
 	return make_pair(nullptr, false);

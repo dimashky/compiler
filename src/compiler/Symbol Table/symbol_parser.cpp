@@ -88,7 +88,6 @@ void symbolParser::check_later_defination()
 	{
 		if (symbolTable::later_defination.front().second.second->getType() == "class")
 		{
-
 			symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first, ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position()).first;
 
 			if (search != nullptr)
