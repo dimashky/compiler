@@ -35,6 +35,7 @@ node* class_tree::find_in_graph(node* &curr, string &class_name, stack<node*>&pa
 	if (curr == nullptr)
 		return nullptr;
 	map<string, node*>::iterator it = curr->childs.find(class_name);
+	
 	if (it != curr->childs.end())
 		return it->second;
 	path.push(curr);
