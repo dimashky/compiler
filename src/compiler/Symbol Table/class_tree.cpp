@@ -295,6 +295,27 @@ void class_tree::check_cycle(node* curr, node* parent, vector<node*> &cycle_path
 	return;
 }
 
+node* class_tree::check_using_namespace(queue<string>&list)
+{
+	if (list.size() == 0)
+		return nullptr;
+	
+	node* curr = root;
+
+	while (!list.empty())
+	{
+		map<string, node*>::iterator it = curr->childs.find(list.front());
+		
+		if (it != curr->childs.end())
+			curr = it->second;
+		else return nullptr;
+
+		list.pop();
+	}
+
+	return curr;
+}
+
 
 class_tree::~class_tree()
 {

@@ -94,6 +94,11 @@ void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifi
 
 }
 
+void symbolParser::add_using(string s, int line_no, int col_no)
+{
+	given_usings.push_back(make_pair(s, make_pair(line_no, col_no)));
+}
+
 void symbolParser::check_later_defination()
 {
 	while (!symbolTable::later_defination.empty())
@@ -307,8 +312,33 @@ void check_later_def_override()
 	}
 }
 
+
 void symbolParser::check()
 {
+	//check using namespace statments
+	for (int i = 0;i < given_usings.size();i++)
+	{
+		queue<string>list;
+
+		string curr_part = "", str_list = given_usings[i].first;
+
+		for (int i = 0;i < str_list.length();i++)
+			if (str_list[i] == '.')
+				list.push(curr_part), curr_part = "";
+			else curr_part += str_list[i];
+	
+		list.push(curr_part);
+
+		node* nsp = symbolTable::type_defination_tree->check_using_namespace(list);
+
+		if (nsp != nullptr)
+			symbolTable::using_namespaces.push_back(nsp);
+
+		else
+			error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
+	}
+
+
 	check_later_defination();
 
 	for (int i = 0; i < symboltable->parents.size(); i++)

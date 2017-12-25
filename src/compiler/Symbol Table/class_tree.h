@@ -36,7 +36,7 @@ public:
 	pair<void*, bool> find(node* curr, queue<string> list);
 
 	void check_cycle(node* curr, node* parent, vector<node*> &cycle_path);
-
+	node* check_using_namespace(queue<string>&list);
 
 	node* get_root();	
 	

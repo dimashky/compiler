@@ -9,6 +9,7 @@ extern errorHandler error_handler;
 
 int symbolTable::is_main = 0;
 vector<node*> symbolTable::parents = vector<node*>();
+vector<node*> symbolTable::using_namespaces = vector<node*>();
 class_tree* symbolTable::type_defination_tree = new class_tree();
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();

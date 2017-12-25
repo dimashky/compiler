@@ -31,6 +31,7 @@ public:
 
 	static int is_main;
 	static vector<node*>parents;
+	static vector<node*>using_namespaces;
 	static class_tree *type_defination_tree;
 	static stack<symbolTable*> openBrackets;
 	static queue<pair<Symbol*, symbolTable*>> later_defination_override;

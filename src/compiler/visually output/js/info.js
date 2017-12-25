@@ -1,6 +1,12 @@
-var input = 'sample inputs/input';var compile_start = '5:55:52:802:720:800'; var lex_end = '5:55:52:803:304:600';var lex_elapsed = '0.000585';
-var compile_start = '5:55:52:802:720:800'; var lex_end = '5:55:52:808:395:900';var lex_elapsed = '0.005675';
+var input = 'sample inputs/input';var compile_start = '6:38:7:268:507:700'; var lex_end = '6:38:7:269:965:500';var lex_elapsed = '0.001458';
+var compile_start = '6:38:7:268:507:700'; var lex_end = '6:38:7:278:777:700';var lex_elapsed = '0.010270';
 var error_recoverd = true;
-var error_num = 1;
+var error_num = 7;
 var errors = [];
 errors.push({ line: 0, col : -1, msg: 'error Program does not contain a static "Main" method suitable for an entry point.'});
+errors.push({ line: 3, col : 1, msg: 'using directory is unnecessery or couldn't be found.'});
+errors.push({ line: 4, col : 1, msg: 'using directory is unnecessery or couldn't be found.'});
+errors.push({ line: 5, col : 1, msg: 'using directory is unnecessery or couldn't be found.'});
+errors.push({ line: 6, col : 1, msg: 'using directory is unnecessery or couldn't be found.'});
+errors.push({ line: 7, col : 1, msg: 'using directory is unnecessery or couldn't be found.'});
+errors.push({ line: 8, col : 1, msg: 'using directory is unnecessery or couldn't be found.'});

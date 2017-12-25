@@ -131,7 +131,7 @@ boolean_literal
 
 /***** C.2.1 Basic concepts *****/
 namespace_name
-  : qualified_identifier	{l.a("namespace_name",1);}	
+  : qualified_identifier	{l.a("namespace_name",1);$<r.base>$ = $<r.base>1;}	
   ;
   
 type_name
@@ -805,8 +805,8 @@ using_alias_directive
   | USING IDENTIFIER EQUAL qualified_identifier error		{l.a("using_alias_directive",1,1);}
   ;
 using_namespace_directive
-  : USING namespace_name SEMICOLON		{l.a("using_namespace_directive",1);}
-  | USING namespace_name error			{l.a("using_namespace_directive",1,1);}
+  : USING namespace_name SEMICOLON		{l.a("using_namespace_directive",1);  SPL->add_using(*$<r.base>2,$<r.line_no>1,$<r.col_no>1);}
+  | USING namespace_name error			{l.a("using_namespace_directive",1,1);SPL->add_using(*$<r.base>2,$<r.line_no>1,$<r.col_no>1);}
   ;
 namespace_member_declarations
   : namespace_member_declaration									                {l.a("namespace_member_declarations",1);}

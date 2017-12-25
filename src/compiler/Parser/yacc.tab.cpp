@@ -2753,7 +2753,7 @@ yyreduce:
 
   case 10:
 #line 134 "yacc.y" /* yacc.c:1646  */
-    {l.a("namespace_name",1);}
+    {l.a("namespace_name",1);(yyval.r.base) = (yyvsp[0].r.base);}
 #line 2758 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -4774,13 +4774,13 @@ yyreduce:
 
   case 344:
 #line 808 "yacc.y" /* yacc.c:1646  */
-    {l.a("using_namespace_directive",1);}
+    {l.a("using_namespace_directive",1);  SPL->add_using(*(yyvsp[-1].r.base),(yyvsp[-2].r.line_no),(yyvsp[-2].r.col_no));}
 #line 4779 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 345:
 #line 809 "yacc.y" /* yacc.c:1646  */
-    {l.a("using_namespace_directive",1,1);}
+    {l.a("using_namespace_directive",1,1);SPL->add_using(*(yyvsp[-1].r.base),(yyvsp[-2].r.line_no),(yyvsp[-2].r.col_no));}
 #line 4785 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 

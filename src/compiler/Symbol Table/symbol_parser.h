@@ -14,6 +14,7 @@ class symbolParser
 {
 private:
 	symbolTable* symboltable;
+	vector<pair<string,pair<int,int > > > given_usings;
 public:
 	symbolParser();
 	void endScope();
@@ -26,6 +27,7 @@ public:
 	void addLocalVariable(string typeIdentifier, queue<string>identifier, bool known_type,bool constant, int line_no, int col_no);
 	void addMethod(queue<string>modifiers  , string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, int line_no, int col_no, bool known_type);
 	void add_scope();
+	void add_using(string s,int line_no,int col_no);
 	void check();
 	void check_function();
 	void check_later_defination();
