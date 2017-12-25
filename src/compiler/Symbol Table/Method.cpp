@@ -44,7 +44,7 @@ void Method::add_attributes(queue<string>&attributes , string name_parent)
 		if (attributes.front() == "OVERRIDE")
 			is_override = true;
 		if (attributes.front() == "VIRTUAL")
-			is_virtual = true;
+			is_virtual = true ;
 
 		if (attributes.front() == "PUBLIC")
 			is_public = true, is_protected = is_private = is_internal = false;

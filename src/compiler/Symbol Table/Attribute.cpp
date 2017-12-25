@@ -199,8 +199,12 @@ bool Attribute::add(string nameAtt,int sizeAtt)
 				}
 				else if (nameAtt == "VIRTUAL")
 				{
-					set<string>::iterator it5 = whatHave.find("PRIVATE");
-					if (it5 != whatHave.end()) {
+					set<string>::iterator it51 = whatHave.find("PUBLIC");
+					set<string>::iterator it52 = whatHave.find("PROTECTED");
+					set<string>::iterator it53 = whatHave.find("INTERNAL");
+
+
+					if (it51 == whatHave.end() && it52 == whatHave.end() && it53 == whatHave.end() ) {
 						error_handler.add(error(line_no, col_no, "attribute error, virtual or abstract members cannot be private"));
 						return false;
 					}
