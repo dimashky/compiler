@@ -29,7 +29,7 @@ extern int col_no;
 int main()
 {
 	
-	//fprintf(info, "var input = 'sample inputs/input';");
+	fprintf(info, "var input = 'sample inputs/input';");
 	auto start = std::chrono::system_clock::now();
 	//printf("-------------------------\nC# Compiler\n-------------------------\n");
 	//printf("START Parsing....\n");
@@ -41,7 +41,9 @@ int main()
 		cout << "===> Parsing\t\t'" << x <<"'"<< endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
+		fclose(yyin);
 	}
+
 	fclose(lexLogger);
 	auto end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;

@@ -83,7 +83,6 @@ void Interface::add_attributes(queue<string>&attributes)
 			if (!is_public && !is_protected && attributes.front() == "PRIVATE")
 				is_private = true;
 		}
-
 		attribute->add(attributes.front(), attributes.size());
 		attributes.pop();
 	}
