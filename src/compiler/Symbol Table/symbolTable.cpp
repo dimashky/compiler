@@ -229,9 +229,8 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		parent = this;
 
 	else parent = openBrackets.top();
-
 	((Method*)symbol)->add_parametars(parameters);
-
+	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType());
 
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
