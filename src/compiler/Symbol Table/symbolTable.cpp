@@ -93,8 +93,23 @@ void symbolTable::addNamespace(Symbol* symbol)
 
 	if (it != parent->symbolMap.end())
 	{
-		openBrackets.push(it->second.first);
-		type_defination_tree->down_specific_child(symbol->getName());
+		if (it->first->getType() == "namespace")
+		{
+			openBrackets.push(it->second.first);
+			type_defination_tree->down_specific_child(symbol->getName());
+		}
+		else 
+		{
+			string parent_name;
+			if (parent->owner == nullptr)
+				parent_name = "<global-namespace>";
+			else parent_name = parent->owner->getName();
+			error_handler.add(error(it->first->getLineNo(), -1, "error, The namespace '" + parent_name + "' already contains a definition for '" + symbol->getName() + "'."));
+			it->second.second = it->second.first;
+			it->second.first = new symbolTable(parent, symbol);
+			openBrackets.push(it->second.first);
+			type_defination_tree->down_specific_child(symbol->getName());
+		}
 	}
 	else
 	{
@@ -103,6 +118,7 @@ void symbolTable::addNamespace(Symbol* symbol)
 	}
 	return;
 }
+
 
 void symbolTable::addField(Symbol* symbol, bool known_type)
 {
