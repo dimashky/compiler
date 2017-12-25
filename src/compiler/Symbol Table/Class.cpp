@@ -13,6 +13,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 	owner_is_namespace = false;
 	type_graph_position = nullptr;
 	baseClassImpInterfaces.push_back(make_pair("", nullptr));
+	have_constructor = false;
 }
 
 void Class::add_attributes(queue<string>&attributes)
@@ -65,6 +66,16 @@ void Class::set_namespace_owner()
 	owner_is_namespace = true;
 	is_public = true;
 	is_protected = is_private = false;
+}
+
+void Class::set_have_constructor()
+{
+	have_constructor = true;
+}
+
+bool Class::get_have_constructor()
+{
+	return have_constructor;
 }
 
 void Class::set_type_graph_position(node* pos)

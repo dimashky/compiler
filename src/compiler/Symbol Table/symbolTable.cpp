@@ -365,8 +365,11 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		openBrackets.push(it->second.second);
 	}
 	else
+	{
+		if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
+			((Class*)parent->owner)->set_have_constructor();
 		add_scope(symbol);
-
+	}
 	symbolTable *top = openBrackets.top();
 	vector<LocalVariable*>  &par = ((Method*)symbol)->get_parameters();
 	for (int i = 0;i < par.size();i++)
@@ -741,7 +744,14 @@ bool symbolTable::closeScope()
 	if (!openBrackets.empty())
 	{
 		if (openBrackets.top()->owner != nullptr && (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace"))
+		{
+			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor())
+			{
+				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), true);
+				openBrackets.pop();
+			}
 			type_defination_tree->end_node();
+		}
 		openBrackets.pop();
 		return true;
 	}
