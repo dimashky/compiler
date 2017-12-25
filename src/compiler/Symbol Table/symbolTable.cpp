@@ -117,6 +117,7 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 		string curr_part = "", str_list = ((Field*)symbol)->get_type_name();
 
 
+
 		for (int i = 0;i < str_list.length();i++)
 		{
 			if (str_list[i] == '.')
@@ -163,7 +164,7 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 	if (!known_type)
 	{
 		queue<string>list;
-		string curr_part = "", str_list = ((Field*)symbol)->get_type_name();
+		string curr_part = "", str_list = ((LocalVariable*)symbol)->get_type_name();
 
 
 		for (int i = 0;i < str_list.length();i++)
@@ -183,9 +184,9 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent_class->owner)->get_type_graph_position(), list);
 
 		if (ref.first != nullptr)
-			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
+			((LocalVariable*)symbol)->set_type(((symbolTable*)ref.first)->owner);
 		else if (ref.second)
-			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found."));
+			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((LocalVariable*)symbol)->get_type_name() + "' couldn't be found."));
 		else
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent_class->owner)->get_type_graph_position(), symbol)));
 	}
@@ -198,6 +199,7 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 
 	return;
 }
+
 void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 {
 	for (map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > ::iterator it = curr->symbolMap.begin(); it != curr->symbolMap.end();)
