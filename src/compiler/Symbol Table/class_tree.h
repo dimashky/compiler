@@ -23,7 +23,7 @@ private:
 	node *root, *current;
 	bool is_parent(node* &child, node* &parent);
 	node* find_in_graph(node* &curr, string &class_name, stack<node*>&path);
-
+	int print_defination_tree(node *curr, int id, vector<string>* nodes, vector<string>* edges);
 public:
 	class_tree();
 	node* add_node(string name, void* stPTR);
@@ -40,7 +40,7 @@ public:
 
 	node* get_root();	
 	
-	int print_defination_tree(node *curr, int id, vector<string>* nodes, vector<string>* edges);
+	void print_defination_tree(node *curr);
 	void print_inhertince_tree(node *curr);
 
 	~class_tree();

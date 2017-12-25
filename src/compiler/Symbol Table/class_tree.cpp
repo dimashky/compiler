@@ -199,6 +199,30 @@ void class_tree::add_base(string name, node* child_ptr, node* parent_ptr)
 {
 	parent_ptr->bases.push_back(make_pair(name, child_ptr));
 }
+
+void class_tree::print_defination_tree(node *curr) {
+	vector<string> nodes, edges;
+	// push root of tree
+	nodes.push_back(string("{ id:0, font: { multi: 'md', color:'white' }, label:'`ROOT`', shape: 'box', color:'#016FB9'},"));
+	// traverse around the tree
+	symbolTable::type_defination_tree->print_defination_tree(curr, 0, &nodes, &edges);
+	// Print to the files
+	// for nodes
+	FILE *type_defination_tree_file = fopen("visually output/js/Type_Defination_Tree/nodes.js", "w");
+	fprintf(type_defination_tree_file, "var nodes=[");
+	for (auto i : nodes)
+		fprintf(type_defination_tree_file, i.c_str());
+	fprintf(type_defination_tree_file, "];");
+	fclose(type_defination_tree_file);
+	// for edges
+	type_defination_tree_file = fopen("visually output/js/Type_Defination_Tree/edges.js", "w");
+	fprintf(type_defination_tree_file, "var edges=[");
+	for (auto i : edges)
+		fprintf(type_defination_tree_file, i.c_str());
+	fprintf(type_defination_tree_file, "];");
+	fclose(type_defination_tree_file);
+}
+
 int class_tree::print_defination_tree(node *curr, int id, vector<string>* nodes, vector<string>* edges)
 {
 	if (curr == nullptr) 
@@ -212,6 +236,7 @@ int class_tree::print_defination_tree(node *curr, int id, vector<string>* nodes,
 		
 		next_id = print_defination_tree(it->second, next_id + 1, nodes, edges);
 	}
+	return next_id;
 }
 
 void class_tree::print_inhertince_tree(node *curr)
@@ -274,3 +299,4 @@ class_tree::~class_tree()
 {
 
 }
+

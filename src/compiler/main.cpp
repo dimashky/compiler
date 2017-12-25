@@ -54,31 +54,13 @@ int main()
 	int error_cnt = error_handler.errorsNum();
 	//cout<< (error_cnt == 0 ? "\nWith NO errors" : ("\n-> With Errors :\t"+to_string(error_cnt)) )<<"\n============\n";
     
-  
+	// check symbol table
 	SPL->check();
-	
-
 	/* Print type_defination_tree */
-	vector<string> nodes, edges;
-	// push root of tree
-	nodes.push_back(string("{ id:" + to_string(0) + ", font: { multi: 'md', color:'white' }, label:'`ROOT`', shape: 'box', color:'#016FB9'},"));
-	// traverse around the tree
-	symbolTable::type_defination_tree->print_defination_tree(symbolTable::type_defination_tree->get_root(),0,&nodes,&edges);
-	// Print to the files
-	FILE *type_defination_tree_file = fopen("visually output/js/Type_Defination_Tree/nodes.js", "w");
-	fprintf(type_defination_tree_file, "var nodes=[");
-	for (auto i : nodes)
-		fprintf(type_defination_tree_file, i.c_str());
-	fprintf(type_defination_tree_file, "];");
-	fclose(type_defination_tree_file);
-	type_defination_tree_file = fopen("visually output/js/Type_Defination_Tree/edges.js", "w");
-	fprintf(type_defination_tree_file, "var edges=[");
-	for (auto i : edges)
-		fprintf(type_defination_tree_file, i.c_str());
-	fprintf(type_defination_tree_file, "];");
-	fclose(type_defination_tree_file);
+	symbolTable::type_defination_tree->print_defination_tree(symbolTable::type_defination_tree->get_root());
+	// print yacc logger
 	l.print();
-	
+	// errors
 	error_handler.print();
 	
 	//if(error_cnt == 0)
