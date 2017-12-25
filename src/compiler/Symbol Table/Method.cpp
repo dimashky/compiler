@@ -1,4 +1,7 @@
 #include "Method.h"
+#include "../Error Handler/error_handler.h"
+
+extern errorHandler error_handler;
 
 Method::Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no): Symbol(name, line_no, col_no)
 {
@@ -13,16 +16,25 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->is_private = true;
 	this->is_protected = false;
 	this->is_internal = false;
-	add_attributes(modifiers);
 	this->types_ids_parameter = types_ids_parameter; 
 	
 
 }
 
-void Method::add_attributes(queue<string>&attributes)
+void Method::add_attributes(queue<string>&attributes , string name_parent)
 {
 	while (!attributes.empty())
 	{
+
+		if (name_parent == "interface")
+		{
+			if (attributes.front() != "NEW") {
+				error_handler.add(error(this->getLineNo(),this->getColNo(), "attribute error, the modifier '" + attributes.front() + "' is not valid for this item"));
+				attribute->add(attributes.front(), attributes.size());
+				attributes.pop();
+				continue; 
+		   }
+		}
 		if (attributes.front() == "SEALED")
 			isFinal = true;
 		if (attributes.front() == "STATIC")
@@ -39,10 +51,10 @@ void Method::add_attributes(queue<string>&attributes)
 		if (!is_public && attributes.front() == "PROTECTED")
 			is_protected = true, is_private = false;
 		if (!is_public && !is_private && attributes.front() == "INTERNAL")
-			is_internal = true , is_public = is_private = false ; 
+			is_internal = true, is_public = is_private = false;
 		if (!is_public && !is_protected && attributes.front() == "PRIVATE")
 			is_private = true;
-
+	   
 
 		attribute->add(attributes.front(),attributes.size());
 		attributes.pop();
