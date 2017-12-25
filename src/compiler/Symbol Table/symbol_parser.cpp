@@ -204,24 +204,32 @@ void check_later_def_var()
 	while (!symbolTable::later_defination_var.empty())
 	{
 		pair<queue<string>, pair<node*, Symbol* > > p = symbolTable::later_defination_var.front();
+		
 		pair<void*, bool> ref = symbolTable::type_defination_tree->find(p.second.first, p.first);
+		
 		if (ref.first != nullptr)
 		{
 			if (p.second.second->getType() == "field")
 				((Field*)p.second.second)->set_type(((symbolTable*)ref.first)->get_owner());
+			
 			else if (p.second.second->getType() == "localvariable")
 				((LocalVariable*)p.second.second)->set_type(((symbolTable*)ref.first)->get_owner());
+			
+			else if (p.second.second->getType() == "method")
+				((Method*)p.second.second)->set_return_type(((symbolTable*)ref.first)->get_owner());
+
 		}
 		else
 		{
-			if (p.second.second->getType() == "field") {
-				string m = "error, the type name '" + ((Field*)p.second.second)->get_type_name() + "' couldn't be found.";
-				error_handler.add(error(p.second.second->getLineNo(), -1, m.c_str()));
-			}
-			else if (p.second.second->getType() == "localvariable") {
-				string m = "error, the type name '" + ((LocalVariable*)p.second.second)->get_type_name() + "' couldn't be found.";
-				error_handler.add(error(p.second.second->getLineNo(), -1, m.c_str()));
-			}
+			if (p.second.second->getType() == "field")
+				error_handler.add(error(p.second.second->getLineNo(), -1, "error, the type name '" + ((Field*)p.second.second)->get_type_name() + "' couldn't be found."));
+
+			else if (p.second.second->getType() == "localvariable")
+				error_handler.add(error(p.second.second->getLineNo(), -1, "error, the type name '" + ((LocalVariable*)p.second.second)->get_type_name() + "' couldn't be found."));
+			
+			else if (p.second.second->getType() == "method")
+				error_handler.add(error(p.second.second->getLineNo(), -1, "error, the return type name '" + ((Method*)p.second.second)->get_return_type() + "' couldn't be found."));
+			
 		}
 		symbolTable::later_defination_var.pop();
 	}

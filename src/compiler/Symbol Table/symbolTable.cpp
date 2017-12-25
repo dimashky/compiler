@@ -123,16 +123,17 @@ void symbolTable::addNamespace(Symbol* symbol)
 void symbolTable::addField(Symbol* symbol, bool known_type)
 {
 	symbolTable *parent = NULL;
+
 	if (openBrackets.empty())
 		parent = this;
+
 	else parent = openBrackets.top();
 
 	if (!known_type)
 	{
 		queue<string>list;
+	
 		string curr_part = "", str_list = ((Field*)symbol)->get_type_name();
-
-
 
 		for (int i = 0;i < str_list.length();i++)
 		{
@@ -144,10 +145,13 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 		list.push(curr_part);
 
 		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		
 		if (ref.first != nullptr)
 			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
+		
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found."));
+		
 		else
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
 	}
@@ -162,6 +166,7 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 
 	if (it != parent->symbolMap.end())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
+	
 	else
 		add_symbol_without_open_brackets(symbol);
 
@@ -208,8 +213,10 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 	}
 
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = parent->symbolMap.find(symbol);
+	
 	if (it2 != parent->symbolMap.end())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, The local variable name '" + symbol->getName() + "' is duplicate."));
+	
 	else
 		add_symbol_without_open_brackets(symbol);
 
@@ -252,19 +259,15 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		parent = this;
 
 	else parent = openBrackets.top();
+	
 	((Method*)symbol)->add_parametars(parameters);
+	
 	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType());
 
-	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() != symbol->getName())
+	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
 
-	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() == symbol->getName())
-		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
-
-	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "interface" && ((Method*)symbol)->get_is_abstract())
-		error_handler.add(error(symbol->getLineNo(), -1, "error, The modifier 'abstract' is not valid for this item."));
-
-	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class"&& parent->owner->getName() == symbol->getName())
+	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
 
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_abstract() && !((Class*)parent->owner)->get_is_abstract())
@@ -286,17 +289,22 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		while (tempEx != nullptr)
 		{
 			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = tempEx->symbolMap.find(symbol);
-			if (itex != tempEx->symbolMap.end() && !((Method*)itex->first)->get_is_private()) { // if is method 
+			
+			if (itex != tempEx->symbolMap.end() && !((Method*)itex->first)->get_is_private()) // if is method
+			{  
 
-				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
+				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type())
+					; // if same return type
 				else
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
 
-				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override());// is virtual or abstract or override
+				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override())
+					;// is virtual or abstract or override
 				else
 					error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
 
-				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal()); //  is same modifiers
+				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal())
+					; //  is same modifiers
 				else
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
 
@@ -304,9 +312,8 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
 				break;
 			}
-			else {
+			else
 				tempEx = ((Class *)tempEx->owner)->get_extended_class().second;
-			}
 		}
 
 		if (tempEx == nullptr)
@@ -331,10 +338,12 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		list.push(curr_part);
 
 		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+
 		if (ref.first != nullptr)
-			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
+			((Method*)symbol)->set_return_type(((symbolTable*)ref.first)->owner);
+
 		else if (ref.second)
-			error_handler.add(error(symbol->getLineNo(), -1, "error,  the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found"));
+			error_handler.add(error(symbol->getLineNo(), -1, "error,  the type name '" + ((Method*)symbol)->get_return_type() + "' couldn't be found"));
 
 		else
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
@@ -378,8 +387,10 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			list.push(curr_part);
 
 			pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+
 			if (ref.first != nullptr)
 				par[i]->set_type(((symbolTable*)ref.first)->owner);
+			
 			else if (ref.second)
 				error_handler.add(error(par[i]->getLineNo(), -1, "error, the type name '" + par[i]->get_type_name() + "' couldn't be found."));
 
@@ -388,6 +399,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		}
 
 		map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it2 = top->symbolMap.find(par[i]);
+		
 		if (it2 != top->symbolMap.end())
 			error_handler.add(error(par[i]->getLineNo(), -1, "error, The parametar name '" + par[i]->getName() + "' is duplicate."));
 
@@ -396,8 +408,6 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 		parameters.pop();
 	}
-
-
 
 	return;
 }
@@ -431,8 +441,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'"));
 
 			//optimize delete data when duplicate is found(we didn't make this optization trick)
-			if (it->second.second != NULL)
-				delete it->second.second;
+			if (it->second.second != nullptr)
+				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
 
@@ -461,9 +471,9 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			{
 				error_handler.add(error(it->first->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
 
-				delete it->first;
-				delete it->second.first;
-				delete it->second.second;
+				//delete it->first;
+				//delete it->second.first;
+				//delete it->second.second;
 
 				parent->symbolMap.erase(it);
 				it = parent->symbolMap.find(symbol);
@@ -613,7 +623,7 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 
 			//optimize delete data when duplicate is found(we didn't make this optization trick)
 			if (it->second.second != NULL)
-				delete it->second.second;
+				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
 
@@ -641,10 +651,10 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 			{
 				error_handler.add(error(it->first->getLineNo(), -1, "error, The type '" + parent->owner->getName() + "' already contains a definition for '" + symbol->getName() + "'."));
 
-				delete it->first;
+	/*			delete it->first;
 				delete it->second.first;
 				delete it->second.second;
-
+*/
 				parent->symbolMap.erase(it);
 				it = parent->symbolMap.find(symbol);
 			}

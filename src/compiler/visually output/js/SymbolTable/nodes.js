@@ -1,1 +1,1 @@
-var nodes = [{ id:0, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\n`namespace`', shape: 'box', color:'#182825'},{ id:1, font: { multi: 'md', color:'white' }, label:'*x*\n`namespace`', shape: 'box', color:'#9A031E'},];
+var nodes = [{ id:0, font: { multi: 'md', color:'white' }, label:'*Global Namespace*\n`namespace`', shape: 'box', color:'#182825'},{ id:1, font: { multi: 'md', color:'white' }, label:'*xx*\n`class`', shape: 'box', color:'#016FB9'},{ id:2, font: { multi: 'md', color:'white' }, label:'*f*\n`class`', shape: 'box', color:'#016FB9'},];
