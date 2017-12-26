@@ -255,6 +255,9 @@ void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 
 void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type, bool is_body)
 {
+
+
+
 	symbolTable *parent = NULL;
 
 	if (openBrackets.empty())
@@ -262,6 +265,12 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	else parent = openBrackets.top();
 	
+	if (parent->owner == nullptr)
+	{
+		return;
+	}
+
+
 	((Method*)symbol)->add_parametars(parameters);
 	
 	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType(), is_body);
@@ -815,17 +824,17 @@ int symbolTable::print(int nodeID)
 {
 	if (owner != NULL) {
 		if (owner->getType() == "class")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`class`', shape: 'box', color:'#016FB9'},", nodeID, owner->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'%s\\n`class`', shape: 'box', color:'#016FB9'},", nodeID, owner->getName().c_str());
 		else if (owner->getType() == "interface")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n_interface_', shape: 'box', color:'#015B98'},", nodeID, owner->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'%s\\n_interface_', shape: 'box', color:'#015B98'},", nodeID, owner->getName().c_str());
 		else if (owner->getType() == "namespace")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'%s\\n`namespace`', shape: 'box', color:'#9A031E'},", nodeID, owner->getName().c_str());
 		else if (owner->getType() == "field")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s fields`', shape: 'box', color:'#4CB944'},", nodeID, ((Field*)owner)->getName().c_str(), ((Field*)owner)->get_type_name().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'%s\\n`%s fields`', shape: 'box', color:'#4CB944'},", nodeID, ((Field*)owner)->getName().c_str(), ((Field*)owner)->get_type_name().c_str());
 		else if (owner->getType() == "localvariable")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`%s LocalVar`', shape: 'box', color:'#FFC07F'},", nodeID, ((LocalVariable*)owner)->getName().c_str(), ((LocalVariable*)owner)->get_type_name().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'%s\\n`%s LocalVar`', shape: 'box', color:'#FFC07F'},", nodeID, ((LocalVariable*)owner)->getName().c_str(), ((LocalVariable*)owner)->get_type_name().c_str());
 		else if (owner->getType() == "method")
-			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'*%s*\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
+			fprintf(nodeFile, "{ id:%d, font: { multi: 'md', color:'white' }, label:'%s\\n`Method`', shape: 'box', color:'#EF476F'},", nodeID, ((Method*)owner)->getName().c_str());
 	}
 	// scope
 	if (owner == NULL && parent != NULL) {

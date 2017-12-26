@@ -31,14 +31,14 @@ int main()
 	
 	fprintf(info, "var input = 'sample inputs/input';");
 	auto start = std::chrono::system_clock::now();
-	//printf("-------------------------\nC# Compiler\n-------------------------\n");
-	//printf("START Parsing....\n");
+	printf("-------------------------\nC# Compiler\n-------------------------\n");
+	printf("START Parsing....\n");
 	
 	vector<string> files;
 	scan_for_cs_files("sample inputs/input",&files);
 	for (auto x : files) {
 		line_no = col_no = 1;
-		//cout << "===> Parsing\t\t'" << x <<"'"<< endl;
+		cout << "===> Parsing\t\t'" << x <<"'"<< endl;
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
 		fclose(yyin);
@@ -51,11 +51,9 @@ int main()
 	std::chrono::duration<double> elapsed_seconds = end - start;
 	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 	string end_time_str = get_time_and_date();
-	//std::cout << "\nFINISHED Parsing at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n";
-	//fprintf(info, "var parse_end = '%s';var parse_elapsed = '%f';\n", end_time_str.c_str(), elapsed_seconds.count());
-	int error_cnt = error_handler.errorsNum();
-	//cout<< (error_cnt == 0 ? "\nWith NO errors" : ("\n-> With Errors :\t"+to_string(error_cnt)) )<<"\n============\n";
-    
+	std::cout << "\nFINISHED Parsing at:\t" << std::ctime(&end_time) << "-> Elapsed time:\t" << elapsed_seconds.count() << "s\n";
+	fprintf(info, "var parse_end = '%s';var parse_elapsed = '%f';\n", end_time_str.c_str(), elapsed_seconds.count());
+	 
 	// check symbol table
 	SPL->check();
 	/* Print type_defination_tree */
@@ -65,9 +63,12 @@ int main()
 	// errors
 	error_handler.print();
 	
+	int error_cnt = error_handler.errorsNum();
+	cout << (error_cnt == 0 ? "\nWith NO errors" : ("\n-> With Errors :\t" + to_string(error_cnt))) << "\n";
+
 	//if(error_cnt == 0)
 	//cout << "To see visuallize section open -> ./visually output/index.html\n" << endl;
-	//cout << "-------------------------THE END-----------------------------\n" << endl;
+	cout << "-------------------------\nEND\n-------------------------\n" << endl;
 	
 	if (! symbolTable::initPrintFiles())
 	{

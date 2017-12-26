@@ -4952,7 +4952,7 @@ yyreduce:
 
   case 374:
 #line 888 "yacc.y" /* yacc.c:1646  */
-    {l.a("class_declaration",5);SPL->endScope();}
+    {l.a("class_declaration",6);SPL->endScope();}
 #line 4957 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 

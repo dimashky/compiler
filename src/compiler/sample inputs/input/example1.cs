@@ -1,10 +1,21 @@
 
-class aa : xx
+class aa
 {
-    public override string ToString()
+    class tt
     {
-        return "asd";
+
+    }
+    public string ToStriddng(int xx)
+    {
+
+    }
+    class xx
+    {
+
     }
 }
 
- class xx { }
+class qqqqqq
+{
+
+}

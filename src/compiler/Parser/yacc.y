@@ -885,7 +885,7 @@ class_declaration
   {
 		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
   } 
-  class_body comma_opt	{l.a("class_declaration",5);SPL->endScope();}
+  class_body comma_opt	{l.a("class_declaration",6);SPL->endScope();}
   | attributes_opt modifiers_opt class IDENTIFIER class_base_opt 
   {
 		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
