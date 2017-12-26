@@ -1,4 +1,4 @@
- class x
+class x
 {
     public  void ttt();
 }

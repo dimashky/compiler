@@ -69,10 +69,10 @@ void symbolParser::addFieldConst(queue<string>modifiers,string  modifier_const,s
 
 }
 
-void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type)
+void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type , bool is_body)
 {
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
-	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type);
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type, is_body);
 }
 
 

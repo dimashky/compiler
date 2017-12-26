@@ -21,7 +21,7 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 
 }
 
-void Method::add_attributes(queue<string>&attributes , string name_parent)
+void Method::add_attributes(queue<string>&attributes , string name_parent,bool is_body)
 {
 	while (!attributes.empty())
 	{
@@ -58,6 +58,10 @@ void Method::add_attributes(queue<string>&attributes , string name_parent)
 
 		attribute->add(attributes.front(),attributes.size());
 		attributes.pop();
+	}
+
+	if (!is_body && !is_virtual && !is_abstract) {
+		error_handler.add(error(this->getLineNo(), this->getColNo(), "funct must declare a body because it is not marked abstract, extern, or partial"));
 	}
 	return;
 }
