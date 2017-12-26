@@ -8,6 +8,7 @@
 extern errorHandler error_handler;
 
 int symbolTable::is_main = 0;
+symbolTable* symbolTable::object_ref = nullptr;
 vector<node*> symbolTable::parents = vector<node*>();
 vector<pair<node*, pair<pair<int, int>, pair<int, int> > > > symbolTable::using_namespaces = vector<pair<node*, pair<pair<int, int>, pair<int, int> > > >();
 class_tree* symbolTable::type_defination_tree = new class_tree();
@@ -286,7 +287,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_override()) // if override
 	{
 		symbolTable* tempEx = ((Class *)parent->owner)->get_extended_class().second;
-
+		
 		while (tempEx != nullptr)
 		{
 			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator itex = tempEx->symbolMap.find(symbol);
@@ -433,6 +434,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 	((Class*)symbol)->add_attributes(modifiers);
 
+
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 
 	node* current = nullptr;
@@ -492,13 +494,16 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 	}
 	else
 	{
+		
 		add_scope(symbol);
 
 		((Class*)symbol)->set_type_graph_position(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 
+
 		current = ((Class*)symbol)->get_type_graph_position()->parent;
 
 		valid_class = true;
+
 	}
 
 	int cnt = 0;
@@ -542,7 +547,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 		}
 
 		else {
-
 			if (find_base != nullptr)
 			{
 				if (find_base->owner->getType() == "class")

@@ -899,9 +899,18 @@ class_base_opt
   | class_base		{l.a("class_base_opt",1);$<r.bases>$ = $<r.bases>1;}
   ;
 class_base
-  : COLON class_type							{l.a("class_base",1);$<r.bases>$ = new queue<string>();}
+  : COLON class_type							{l.a("class_base",1);$<r.bases>$ = new queue<string>();$<r.bases>$->push(*$<r.base>2);}
   | COLON interface_type_list					{l.a("class_base",1);$<r.bases>$ = $<r.bases>2;}
-  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);$<r.bases>$ = new queue<string>();}
+  | COLON class_type COMMA interface_type_list	
+  {
+		l.a("class_base",2);$<r.bases>$ = new queue<string>();
+		$<r.bases>$->push(*$<r.base>2);
+		while(!$<r.bases>4->empty())
+		{
+			$<r.bases>$->push($<r.bases>4->front());
+			$<r.bases>4->pop();
+		}
+  }
   ;
 interface_type_list
   : type_name								

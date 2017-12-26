@@ -23,8 +23,33 @@ void symbolParser::endScope()
 	symboltable->closeScope();
 }
 
+void symbolParser::add_object()
+{
+
+	Symbol* symbol = new Class("object", 0, 0);
+
+	symboltable->addClass(symbol, queue<string>(), queue<string>());
+	
+	symbolTable::object_ref = symbolTable::openBrackets.top();
+
+	queue<string>mod;
+
+	mod.push("PUBLIC");
+	mod.push("VIRTUAL");
+
+	Method* method = new Method(mod, "string", "toString", 0, 0);
+
+	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), 1, 1);
+
+	endScope();
+	endScope();
+}
+
 void symbolParser::addNamespace(string name, int line_no, int col_no)
 {
+	if (symbolTable::object_ref == nullptr)
+		add_object();
+
 	Symbol* newNamespace = new Namespace(name, line_no, col_no);
 	symboltable->addNamespace(newNamespace);
 	return;
@@ -32,6 +57,9 @@ void symbolParser::addNamespace(string name, int line_no, int col_no)
 
 void symbolParser::addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no)
 {
+	if (symbolTable::object_ref == nullptr)
+		add_object();
+
 	Symbol* newClass = new Class(className, line_no, col_no);
 	symboltable->addClass(newClass, bases, modifiers);
 	return;

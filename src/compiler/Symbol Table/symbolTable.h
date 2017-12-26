@@ -28,7 +28,7 @@ private:
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > symbolMap;
 
 public:
-
+	static symbolTable* object_ref;
 	static int is_main;
 	static vector<node*>parents;
 	static vector<pair<node*,pair<pair<int, int>, pair<int, int> > > >using_namespaces;
