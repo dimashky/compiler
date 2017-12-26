@@ -364,6 +364,10 @@ void check_later_def_var()
 
 void symbolParser::check_function()
 {
+	symbolTable* curr = symbolTable::openBrackets.top();
+	while (curr == nullptr)
+		curr = curr->get_parent();
+	
 	symboltable->check_method(symbolTable::openBrackets.top(), map<string, bool>());
 }
 

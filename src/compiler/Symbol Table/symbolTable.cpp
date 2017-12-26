@@ -256,8 +256,6 @@ void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type, bool is_body)
 {
 
-
-
 	symbolTable *parent = NULL;
 
 	if (openBrackets.empty())
@@ -265,10 +263,6 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	else parent = openBrackets.top();
 	
-	if (parent->owner == nullptr)
-	{
-		return;
-	}
 
 
 	((Method*)symbol)->add_parametars(parameters);
@@ -377,6 +371,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	}
 	else
 	{
+
 		if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
 			((Class*)parent->owner)->set_have_constructor();
 		add_scope(symbol);

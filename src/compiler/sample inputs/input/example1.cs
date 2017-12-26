@@ -1,21 +1,12 @@
-
-class aa
+interface xx
 {
-    class tt
-    {
-
-    }
-    public string ToStriddng(int xx)
-    {
-
-    }
-    class xx
-    {
-
-    }
+    new void f();
 }
 
-class qqqqqq
+class tt : xx
 {
+    public override void f()
+    {
 
+    }
 }
