@@ -1,6 +1,6 @@
 
 class qq
 {
-
+    void f();
 }
 

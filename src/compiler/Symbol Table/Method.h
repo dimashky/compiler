@@ -13,7 +13,7 @@ private:
 	Attribute* attribute;
 	string return_type;
 	Symbol* return_type_ref;
-	bool isFinal,is_static,is_abstract,is_override , is_virtual;
+	bool isFinal,is_static,is_abstract,is_override , is_virtual, is_extern;
 	bool is_public, is_private , is_protected , is_internal; 
 	vector<LocalVariable*> types_ids_parameter;
 public:
