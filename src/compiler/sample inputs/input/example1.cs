@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 using x.y.z;
 namespace x
+=======
+class x
+>>>>>>> origin/medo-final
 {
     namespace y
     {

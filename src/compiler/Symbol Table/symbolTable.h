@@ -46,7 +46,7 @@ public:
 	void addLocalVariable(Symbol* symbol, bool isParameter);
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
-	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type);
+	void addMethod(Symbol* symbol,queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type, bool is_body);
 	
 	void check_method(symbolTable* curr, map<string, bool>check_map);
        

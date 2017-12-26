@@ -18,7 +18,7 @@ private:
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
-	void add_attributes(queue<string>&attributes,string name_parent);
+	void add_attributes(queue<string>&attributes,string name_parent, bool is_body);
 	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters);
 
 	void set_return_type(Symbol* ref);
@@ -36,6 +36,7 @@ public:
 	bool get_is_private();
 	bool get_is_protected();
 	bool get_is_internal();
+
 	string get_return_type();
 	string getType();
 

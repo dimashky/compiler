@@ -252,7 +252,7 @@ void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 	return;
 }
 
-void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type)
+void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type, bool is_body)
 {
 	symbolTable *parent = NULL;
 
@@ -263,7 +263,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	
 	((Method*)symbol)->add_parametars(parameters);
 	
-	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType());
+	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType(), is_body);
 
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
@@ -748,7 +748,7 @@ bool symbolTable::closeScope()
 		{
 			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor())
 			{
-				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), true);
+				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), true ,false );
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();
