@@ -31,13 +31,12 @@ void symbolParser::add_object()
 	symboltable->addClass(symbol, queue<string>(), queue<string>());
 	
 	symbolTable::object_ref = symbolTable::openBrackets.top();
-
 	queue<string>mod;
 
 	mod.push("PUBLIC");
 	mod.push("VIRTUAL");
 
-	Method* method = new Method(mod, "string", "toString", 0, 0);
+	Method* method = new Method(mod, "string", "ToString", 0, 0);
 
 	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), 1, 1);
 
@@ -159,6 +158,8 @@ void symbolParser::check_later_defination()
 					if (!symbolTable::later_defination.front().first.empty())
 						parent_name += '.';
 				}
+				((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
+
 				error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, "'" + parent_name + "' is ambiguous reference."));
 			}
 
@@ -183,6 +184,7 @@ void symbolParser::check_later_defination()
 								if (!symbolTable::later_defination.front().first.empty())
 									parent_name += '.';
 							}
+							((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 							string m = "symbol parser error, cannot derive from sealed type '" + parent_name + "'.";
 							error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 						}
@@ -202,9 +204,13 @@ void symbolParser::check_later_defination()
 				}
 
 				else if (search->get_owner()->getType() == "interface")
+				{
+					((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
-
-				else if (search->get_owner()->getType() == "namespace") {
+				}
+				else if (search->get_owner()->getType() == "namespace") 
+				{
+					((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					string m = "symmbol parser error, '" + search->get_owner()->getName() + "' is a namespace.";
 					error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 				}
