@@ -42,6 +42,8 @@ int main()
 		yyin = fopen(x.c_str(), "r");
 		yyparse();
 		fclose(yyin);
+		SPL->send_using_to_st();
+		SPL->clear_given_usings();
 	}
 
 	fclose(lexLogger);

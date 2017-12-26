@@ -101,8 +101,10 @@ void symbolParser::add_using(string s, int line_no, int col_no)
 
 void symbolParser::check_later_defination()
 {
+	int mycnt1 = -1;
 	while (!symbolTable::later_defination.empty())
 	{
+		mycnt1++;
 		if (symbolTable::later_defination.front().second.second->getType() == "class")
 		{
 			symbolTable* search = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::later_defination.front().second.first, symbolTable::later_defination.front().first, ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position()).first;
@@ -112,11 +114,13 @@ void symbolParser::check_later_defination()
 			if (search == nullptr)
 				for (int nsp = 0;nsp < symbolTable::using_namespaces.size();nsp++)
 				{
-					symbolTable* curr_type = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp], symbolTable::later_defination.front().first).first;
-					if (curr_type != nullptr)
-						cnt++, search = curr_type;
+					if (symbolTable::using_namespaces[nsp].second.first.first <= mycnt1 && symbolTable::using_namespaces[nsp].second.first.second > mycnt1)
+					{
+						symbolTable* curr_type = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp].first, symbolTable::later_defination.front().first).first;
+						if (curr_type != nullptr)
+							cnt++, search = curr_type;
+					}
 				}
-
 			if (cnt > 1)
 			{
 				string parent_name;
@@ -200,11 +204,12 @@ void symbolParser::check_later_defination()
 
 			if (search == nullptr)
 				for (int nsp = 0;nsp < symbolTable::using_namespaces.size();nsp++)
-				{
-					symbolTable* curr_type = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp], symbolTable::later_defination.front().first).first;
-					if (curr_type != nullptr)
-						cnt++, search = curr_type;
-				}
+					if (symbolTable::using_namespaces[nsp].second.first.first <= mycnt1 && symbolTable::using_namespaces[nsp].second.first.second > mycnt1)
+					{
+						symbolTable* curr_type = (symbolTable*)symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp].first, symbolTable::later_defination.front().first).first;
+						if (curr_type != nullptr)
+							cnt++, search = curr_type;
+					}
 
 			if (cnt > 1)
 			{
@@ -264,8 +269,10 @@ void symbolParser::check_later_defination()
 
 void check_later_def_var()
 {
+	int cnt = -1;
 	while (!symbolTable::later_defination_var.empty())
 	{
+		cnt++;
 		pair<queue<string>, pair<node*, Symbol* > > p = symbolTable::later_defination_var.front();
 		
 		pair<void*, bool> ref = symbolTable::type_defination_tree->find(p.second.first, p.first);
@@ -287,8 +294,9 @@ void check_later_def_var()
 			bool find_type = false;
 
 			for (int nsp = 0;nsp < symbolTable::using_namespaces.size();nsp++)
+			if(symbolTable::using_namespaces[nsp].second.second.first <= cnt && symbolTable::using_namespaces[nsp].second.second.second > cnt)
 			{
-				ref = symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp], p.first);
+				ref = symbolTable::type_defination_tree->find(symbolTable::using_namespaces[nsp].first, p.first);
 				if (ref.first != nullptr)
 				{
 					if (p.second.second->getType() == "field")
@@ -380,10 +388,20 @@ void check_later_def_override()
 	}
 }
 
-
-void symbolParser::check()
+void symbolParser::send_using_to_st()
 {
-	//check using namespace statments
+	int min1, min2, max1, max2;
+
+	if (symbolTable::using_namespaces.size() != 0)
+	{
+		min1 = symbolTable::using_namespaces[symbolTable::using_namespaces.size() - 1].second.first.second;
+		min2 = symbolTable::using_namespaces[symbolTable::using_namespaces.size() - 1].second.second.second;
+	}
+	else min1 = min2 = 0;
+	
+	max1 = symbolTable::later_defination.size();
+	max2 = symbolTable::later_defination_var.size();
+
 	for (int i = 0;i < given_usings.size();i++)
 	{
 		queue<string>list;
@@ -394,17 +412,23 @@ void symbolParser::check()
 			if (str_list[i] == '.')
 				list.push(curr_part), curr_part = "";
 			else curr_part += str_list[i];
-	
-		list.push(curr_part);
 
-		node* nsp = symbolTable::type_defination_tree->check_using_namespace(list);
+			list.push(curr_part);
 
-		if (nsp != nullptr)
-			symbolTable::using_namespaces.push_back(nsp);
+			node* nsp = symbolTable::type_defination_tree->check_using_namespace(list);
 
-		else
-			error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
+			if (nsp != nullptr)
+				symbolTable::using_namespaces.push_back(make_pair(nsp, make_pair(make_pair(min1, max1), make_pair(min2, max2))));
+
+			else
+				error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
 	}
+}
+
+
+void symbolParser::check()
+{
+	
 
 	check_later_defination();
 

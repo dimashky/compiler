@@ -28,8 +28,12 @@ public:
 	void addMethod(queue<string>modifiers  , string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, int line_no, int col_no, bool known_type);
 	void add_scope();
 	void add_using(string s,int line_no,int col_no);
+	void send_using_to_st();
 	void check();
 	void check_function();
 	void check_later_defination();
+	void clear_given_usings() {
+		given_usings.clear();
+	}
 	symbolTable* getSymbolTableRoot();
 };
