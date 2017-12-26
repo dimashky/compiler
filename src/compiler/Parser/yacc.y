@@ -983,11 +983,11 @@ method_header
       }
   | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE block
 		  {    l.a("method_header",5); 
-               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
+               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
          }
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE	block
 		 {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,1);
+        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,1,1);
          }
 
 
@@ -1002,11 +1002,11 @@ method_header
       }
   | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE SEMICOLON
 		  {    l.a("method_header",5); 
-               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>(),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
          }
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE	SEMICOLON
 		 {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,0);
+        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,1,0);
          }
   ;
 
