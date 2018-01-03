@@ -13,66 +13,33 @@ private:
 	Attribute* attribute;
 	string return_type;
 	Symbol* return_type_ref;
-	bool isFinal,is_static,is_abstract,is_override , is_virtual;
-	
+	bool isFinal,is_static,is_abstract,is_override , is_virtual, is_extern;
+	bool is_public, is_private , is_protected , is_internal; 
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
-	void add_attributes(queue<string>&attributes);
+	void add_attributes(queue<string>&attributes,string name_parent, bool is_body);
+	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters);
+
+	void set_return_type(Symbol* ref);
+
+	bool compare(Symbol* comp);
+	bool is_final();
+
+	vector<LocalVariable*>& get_parameters();
+	int get_parametars_count();
+	bool get_is_static();
+	bool get_is_abstract();
+	bool get_is_override();
+	bool get_is_virtual();
+	bool get_is_public();
+	bool get_is_private();
+	bool get_is_protected();
+	bool get_is_internal();
+
 	string get_return_type();
 	string getType();
 
-	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters)
-	{
-		while (!parameters.empty())
-			types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, true, false, parameters.front().first.second.first, parameters.front().first.second.second)), parameters.pop();
-	}
-	vector<LocalVariable*>& get_parameters();
-	
-	int get_parametars_count()
-	{
-		return types_ids_parameter.size();
-	}
-
-	bool compare(Symbol* comp)
-	{
-		
-		if (getName() == comp->getName() && comp->getType() == "method")
-		{
-			if (get_parametars_count() != ((Method*)comp)->get_parametars_count())
-				return get_parametars_count() > ((Method*)comp)->get_parametars_count();
-
-			vector<LocalVariable*> &p1 = get_parameters();
-			vector<LocalVariable*> &p2 = ((Method*)comp)->get_parameters();
-			for (int i = 0;i < p1.size();i++)
-				if (p1[i]->get_type_name() != p2[i]->get_type_name())
-					return p1[i]->get_type_name() > p2[i]->get_type_name();
-				
-			return false;
-		}
-		return getName() > comp->getName();
-	}
-
-	void set_return_type(Symbol* ref)
-	{
-		return_type_ref = ref;
-		return;
-	}
-	bool get_is_static() {
-		return is_static; 
-	}
-	
-	bool get_is_abstract() {
-		return is_abstract;
-	}
-	bool is_final();
-	bool get_is_override() {
-		return is_override; 
-	}
-	bool get_is_virtual()
-	{
-		return is_virtual;
-	}
 	~Method();
 
 };

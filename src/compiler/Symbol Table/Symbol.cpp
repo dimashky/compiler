@@ -29,7 +29,13 @@ int Symbol::getLineNo()
 {
 	return line_no;
 }
+
 int Symbol::getColNo()
 {
 	return col_no;
+}
+
+bool Symbol::compare(Symbol* comp)
+{
+	return this->name > comp->name;
 }

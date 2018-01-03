@@ -3,13 +3,14 @@
 
 #include <iostream>
 #include <fstream>
-#include <queue>
+#include <vector>
+#include <algorithm> 
 #include <string.h>
 #include "error_record.h"
 
 
 class errorHandler {
-	std::queue<error> errorList;
+	std::vector<error> errorList;
 	char* filename;
 	int counter ;
 public:
@@ -19,21 +20,20 @@ public:
 	}
 	void add(error e) {
 		e.id = ++counter;
-		errorList.push(e);
+		errorList.push_back(e);
 	}
 	void print() {
+		std::sort(errorList.begin(), errorList.end());
 		FILE* f = fopen(filename, "w");
 		fprintf(f, "Total Errors = %d\n", counter);
 		extern FILE* info;
 		fprintf(info, "var error_num = %d;\n", counter);
 		if(counter)
 			fprintf(info, "var errors = [];\n");
-		while (!errorList.empty()) {
-			error e = errorList.front();
+		for (error e : errorList) {
 			fprintf(f, "Error#%d [%d, %d] -> %s\n",e.id,e.line_no, e.col_no, e.msg.c_str());
 			std::string ss = "errors.push({ line: "+ std::to_string(e.line_no) +", col : "+std::to_string(e.col_no)+", msg: '"+ e.msg+"'});\n";
 			fprintf(info, "%s", ss.c_str());
-			errorList.pop();
 		}
 		fclose(f);
 	}

@@ -9,14 +9,14 @@ private:
 	string name;
 public:
 	Symbol(string name, int line_no, int col_no);
-	~Symbol();
-	virtual string getType();
+
+	virtual bool compare(Symbol* comp);
+
 	string getName();
 	int getLineNo();
 	int getColNo();
-	virtual bool compare(Symbol* comp)
-	{
-		return this->name > comp->name;
-	}
-	
+	virtual string getType();
+
+	~Symbol();
+
 };

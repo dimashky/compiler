@@ -131,7 +131,7 @@ boolean_literal
 
 /***** C.2.1 Basic concepts *****/
 namespace_name
-  : qualified_identifier	{l.a("namespace_name",1);}	
+  : qualified_identifier	{l.a("namespace_name",1);$<r.base>$ = $<r.base>1;}	
   ;
   
 type_name
@@ -483,8 +483,8 @@ labeled_statement
 declaration_statement
   : local_variable_declaration SEMICOLON	                              {l.a("declaration_statement",1);}
   | local_constant_declaration SEMICOLON	                              {l.a("declaration_statement",1);}
-  | local_variable_declaration error		                              {yyerrok; l.a("declaration_statement",1,1);}
-  | local_constant_declaration error		                              {yyerrok; l.a("declaration_statement",1,1);}
+  | local_variable_declaration error		                              { l.a("declaration_statement",1,1);}
+  | local_constant_declaration error		                              { l.a("declaration_statement",1,1);}
   ;
 local_variable_declaration
   : type variable_declarators 		                                      
@@ -551,7 +551,7 @@ constant_declarator
   /*
 expression_statement
   : statement_expression SEMICOLON									{l.a("expression_statement",1);}
-  |	statement_expression error		                                {yyerrok;l.a("expression_statement",1,1);}
+  |	statement_expression error		                                {l.a("expression_statement",1,1);}
   ;
   */
   expression_statement
@@ -562,13 +562,13 @@ expression_statement
   | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
   | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
-  | invocation_expression			error                             {yyerrok; l.a("expression_statement",1,1);}
-  | object_creation_expression		error							  {yyerrok;l.a("expression_statement",1,1);}
-  | assignment						error							  {yyerrok;l.a("expression_statement",1,1);}
-  | post_increment_expression 		error                             {yyerrok;l.a("expression_statement",1,1);}
-  | post_decrement_expression		error                             {yyerrok;l.a("expression_statement",1,1);}
-  | pre_increment_expression		error                             {yyerrok;l.a("expression_statement",1,1);}
-  | pre_decrement_expression		error                             {yyerrok;l.a("expression_statement",1,1);}
+  | invocation_expression			error                             { l.a("expression_statement",1,1);}
+  | object_creation_expression		error							  {l.a("expression_statement",1,1);}
+  | assignment						error							  {l.a("expression_statement",1,1);}
+  | post_increment_expression 		error                             {l.a("expression_statement",1,1);}
+  | post_decrement_expression		error                             {l.a("expression_statement",1,1);}
+  | pre_increment_expression		error                             {l.a("expression_statement",1,1);}
+  | pre_decrement_expression		error                             {l.a("expression_statement",1,1);}
   ;
 statement_expression
   : invocation_expression	 										{l.a("statement_expression",1);}
@@ -624,11 +624,11 @@ unsafe_statement
 while_statement
   : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
   | WHILE LEFT_BRACKET_CIRCLE error				 RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2,1);}
-  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{ yyerrok; } {l.a("while_statement",2,1);}
+  | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{  } {l.a("while_statement",2,1);}
   ;
 do_statement
   : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
-  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{yyerrok; l.a("do_statement",2,1);}
+  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{ l.a("do_statement",2,1);}
   ;
 
 for_statement
@@ -805,8 +805,8 @@ using_alias_directive
   | USING IDENTIFIER EQUAL qualified_identifier error		{l.a("using_alias_directive",1,1);}
   ;
 using_namespace_directive
-  : USING namespace_name SEMICOLON		{l.a("using_namespace_directive",1);}
-  | USING namespace_name error			{l.a("using_namespace_directive",1,1);}
+  : USING namespace_name SEMICOLON		{l.a("using_namespace_directive",1);  SPL->add_using(*$<r.base>2,$<r.line_no>1,$<r.col_no>1);}
+  | USING namespace_name error			{l.a("using_namespace_directive",1,1);SPL->add_using(*$<r.base>2,$<r.line_no>1,$<r.col_no>1);}
   ;
 namespace_member_declarations
   : namespace_member_declaration									                {l.a("namespace_member_declarations",1);}
@@ -832,7 +832,7 @@ type_declaration
  * enum_modifier, delegate_modifier
  */
 modifiers_opt
-  : /* Nothing */       
+  : /* Nothing  medo */       
   {		
 		l.a("modifiers_opt",0);
 		$<r.modifiers>$ = new queue<string>();
@@ -885,7 +885,12 @@ class_declaration
   {
 		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
   } 
-  class_body comma_opt	{l.a("class_declaration",5);SPL->endScope();}
+  class_body comma_opt	{l.a("class_declaration",6);SPL->endScope();}
+  | attributes_opt modifiers_opt class IDENTIFIER class_base_opt 
+  {
+		SPL->addClass(*$<r.modifiers>2,string($<r.str>4),*$<r.bases>5,$<r.line_no>4,$<r.col_no>4);
+  } 
+  error comma_opt	{l.a("class_declaration",5);SPL->endScope();}
   ;
 
 
@@ -894,9 +899,18 @@ class_base_opt
   | class_base		{l.a("class_base_opt",1);$<r.bases>$ = $<r.bases>1;}
   ;
 class_base
-  : COLON class_type							{l.a("class_base",1);$<r.bases>$ = new queue<string>();}
+  : COLON class_type							{l.a("class_base",1);$<r.bases>$ = new queue<string>();$<r.bases>$->push(*$<r.base>2);}
   | COLON interface_type_list					{l.a("class_base",1);$<r.bases>$ = $<r.bases>2;}
-  | COLON class_type COMMA interface_type_list	{l.a("class_base",2);$<r.bases>$ = new queue<string>();}
+  | COLON class_type COMMA interface_type_list	
+  {
+		l.a("class_base",2);$<r.bases>$ = new queue<string>();
+		$<r.bases>$->push(*$<r.base>2);
+		while(!$<r.bases>4->empty())
+		{
+			$<r.bases>$->push($<r.bases>4->front());
+			$<r.bases>4->pop();
+		}
+  }
   ;
 interface_type_list
   : type_name								
@@ -939,10 +953,16 @@ class_member_declaration
   ;
 constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
-		  {		l.a("constant_declaration",4);
-				//SPL->add_var(*$<r.modifiers>2,1);
+		  {		
+		         l.a("constant_declaration",4);
+	          SPL->addFieldConst(*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
 		  }
-  | attributes_opt modifiers_opt CONST type constant_declarators error		{l.a("constant_declaration",4,1);}
+  | attributes_opt modifiers_opt CONST type constant_declarators error		
+         {
+		    l.a("constant_declaration",4,1);
+         SPL->addFieldConst(*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
+
+		 }
   ;
 field_declaration
   : attributes_opt modifiers_opt type variable_declarators SEMICOLON
@@ -958,18 +978,55 @@ field_declaration
   ;
 
 method_declaration
-  : method_header method_body		{l.a("method_declaration",2);SPL->check_function(); SPL->endScope();}
+  : method_header 		{l.a("method_declaration",2);SPL->check_function(); SPL->endScope();}
   ;
 
 method_header
-  : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	
-      {    l.a("method_header",5); 
-          SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+  : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE
+  {    l.a("method_header",5); 
+          SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
       }
+  
+   block	
+      
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	
-      {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1);
+   {   l.a("method_header",4);
+        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,1);
       }
+  block
+     
+  | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE
+  {    l.a("method_header",5); 
+               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
+         } block
+		  
+  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE
+  
+   {   l.a("method_header",4);
+        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,1,1);
+         }
+
+  	block
+		
+
+
+
+   | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	SEMICOLON
+      {    l.a("method_header",5); 
+          SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+      }
+  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	SEMICOLON
+      {   l.a("method_header",4);
+        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,0);
+      }
+  | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE SEMICOLON
+		  {    l.a("method_header",5); 
+               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>(),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+         }
+  | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE	SEMICOLON
+		 {   l.a("method_header",4);
+        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,1,0);
+         }
   ;
 
 formal_parameter_list_opt
@@ -997,11 +1054,12 @@ return_type
   : type					{l.a("return_type",1);}
   | VOID					{l.a("return_type",0);}
   ;
+  /*
 method_body
   : block		{l.a("method_body",1);}
   | SEMICOLON	{l.a("method_body",0);}
   ;
-
+*/
   
 
 
@@ -1207,7 +1265,7 @@ conversion_operator_declarator
 constructor_declaration
   : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE 
   {
-  SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,$<r.line_no>3,$<r.col_no>3,1);
+  SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,$<r.line_no>3,$<r.col_no>3,1,1);
   }
   constructor_initializer_opt constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
   ;
@@ -1328,12 +1386,22 @@ interface_member_declaration
   ;
 /* inline return_type to avoid conflict with interface_property_declaration */
 interface_method_declaration
-  : attributes_opt new_opt type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		{l.a("interface_method_declaration",5);}
-  | attributes_opt new_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		{l.a("interface_method_declaration",4);}
+  : attributes_opt new_opt type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
+    {
+     l.a("interface_method_declaration",5);
+	 SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string($<r.str>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+	 SPL->endScope();
+    }
+  | attributes_opt new_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
+    {
+	  l.a("interface_method_declaration",4);
+	  SPL->addMethod(*$<r.modifiers>2,"VOID",string($<r.str>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,0);
+	  SPL->endScope();
+    }
   ;
-new_opt
-  : /* Nothing */  {l.a("new_opt",0);}
-  | NEW            {l.a("new_opt",0);}
+new_opt 
+  : /* Nothing */  {l.a("new_opt",0); $<r.modifiers>$ = new queue<string>();}
+  | NEW            {l.a("new_opt",0);$<r.modifiers>$ = new queue<string>() ; $<r.modifiers>$->push("NEW");} 
   ;
 interface_property_declaration
   : attributes_opt new_opt type IDENTIFIER 
@@ -1475,15 +1543,15 @@ EXIT_getset
 
  class 
    : CLASS												{l.a("CLASS",0);}	
-   | error										        {l.a("CLASS",0,1);yyerrok;yyclearin;}
+   | error										        {l.a("CLASS",0,1);yyclearin;}
    ;
 left_bracket_circle 
   : LEFT_BRACKET_CIRCLE									{l.a("left_bracket_circle",0);}
-  | error												{l.a("left_bracket_circle",0,1);yyerrok;yyclearin;}
+  | error												{l.a("left_bracket_circle",0,1);yyclearin;}
   ;
 right_bracket_circle 
   : RIGHT_BRACKET_CIRCLE								{l.a("right_bracket_circle",0);}
-  | error												{l.a("right_bracket_circle",0,1);yyerrok;yyclearin;}
+  | error												{l.a("right_bracket_circle",0,1);yyclearin;}
   ;
 semicolon 
   : SEMICOLON											{ l.a("semicolon",0);}
@@ -1491,7 +1559,7 @@ semicolon
   ;
 in 
   : IN												    {l.a("in",0);}
-  | error											    {l.a("in",0,1);yyerrok;} 
+  | error											    {l.a("in",0,1);} 
   ; 
 
 

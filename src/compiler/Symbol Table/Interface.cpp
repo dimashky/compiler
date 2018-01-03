@@ -1,8 +1,10 @@
 #include "Interface.h"
+#include "../Error Handler/error_handler.h"
+extern errorHandler error_handler;
 
 Interface::Interface(string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
-	attribute = new Attribute(this->getType());
+	attribute = new Attribute(this->getType(),line_no , col_no);
 	is_public = false;
 	is_private = true;
 	is_protected = false;
@@ -21,7 +23,8 @@ void Interface::add_base(string name, symbolTable* ref)
 	for (int i = 0;i < impInterfaces.size();i++)
 		if (impInterfaces[i].first == name)
 		{
-			cout << "error : " << name << " already listed in interface list." << endl;
+			string m = "interface error, "+ name + " already listed in interface list.";
+			error_handler.add(error(getLineNo(), -1, m.c_str()));
 			return;
 		}
 	impInterfaces.push_back(make_pair(name, ref));
@@ -33,6 +36,32 @@ string Interface::getType()
 	return "interface";
 }
 
+bool Interface::get_is_public()
+{
+	return is_public;
+}
+
+void Interface::set_type_graph_position(node* pos)
+{
+	type_graph_position = pos;
+	return;
+}
+
+node* Interface::get_type_graph_position()
+{
+	return type_graph_position;
+}
+
+void Interface::delete_implemented_interface(symbolTable* ref)
+{
+	for (int i = 0;i < impInterfaces.size();i++)
+	{
+		if (impInterfaces[i].second == ref)
+		{
+			cout << ref->get_owner()->getLineNo() << " " << impInterfaces[i].second->get_owner()->getLineNo() << endl;
+		}
+	}
+}
 
 
 void Interface::add_attributes(queue<string>&attributes)
@@ -43,7 +72,7 @@ void Interface::add_attributes(queue<string>&attributes)
 		if (owner_is_namespace)
 		{
 			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE")
-				cout << "error : there is an error in line " << getLineNo() << ", elements defined in namespace cannot be private or protected." << endl;
+				error_handler.add(error(getLineNo(), -1, "interface error, elements defined in namespace cannot be private or protected."));
 		}
 		else
 		{
@@ -54,8 +83,7 @@ void Interface::add_attributes(queue<string>&attributes)
 			if (!is_public && !is_protected && attributes.front() == "PRIVATE")
 				is_private = true;
 		}
-
-		attribute->add(attributes.front());
+		attribute->add(attributes.front(), attributes.size());
 		attributes.pop();
 	}
 	return;

@@ -14,8 +14,9 @@ private:
 	vector<pair<string, symbolTable*> > baseClassImpInterfaces;
 
 	Attribute* attribute;
-	bool isFinal,is_public,is_private,is_protected,owner_is_namespace, is_abstract;
+	bool isFinal,is_public,is_private,is_protected,owner_is_namespace, is_abstract,have_constructor;
 	node* type_graph_position;
+	
 
 
 public:
@@ -25,40 +26,18 @@ public:
 	void add_base(string name, symbolTable* ref);
 	void add_attributes(queue<string>&attributes);
 
+	void set_have_constructor();
 	void set_namespace_owner();
+	void set_type_graph_position(node* pos);
+	void set_extended_class(pair<string, symbolTable*>val);
 
 	bool is_final();
+	bool get_is_abstract();
+	bool get_is_public();
+	bool get_have_constructor();
+	node* get_type_graph_position();
+	pair<string, symbolTable*> get_extended_class();
 
-	bool get_is_public() 
-	{
-		return is_public;
-	}
-
-	void set_type_graph_position(node* pos)
-	{
-		type_graph_position = pos;
-		return;
-	}
-
-	node* get_type_graph_position()
-	{
-		return type_graph_position;
-	}
-
-	pair<string, symbolTable*> get_extended_class()
-	{
-		return baseClassImpInterfaces[0];
-	}
-
-	void set_extended_class(pair<string, symbolTable*>val)
-	{
-		baseClassImpInterfaces[0] = val;
-		return;
-	}
-	bool get_is_abstract() {
-		return is_abstract; 
-	}
 	~Class();
-
 };
 

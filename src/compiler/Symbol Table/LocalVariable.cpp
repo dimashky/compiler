@@ -25,6 +25,11 @@ bool LocalVariable::is_parameter()
 	return isParameter;
 }
 
+void LocalVariable::set_type(Symbol* type_ref)
+{
+	this->type_ref = type_ref;
+}
+
 LocalVariable::~LocalVariable()
 {
 }
