@@ -466,8 +466,6 @@ void symbolParser::send_using_to_st()
 
 void symbolParser::check()
 {
-	
-
 	check_later_defination();
 
 	for (int i = 0; i < symboltable->parents.size(); i++)

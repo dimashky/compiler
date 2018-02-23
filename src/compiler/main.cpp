@@ -79,6 +79,13 @@ int main()
 		symbolTable::closePrintFiles();
 	}
     fclose(info);
+
+
+	for (int i = 0;i < symbolTable::deleted.size();i++)
+		delete symbolTable::deleted[i];
+	
+
+
 	system("pause");
 	return 0;
 }

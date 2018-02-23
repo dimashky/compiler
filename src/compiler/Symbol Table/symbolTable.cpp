@@ -16,11 +16,15 @@ stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
-
+vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
 symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
 {
 	this->parent = parent;
 	this->owner = owner;
+	if (this->parent != nullptr) {
+		this->valid = this->parent->valid;
+	}
+	else this->valid = true;
 }
 
 map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>& symbolTable::get_symbolMap()
@@ -108,6 +112,12 @@ void symbolTable::addNamespace(Symbol* symbol)
 			else parent_name = parent->owner->getName();
 			error_handler.add(error(it->first->getLineNo(), -1, "error, The namespace '" + parent_name + "' already contains a definition for '" + symbol->getName() + "'."));
 			it->second.second = it->second.first;
+			
+			//add to deleted vector
+			it->second.second->setAsInvalid();
+			if (it->second.second->parent->valid)
+				deleted.push_back(it->second.second);
+
 			it->second.first = new symbolTable(parent, symbol);
 			openBrackets.push(it->second.first);
 			type_defination_tree->down_specific_child(symbol->getName());
@@ -456,6 +466,10 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 			it->second.second = new symbolTable(parent, symbol);
 
+			it->second.second->setAsInvalid();
+			if (it->second.second->parent->valid)
+				deleted.push_back(it->second.second);
+
 			current = ((Class*)it->first)->get_type_graph_position();
 
 			openBrackets.push(it->second.second);
@@ -469,6 +483,10 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
+
+			it->second.second->setAsInvalid();
+			if (it->second.second->parent->valid)
+				deleted.push_back(it->second.second);
 
 			current = ((Interface*)it->first)->get_type_graph_position();
 
@@ -646,10 +664,14 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 			error_handler.add(error(symbol->getLineNo(), -1, "error, there is defination with same name '" + symbol->getName() + "'"));
 
 			//optimize delete data when duplicate is found(we didn't make this optization trick)
-			if (it->second.second != NULL)
+			if (it->second.second != nullptr)
 				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
+
+			it->second.second->setAsInvalid();
+			if (it->second.second->parent->valid)
+				deleted.push_back(it->second.second);
 
 			current = ((Class*)it->first)->get_type_graph_position();
 
@@ -664,6 +686,12 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 				it->second.second = nullptr;
 
 			it->second.second = new symbolTable(parent, symbol);
+
+
+			it->second.second->setAsInvalid();
+			if (it->second.second->parent->valid)
+				deleted.push_back(it->second.second);
+
 
 			current = ((Interface*)it->first)->get_type_graph_position();
 
@@ -791,7 +819,22 @@ string symbolTable::get_owner_name()
 
 symbolTable::~symbolTable()
 {
+	for (int i = 0;i < childs.size();i++)
+		if (childs[i] != nullptr)
+			delete childs[i];
+	childs.clear();
 
+	for (map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it = symbolMap.begin();it != symbolMap.end();it++)
+	{
+		if (it->second.first != nullptr)
+			delete it->second.first;
+		if (it->second.second != nullptr)
+			delete it->second.second;
+	}
+
+	symbolMap.clear();
+	if (owner != nullptr)
+		delete owner;
 }
 
 bool symbolTable::initPrintFiles()

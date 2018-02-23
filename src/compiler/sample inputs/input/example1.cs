@@ -1,11 +1,15 @@
-interface xx
+class a
 {
-    new void f();
+
 }
 
-class tt : xx
+class a
 {
-    public override void f()
+    class b
+    {
+
+    }
+    class b
     {
 
     }
