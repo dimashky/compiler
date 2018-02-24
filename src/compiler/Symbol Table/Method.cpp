@@ -61,8 +61,7 @@ void Method::add_attributes(queue<string>&attributes , string name_parent,bool i
 		attribute->add(attributes.front(),attributes.size());
 		attributes.pop();
 	}
-
-	if (!is_body && !is_extern && !is_abstract) {
+	if ( is_body && (is_extern || is_abstract)) {
 		error_handler.add(error(this->getLineNo(), this->getColNo(),this->getName()+ " must declare a body because it is not marked abstract, extern, or partial"));
 	}
 	return;

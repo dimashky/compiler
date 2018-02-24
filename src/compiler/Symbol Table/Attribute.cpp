@@ -299,7 +299,7 @@ bool Attribute::add(string nameAtt,int sizeAtt)
 						}
 					}
 					else {
-						error_handler.add(error(line_no, col_no, "attribute error, cannot be sealed because it is not an override"));
+						error_handler.add(error(line_no, col_no, "attribute error, cannot be abstract because it is a private method"));
 						return false;
 					}
 

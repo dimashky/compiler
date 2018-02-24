@@ -1,15 +1,13 @@
-class a
+ abstract class a
 {
-
-}
-
-class a
-{
-    class b
+      void f1()
     {
 
     }
-    class b
+}
+abstract class b:a
+{
+    void f1()
     {
 
     }
