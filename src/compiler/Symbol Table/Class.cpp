@@ -23,7 +23,7 @@ void Class::add_attributes(queue<string>&attributes)
 		if (attributes.front() == "SEALED")
 			isFinal = true;
 		if (attributes.front() == "ABSTRACT")
-			is_abstract = true;
+			is_abstract = true ;
 
 		if (owner_is_namespace)
 		{

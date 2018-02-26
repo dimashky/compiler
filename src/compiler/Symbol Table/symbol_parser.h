@@ -32,6 +32,7 @@ public:
 	void check();
 	void check_function();
 	void check_later_defination();
+	void check_is_methods_not_override();
 	void add_object();
 	void clear_given_usings() {
 		given_usings.clear();

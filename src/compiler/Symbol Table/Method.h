@@ -15,6 +15,7 @@ private:
 	Symbol* return_type_ref;
 	bool isFinal,is_static,is_abstract,is_override , is_virtual, is_extern;
 	bool is_public, is_private , is_protected , is_internal; 
+	bool must_ovrride; 
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
@@ -36,7 +37,9 @@ public:
 	bool get_is_private();
 	bool get_is_protected();
 	bool get_is_internal();
+	bool get_is_must_ovrride();
 
+	void set_must_ovrride(bool must_override);
 	string get_return_type();
 	string getType();
 

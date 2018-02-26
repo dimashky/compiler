@@ -36,6 +36,8 @@ public:
 	static class_tree *type_defination_tree;
 	static stack<symbolTable*> openBrackets;
 	static queue<pair<Symbol*, symbolTable*>> later_defination_override;
+	static queue<pair<Symbol*, symbolTable*>> extended_abstract_classes;
+
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
 	static vector<symbolTable*> deleted;
 

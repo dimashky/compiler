@@ -198,6 +198,9 @@ void symbolParser::check_later_defination()
 							{
 								symboltable->type_defination_tree->add_base(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
 								symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
+								// class is extend from abstruct class
+								if (!(((Class*)symbolTable::later_defination.front().second.second)->get_is_abstract()) && (((Class*)search->get_owner())->get_is_abstract()))
+									symbolTable::extended_abstract_classes.push(make_pair(symbolTable::later_defination.front().second.second, search));
 							}
 						}
 					}
@@ -390,27 +393,35 @@ void check_later_def_override()
 		{
 			
 			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator itex = tempEx->get_symbolMap().find(symbol);
-
-
-			
-			
+			bool correctOverride = true;
 			if (itex != tempEx->get_symbolMap().end() && !((Method*)itex->first)->get_is_private()) { // if is method 
 
-				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type()); // if same return type
-				else
+				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type())
+					; // if same return type
+				else {
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
-
-				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override());// is virtual or abstract or override
-				else
+					correctOverride = false;
+				}
+				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override())
+				;// is virtual or abstract or override
+				else {
 					error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
-
-				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal()); //  is same modifiers
-				else
+					correctOverride = false;
+				}
+				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal())
+					;//  is same modifiers
+				else{
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
+					correctOverride = false;
 
-				if (((Method*)itex->first)->is_final())
+				}
+				if (!(((Method*)itex->first)->is_final()))
+					; // is not final 
+				else 
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
 
+				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_is_must_ovrride())
+					((Method*)itex->first)->set_must_ovrride(false);
 				break;
 			}
 			else {
@@ -462,7 +473,37 @@ void symbolParser::send_using_to_st()
 				error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
 	}
 }
+void symbolParser::check_is_methods_not_override()
+{
+	while (!symbolTable::extended_abstract_classes.empty())
+	{
 
+		Symbol* symbol = symbolTable::extended_abstract_classes.front().first;
+
+		symbolTable* parent = symbolTable::extended_abstract_classes.front().second;
+
+		symbolTable* tempEx = parent; 
+		//symbolTable* tempEx = ((Class *)parent->get_owner())->get_extended_class().second;
+
+		while(tempEx != nullptr && (((Class*)tempEx->get_owner())->get_is_abstract()))
+		{
+
+			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator itex = tempEx->get_symbolMap().begin();
+			for (itex = tempEx->get_symbolMap().begin(); itex != tempEx->get_symbolMap().end(); itex++)
+			{
+				if (itex->first->getType() == "method" && (((Method*)itex->first)->get_is_must_ovrride()))
+				{
+					error_handler.add(error(symbol->getLineNo(), -1, "error, '"+ symbol->getName() +"' does not implement inherited abstract member '" + tempEx->get_owner_name() + "." + itex->first->getName()+"'."));
+				}
+			}
+			tempEx = ((Class *)tempEx->get_owner())->get_extended_class().second;
+
+		}
+
+		symbolTable::extended_abstract_classes.pop();
+	}
+
+}
 
 void symbolParser::check()
 {
@@ -472,8 +513,10 @@ void symbolParser::check()
 		symbolTable::type_defination_tree->check_cycle(symboltable->parents[i], symboltable->parents[i], vector<node*>());
 
 	check_later_def_var();
-
 	check_later_def_override();
+
+
+	check_is_methods_not_override();
 	
 	if (symbolTable::is_main == 0)
 		error_handler.add(error(0, -1, "error Program does not contain a static \"Main\" method suitable for an entry point."));

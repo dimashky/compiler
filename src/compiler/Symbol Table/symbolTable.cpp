@@ -14,6 +14,7 @@ vector<pair<node*, pair<pair<int, int>, pair<int, int> > > > symbolTable::using_
 class_tree* symbolTable::type_defination_tree = new class_tree();
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
+queue<pair<Symbol*, symbolTable*>> symbolTable::extended_abstract_classes = queue<pair<Symbol*, symbolTable*>>();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
@@ -274,20 +275,26 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	else parent = openBrackets.top();
 	
 
-
 	((Method*)symbol)->add_parametars(parameters);
 	
 	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType(), is_body);
 
+	// is correct abstract method
+	if (!is_body && ((Method*)symbol)->get_is_abstract()  && !((Method*)symbol)->get_is_private() && parent->owner != NULL && parent->owner->getType() == "class" && ((Class*)parent->owner)->get_is_abstract())
+		((Method*)symbol)->set_must_ovrride(true);
+    // name method same name class  
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
 
+	//the same as their enclosing type
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() == symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, member names cannot be the same as their enclosing type."));
 
+	// abstract method without abstract class 
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_abstract() && !((Class*)parent->owner)->get_is_abstract())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, '" + ((Method*)symbol)->getName() + "' is abstract but it is contained in non-abstract class '" + ((Class*)parent->owner)->getName() + "'."));
 
+	// more Main method
 	if (symbol->getName() == "Main" && ((Method*)symbol)->get_is_static() && parent->owner->getType() == "class")
 	{
 		if (symbolTable::is_main != 0)
@@ -296,7 +303,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		symbolTable::is_main++;
 	}
 
-	/// error for override method 
+	// error for override method 
 	if (((Method*)symbol)->get_return_type() != "" && parent->owner != NULL && parent->owner->getType() == "class" && ((Method*)symbol)->get_is_override()) // if override
 	{
 		symbolTable* tempEx = ((Class *)parent->owner)->get_extended_class().second;
@@ -307,25 +314,34 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			
 			if (itex != tempEx->symbolMap.end() && !((Method*)itex->first)->get_is_private()) // if is method
 			{  
-
+				bool correctOverride = true;
 				if (((Method*)symbol)->get_return_type() == ((Method*)itex->first)->get_return_type())
 					; // if same return type
-				else
+				else {
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': return type must be '" + ((Method*)itex->first)->get_return_type() + "' to match overridden member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()'."));
-
+					correctOverride = false; 
+				}
 				if (((Method*)itex->first)->get_is_virtual() || ((Method*)itex->first)->get_is_abstract() || ((Method*)itex->first)->get_is_override())
 					;// is virtual or abstract or override
-				else
+				else {
 					error_handler.add(error(symbol->getLineNo(), -1, "error, cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is not marked virtual, abstract, or override"));
-
+					correctOverride = false;
+				}
 				if (((Method*)itex->first)->get_is_public() == ((Method*)symbol)->get_is_public() && ((Method*)itex->first)->get_is_protected() == ((Method*)symbol)->get_is_protected() && ((Method*)itex->first)->get_is_internal() == ((Method*)symbol)->get_is_internal())
 					; //  is same modifiers
-				else
+				else {
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot change access modifiers when overriding "));
-
-				if (((Method*)itex->first)->is_final())
+					correctOverride = false;
+				}
+				if (!(((Method*)itex->first)->is_final()))
+					;
+				else {
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
-				break;
+					correctOverride = false;
+				}
+				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_is_must_ovrride())
+					((Method*)itex->first)->set_must_ovrride(false); 
+					break;
 			}
 			else
 				tempEx = ((Class *)tempEx->owner)->get_extended_class().second;
@@ -447,8 +463,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 		((Class*)symbol)->set_namespace_owner();
 
 	((Class*)symbol)->add_attributes(modifiers);
-
-
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>::iterator it = parent->symbolMap.find(symbol);
 
 	node* current = nullptr;
@@ -588,7 +602,14 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 						{
 							parents.push_back(((Class*)find_base->owner)->get_type_graph_position());
 							type_defination_tree->add_base(((Class*)find_base->owner)->getName(), ((Class*)find_base->owner)->get_type_graph_position(), ((Class*)symbol)->get_type_graph_position());
+							
+
+							// class is extend from abstruct class
+							if (!(((Class*)symbol)->get_is_abstract()) && (((Class*)find_base->owner)->get_is_abstract()))
+								extended_abstract_classes.push(make_pair(symbol, find_base));
+							
 						}
+						 
 					}
 				}
 				else if (find_base->owner->getType() == "namespace")

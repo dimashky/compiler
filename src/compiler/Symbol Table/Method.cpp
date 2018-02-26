@@ -17,6 +17,7 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->is_protected = false;
 	this->is_internal = false;
 	this->is_extern = false;
+	this->must_ovrride = false; 
 	this->types_ids_parameter = types_ids_parameter; 
 	
 
@@ -164,6 +165,15 @@ bool Method::get_is_protected()
 bool Method::get_is_internal()
 {
 	return is_internal;
+}
+bool Method::get_is_must_ovrride()
+{
+	return must_ovrride; 
+}
+
+void Method::set_must_ovrride(bool must_override)
+{
+	this->must_ovrride = must_override;
 }
 
 Method::~Method()
