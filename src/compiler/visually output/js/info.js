@@ -1,6 +1,6 @@
-var input = 'sample inputs/input';var compile_start = '7:57:57:834:789:700'; var lex_end = '7:57:57:836:156:800';var lex_elapsed = '0.001367';
-var compile_start = '7:57:57:834:789:700'; var lex_end = '7:57:57:853:431:600';var lex_elapsed = '0.018641';
-var parse_end = '7:57:57:854:393:600';var parse_elapsed = '0.022888';
+var input = 'sample inputs/input';var compile_start = '0:24:25:484:274:700'; var lex_end = '0:24:25:485:652:800';var lex_elapsed = '0.001379';
+var compile_start = '0:24:25:484:274:700'; var lex_end = '0:24:25:501:199:300';var lex_elapsed = '0.016925';
+var parse_end = '0:24:25:502:200:600';var parse_elapsed = '0.022028';
 var error_recoverd = true;
 var error_num = 3;
 var errors = [];

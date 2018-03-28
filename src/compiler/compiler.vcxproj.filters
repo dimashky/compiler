@@ -40,6 +40,18 @@
     <Filter Include="Source Files\I/O\input">
       <UniqueIdentifier>{97c22513-d26d-4791-840d-74d7923f7fe4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AST">
+      <UniqueIdentifier>{bda033a2-6384-4750-9703-6f5671a4fe6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AST\Expression">
+      <UniqueIdentifier>{b8bbd724-cf55-49cf-af43-cdba50b43dfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AST\Object">
+      <UniqueIdentifier>{0a868830-21fb-42eb-a711-e50b65998b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AST\Statement">
+      <UniqueIdentifier>{3ea7819b-308c-4890-aac9-3192336b2782}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\example1.cs">
@@ -101,9 +113,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp">
       <Filter>Source Files\Lexical Analyzer</Filter>
     </ClCompile>
@@ -145,6 +154,55 @@
     </ClCompile>
     <ClCompile Include="Parser\yacc.tab.cpp">
       <Filter>Source Files\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Node.cpp">
+      <Filter>Source Files\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Expression\Identifier.cpp">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Expression\Expression.cpp">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Expression\BinaryExpression.cpp">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Object\Object.cpp">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Expression\UnaryExpression.cpp">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AST\Object\Variable.cpp">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Object\Procedure.cpp">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\Statement.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\While.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\IfElse.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\If.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\Call.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\Block.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\Assignment.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Expression\AutoConst.cpp">
+      <Filter>Source Files\AST\Expression</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +265,54 @@
     </ClInclude>
     <ClInclude Include="tools\tools.h">
       <Filter>Source Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Node.h">
+      <Filter>Source Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Expression\Identifier.h">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Expression\Expression.h">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Expression\BinaryExpression.h">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Object\Object.h">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Expression\UnaryExpression.h">
+      <Filter>Source Files\AST\Expression</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Object\Variable.h">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Object\Procedure.h">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Statement.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\While.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\IfElse.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\If.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Call.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Block.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Assignment.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Expression\AutoConst.h">
+      <Filter>Source Files\AST\Expression</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

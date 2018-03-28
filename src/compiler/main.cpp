@@ -5,7 +5,6 @@
 #include "tools/tools.h"
 #include <stdio.h>
 #include <ctime>
-
 using namespace std;
 
 // Extern from YACC 
@@ -25,7 +24,6 @@ extern symbolParser* SPL = new symbolParser();
 // Extern for Lex
 extern int line_no;
 extern int col_no;
-
 int main()
 {
 	
