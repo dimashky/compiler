@@ -9,6 +9,7 @@ class Procedure :public Object
 	Procedure *program;
 public:
 	Procedure();
+	Procedure(string name, Procedure* program);
 	~Procedure();
 };
 

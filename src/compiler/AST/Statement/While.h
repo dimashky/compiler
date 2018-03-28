@@ -4,10 +4,11 @@
 #include"../Statement/Statement.h"
 class While :public Statement
 {
-	Expression cond;
-	Statement stat;
+	Expression *condition;
+	Statement *statement;
 public:
 	While();
+	While(Expression *condition, Statement *statement);
 	~While();
 };
 

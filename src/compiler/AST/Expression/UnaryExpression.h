@@ -8,6 +8,7 @@ private:
 	Expression *expression;
 public:
 	UnaryExpression();
+	UnaryExpression(Operator op, Expression *expression);
 	~UnaryExpression();
 };
 

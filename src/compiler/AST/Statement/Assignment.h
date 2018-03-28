@@ -4,10 +4,11 @@
 #include "../Expression/Expression.h"
 class Assignment :public Statement
 {
-	Object left;
-	Expression right;
+	Object *left;
+	Expression *right;
 public:
 	Assignment();
+	Assignment(Object *left, Expression *right);
 	~Assignment();
 };
 

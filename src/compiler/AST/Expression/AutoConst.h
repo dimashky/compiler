@@ -7,6 +7,7 @@ class AutoConst :public Expression
 
   public:
 	AutoConst();
+	AutoConst(string type , void* value);
 	~AutoConst();
 };
 

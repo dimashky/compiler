@@ -4,10 +4,11 @@
 #include"../Statement/Statement.h"
 class If :public Statement
 {
-	Expression codnition;
-	Statement statement;
+	Expression *codnition;
+	Statement *statement;
 public:
 	If();
+	If(Expression *codnition, Statement *statement);
 	~If();
 };
 

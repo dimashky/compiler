@@ -6,6 +6,7 @@ class Identifier : public Expression
 	Object object; 
 public:
 	Identifier();
+	Identifier(Object object);
 	~Identifier();
 };
 
