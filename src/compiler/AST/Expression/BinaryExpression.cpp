@@ -2,10 +2,6 @@
 
 
 
-BinaryExpression::BinaryExpression()
-{
-
-}
 BinaryExpression::BinaryExpression(Expression *left, Operator op1, Expression *right)
 {
 	this->left = left; 

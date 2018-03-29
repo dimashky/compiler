@@ -1,13 +1,9 @@
 #include "Identifier.h"
 
 
-
-Identifier::Identifier()
+Identifier::Identifier(Symbol *symbol)
 {
-}
-Identifier::Identifier(Object object)
-{
-	this->object = object; 
+	this->symbol = symbol;
 }
 
 

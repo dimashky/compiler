@@ -1,15 +1,19 @@
 #pragma once
 #include "Object.h" 
 #include "../Statement/Block.h"
+#include "../../Symbol Table/Symbol.h"
+
 class Procedure :public Object
 {
-	vector<Object> locals;
+	vector<Object*> locals;
 	Block block;
-	int nextAdr;  
-	Procedure *program;
+
 public:
-	Procedure();
-	Procedure(string name, Procedure* program);
+	Procedure(Symbol* symbol);
+	void add(Object* object) {
+		locals.push_back(object);
+		return;
+	}
 	~Procedure();
 };
 

@@ -1,11 +1,7 @@
 #include "Variable.h"
-Variable::Variable()
-{
 
-}
-Variable::Variable(Type type, string name)
+Variable::Variable(Symbol* symbol):Object(symbol)
 {
-	Object::Object(type, name);
 }
 Variable::~Variable()
 {

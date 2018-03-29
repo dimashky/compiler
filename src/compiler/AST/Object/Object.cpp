@@ -2,13 +2,9 @@
 
 
 
-Object::Object()
+Object::Object(Symbol* symbol)
 {
-}
-Object::Object(Type  type, string name)
-{
-	this->type = type; 
-	this->name = name; 
+	this->symbol = symbol;
 }
 Object::~Object()
 {

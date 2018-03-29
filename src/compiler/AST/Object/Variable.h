@@ -1,11 +1,10 @@
 #pragma once
 #include "Object.h"
+#include "../../Symbol Table/Symbol.h"
 class Variable :public Object
 {
-	int adrress;
 public:
-	Variable();
-	Variable(Type type, string name);
+	Variable(Symbol* symbol);
 	~Variable();
 };
 

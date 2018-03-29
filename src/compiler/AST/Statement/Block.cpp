@@ -5,6 +5,7 @@ Block::Block()
 void Block::add(Statement* statement)
 {
 	this->statements.push_back(statement);
+	return;
 }
 Block::~Block()
 {

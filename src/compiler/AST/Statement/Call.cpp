@@ -2,9 +2,9 @@
 Call::Call()
 {
 }
-Call::Call(Object *proc)
+Call::Call(Symbol *symbol)
 {
-	this->proc = proc;
+	this->symbol = symbol;
 }
 Call::~Call()
 {

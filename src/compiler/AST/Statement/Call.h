@@ -3,10 +3,10 @@
 #include "../Object/Object.h"
 class Call :public Statement
 {
-	Object *proc;
+	Symbol *symbol;
 public:
 	Call();
-	Call(Object *proc);
+	Call(Symbol *symbol);
 	~Call();
 };
 

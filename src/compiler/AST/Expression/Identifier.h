@@ -1,12 +1,16 @@
 #pragma once
 #include "Expression.h"
 #include "../Object/Object.h"
+#include "../../Symbol Table/Symbol.h"
+
+using namespace::std;
+
 class Identifier : public Expression
 {
-	Object object; 
+	Symbol *symbol;
+
 public:
-	Identifier();
-	Identifier(Object object);
+	Identifier(Symbol *symbol);
 	~Identifier();
 };
 
