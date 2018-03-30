@@ -1,20 +1,10 @@
-//Abstract Class1
-abstract class a
+namespace a
 {
-    public abstract void f1();
-    public abstract void f2();
-}
-abstract class b : a
-{
-    public abstract void f3();
-    public override void f1()
+    namespace b
     {
+        class c
+        {
 
+        }
     }
 }
-//Abstract Class2
-class c : b
-{
-
-}
-

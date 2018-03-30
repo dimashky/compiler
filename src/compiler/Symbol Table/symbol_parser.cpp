@@ -44,46 +44,52 @@ void symbolParser::add_object()
 	endScope();
 }
 
-void symbolParser::addNamespace(string name, int line_no, int col_no)
+Symbol* symbolParser::addNamespace(string name, int line_no, int col_no)
 {
 	if (symbolTable::object_ref == nullptr)
 		add_object();
 
 	Symbol* newNamespace = new Namespace(name, line_no, col_no);
 	symboltable->addNamespace(newNamespace);
-	return;
+	return newNamespace;
 }
 
-void symbolParser::addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no)
+Symbol* symbolParser::addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no)
 {
 	if (symbolTable::object_ref == nullptr)
 		add_object();
 
 	Symbol* newClass = new Class(className, line_no, col_no);
 	symboltable->addClass(newClass, bases, modifiers);
-	return;
+	return newClass;
 }
 
-void symbolParser::addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no)
+Symbol* symbolParser::addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no)
 {
 	Symbol* newInterface = new Interface(interfaceName, line_no, col_no);
 	symboltable->addInterface(newInterface, bases, modifiers);
-	return;
+	return newInterface;
 }
-void symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+vector<Symbol*> symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
 {
+	vector<Symbol*> arr;
+
 	while (!identifiers.empty())
 	{
 		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), line_no, col_no);
 		symboltable->addField(newField, known_type);
 		identifiers.pop();
 
+		arr.push_back(newField);
 	}
-	return;
+	return arr;
 
 }
-void symbolParser::addFieldConst(queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+vector<Symbol*> symbolParser::addFieldConst(queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
 {
+	vector<Symbol*> arr;
+
+
 	modifiers.push(modifier_const);
 	while (!identifiers.empty())
 	{
@@ -91,15 +97,17 @@ void symbolParser::addFieldConst(queue<string>modifiers,string  modifier_const,s
 		symboltable->addField(newField, known_type);
 		identifiers.pop();
 
+		arr.push_back(newField);
 	}
-	return;
-
+	return arr;
 }
 
-void symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type , bool is_body)
+Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type , bool is_body)
 {
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type, is_body);
+
+	return newMethod;
 }
 
 
@@ -108,17 +116,19 @@ void symbolParser::add_scope()
 	symboltable->add_scope();
 }
 
-void symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
+vector<Symbol*> symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
 {
+	vector<Symbol*> arr;
+
 	while (!identifiers.empty())
 	{
 		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, constant, line_no, col_no);
 		symboltable->addLocalVariable(newLocalVariable, known_type);
 		identifiers.pop();
+
+		arr.push_back(newLocalVariable);
 	}
-	return;
-
-
+	return arr;
 }
 
 void symbolParser::add_using(string s, int line_no, int col_no)

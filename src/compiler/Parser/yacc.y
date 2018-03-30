@@ -16,6 +16,9 @@
 	#include "../logger/Logger.h"
 	#include "../Error Handler/error_handler.h"
 	#include "../Symbol Table/symbol_parser.h"
+	#include "../Symbol Table/Symbol.h"
+	#include "../AST/Object/Procedure.h"
+	#include "../AST/Node.h"
 
 	extern symbolParser* SPL;
 
@@ -25,6 +28,7 @@
 	extern int yylex();
 	extern int yyparse();
 	extern FILE* yyin;
+	extern Procedure* AST;
 
 	Logger l("logs/parser.log");
 	void yyerror(const char *);
@@ -47,6 +51,9 @@
 		string *identifier;
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+
+		Node* node;
+		Symbol* symbol;
 
 		bool known_type;
         
@@ -810,7 +817,7 @@ using_namespace_directive
   ;
 namespace_member_declarations
   : namespace_member_declaration									                {l.a("namespace_member_declarations",1);}
-  | namespace_member_declarations namespace_member_declaration		{l.a("namespace_member_declarations",2);}
+  | namespace_member_declarations namespace_member_declaration						{l.a("namespace_member_declarations",2);}
   ;
 namespace_member_declaration
   : namespace_declaration	{l.a("namespace_member_declaration",1);}

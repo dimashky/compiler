@@ -1,9 +1,7 @@
-var input = 'sample inputs/input';var compile_start = '7:53:51:806:471:100'; var lex_end = '7:53:51:829:491:700';var lex_elapsed = '0.023021';
-var compile_start = '7:53:51:806:471:100'; var lex_end = '7:53:51:902:248:300';var lex_elapsed = '0.095778';
-var parse_end = '7:53:51:905:918:500';var parse_elapsed = '0.127625';
+var input = 'sample inputs/input';var compile_start = '0:42:32:72:790:600'; var lex_end = '0:42:32:73:218:900';var lex_elapsed = '0.000429';
+var compile_start = '0:42:32:72:790:600'; var lex_end = '0:42:32:86:190:0';var lex_elapsed = '0.013399';
+var parse_end = '0:42:32:96:404:400';var parse_elapsed = '0.043819';
 var error_recoverd = true;
-var error_num = 3;
+var error_num = 1;
 var errors = [];
 errors.push({ line: 0, col : -1, msg: 'error Program does not contain a static "Main" method suitable for an entry point.'});
-errors.push({ line: 18, col : -1, msg: 'error, 'c' does not implement inherited abstract member 'b.f3'.'});
-errors.push({ line: 18, col : -1, msg: 'error, 'c' does not implement inherited abstract member 'a.f2'.'});
