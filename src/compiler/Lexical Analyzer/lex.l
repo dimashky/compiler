@@ -8,6 +8,9 @@
 	#include <ratio>
 	#include <chrono>
 	#include "../Error Handler/error_handler.h"
+	#include "../Symbol Table/Symbol.h"
+	#include "../AST/Object/Procedure.h"
+	#include "../AST/Node.h"
 
 	extern FILE* lexLogger;
 	using namespace std;
@@ -31,6 +34,10 @@
 		int col_no;
 		string *modifier,*base;
 		queue<string> *modifiers,*bases;
+		
+		Procedure* proc;
+		Symbol* symbol;
+
 
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
@@ -40,6 +47,9 @@
 			base = new string();
 			modifiers = new queue<string>();
 			bases = new queue<string>();
+			
+			proc = new Procedure(nullptr,nullptr);
+			symbol = new Symbol("",0,0);
 			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);

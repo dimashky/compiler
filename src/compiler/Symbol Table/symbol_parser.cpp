@@ -2,8 +2,11 @@
 #include<vector>
 #include "symbol_parser.h"
 #include "../Error Handler/error_handler.h"
-extern errorHandler error_handler;
+#include "../AST/Object/Procedure.h"
+#include "../AST/Object/Variable.h"
 
+extern errorHandler error_handler;
+extern Procedure* AST;
 using namespace std;
 symbolParser::symbolParser()
 {
@@ -20,6 +23,8 @@ void symbolParser::print(queue<string> &s1, char* s2)
 
 void symbolParser::endScope()
 {
+	Node::Up();
+
 	symboltable->closeScope();
 }
 
@@ -36,9 +41,26 @@ void symbolParser::add_object()
 	mod.push("PUBLIC");
 	mod.push("VIRTUAL");
 
+	
+	Procedure* ns = new Procedure(symbol, Node::current);
+
+	((Procedure*)Node::current)->add(ns);
+
+	Node::setCurrent(ns);
+	
+	
 	Method* method = new Method(mod, "string", "ToString", 0, 0);
 
 	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), 1, 1);
+
+
+
+
+	ns = new Procedure(method, Node::current);
+
+	((Procedure*)Node::current)->add(ns);
+
+	Node::setCurrent(ns);
 
 	endScope();
 	endScope();
@@ -51,6 +73,14 @@ Symbol* symbolParser::addNamespace(string name, int line_no, int col_no)
 
 	Symbol* newNamespace = new Namespace(name, line_no, col_no);
 	symboltable->addNamespace(newNamespace);
+
+
+	Procedure* ns = new Procedure(newNamespace, Node::current);
+
+	((Procedure*)Node::current)->add(ns);
+
+	Node::setCurrent(ns);
+
 	return newNamespace;
 }
 
@@ -61,6 +91,13 @@ Symbol* symbolParser::addClass(queue<string>&modifiers, string className, queue<
 
 	Symbol* newClass = new Class(className, line_no, col_no);
 	symboltable->addClass(newClass, bases, modifiers);
+
+	Procedure* ns = new Procedure(newClass, Node::current);
+
+	((Procedure*)Node::current)->add(ns);
+
+	Node::setCurrent(ns);
+
 	return newClass;
 }
 
@@ -68,6 +105,16 @@ Symbol* symbolParser::addInterface(queue<string>modifiers, string interfaceName,
 {
 	Symbol* newInterface = new Interface(interfaceName, line_no, col_no);
 	symboltable->addInterface(newInterface, bases, modifiers);
+
+
+
+	Procedure* ns = new Procedure(newInterface, Node::current);
+
+	((Procedure*)Node::current)->add(ns);
+
+	Node::setCurrent(ns);
+
+
 	return newInterface;
 }
 vector<Symbol*> symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
@@ -80,8 +127,17 @@ vector<Symbol*> symbolParser::addField(queue<string>modifiers, string typeIdenti
 		symboltable->addField(newField, known_type);
 		identifiers.pop();
 
+		Variable* field = new Variable(newField, Node::current);
+
+		((Procedure*)Node::current)->add(field);
+
 		arr.push_back(newField);
 	}
+
+
+
+
+
 	return arr;
 
 }
@@ -97,6 +153,11 @@ vector<Symbol*> symbolParser::addFieldConst(queue<string>modifiers,string  modif
 		symboltable->addField(newField, known_type);
 		identifiers.pop();
 
+
+		Variable* field = new Variable(newField, Node::current);
+
+		((Procedure*)Node::current)->add(field);
+
 		arr.push_back(newField);
 	}
 	return arr;
@@ -107,10 +168,22 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type, is_body);
 
+	Procedure* ns = new Procedure(newMethod, Node::current);
+
+	((Procedure*)Node::current)->add(ns);
+
+	Node::setCurrent(ns);
+
+	Block* b = new Block(Node::current);
+
+	((Procedure*)ns)->setBlock(b);
+
+	Node::setCurrent(b);
+
 	return newMethod;
 }
 
-
+//notify this in AST
 void symbolParser::add_scope()
 {
 	symboltable->add_scope();

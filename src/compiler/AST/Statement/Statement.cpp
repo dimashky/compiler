@@ -1,5 +1,5 @@
 #include "Statement.h"
-Statement::Statement()
+Statement::Statement(Node* parent):Node(parent)
 {
 }
 Statement::~Statement()

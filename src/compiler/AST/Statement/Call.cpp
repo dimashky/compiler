@@ -1,8 +1,6 @@
 #include "Call.h"
-Call::Call()
-{
-}
-Call::Call(Symbol *symbol)
+
+Call::Call(Symbol *symbol,Node *parent) :Statement(parent)
 {
 	this->symbol = symbol;
 }

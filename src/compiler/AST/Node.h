@@ -3,8 +3,19 @@
 using namespace std; 
 class Node
 {
+protected:
+	Node* parent;
+
 public:
-	Node();
+	static Node* current;
+	Node(Node* parent);
+	static void setCurrent(Node* current) {
+		Node::current = current;
+	}
+	static void Up() {
+		if(Node::current != nullptr)
+		Node::current = Node::current->parent;
+	}
 	~Node();
 };
 

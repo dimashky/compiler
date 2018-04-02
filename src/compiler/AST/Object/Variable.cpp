@@ -1,6 +1,6 @@
 #include "Variable.h"
 
-Variable::Variable(Symbol* symbol):Object(symbol)
+Variable::Variable(Symbol* symbol, Node* parent) :Object(symbol, parent)
 {
 }
 Variable::~Variable()

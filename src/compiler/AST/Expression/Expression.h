@@ -16,7 +16,7 @@ enum Operator {
 };
 
 
-class Expression : Node
+class Expression
 {
 public:
 	Expression();

@@ -1,5 +1,5 @@
 #include "Block.h"
-Block::Block()
+Block::Block(Node *parent) :Statement(parent)
 {
 }
 void Block::add(Statement* statement)

@@ -2,7 +2,7 @@
 
 
 
-Object::Object(Symbol* symbol)
+Object::Object(Symbol* symbol, Node* parent):Node(parent)
 {
 	this->symbol = symbol;
 }

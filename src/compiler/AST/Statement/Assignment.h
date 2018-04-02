@@ -7,7 +7,7 @@ class Assignment :public Statement
 	Object *left;
 	Expression *right;
 public:
-	Assignment(Object *left, Expression *right);
+	Assignment(Object *left, Expression *right, Node* parent);
 	~Assignment();
 };
 

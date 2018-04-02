@@ -52,7 +52,7 @@
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
 
-		Node* node;
+		Procedure* proc;
 		Symbol* symbol;
 
 		bool known_type;

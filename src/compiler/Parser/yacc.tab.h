@@ -193,7 +193,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 35 "yacc.y" /* yacc.c:1909  */
+#line 39 "yacc.y" /* yacc.c:1909  */
 
 	struct R{
 		int i;
@@ -210,12 +210,15 @@ union YYSTYPE
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
 
+		Procedure* proc;
+		Symbol* symbol;
+
 		bool known_type;
         
 		}r;
 	
 
-#line 219 "yacc.tab.h" /* yacc.c:1909  */
+#line 222 "yacc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
