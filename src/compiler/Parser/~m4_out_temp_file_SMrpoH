@@ -1,3 +1,4 @@
+@output(yacc.tab.cpp@)@
 /* A Bison parser, made by GNU Bison 2.7.  */
 
 /* Bison implementation for Yacc-like parsers in C
@@ -81,11 +82,6 @@
 	#include "../AST/Expression/Expression.h"
 	#include "../AST/Expression/AutoConst.h"
 	#include "../AST/Expression/Identifier.h"
-	#include "../AST/Expression/BinaryExpression.h"
-	#include "../AST/Expression/UnaryExpression.h"
-	#include "../AST/Statement/Statement.h"
-	#include "../AST/Statement/Assignment.h"
-
 
 	extern symbolParser* SPL;
 
@@ -103,7 +99,7 @@
 
 
 /* Line 371 of yacc.c  */
-#line 107 "yacc.tab.cpp"
+#line @oline@ @ofile@
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -122,7 +118,7 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "yacc.tab.h".  */
+   by #include "@basename(yacc.tab.h@)".  */
 #ifndef YY_YY_YACC_TAB_H_INCLUDED
 # define YY_YY_YACC_TAB_H_INCLUDED
 /* Enabling traces.  */
@@ -287,7 +283,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 47 "yacc.y"
+#line 42 "yacc.y"
 
 	struct R{
 		int i;
@@ -307,9 +303,6 @@ typedef union YYSTYPE
 		Procedure* proc;
 		Symbol* symbol;
 		Expression *exp;
-		Statement* st;
-		Operator op;
-		Node* node;
 
 		bool known_type;
         
@@ -317,7 +310,7 @@ typedef union YYSTYPE
 	
 
 /* Line 387 of yacc.c  */
-#line 321 "yacc.tab.cpp"
+#line @oline@ @ofile@
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -345,7 +338,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 349 "yacc.tab.cpp"
+#line @oline@ @ofile@
 
 #ifdef short
 # undef short
@@ -891,67 +884,67 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   138,   138,   139,   140,   141,   142,   143,   146,   147,
-     153,   157,   162,   163,   167,   168,   172,   173,   174,   178,
-     179,   183,   184,   185,   189,   190,   191,   192,   193,   194,
-     195,   196,   197,   200,   201,   204,   205,   208,   209,   212,
-     213,   214,   217,   218,   221,   225,   229,   230,   233,   234,
-     235,   238,   239,   242,   243,   244,   245,   246,   247,   248,
-     249,   250,   251,   252,   253,   256,   259,   260,   261,   264,
-     265,   268,   269,   272,   273,   276,   277,   280,   281,   284,
-     287,   288,   291,   294,   297,   300,   303,   304,   307,   308,
-     311,   312,   315,   318,   321,   324,   327,   330,   331,   332,
-     333,   334,   337,   338,   339,   340,   343,   346,   349,   350,
-     351,   352,   353,   354,   355,   363,   364,   365,   366,   367,
-     368,   371,   372,   375,   376,   379,   380,   383,   384,   389,
-     394,   402,   407,   412,   420,   425,   430,   438,   443,   448,
-     453,   458,   463,   468,   476,   481,   486,   494,   499,   506,
-     511,   519,   524,   532,   537,   545,   550,   559,   564,   572,
-     580,   581,   582,   583,   584,   585,   586,   587,   588,   589,
-     590,   593,   594,   597,   600,   604,   605,   606,   609,   610,
-     611,   612,   613,   614,   615,   616,   617,   618,   619,   620,
-     621,   624,   624,   625,   628,   629,   633,   634,   637,   640,
-     643,   644,   645,   646,   649,   657,   662,   669,   673,   679,
-     680,   681,   684,   687,   694,   700,   708,   717,   718,   719,
-     720,   721,   722,   723,   724,   725,   726,   727,   728,   729,
-     730,   733,   734,   735,   736,   737,   738,   739,   742,   743,
-     746,   747,   750,   753,   756,   757,   760,   761,   764,   767,
-     768,   771,   772,   775,   776,   777,   778,   781,   784,   785,
-     786,   786,   786,   789,   790,   794,   799,   800,   803,   804,
-     807,   808,   811,   812,   815,   818,   821,   822,   825,   828,
-     829,   830,   831,   832,   835,   836,   839,   840,   843,   844,
-     845,   846,   847,   848,   851,   852,   855,   856,   859,   860,
-     863,   864,   865,   868,   869,   872,   873,   874,   877,   878,
-     881,   884,   887,   890,   893,   896,   897,   901,   904,   905,
-     908,   911,   912,   915,   916,   919,   920,   923,   924,   927,
-     927,   931,   932,   936,   940,   947,   948,   952,   955,   956,
-     959,   960,   963,   964,   967,   968,   971,   972,   975,   976,
-     979,   980,   981,   982,   983,   995,   999,  1006,  1012,  1020,
-    1021,  1022,  1023,  1024,  1025,  1026,  1027,  1028,  1029,  1030,
-    1031,  1032,  1033,  1044,  1043,  1049,  1048,  1057,  1058,  1061,
-    1062,  1063,  1075,  1081,  1090,  1094,  1095,  1098,  1099,  1102,
-    1103,  1104,  1105,  1106,  1107,  1108,  1109,  1110,  1111,  1114,
-    1119,  1127,  1132,  1140,  1145,  1144,  1152,  1151,  1158,  1157,
-    1164,  1162,  1173,  1177,  1181,  1185,  1193,  1196,  1200,  1204,
-    1213,  1214,  1226,  1231,  1238,  1243,  1250,  1258,  1268,  1279,
-    1287,  1298,  1299,  1300,  1303,  1314,  1320,  1321,  1324,  1325,
-    1328,  1329,  1332,  1338,  1344,  1345,  1348,  1349,  1355,  1356,
-    1359,  1365,  1371,  1377,  1379,  1382,  1386,  1389,  1390,  1393,
-    1394,  1397,  1398,  1399,  1400,  1401,  1402,  1403,  1404,  1405,
-    1406,  1407,  1408,  1409,  1410,  1411,  1412,  1413,  1414,  1415,
-    1416,  1417,  1418,  1421,  1422,  1426,  1425,  1432,  1433,  1436,
-    1437,  1453,  1456,  1457,  1460,  1461,  1466,  1469,  1470,  1473,
-    1476,  1479,  1480,  1483,  1484,  1487,  1488,  1489,  1490,  1491,
-    1492,  1493,  1494,  1496,  1501,  1502,  1505,  1506,  1509,  1510,
-    1516,  1515,  1523,  1524,  1527,  1530,  1533,  1534,  1537,  1538,
-    1541,  1542,  1543,  1544,  1548,  1554,  1562,  1563,  1569,  1566,
-    1576,  1572,  1580,  1581,  1582,  1583,  1586,  1591,  1592,  1597,
-    1600,  1601,  1604,  1607,  1608,  1611,  1612,  1615,  1616,  1619,
-    1620,  1625,  1626,  1631,  1634,  1635,  1638,  1639,  1642,  1643,
-    1646,  1649,  1650,  1651,  1652,  1653,  1654,  1655,  1656,  1657,
-    1660,  1661,  1664,  1667,  1668,  1671,  1674,  1681,  1684,  1687,
-    1690,  1693,  1696,  1704,  1705,  1708,  1709,  1712,  1713,  1716,
-    1717,  1720,  1721
+       0,   130,   130,   131,   132,   133,   134,   135,   138,   139,
+     145,   149,   154,   155,   159,   160,   164,   165,   166,   170,
+     171,   175,   176,   177,   181,   182,   183,   184,   185,   186,
+     187,   188,   189,   192,   193,   196,   197,   200,   201,   204,
+     205,   206,   209,   210,   213,   217,   221,   222,   225,   226,
+     227,   230,   231,   234,   235,   236,   237,   238,   239,   240,
+     241,   242,   243,   244,   245,   248,   251,   252,   253,   256,
+     257,   260,   261,   264,   265,   268,   269,   272,   273,   276,
+     279,   280,   283,   286,   289,   292,   295,   296,   299,   300,
+     303,   304,   307,   310,   313,   316,   319,   322,   323,   324,
+     325,   326,   329,   330,   331,   332,   335,   338,   341,   342,
+     343,   344,   345,   346,   347,   355,   356,   357,   358,   359,
+     360,   363,   364,   367,   368,   371,   372,   375,   376,   377,
+     378,   381,   382,   383,   386,   387,   388,   391,   392,   393,
+     394,   395,   396,   397,   400,   401,   402,   405,   406,   409,
+     410,   413,   414,   417,   418,   421,   422,   425,   426,   429,
+     432,   433,   434,   435,   436,   437,   438,   439,   440,   441,
+     442,   445,   446,   449,   452,   456,   457,   458,   461,   462,
+     463,   464,   465,   466,   467,   468,   469,   470,   471,   472,
+     473,   476,   476,   477,   480,   481,   485,   486,   489,   492,
+     495,   496,   497,   498,   501,   509,   514,   521,   525,   531,
+     532,   533,   536,   539,   546,   552,   560,   569,   570,   571,
+     572,   573,   574,   575,   576,   577,   578,   579,   580,   581,
+     582,   585,   586,   587,   588,   589,   590,   591,   594,   595,
+     598,   599,   602,   605,   608,   609,   612,   613,   616,   619,
+     620,   623,   624,   627,   628,   629,   630,   633,   636,   637,
+     638,   638,   638,   641,   642,   646,   651,   652,   655,   656,
+     659,   660,   663,   664,   667,   670,   673,   674,   677,   680,
+     681,   682,   683,   684,   687,   688,   691,   692,   695,   696,
+     697,   698,   699,   700,   703,   704,   707,   708,   711,   712,
+     715,   716,   717,   720,   721,   724,   725,   726,   729,   730,
+     733,   736,   739,   742,   745,   748,   749,   753,   756,   757,
+     760,   763,   764,   767,   768,   771,   772,   775,   776,   779,
+     779,   783,   784,   788,   792,   799,   800,   804,   807,   808,
+     811,   812,   815,   816,   819,   820,   823,   824,   827,   828,
+     831,   832,   833,   834,   835,   847,   851,   858,   864,   872,
+     873,   874,   875,   876,   877,   878,   879,   880,   881,   882,
+     883,   884,   885,   896,   895,   901,   900,   909,   910,   913,
+     914,   915,   927,   933,   942,   946,   947,   950,   951,   954,
+     955,   956,   957,   958,   959,   960,   961,   962,   963,   966,
+     971,   979,   984,   992,   997,   996,  1004,  1003,  1010,  1009,
+    1016,  1014,  1025,  1029,  1033,  1037,  1045,  1048,  1052,  1056,
+    1065,  1066,  1078,  1083,  1090,  1095,  1102,  1110,  1120,  1131,
+    1139,  1150,  1151,  1152,  1155,  1166,  1172,  1173,  1176,  1177,
+    1180,  1181,  1184,  1190,  1196,  1197,  1200,  1201,  1207,  1208,
+    1211,  1217,  1223,  1229,  1231,  1234,  1238,  1241,  1242,  1245,
+    1246,  1249,  1250,  1251,  1252,  1253,  1254,  1255,  1256,  1257,
+    1258,  1259,  1260,  1261,  1262,  1263,  1264,  1265,  1266,  1267,
+    1268,  1269,  1270,  1273,  1274,  1278,  1277,  1284,  1285,  1288,
+    1289,  1305,  1308,  1309,  1312,  1313,  1318,  1321,  1322,  1325,
+    1328,  1331,  1332,  1335,  1336,  1339,  1340,  1341,  1342,  1343,
+    1344,  1345,  1346,  1348,  1353,  1354,  1357,  1358,  1361,  1362,
+    1368,  1367,  1375,  1376,  1379,  1382,  1385,  1386,  1389,  1390,
+    1393,  1394,  1395,  1396,  1400,  1406,  1414,  1415,  1421,  1418,
+    1428,  1424,  1432,  1433,  1434,  1435,  1438,  1443,  1444,  1449,
+    1452,  1453,  1456,  1459,  1460,  1463,  1464,  1467,  1468,  1471,
+    1472,  1477,  1478,  1483,  1486,  1487,  1490,  1491,  1494,  1495,
+    1498,  1501,  1502,  1503,  1504,  1505,  1506,  1507,  1508,  1509,
+    1512,  1513,  1516,  1519,  1520,  1523,  1526,  1533,  1536,  1539,
+    1542,  1545,  1548,  1556,  1557,  1560,  1561,  1564,  1565,  1568,
+    1569,  1572,  1573
 };
 #endif
 
@@ -974,7 +967,7 @@ static const char *const yytname[] =
   "TYPEOF", "UINT", "ULONG", "UNCHECKED", "UNSAFE", "USHORT", "USING",
   "VIRTUAL", "VOID", "VOLATILE", "WHILE", "ASSEMBLY", "FIELD", "METHOD",
   "MODULE", "PARAM", "PROPERTY", "TYPE", "GET", "SET", "ADD", "REMOVE",
-  "\",\"", "\"[\"", "\"]\"", "\"{\"", "\"}\"", "\"(\"", "\")\"", "\">\"",
+  "\",\"", "\"@{\"", "\"@}\"", "\"{\"", "\"}\"", "\"(\"", "\")\"", "\">\"",
   "\"<\"", "\";\"", "\":\"", "\".\"", "PLUS", "MINUS", "STAR", "SLASH",
   "PERCENT", "AND", "OR", "EXCLAMATION_POINT", "TILDE", "QUESTION_MARK",
   "POWER", "EQUAL", "PLUSEQ", "MINUSEQ", "STAREQ", "DIVEQ", "MODEQ",
@@ -1003,7 +996,7 @@ static const char *const yytname[] =
   "conditional_and_expression", "conditional_or_expression",
   "conditional_expression", "assignment", "assignment_operator",
   "expression", "constant_expression", "boolean_expression", "statement",
-  "embedded_statement", "block", "$@1", "statement_list_opt",
+  "embedded_statement", "block", "$@@1", "statement_list_opt",
   "statement_list", "empty_statement", "labeled_statement",
   "declaration_statement", "local_variable_declaration",
   "variable_declarators", "variable_declarator", "variable_initializer",
@@ -1012,8 +1005,8 @@ static const char *const yytname[] =
   "statement_expression", "selection_statement", "if_statement",
   "switch_statement", "switch_block", "switch_sections_opt",
   "switch_sections", "switch_section", "switch_labels", "switch_label",
-  "iteration_statement", "unsafe_statement", "while_statement", "$@2",
-  "$@3", "do_statement", "for_statement", "for_initializer_opt",
+  "iteration_statement", "unsafe_statement", "while_statement", "$@@2",
+  "$@@3", "do_statement", "for_statement", "for_initializer_opt",
   "for_condition_opt", "for_iterator_opt", "for_initializer",
   "for_condition", "for_iterator", "statement_expression_list",
   "foreach_statement", "jump_statement", "break_statement",
@@ -1024,16 +1017,16 @@ static const char *const yytname[] =
   "resource_acquisition", "fixed_statement", "fixed_pointer_declarators",
   "fixed_pointer_declarator", "compilation_unit", "using_directives_opt",
   "attributes_opt", "namespace_member_declarations_opt",
-  "namespace_declaration", "$@4", "comma_opt", "qualified_identifier",
+  "namespace_declaration", "$@@4", "comma_opt", "qualified_identifier",
   "qualifier", "namespace_body", "using_directives", "using_directive",
   "using_alias_directive", "using_namespace_directive",
   "namespace_member_declarations", "namespace_member_declaration",
   "type_declaration", "modifiers_opt", "modifiers", "modifier",
-  "class_declaration", "$@5", "$@6", "class_base_opt", "class_base",
+  "class_declaration", "$@@5", "$@@6", "class_base_opt", "class_base",
   "interface_type_list", "class_body", "class_member_declarations_opt",
   "class_member_declarations", "class_member_declaration",
   "constant_declaration", "field_declaration", "method_declaration",
-  "method_header", "$@7", "$@8", "$@9", "$@10",
+  "method_header", "$@@7", "$@@8", "$@@9", "$@@10",
   "formal_parameter_list_opt", "return_type", "formal_parameter_list",
   "formal_parameter_default_list", "formal_parameter", "fixed_parameter",
   "formal_parameter_default", "parameter_modifier_opt", "parameter_array",
@@ -1045,19 +1038,19 @@ static const char *const yytname[] =
   "indexer_declaration", "indexer_declarator", "qualified_this",
   "operator_declaration", "operator_declarator",
   "overloadable_operator_declarator", "overloadable_operator",
-  "conversion_operator_declarator", "constructor_declaration", "$@11",
+  "conversion_operator_declarator", "constructor_declaration", "$@@11",
   "constructor_initializer_opt", "constructor_initializer",
   "destructor_declaration", "operator_body", "constructor_body",
   "struct_declaration", "struct_interfaces_opt", "struct_interfaces",
   "struct_body", "struct_member_declarations_opt",
   "struct_member_declarations", "struct_member_declaration",
   "array_initializer", "variable_initializer_list_opt",
-  "variable_initializer_list", "interface_declaration", "$@12",
+  "variable_initializer_list", "interface_declaration", "$@@12",
   "interface_base_opt", "interface_base", "interface_body",
   "interface_member_declarations_opt", "interface_member_declarations",
   "interface_member_declaration", "interface_method_declaration",
-  "new_opt", "interface_property_declaration", "$@13",
-  "interface_indexer_declaration", "$@14", "interface_accessors",
+  "new_opt", "interface_property_declaration", "$@@13",
+  "interface_indexer_declaration", "$@@14", "interface_accessors",
   "interface_event_declaration", "interface_empty_body",
   "enum_declaration", "enum_base_opt", "enum_base", "enum_body",
   "enum_member_declarations_opt", "enum_member_declarations",
@@ -2495,7 +2488,7 @@ yy_reduce_print (yyvsp, yyrule)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
-		       &(yyvsp[(yyi + 1) - (yynrhs)])
+		       &(yyvsp@{(yyi + 1) - (yynrhs)@})
 		       		       );
       YYFPRINTF (stderr, "\n");
     }
@@ -3089,2245 +3082,2148 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 138 "yacc.y"
-    {l.a("boolean_literal",1);	  (yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 130 "yacc.y"
+    {l.a("boolean_literal",1);	  (yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 3:
 /* Line 1792 of yacc.c  */
-#line 139 "yacc.y"
-    {l.a("INTEGER_LITERAL",0);	  (yyval.r.exp) = new AutoConst("INT",new int((yyvsp[(1) - (1)].r.i)),Node::current);}
+#line 131 "yacc.y"
+    {l.a("INTEGER_LITERAL",0);	  (yyval.r.exp) = new AutoConst("INT",new int((yyvsp@{(1) - (1)@}.r.i)),Node::current);}
     break;
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 140 "yacc.y"
-    {l.a("REAL_LITERAL",0);		  (yyval.r.exp) = new AutoConst("FLOAT",new float((yyvsp[(1) - (1)].r.f)),Node::current);}
+#line 132 "yacc.y"
+    {l.a("REAL_LITERAL",0);		  (yyval.r.exp) = new AutoConst("FLOAT",new float((yyvsp@{(1) - (1)@}.r.f)),Node::current);}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 141 "yacc.y"
-    {l.a("CHARACTER_LITERAL",0);  (yyval.r.exp) = new AutoConst("CHAR",new char((yyvsp[(1) - (1)].r.c)),Node::current);}
+#line 133 "yacc.y"
+    {l.a("CHARACTER_LITERAL",0);  (yyval.r.exp) = new AutoConst("CHAR",new char((yyvsp@{(1) - (1)@}.r.c)),Node::current);}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 142 "yacc.y"
-    {l.a("STRING_LITERAL",0);     (yyval.r.exp) = new AutoConst("STRING",new string((yyvsp[(1) - (1)].r.str)),Node::current);}
+#line 134 "yacc.y"
+    {l.a("STRING_LITERAL",0);     (yyval.r.exp) = new AutoConst("STRING",new string((yyvsp@{(1) - (1)@}.r.str)),Node::current);}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 143 "yacc.y"
+#line 135 "yacc.y"
     {l.a("NULL_LITERAL",0);       (yyval.r.exp) = new AutoConst("NULL",nullptr,Node::current);}
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 146 "yacc.y"
+#line 138 "yacc.y"
     {l.a("TRUE",0);(yyval.r.exp) = new AutoConst("BOOL",new bool(true),Node::current);}
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 147 "yacc.y"
+#line 139 "yacc.y"
     {l.a("FALSE",0);(yyval.r.exp) = new AutoConst("BOOL",new bool(false),Node::current);}
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 153 "yacc.y"
-    {l.a("namespace_name",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 145 "yacc.y"
+    {l.a("namespace_name",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 157 "yacc.y"
-    {l.a("type_name",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 149 "yacc.y"
+    {l.a("type_name",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 162 "yacc.y"
-    {l.a("type",1);(yyval.r.known_type) = (yyvsp[(1) - (1)].r.known_type);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 154 "yacc.y"
+    {l.a("type",1);(yyval.r.known_type) = (yyvsp@{(1) - (1)@}.r.known_type);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 163 "yacc.y"
-    {l.a("type",1);(yyval.r.known_type) = (yyvsp[(1) - (1)].r.known_type);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 155 "yacc.y"
+    {l.a("type",1);(yyval.r.known_type) = (yyvsp@{(1) - (1)@}.r.known_type);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 167 "yacc.y"
-    {l.a("non_array_type",1);(yyval.r.known_type) = true;(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 159 "yacc.y"
+    {l.a("non_array_type",1);(yyval.r.known_type) = true;(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 168 "yacc.y"
-    {l.a("non_array_type",1);(yyval.r.known_type) = false;(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 160 "yacc.y"
+    {l.a("non_array_type",1);(yyval.r.known_type) = false;(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 172 "yacc.y"
-    {l.a("simple_type",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 164 "yacc.y"
+    {l.a("simple_type",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 173 "yacc.y"
-    {l.a("simple_type",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 165 "yacc.y"
+    {l.a("simple_type",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 174 "yacc.y"
-    {l.a("simple_type",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 166 "yacc.y"
+    {l.a("simple_type",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 178 "yacc.y"
-    {l.a("primitive_type",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 170 "yacc.y"
+    {l.a("primitive_type",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 179 "yacc.y"
+#line 171 "yacc.y"
     {l.a("primitive_type",0);(yyval.r.base) = new string("BOOL");}
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 183 "yacc.y"
-    {l.a("numeric_type",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 175 "yacc.y"
+    {l.a("numeric_type",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 184 "yacc.y"
-    {l.a("numeric_type",1);(yyval.r.base) = (yyvsp[(1) - (1)].r.base);}
+#line 176 "yacc.y"
+    {l.a("numeric_type",1);(yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 185 "yacc.y"
+#line 177 "yacc.y"
     {l.a("numeric_type",0);(yyval.r.base) = new string("DECIMAL");}
     break;
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 189 "yacc.y"
+#line 181 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("SBYTE");}
     break;
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 190 "yacc.y"
+#line 182 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("BYTE");}
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 191 "yacc.y"
+#line 183 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("SHORT");}
     break;
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 192 "yacc.y"
+#line 184 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("USHORT");}
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 193 "yacc.y"
+#line 185 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("INT");}
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 194 "yacc.y"
+#line 186 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("UINT");}
     break;
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 195 "yacc.y"
+#line 187 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("LONG");}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 196 "yacc.y"
+#line 188 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("ULONG");}
     break;
 
   case 32:
 /* Line 1792 of yacc.c  */
-#line 197 "yacc.y"
+#line 189 "yacc.y"
     {l.a("integral_type",0);(yyval.r.base) = new string("CHAR");}
     break;
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 200 "yacc.y"
+#line 192 "yacc.y"
     {l.a("floating_point_type",0);(yyval.r.base) = new string("FLOAT");}
     break;
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 201 "yacc.y"
+#line 193 "yacc.y"
     {l.a("floating_point_type",0);(yyval.r.base) = new string("DOUBLE");}
     break;
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 204 "yacc.y"
+#line 196 "yacc.y"
     {l.a("class_type",0);(yyval.r.base) = new string("OBJECT");}
     break;
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 205 "yacc.y"
+#line 197 "yacc.y"
     {l.a("class_type",0);(yyval.r.base) = new string("STRING");}
     break;
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 208 "yacc.y"
+#line 200 "yacc.y"
     {l.a("pointer_type",1);}
     break;
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 209 "yacc.y"
+#line 201 "yacc.y"
     {l.a("pointer_type",0);}
     break;
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 212 "yacc.y"
-    {l.a("array_type",2);(yyval.r.known_type) = (yyvsp[(1) - (2)].r.known_type);(yyval.r.base) = (yyvsp[(1) - (2)].r.base);}
+#line 204 "yacc.y"
+    {l.a("array_type",2);(yyval.r.known_type) = (yyvsp@{(1) - (2)@}.r.known_type);(yyval.r.base) = (yyvsp@{(1) - (2)@}.r.base);}
     break;
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 213 "yacc.y"
-    {l.a("array_type",2);(yyval.r.known_type) = true;(yyval.r.base) = (yyvsp[(1) - (2)].r.base);}
+#line 205 "yacc.y"
+    {l.a("array_type",2);(yyval.r.known_type) = true;(yyval.r.base) = (yyvsp@{(1) - (2)@}.r.base);}
     break;
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 214 "yacc.y"
-    {l.a("array_type",2);(yyval.r.known_type) = false;(yyval.r.base) = (yyvsp[(1) - (2)].r.base);}
+#line 206 "yacc.y"
+    {l.a("array_type",2);(yyval.r.known_type) = false;(yyval.r.base) = (yyvsp@{(1) - (2)@}.r.base);}
     break;
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 217 "yacc.y"
+#line 209 "yacc.y"
     {l.a("rank_specifiers_opt",0);}
     break;
 
   case 43:
 /* Line 1792 of yacc.c  */
-#line 218 "yacc.y"
+#line 210 "yacc.y"
     {l.a("rank_specifiers_opt",2);}
     break;
 
   case 44:
 /* Line 1792 of yacc.c  */
-#line 221 "yacc.y"
+#line 213 "yacc.y"
     {l.a("rank_specifier",0);}
     break;
 
   case 45:
 /* Line 1792 of yacc.c  */
-#line 225 "yacc.y"
+#line 217 "yacc.y"
     {l.a("variable_reference",1);}
     break;
 
   case 46:
 /* Line 1792 of yacc.c  */
-#line 229 "yacc.y"
+#line 221 "yacc.y"
     {l.a("argument_list",1);}
     break;
 
   case 47:
 /* Line 1792 of yacc.c  */
-#line 230 "yacc.y"
+#line 222 "yacc.y"
     {l.a("argument_list",2);}
     break;
 
   case 48:
 /* Line 1792 of yacc.c  */
-#line 233 "yacc.y"
+#line 225 "yacc.y"
     {l.a("argument",1);}
     break;
 
   case 49:
 /* Line 1792 of yacc.c  */
-#line 234 "yacc.y"
+#line 226 "yacc.y"
     {l.a("argument",1);}
     break;
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 235 "yacc.y"
+#line 227 "yacc.y"
     {l.a("argument",1);}
     break;
 
   case 51:
 /* Line 1792 of yacc.c  */
-#line 238 "yacc.y"
-    {l.a("primary_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 230 "yacc.y"
+    {l.a("primary_expression",1);}
     break;
 
   case 52:
 /* Line 1792 of yacc.c  */
-#line 239 "yacc.y"
-    {l.a("primary_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 231 "yacc.y"
+    {l.a("primary_expression",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 53:
 /* Line 1792 of yacc.c  */
-#line 242 "yacc.y"
-    {l.a("primary_expression_no_parenthesis",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 234 "yacc.y"
+    {l.a("primary_expression_no_parenthesis",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 243 "yacc.y"
+#line 235 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 55:
 /* Line 1792 of yacc.c  */
-#line 244 "yacc.y"
+#line 236 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 56:
 /* Line 1792 of yacc.c  */
-#line 245 "yacc.y"
+#line 237 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 57:
 /* Line 1792 of yacc.c  */
-#line 246 "yacc.y"
+#line 238 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 58:
 /* Line 1792 of yacc.c  */
-#line 247 "yacc.y"
+#line 239 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 59:
 /* Line 1792 of yacc.c  */
-#line 248 "yacc.y"
+#line 240 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 60:
 /* Line 1792 of yacc.c  */
-#line 249 "yacc.y"
+#line 241 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 61:
 /* Line 1792 of yacc.c  */
-#line 250 "yacc.y"
+#line 242 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 62:
 /* Line 1792 of yacc.c  */
-#line 251 "yacc.y"
+#line 243 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 63:
 /* Line 1792 of yacc.c  */
-#line 252 "yacc.y"
+#line 244 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 64:
 /* Line 1792 of yacc.c  */
-#line 253 "yacc.y"
+#line 245 "yacc.y"
     {l.a("primary_expression_no_parenthesis",1);}
     break;
 
   case 65:
 /* Line 1792 of yacc.c  */
-#line 256 "yacc.y"
-    {l.a("parenthesized_expression",1);(yyval.r.exp) = (yyvsp[(2) - (3)].r.exp);}
+#line 248 "yacc.y"
+    {l.a("parenthesized_expression",1);}
     break;
 
   case 66:
 /* Line 1792 of yacc.c  */
-#line 259 "yacc.y"
+#line 251 "yacc.y"
     {l.a("member_access",1);}
     break;
 
   case 67:
 /* Line 1792 of yacc.c  */
-#line 260 "yacc.y"
+#line 252 "yacc.y"
     {l.a("member_access",1);}
     break;
 
   case 68:
 /* Line 1792 of yacc.c  */
-#line 261 "yacc.y"
+#line 253 "yacc.y"
     {l.a("member_access",1);}
     break;
 
   case 69:
 /* Line 1792 of yacc.c  */
-#line 264 "yacc.y"
+#line 256 "yacc.y"
     {l.a("invocation_expression",2);}
     break;
 
   case 70:
 /* Line 1792 of yacc.c  */
-#line 265 "yacc.y"
+#line 257 "yacc.y"
     {l.a("invocation_expression",2);}
     break;
 
   case 71:
 /* Line 1792 of yacc.c  */
-#line 268 "yacc.y"
+#line 260 "yacc.y"
     {l.a("argument_list_opt",0);}
     break;
 
   case 72:
 /* Line 1792 of yacc.c  */
-#line 269 "yacc.y"
+#line 261 "yacc.y"
     {l.a("argument_list_opt",1);}
     break;
 
   case 73:
 /* Line 1792 of yacc.c  */
-#line 272 "yacc.y"
+#line 264 "yacc.y"
     {l.a("element_access",2);}
     break;
 
   case 74:
 /* Line 1792 of yacc.c  */
-#line 273 "yacc.y"
+#line 265 "yacc.y"
     {l.a("element_access",2);}
     break;
 
   case 75:
 /* Line 1792 of yacc.c  */
-#line 276 "yacc.y"
+#line 268 "yacc.y"
     {l.a("expression_list_opt",0);}
     break;
 
   case 76:
 /* Line 1792 of yacc.c  */
-#line 277 "yacc.y"
+#line 269 "yacc.y"
     {l.a("expression_list_opt",1);}
     break;
 
   case 77:
 /* Line 1792 of yacc.c  */
-#line 280 "yacc.y"
+#line 272 "yacc.y"
     {l.a("expression_list",1);}
     break;
 
   case 78:
 /* Line 1792 of yacc.c  */
-#line 281 "yacc.y"
+#line 273 "yacc.y"
     {l.a("expression_list",2);}
     break;
 
   case 79:
 /* Line 1792 of yacc.c  */
-#line 284 "yacc.y"
+#line 276 "yacc.y"
     {l.a("this_access",0);}
     break;
 
   case 80:
 /* Line 1792 of yacc.c  */
-#line 287 "yacc.y"
+#line 279 "yacc.y"
     {l.a("base_access",0);}
     break;
 
   case 81:
 /* Line 1792 of yacc.c  */
-#line 288 "yacc.y"
+#line 280 "yacc.y"
     {l.a("base_access",1);}
     break;
 
   case 82:
 /* Line 1792 of yacc.c  */
-#line 291 "yacc.y"
-    {l.a("post_increment_expression",1);(yyval.r.exp) = new UnaryExpression(post_plusplus,(yyvsp[(1) - (2)].r.exp),Node::current);}
+#line 283 "yacc.y"
+    {l.a("post_increment_expression",1);}
     break;
 
   case 83:
 /* Line 1792 of yacc.c  */
-#line 294 "yacc.y"
-    {l.a("post_decrement_expression",1);(yyval.r.exp) = new UnaryExpression(post_minusminus,(yyvsp[(1) - (2)].r.exp),Node::current);}
+#line 286 "yacc.y"
+    {l.a("post_decrement_expression",1);}
     break;
 
   case 84:
 /* Line 1792 of yacc.c  */
-#line 297 "yacc.y"
+#line 289 "yacc.y"
     {l.a("new_expression",1);}
     break;
 
   case 85:
 /* Line 1792 of yacc.c  */
-#line 300 "yacc.y"
+#line 292 "yacc.y"
     {l.a("object_creation_expression",2);}
     break;
 
   case 86:
 /* Line 1792 of yacc.c  */
-#line 303 "yacc.y"
+#line 295 "yacc.y"
     {l.a("array_creation_expression",4);}
     break;
 
   case 87:
 /* Line 1792 of yacc.c  */
-#line 304 "yacc.y"
+#line 296 "yacc.y"
     {l.a("array_creation_expression",2);}
     break;
 
   case 88:
 /* Line 1792 of yacc.c  */
-#line 307 "yacc.y"
+#line 299 "yacc.y"
     {l.a("array_initializer_opt",0);}
     break;
 
   case 89:
 /* Line 1792 of yacc.c  */
-#line 308 "yacc.y"
+#line 300 "yacc.y"
     {l.a("array_initializer_opt",1);}
     break;
 
   case 90:
 /* Line 1792 of yacc.c  */
-#line 311 "yacc.y"
+#line 303 "yacc.y"
     {l.a("typeof_expression",1);}
     break;
 
   case 91:
 /* Line 1792 of yacc.c  */
-#line 312 "yacc.y"
+#line 304 "yacc.y"
     {l.a("typeof_expression",0);}
     break;
 
   case 92:
 /* Line 1792 of yacc.c  */
-#line 315 "yacc.y"
+#line 307 "yacc.y"
     {l.a("checked_expression",1);}
     break;
 
   case 93:
 /* Line 1792 of yacc.c  */
-#line 318 "yacc.y"
+#line 310 "yacc.y"
     {l.a("unchecked_expression",1);}
     break;
 
   case 94:
 /* Line 1792 of yacc.c  */
-#line 321 "yacc.y"
+#line 313 "yacc.y"
     {l.a("pointer_member_access",1);}
     break;
 
   case 95:
 /* Line 1792 of yacc.c  */
-#line 324 "yacc.y"
-    {l.a("addressof_expression",1);(yyval.r.exp) = new UnaryExpression(And,(yyvsp[(2) - (2)].r.exp),Node::current);}
+#line 316 "yacc.y"
+    {l.a("addressof_expression",1);}
     break;
 
   case 96:
 /* Line 1792 of yacc.c  */
-#line 327 "yacc.y"
+#line 319 "yacc.y"
     {l.a("sizeof_expression",1);}
     break;
 
   case 97:
 /* Line 1792 of yacc.c  */
-#line 330 "yacc.y"
-    {l.a("postfix_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 322 "yacc.y"
+    {l.a("postfix_expression",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 98:
 /* Line 1792 of yacc.c  */
-#line 331 "yacc.y"
-    {l.a("postfix_expression",1);(yyval.r.exp) = new Identifier(SPL->find(*(yyvsp[(1) - (1)].r.base)));}
+#line 323 "yacc.y"
+    {l.a("postfix_expression",1);(yyval.r.exp) = new Identifier(SPL->find(*(yyvsp@{(1) - (1)@}.r.base)));cout << SPL->find(*(yyvsp@{(1) - (1)@}.r.base))->getLineNo() << " " << SPL->find(*(yyvsp@{(1) - (1)@}.r.base))->getName() << endl;}
     break;
 
   case 99:
 /* Line 1792 of yacc.c  */
-#line 332 "yacc.y"
-    {l.a("postfix_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 324 "yacc.y"
+    {l.a("postfix_expression",1);}
     break;
 
   case 100:
 /* Line 1792 of yacc.c  */
-#line 333 "yacc.y"
-    {l.a("postfix_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 325 "yacc.y"
+    {l.a("postfix_expression",1);}
     break;
 
   case 101:
 /* Line 1792 of yacc.c  */
-#line 334 "yacc.y"
+#line 326 "yacc.y"
     {l.a("postfix_expression",1);}
     break;
 
   case 102:
 /* Line 1792 of yacc.c  */
-#line 337 "yacc.y"
-    {l.a("unary_expression_not_plusminus",1);(yyval.r.exp) = new UnaryExpression(exclamation_point,(yyvsp[(2) - (2)].r.exp),Node::current);}
+#line 329 "yacc.y"
+    {l.a("unary_expression_not_plusminus",1);}
     break;
 
   case 103:
 /* Line 1792 of yacc.c  */
-#line 338 "yacc.y"
-    {l.a("unary_expression_not_plusminus",1);(yyval.r.exp) = new UnaryExpression(tilde,(yyvsp[(2) - (2)].r.exp),Node::current);}
+#line 330 "yacc.y"
+    {l.a("unary_expression_not_plusminus",1);}
     break;
 
   case 104:
 /* Line 1792 of yacc.c  */
-#line 339 "yacc.y"
+#line 331 "yacc.y"
     {l.a("unary_expression_not_plusminus",1);}
     break;
 
   case 105:
 /* Line 1792 of yacc.c  */
-#line 340 "yacc.y"
-    {l.a("unary_expression_not_plusminus",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 332 "yacc.y"
+    {l.a("unary_expression_not_plusminus",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 106:
 /* Line 1792 of yacc.c  */
-#line 343 "yacc.y"
-    {l.a("pre_increment_expression",1);(yyval.r.exp) = (yyvsp[(2) - (2)].r.exp);}
+#line 335 "yacc.y"
+    {l.a("pre_increment_expression",1);(yyval.r.exp) = (yyvsp@{(2) - (2)@}.r.exp);}
     break;
 
   case 107:
 /* Line 1792 of yacc.c  */
-#line 346 "yacc.y"
-    {l.a("pre_decrement_expression",1);(yyval.r.exp) = (yyvsp[(2) - (2)].r.exp);}
+#line 338 "yacc.y"
+    {l.a("pre_decrement_expression",1);(yyval.r.exp) = (yyvsp@{(2) - (2)@}.r.exp);}
     break;
 
   case 108:
 /* Line 1792 of yacc.c  */
-#line 349 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(2) - (2)].r.exp);}
+#line 341 "yacc.y"
+    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp@{(2) - (2)@}.r.exp);}
     break;
 
   case 109:
 /* Line 1792 of yacc.c  */
-#line 350 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(2) - (2)].r.exp);}
+#line 342 "yacc.y"
+    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp@{(2) - (2)@}.r.exp);}
     break;
 
   case 110:
 /* Line 1792 of yacc.c  */
-#line 351 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(2) - (2)].r.exp);}
+#line 343 "yacc.y"
+    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp@{(2) - (2)@}.r.exp);}
     break;
 
   case 111:
 /* Line 1792 of yacc.c  */
-#line 352 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 344 "yacc.y"
+    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 112:
 /* Line 1792 of yacc.c  */
-#line 353 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 345 "yacc.y"
+    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 113:
 /* Line 1792 of yacc.c  */
-#line 354 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 346 "yacc.y"
+    {l.a("unary_expression",1);}
     break;
 
   case 114:
 /* Line 1792 of yacc.c  */
-#line 355 "yacc.y"
-    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 347 "yacc.y"
+    {l.a("unary_expression",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 115:
 /* Line 1792 of yacc.c  */
-#line 363 "yacc.y"
+#line 355 "yacc.y"
     {l.a("cast_expression",2);}
     break;
 
   case 116:
 /* Line 1792 of yacc.c  */
-#line 364 "yacc.y"
+#line 356 "yacc.y"
     {l.a("cast_expression",2);}
     break;
 
   case 117:
 /* Line 1792 of yacc.c  */
-#line 365 "yacc.y"
+#line 357 "yacc.y"
     {l.a("cast_expression",4);}
     break;
 
   case 118:
 /* Line 1792 of yacc.c  */
-#line 366 "yacc.y"
+#line 358 "yacc.y"
     {l.a("cast_expression",3);}
     break;
 
   case 119:
 /* Line 1792 of yacc.c  */
-#line 367 "yacc.y"
+#line 359 "yacc.y"
     {l.a("cast_expression",3);}
     break;
 
   case 120:
 /* Line 1792 of yacc.c  */
-#line 368 "yacc.y"
+#line 360 "yacc.y"
     {l.a("cast_expression",2);}
     break;
 
   case 121:
 /* Line 1792 of yacc.c  */
-#line 371 "yacc.y"
+#line 363 "yacc.y"
     {l.a("type_quals_opt",0);}
     break;
 
   case 122:
 /* Line 1792 of yacc.c  */
-#line 372 "yacc.y"
+#line 364 "yacc.y"
     {l.a("type_quals_opt",1);}
     break;
 
   case 123:
 /* Line 1792 of yacc.c  */
-#line 375 "yacc.y"
+#line 367 "yacc.y"
     {l.a("type_quals",1);}
     break;
 
   case 124:
 /* Line 1792 of yacc.c  */
-#line 376 "yacc.y"
+#line 368 "yacc.y"
     {l.a("type_quals",2);}
     break;
 
   case 125:
 /* Line 1792 of yacc.c  */
-#line 379 "yacc.y"
+#line 371 "yacc.y"
     {l.a("type_qual",1);}
     break;
 
   case 126:
 /* Line 1792 of yacc.c  */
-#line 380 "yacc.y"
+#line 372 "yacc.y"
     {l.a("type_qual",0);}
     break;
 
   case 127:
 /* Line 1792 of yacc.c  */
-#line 383 "yacc.y"
-    {(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);}
+#line 375 "yacc.y"
+    {(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 128:
 /* Line 1792 of yacc.c  */
-#line 385 "yacc.y"
-    {
-		l.a("multiplicative_expression STAR",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),star,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 376 "yacc.y"
+    {l.a("multiplicative_expression STAR",2);}
     break;
 
   case 129:
 /* Line 1792 of yacc.c  */
-#line 390 "yacc.y"
-    {
-		l.a("multiplicative_expression SLASH",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),slash,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 377 "yacc.y"
+    {l.a("multiplicative_expression SLASH",2);}
     break;
 
   case 130:
 /* Line 1792 of yacc.c  */
-#line 395 "yacc.y"
-    {
-		l.a("multiplicative_expression PERCENT",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),percent,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 378 "yacc.y"
+    {l.a("multiplicative_expression PERCENT",2);}
     break;
 
   case 131:
 /* Line 1792 of yacc.c  */
-#line 403 "yacc.y"
-    {
-		l.a("additive_expression multiplicative_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 381 "yacc.y"
+    {l.a("additive_expression multiplicative_expression",1);(yyval.r.exp) = (yyvsp@{(1) - (1)@}.r.exp);}
     break;
 
   case 132:
 /* Line 1792 of yacc.c  */
-#line 408 "yacc.y"
-    {
-		l.a("additive_expression PLUS",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),Plus,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 382 "yacc.y"
+    {l.a("additive_expression PLUS",2);}
     break;
 
   case 133:
 /* Line 1792 of yacc.c  */
-#line 413 "yacc.y"
-    {
-		l.a("additive_expression MINUS",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),Minus,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 383 "yacc.y"
+    {l.a("additive_expression MINUS",2);}
     break;
 
   case 134:
 /* Line 1792 of yacc.c  */
-#line 421 "yacc.y"
-    {
-		l.a("shift_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 386 "yacc.y"
+    {l.a("shift_expression",1);}
     break;
 
   case 135:
 /* Line 1792 of yacc.c  */
-#line 426 "yacc.y"
-    {
-		l.a("shift_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),ltlt,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 387 "yacc.y"
+    {l.a("shift_expression",2);}
     break;
 
   case 136:
 /* Line 1792 of yacc.c  */
-#line 431 "yacc.y"
-    {
-		l.a("shift_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),gtgt,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 388 "yacc.y"
+    {l.a("shift_expression",2);}
     break;
 
   case 137:
 /* Line 1792 of yacc.c  */
-#line 439 "yacc.y"
-    {
-		l.a("relational_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 391 "yacc.y"
+    {l.a("relational_expression",1);}
     break;
 
   case 138:
 /* Line 1792 of yacc.c  */
-#line 444 "yacc.y"
-    {
-		l.a("relational_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),smaller,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 392 "yacc.y"
+    {l.a("relational_expression",2);}
     break;
 
   case 139:
 /* Line 1792 of yacc.c  */
-#line 449 "yacc.y"
-    {
-		l.a("relational_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),Greater,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 393 "yacc.y"
+    {l.a("relational_expression",2);}
     break;
 
   case 140:
 /* Line 1792 of yacc.c  */
-#line 454 "yacc.y"
-    {
-		l.a("relational_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),leq,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 394 "yacc.y"
+    {l.a("relational_expression",2);}
     break;
 
   case 141:
 /* Line 1792 of yacc.c  */
-#line 459 "yacc.y"
-    {
-		l.a("relational_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),geq,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 395 "yacc.y"
+    {l.a("relational_expression",2);}
     break;
 
   case 142:
 /* Line 1792 of yacc.c  */
-#line 464 "yacc.y"
-    {
-		l.a("relational_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),Is,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 396 "yacc.y"
+    {l.a("relational_expression",2);}
     break;
 
   case 143:
 /* Line 1792 of yacc.c  */
-#line 469 "yacc.y"
-    {
-		l.a("relational_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),As,(yyvsp[(3) - (3)].r.exp),Node::current);		
-  }
+#line 397 "yacc.y"
+    {l.a("relational_expression",2);}
     break;
 
   case 144:
 /* Line 1792 of yacc.c  */
-#line 477 "yacc.y"
-    {
-		l.a("equality_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 400 "yacc.y"
+    {l.a("equality_expression",1);}
     break;
 
   case 145:
 /* Line 1792 of yacc.c  */
-#line 482 "yacc.y"
-    {
-		l.a("equality_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),eqeq,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 401 "yacc.y"
+    {l.a("equality_expression",2);}
     break;
 
   case 146:
 /* Line 1792 of yacc.c  */
-#line 487 "yacc.y"
-    {
-		l.a("equality_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),noteq,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 402 "yacc.y"
+    {l.a("equality_expression",2);}
     break;
 
   case 147:
 /* Line 1792 of yacc.c  */
-#line 495 "yacc.y"
-    {
-		l.a("and_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 405 "yacc.y"
+    {l.a("and_expression",1);}
     break;
 
   case 148:
 /* Line 1792 of yacc.c  */
-#line 500 "yacc.y"
-    {
-		l.a("and_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),And,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 406 "yacc.y"
+    {l.a("and_expression",2);}
     break;
 
   case 149:
 /* Line 1792 of yacc.c  */
-#line 507 "yacc.y"
-    {
-		l.a("exclusive_or_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 409 "yacc.y"
+    {l.a("exclusive_or_expression",1);}
     break;
 
   case 150:
 /* Line 1792 of yacc.c  */
-#line 512 "yacc.y"
-    {
-		l.a("exclusive_or_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),power,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 410 "yacc.y"
+    {l.a("exclusive_or_expression",2);}
     break;
 
   case 151:
 /* Line 1792 of yacc.c  */
-#line 520 "yacc.y"
-    {
-		l.a("inclusive_or_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 413 "yacc.y"
+    {l.a("inclusive_or_expression",1);}
     break;
 
   case 152:
 /* Line 1792 of yacc.c  */
-#line 525 "yacc.y"
-    {
-		l.a("inclusive_or_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),Or,(yyvsp[(3) - (3)].r.exp),Node::current);  
-  }
+#line 414 "yacc.y"
+    {l.a("inclusive_or_expression",2);}
     break;
 
   case 153:
 /* Line 1792 of yacc.c  */
-#line 533 "yacc.y"
-    {
-		l.a("conditional_and_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 417 "yacc.y"
+    {l.a("conditional_and_expression",1);}
     break;
 
   case 154:
 /* Line 1792 of yacc.c  */
-#line 538 "yacc.y"
-    {
-		l.a("conditional_and_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),andand,(yyvsp[(3) - (3)].r.exp),Node::current);
-  }
+#line 418 "yacc.y"
+    {l.a("conditional_and_expression",2);}
     break;
 
   case 155:
 /* Line 1792 of yacc.c  */
-#line 546 "yacc.y"
-    {
-		l.a("conditional_or_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 421 "yacc.y"
+    {l.a("conditional_or_expression",1);}
     break;
 
   case 156:
 /* Line 1792 of yacc.c  */
-#line 551 "yacc.y"
-    {
-		l.a("conditional_or_expression",2);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (3)].r.exp),oror,(yyvsp[(3) - (3)].r.exp),Node::current);
-  
-  }
+#line 422 "yacc.y"
+    {l.a("conditional_or_expression",2);}
     break;
 
   case 157:
 /* Line 1792 of yacc.c  */
-#line 560 "yacc.y"
-    {
-		l.a("conditional_expression",1);
-		(yyval.r.exp) = (yyvsp[(1) - (1)].r.exp);
-  }
+#line 425 "yacc.y"
+    {l.a("conditional_expression",1);}
     break;
 
   case 158:
 /* Line 1792 of yacc.c  */
-#line 565 "yacc.y"
-    {
-		l.a("conditional_expression",3);
-		(yyval.r.exp) = new BinaryExpression((yyvsp[(1) - (5)].r.exp),question_mark,(yyvsp[(3) - (5)].r.exp),Node::current);  
-  }
+#line 426 "yacc.y"
+    {l.a("conditional_expression",3);}
     break;
 
   case 159:
 /* Line 1792 of yacc.c  */
-#line 573 "yacc.y"
-    {
-		l.a("assignment",3);
-		(yyval.r.st) = new Assignment(new Variable(((Identifier*)(yyvsp[(1) - (3)].r.exp))->symbol,Node::current),(yyvsp[(2) - (3)].r.op),(yyvsp[(3) - (3)].r.node),Node::current);
-  }
+#line 429 "yacc.y"
+    {l.a("assignment",3);}
     break;
 
   case 160:
 /* Line 1792 of yacc.c  */
-#line 580 "yacc.y"
-    {l.a("assignment_operator EQUAL",0);(yyval.r.op) = Equal;}
+#line 432 "yacc.y"
+    {l.a("assignment_operator EQUAL",0);}
     break;
 
   case 161:
 /* Line 1792 of yacc.c  */
-#line 581 "yacc.y"
-    {l.a("assignment_operator PLUSEQ",0);(yyval.r.op) = pluseq;}
+#line 433 "yacc.y"
+    {l.a("assignment_operator PLUSEQ",0);}
     break;
 
   case 162:
 /* Line 1792 of yacc.c  */
-#line 582 "yacc.y"
-    {l.a("assignment_operator MINUSEQ",0);(yyval.r.op) = minuseq;}
+#line 434 "yacc.y"
+    {l.a("assignment_operator MINUSEQ",0);}
     break;
 
   case 163:
 /* Line 1792 of yacc.c  */
-#line 583 "yacc.y"
-    {l.a("assignment_operator STAREQ",0);(yyval.r.op) = stareq;}
+#line 435 "yacc.y"
+    {l.a("assignment_operator STAREQ",0);}
     break;
 
   case 164:
 /* Line 1792 of yacc.c  */
-#line 584 "yacc.y"
-    {l.a("assignment_operator DIVEQ",0);(yyval.r.op) = diveq;}
+#line 436 "yacc.y"
+    {l.a("assignment_operator DIVEQ",0);}
     break;
 
   case 165:
 /* Line 1792 of yacc.c  */
-#line 585 "yacc.y"
-    {l.a("assignment_operator MODEQ",0);(yyval.r.op) = modeq;}
+#line 437 "yacc.y"
+    {l.a("assignment_operator MODEQ",0);}
     break;
 
   case 166:
 /* Line 1792 of yacc.c  */
-#line 586 "yacc.y"
-    {l.a("assignment_operator XOREQ",0);(yyval.r.op) = xoreq;}
+#line 438 "yacc.y"
+    {l.a("assignment_operator XOREQ",0);}
     break;
 
   case 167:
 /* Line 1792 of yacc.c  */
-#line 587 "yacc.y"
-    {l.a("assignment_operator ANDEQ",0);(yyval.r.op) = andeq;}
+#line 439 "yacc.y"
+    {l.a("assignment_operator ANDEQ",0);}
     break;
 
   case 168:
 /* Line 1792 of yacc.c  */
-#line 588 "yacc.y"
-    {l.a("assignment_operator OREQ",0);(yyval.r.op) = oreq;}
+#line 440 "yacc.y"
+    {l.a("assignment_operator OREQ",0);}
     break;
 
   case 169:
 /* Line 1792 of yacc.c  */
-#line 589 "yacc.y"
-    {l.a("assignment_operator GTGTEQ",0);(yyval.r.op) = gtgteq;}
+#line 441 "yacc.y"
+    {l.a("assignment_operator GTGTEQ",0);}
     break;
 
   case 170:
 /* Line 1792 of yacc.c  */
-#line 590 "yacc.y"
-    {l.a("assignment_operator LTLTEQ",0);(yyval.r.op) = ltlteq;}
+#line 442 "yacc.y"
+    {l.a("assignment_operator LTLTEQ",0);}
     break;
 
   case 171:
 /* Line 1792 of yacc.c  */
-#line 593 "yacc.y"
-    {l.a("expression",1);(yyval.r.node) = (yyvsp[(1) - (1)].r.exp);}
+#line 445 "yacc.y"
+    {l.a("expression",1);}
     break;
 
   case 172:
 /* Line 1792 of yacc.c  */
-#line 594 "yacc.y"
-    {l.a("expression",1);(yyval.r.node) = (yyvsp[(1) - (1)].r.st);}
+#line 446 "yacc.y"
+    {l.a("expression",1);}
     break;
 
   case 173:
 /* Line 1792 of yacc.c  */
-#line 597 "yacc.y"
+#line 449 "yacc.y"
     {l.a("constant_expression",1);}
     break;
 
   case 174:
 /* Line 1792 of yacc.c  */
-#line 600 "yacc.y"
+#line 452 "yacc.y"
     {l.a("boolean_expression",1);}
     break;
 
   case 175:
 /* Line 1792 of yacc.c  */
-#line 604 "yacc.y"
+#line 456 "yacc.y"
     {l.a("statement",1);}
     break;
 
   case 176:
 /* Line 1792 of yacc.c  */
-#line 605 "yacc.y"
+#line 457 "yacc.y"
     {l.a("statement",1);}
     break;
 
   case 177:
 /* Line 1792 of yacc.c  */
-#line 606 "yacc.y"
+#line 458 "yacc.y"
     {l.a("statement",1);}
     break;
 
   case 178:
 /* Line 1792 of yacc.c  */
-#line 609 "yacc.y"
+#line 461 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 179:
 /* Line 1792 of yacc.c  */
-#line 610 "yacc.y"
+#line 462 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 180:
 /* Line 1792 of yacc.c  */
-#line 611 "yacc.y"
+#line 463 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 181:
 /* Line 1792 of yacc.c  */
-#line 612 "yacc.y"
+#line 464 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 182:
 /* Line 1792 of yacc.c  */
-#line 613 "yacc.y"
+#line 465 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 183:
 /* Line 1792 of yacc.c  */
-#line 614 "yacc.y"
+#line 466 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 184:
 /* Line 1792 of yacc.c  */
-#line 615 "yacc.y"
+#line 467 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 185:
 /* Line 1792 of yacc.c  */
-#line 616 "yacc.y"
+#line 468 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 186:
 /* Line 1792 of yacc.c  */
-#line 617 "yacc.y"
+#line 469 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 187:
 /* Line 1792 of yacc.c  */
-#line 618 "yacc.y"
+#line 470 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 188:
 /* Line 1792 of yacc.c  */
-#line 619 "yacc.y"
+#line 471 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 189:
 /* Line 1792 of yacc.c  */
-#line 620 "yacc.y"
+#line 472 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 190:
 /* Line 1792 of yacc.c  */
-#line 621 "yacc.y"
+#line 473 "yacc.y"
     {l.a("embedded_statement",1);}
     break;
 
   case 191:
 /* Line 1792 of yacc.c  */
-#line 624 "yacc.y"
+#line 476 "yacc.y"
     { SPL->add_scope(); }
     break;
 
   case 192:
 /* Line 1792 of yacc.c  */
-#line 624 "yacc.y"
+#line 476 "yacc.y"
     {l.a("block",1);  SPL->endScope();}
     break;
 
   case 193:
 /* Line 1792 of yacc.c  */
-#line 625 "yacc.y"
+#line 477 "yacc.y"
     {l.a("block",1,1);}
     break;
 
   case 194:
 /* Line 1792 of yacc.c  */
-#line 628 "yacc.y"
+#line 480 "yacc.y"
     {l.a("statement_list_opt",0);}
     break;
 
   case 195:
 /* Line 1792 of yacc.c  */
-#line 629 "yacc.y"
+#line 481 "yacc.y"
     {l.a("statement_list_opt",1);}
     break;
 
   case 196:
 /* Line 1792 of yacc.c  */
-#line 633 "yacc.y"
+#line 485 "yacc.y"
     {l.a("statement_list",1);}
     break;
 
   case 197:
 /* Line 1792 of yacc.c  */
-#line 634 "yacc.y"
+#line 486 "yacc.y"
     {l.a("statement_list",2);}
     break;
 
   case 198:
 /* Line 1792 of yacc.c  */
-#line 637 "yacc.y"
+#line 489 "yacc.y"
     {l.a("empty_statement",0);}
     break;
 
   case 199:
 /* Line 1792 of yacc.c  */
-#line 640 "yacc.y"
+#line 492 "yacc.y"
     {l.a("labeled_statement",1);}
     break;
 
   case 200:
 /* Line 1792 of yacc.c  */
-#line 643 "yacc.y"
+#line 495 "yacc.y"
     {l.a("declaration_statement",1);}
     break;
 
   case 201:
 /* Line 1792 of yacc.c  */
-#line 644 "yacc.y"
+#line 496 "yacc.y"
     {l.a("declaration_statement",1);}
     break;
 
   case 202:
 /* Line 1792 of yacc.c  */
-#line 645 "yacc.y"
+#line 497 "yacc.y"
     { l.a("declaration_statement",1,1);}
     break;
 
   case 203:
 /* Line 1792 of yacc.c  */
-#line 646 "yacc.y"
+#line 498 "yacc.y"
     { l.a("declaration_statement",1,1);}
     break;
 
   case 204:
 /* Line 1792 of yacc.c  */
-#line 650 "yacc.y"
+#line 502 "yacc.y"
     {
 		l.a("local_variable_declaration",2);
 
-		SPL->addLocalVariable(*(yyvsp[(1) - (2)].r.base),*(yyvsp[(2) - (2)].r.identifiers),(yyvsp[(1) - (2)].r.known_type),false,(yyvsp[(2) - (2)].r.line_no),(yyvsp[(2) - (2)].r.col_no)) ;
+		SPL->addLocalVariable(*(yyvsp@{(1) - (2)@}.r.base),*(yyvsp@{(2) - (2)@}.r.identifiers),(yyvsp@{(1) - (2)@}.r.known_type),false,(yyvsp@{(2) - (2)@}.r.line_no),(yyvsp@{(2) - (2)@}.r.col_no)) ;
 	}
     break;
 
   case 205:
 /* Line 1792 of yacc.c  */
-#line 658 "yacc.y"
+#line 510 "yacc.y"
     {	 l.a("variable_declarators",1); 
 				 (yyval.r.identifiers) = new queue<string>();
-				 (yyval.r.identifiers)->push(*(yyvsp[(1) - (1)].r.identifier));
+				 (yyval.r.identifiers)->push(*(yyvsp@{(1) - (1)@}.r.identifier));
 		   }
     break;
 
   case 206:
 /* Line 1792 of yacc.c  */
-#line 663 "yacc.y"
+#line 515 "yacc.y"
     {      l.a("variable_declarators",2);
-				  (yyval.r.identifiers) = (yyvsp[(1) - (3)].r.identifiers);
-				  (yyval.r.identifiers)->push(*(yyvsp[(3) - (3)].r.identifier));
+				  (yyval.r.identifiers) = (yyvsp@{(1) - (3)@}.r.identifiers);
+				  (yyval.r.identifiers)->push(*(yyvsp@{(3) - (3)@}.r.identifier));
 		   }
     break;
 
   case 207:
 /* Line 1792 of yacc.c  */
-#line 670 "yacc.y"
+#line 522 "yacc.y"
     {		 l.a("variable_declarator",0); 
-				 (yyval.r.identifier) = new string ((yyvsp[(1) - (1)].r.str)) ; 
+				 (yyval.r.identifier) = new string ((yyvsp@{(1) - (1)@}.r.str)) ; 
 		  }
     break;
 
   case 208:
 /* Line 1792 of yacc.c  */
-#line 674 "yacc.y"
+#line 526 "yacc.y"
     {		l.a("variable_declarator",1); 
-					(yyval.r.identifier) = new string ((yyvsp[(1) - (3)].r.str));
+					(yyval.r.identifier) = new string ((yyvsp@{(1) - (3)@}.r.str));
 		   }
     break;
 
   case 209:
 /* Line 1792 of yacc.c  */
-#line 679 "yacc.y"
+#line 531 "yacc.y"
     {l.a("variable_initializer",1);}
     break;
 
   case 210:
 /* Line 1792 of yacc.c  */
-#line 680 "yacc.y"
+#line 532 "yacc.y"
     {l.a("variable_initializer",1);}
     break;
 
   case 211:
 /* Line 1792 of yacc.c  */
-#line 681 "yacc.y"
+#line 533 "yacc.y"
     {l.a("variable_initializer",1);}
     break;
 
   case 212:
 /* Line 1792 of yacc.c  */
-#line 684 "yacc.y"
+#line 536 "yacc.y"
     {l.a("stackalloc_initializer",2);}
     break;
 
   case 213:
 /* Line 1792 of yacc.c  */
-#line 688 "yacc.y"
+#line 540 "yacc.y"
     {
 		l.a("local_constant_declaration",2);
-		SPL->addLocalVariable(*(yyvsp[(2) - (3)].r.base),*(yyvsp[(3) - (3)].r.identifiers),(yyvsp[(2) - (3)].r.known_type),true,(yyvsp[(2) - (3)].r.line_no),(yyvsp[(2) - (3)].r.col_no)) ;
+		SPL->addLocalVariable(*(yyvsp@{(2) - (3)@}.r.base),*(yyvsp@{(3) - (3)@}.r.identifiers),(yyvsp@{(2) - (3)@}.r.known_type),true,(yyvsp@{(2) - (3)@}.r.line_no),(yyvsp@{(2) - (3)@}.r.col_no)) ;
   }
     break;
 
   case 214:
 /* Line 1792 of yacc.c  */
-#line 695 "yacc.y"
+#line 547 "yacc.y"
     {
 		l.a("constant_declarators",1);
   		(yyval.r.identifiers) = new queue<string>();
-		(yyval.r.identifiers)->push(*(yyvsp[(1) - (1)].r.identifier));
+		(yyval.r.identifiers)->push(*(yyvsp@{(1) - (1)@}.r.identifier));
   }
     break;
 
   case 215:
 /* Line 1792 of yacc.c  */
-#line 701 "yacc.y"
+#line 553 "yacc.y"
     {
 		l.a("constant_declarators",2);
-	  	(yyval.r.identifiers) = (yyvsp[(1) - (3)].r.identifiers);
-		(yyval.r.identifiers)->push(*(yyvsp[(3) - (3)].r.identifier));	
+	  	(yyval.r.identifiers) = (yyvsp@{(1) - (3)@}.r.identifiers);
+		(yyval.r.identifiers)->push(*(yyvsp@{(3) - (3)@}.r.identifier));	
   }
     break;
 
   case 216:
 /* Line 1792 of yacc.c  */
-#line 708 "yacc.y"
-    {l.a("constant_declarator",1);(yyval.r.identifier) = new string((yyvsp[(1) - (3)].r.str));}
+#line 560 "yacc.y"
+    {l.a("constant_declarator",1);(yyval.r.identifier) = new string((yyvsp@{(1) - (3)@}.r.str));}
     break;
 
   case 217:
 /* Line 1792 of yacc.c  */
-#line 717 "yacc.y"
+#line 569 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 218:
 /* Line 1792 of yacc.c  */
-#line 718 "yacc.y"
+#line 570 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 219:
 /* Line 1792 of yacc.c  */
-#line 719 "yacc.y"
+#line 571 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 220:
 /* Line 1792 of yacc.c  */
-#line 720 "yacc.y"
+#line 572 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 221:
 /* Line 1792 of yacc.c  */
-#line 721 "yacc.y"
+#line 573 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 222:
 /* Line 1792 of yacc.c  */
-#line 722 "yacc.y"
+#line 574 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 223:
 /* Line 1792 of yacc.c  */
-#line 723 "yacc.y"
+#line 575 "yacc.y"
     {l.a("expression_statement",1);}
     break;
 
   case 224:
 /* Line 1792 of yacc.c  */
-#line 724 "yacc.y"
+#line 576 "yacc.y"
     { l.a("expression_statement",1,1);}
     break;
 
   case 225:
 /* Line 1792 of yacc.c  */
-#line 725 "yacc.y"
+#line 577 "yacc.y"
     {l.a("expression_statement",1,1);}
     break;
 
   case 226:
 /* Line 1792 of yacc.c  */
-#line 726 "yacc.y"
+#line 578 "yacc.y"
     {l.a("expression_statement",1,1);}
     break;
 
   case 227:
 /* Line 1792 of yacc.c  */
-#line 727 "yacc.y"
+#line 579 "yacc.y"
     {l.a("expression_statement",1,1);}
     break;
 
   case 228:
 /* Line 1792 of yacc.c  */
-#line 728 "yacc.y"
+#line 580 "yacc.y"
     {l.a("expression_statement",1,1);}
     break;
 
   case 229:
 /* Line 1792 of yacc.c  */
-#line 729 "yacc.y"
+#line 581 "yacc.y"
     {l.a("expression_statement",1,1);}
     break;
 
   case 230:
 /* Line 1792 of yacc.c  */
-#line 730 "yacc.y"
+#line 582 "yacc.y"
     {l.a("expression_statement",1,1);}
     break;
 
   case 231:
 /* Line 1792 of yacc.c  */
-#line 733 "yacc.y"
+#line 585 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 232:
 /* Line 1792 of yacc.c  */
-#line 734 "yacc.y"
+#line 586 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 233:
 /* Line 1792 of yacc.c  */
-#line 735 "yacc.y"
+#line 587 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 234:
 /* Line 1792 of yacc.c  */
-#line 736 "yacc.y"
+#line 588 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 235:
 /* Line 1792 of yacc.c  */
-#line 737 "yacc.y"
+#line 589 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 236:
 /* Line 1792 of yacc.c  */
-#line 738 "yacc.y"
+#line 590 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 237:
 /* Line 1792 of yacc.c  */
-#line 739 "yacc.y"
+#line 591 "yacc.y"
     {l.a("statement_expression",1);}
     break;
 
   case 238:
 /* Line 1792 of yacc.c  */
-#line 742 "yacc.y"
+#line 594 "yacc.y"
     {l.a("selection_statement",1);}
     break;
 
   case 239:
 /* Line 1792 of yacc.c  */
-#line 743 "yacc.y"
+#line 595 "yacc.y"
     {l.a("selection_statement",1);}
     break;
 
   case 240:
 /* Line 1792 of yacc.c  */
-#line 746 "yacc.y"
+#line 598 "yacc.y"
     {l.a("if_statement",2);}
     break;
 
   case 241:
 /* Line 1792 of yacc.c  */
-#line 747 "yacc.y"
+#line 599 "yacc.y"
     {l.a("if_statement",3);}
     break;
 
   case 242:
 /* Line 1792 of yacc.c  */
-#line 750 "yacc.y"
+#line 602 "yacc.y"
     {l.a("switch_statement",2);}
     break;
 
   case 243:
 /* Line 1792 of yacc.c  */
-#line 753 "yacc.y"
+#line 605 "yacc.y"
     {l.a("switch_block",1);}
     break;
 
   case 244:
 /* Line 1792 of yacc.c  */
-#line 756 "yacc.y"
+#line 608 "yacc.y"
     {l.a("switch_sections_opt",0);}
     break;
 
   case 245:
 /* Line 1792 of yacc.c  */
-#line 757 "yacc.y"
+#line 609 "yacc.y"
     {l.a("switch_sections_opt",1);}
     break;
 
   case 246:
 /* Line 1792 of yacc.c  */
-#line 760 "yacc.y"
+#line 612 "yacc.y"
     {l.a("switch_sections",1);}
     break;
 
   case 247:
 /* Line 1792 of yacc.c  */
-#line 761 "yacc.y"
+#line 613 "yacc.y"
     {l.a("switch_sections",2);}
     break;
 
   case 248:
 /* Line 1792 of yacc.c  */
-#line 764 "yacc.y"
+#line 616 "yacc.y"
     {l.a("switch_section",2);}
     break;
 
   case 249:
 /* Line 1792 of yacc.c  */
-#line 767 "yacc.y"
+#line 619 "yacc.y"
     {l.a("switch_labels",1);}
     break;
 
   case 250:
 /* Line 1792 of yacc.c  */
-#line 768 "yacc.y"
+#line 620 "yacc.y"
     {l.a("switch_labels",2);}
     break;
 
   case 251:
 /* Line 1792 of yacc.c  */
-#line 771 "yacc.y"
+#line 623 "yacc.y"
     {l.a("switch_label",1);}
     break;
 
   case 252:
 /* Line 1792 of yacc.c  */
-#line 772 "yacc.y"
+#line 624 "yacc.y"
     {l.a("switch_label",0);}
     break;
 
   case 253:
 /* Line 1792 of yacc.c  */
-#line 775 "yacc.y"
+#line 627 "yacc.y"
     {l.a("iteration_statement",1);}
     break;
 
   case 254:
 /* Line 1792 of yacc.c  */
-#line 776 "yacc.y"
+#line 628 "yacc.y"
     {l.a("iteration_statement",1);}
     break;
 
   case 255:
 /* Line 1792 of yacc.c  */
-#line 777 "yacc.y"
+#line 629 "yacc.y"
     {l.a("iteration_statement",1);}
     break;
 
   case 256:
 /* Line 1792 of yacc.c  */
-#line 778 "yacc.y"
+#line 630 "yacc.y"
     {l.a("iteration_statement",1);}
     break;
 
   case 257:
 /* Line 1792 of yacc.c  */
-#line 781 "yacc.y"
+#line 633 "yacc.y"
     {l.a("unsafe_statement",1);}
     break;
 
   case 258:
 /* Line 1792 of yacc.c  */
-#line 784 "yacc.y"
+#line 636 "yacc.y"
     {l.a("while_statement",2);}
     break;
 
   case 259:
 /* Line 1792 of yacc.c  */
-#line 785 "yacc.y"
+#line 637 "yacc.y"
     {l.a("while_statement",2,1);}
     break;
 
   case 260:
 /* Line 1792 of yacc.c  */
-#line 786 "yacc.y"
+#line 638 "yacc.y"
     {yyclearin;}
     break;
 
   case 261:
 /* Line 1792 of yacc.c  */
-#line 786 "yacc.y"
+#line 638 "yacc.y"
     {  }
     break;
 
   case 262:
 /* Line 1792 of yacc.c  */
-#line 786 "yacc.y"
+#line 638 "yacc.y"
     {l.a("while_statement",2,1);}
     break;
 
   case 263:
 /* Line 1792 of yacc.c  */
-#line 789 "yacc.y"
+#line 641 "yacc.y"
     {l.a("do_statement",2);}
     break;
 
   case 264:
 /* Line 1792 of yacc.c  */
-#line 790 "yacc.y"
+#line 642 "yacc.y"
     { l.a("do_statement",2,1);}
     break;
 
   case 265:
 /* Line 1792 of yacc.c  */
-#line 794 "yacc.y"
+#line 646 "yacc.y"
     {l.a("for_statement",8);}
     break;
 
   case 266:
 /* Line 1792 of yacc.c  */
-#line 799 "yacc.y"
+#line 651 "yacc.y"
     {l.a("for_initializer_opt",0);}
     break;
 
   case 267:
 /* Line 1792 of yacc.c  */
-#line 800 "yacc.y"
+#line 652 "yacc.y"
     {l.a("for_initializer_opt",1);}
     break;
 
   case 268:
 /* Line 1792 of yacc.c  */
-#line 803 "yacc.y"
+#line 655 "yacc.y"
     {l.a("for_condition_opt",0);}
     break;
 
   case 269:
 /* Line 1792 of yacc.c  */
-#line 804 "yacc.y"
+#line 656 "yacc.y"
     {l.a("for_condition_opt",1);}
     break;
 
   case 270:
 /* Line 1792 of yacc.c  */
-#line 807 "yacc.y"
+#line 659 "yacc.y"
     {l.a("for_iterator_opt",0);}
     break;
 
   case 271:
 /* Line 1792 of yacc.c  */
-#line 808 "yacc.y"
+#line 660 "yacc.y"
     {l.a("for_iterator_opt",1);}
     break;
 
   case 272:
 /* Line 1792 of yacc.c  */
-#line 811 "yacc.y"
+#line 663 "yacc.y"
     {l.a("for_initializer",1);}
     break;
 
   case 273:
 /* Line 1792 of yacc.c  */
-#line 812 "yacc.y"
+#line 664 "yacc.y"
     {l.a("for_initializer",1);}
     break;
 
   case 274:
 /* Line 1792 of yacc.c  */
-#line 815 "yacc.y"
+#line 667 "yacc.y"
     {l.a("for_condition",1);}
     break;
 
   case 275:
 /* Line 1792 of yacc.c  */
-#line 818 "yacc.y"
+#line 670 "yacc.y"
     {l.a("for_iterator",1);}
     break;
 
   case 276:
 /* Line 1792 of yacc.c  */
-#line 821 "yacc.y"
+#line 673 "yacc.y"
     {l.a("statement_expression_list",1);}
     break;
 
   case 277:
 /* Line 1792 of yacc.c  */
-#line 822 "yacc.y"
+#line 674 "yacc.y"
     {l.a("statement_expression_list",2);}
     break;
 
   case 278:
 /* Line 1792 of yacc.c  */
-#line 825 "yacc.y"
+#line 677 "yacc.y"
     {l.a("foreach_statement",7);}
     break;
 
   case 279:
 /* Line 1792 of yacc.c  */
-#line 828 "yacc.y"
+#line 680 "yacc.y"
     {l.a("jump_statement",1);}
     break;
 
   case 280:
 /* Line 1792 of yacc.c  */
-#line 829 "yacc.y"
+#line 681 "yacc.y"
     {l.a("jump_statement",1);}
     break;
 
   case 281:
 /* Line 1792 of yacc.c  */
-#line 830 "yacc.y"
+#line 682 "yacc.y"
     {l.a("jump_statement",1);}
     break;
 
   case 282:
 /* Line 1792 of yacc.c  */
-#line 831 "yacc.y"
+#line 683 "yacc.y"
     {l.a("jump_statement",1);}
     break;
 
   case 283:
 /* Line 1792 of yacc.c  */
-#line 832 "yacc.y"
+#line 684 "yacc.y"
     {l.a("jump_statement",1);}
     break;
 
   case 284:
 /* Line 1792 of yacc.c  */
-#line 835 "yacc.y"
+#line 687 "yacc.y"
     {l.a("break_statement",0);}
     break;
 
   case 285:
 /* Line 1792 of yacc.c  */
-#line 836 "yacc.y"
+#line 688 "yacc.y"
     {l.a("break_statement",0,1);}
     break;
 
   case 286:
 /* Line 1792 of yacc.c  */
-#line 839 "yacc.y"
+#line 691 "yacc.y"
     {l.a("continue_statement",0);}
     break;
 
   case 287:
 /* Line 1792 of yacc.c  */
-#line 840 "yacc.y"
+#line 692 "yacc.y"
     {l.a("continue_statement",0,1);}
     break;
 
   case 288:
 /* Line 1792 of yacc.c  */
-#line 843 "yacc.y"
+#line 695 "yacc.y"
     {l.a("goto_statement",0);}
     break;
 
   case 289:
 /* Line 1792 of yacc.c  */
-#line 844 "yacc.y"
+#line 696 "yacc.y"
     {l.a("goto_statement",1);}
     break;
 
   case 290:
 /* Line 1792 of yacc.c  */
-#line 845 "yacc.y"
+#line 697 "yacc.y"
     {l.a("goto_statement",0);}
     break;
 
   case 291:
 /* Line 1792 of yacc.c  */
-#line 846 "yacc.y"
+#line 698 "yacc.y"
     {l.a("goto_statement",0,1);}
     break;
 
   case 292:
 /* Line 1792 of yacc.c  */
-#line 847 "yacc.y"
+#line 699 "yacc.y"
     {l.a("goto_statement",1,1);}
     break;
 
   case 293:
 /* Line 1792 of yacc.c  */
-#line 848 "yacc.y"
+#line 700 "yacc.y"
     {l.a("goto_statement",0,1);}
     break;
 
   case 294:
 /* Line 1792 of yacc.c  */
-#line 851 "yacc.y"
+#line 703 "yacc.y"
     {l.a("return_statement",1);}
     break;
 
   case 295:
 /* Line 1792 of yacc.c  */
-#line 852 "yacc.y"
+#line 704 "yacc.y"
     {l.a("return_statement",1,1);}
     break;
 
   case 296:
 /* Line 1792 of yacc.c  */
-#line 855 "yacc.y"
+#line 707 "yacc.y"
     {l.a("expression_opt",0);}
     break;
 
   case 297:
 /* Line 1792 of yacc.c  */
-#line 856 "yacc.y"
+#line 708 "yacc.y"
     {l.a("expression_opt",1);}
     break;
 
   case 298:
 /* Line 1792 of yacc.c  */
-#line 859 "yacc.y"
+#line 711 "yacc.y"
     {l.a("throw_statement",1);}
     break;
 
   case 299:
 /* Line 1792 of yacc.c  */
-#line 860 "yacc.y"
+#line 712 "yacc.y"
     {l.a("throw_statement",1);}
     break;
 
   case 300:
 /* Line 1792 of yacc.c  */
-#line 863 "yacc.y"
+#line 715 "yacc.y"
     {l.a("try_statement",2);}
     break;
 
   case 301:
 /* Line 1792 of yacc.c  */
-#line 864 "yacc.y"
+#line 716 "yacc.y"
     {l.a("try_statement",2);}
     break;
 
   case 302:
 /* Line 1792 of yacc.c  */
-#line 865 "yacc.y"
+#line 717 "yacc.y"
     {l.a("try_statement",3);}
     break;
 
   case 303:
 /* Line 1792 of yacc.c  */
-#line 868 "yacc.y"
+#line 720 "yacc.y"
     {l.a("catch_clauses",1);}
     break;
 
   case 304:
 /* Line 1792 of yacc.c  */
-#line 869 "yacc.y"
+#line 721 "yacc.y"
     {l.a("catch_clauses",2);}
     break;
 
   case 305:
 /* Line 1792 of yacc.c  */
-#line 872 "yacc.y"
+#line 724 "yacc.y"
     {l.a("catch_clause",3);}
     break;
 
   case 306:
 /* Line 1792 of yacc.c  */
-#line 873 "yacc.y"
+#line 725 "yacc.y"
     {l.a("catch_clause",3);}
     break;
 
   case 308:
 /* Line 1792 of yacc.c  */
-#line 877 "yacc.y"
+#line 729 "yacc.y"
     {l.a("identifier_opt",0);}
     break;
 
   case 309:
 /* Line 1792 of yacc.c  */
-#line 878 "yacc.y"
+#line 730 "yacc.y"
     {l.a("identifier_opt",0);}
     break;
 
   case 310:
 /* Line 1792 of yacc.c  */
-#line 881 "yacc.y"
+#line 733 "yacc.y"
     {l.a("finally_clause",1);}
     break;
 
   case 311:
 /* Line 1792 of yacc.c  */
-#line 884 "yacc.y"
+#line 736 "yacc.y"
     {l.a("checked_statement",1);}
     break;
 
   case 312:
 /* Line 1792 of yacc.c  */
-#line 887 "yacc.y"
+#line 739 "yacc.y"
     {l.a("unchecked_statement",1);}
     break;
 
   case 313:
 /* Line 1792 of yacc.c  */
-#line 890 "yacc.y"
+#line 742 "yacc.y"
     {l.a("lock_statement",2);}
     break;
 
   case 314:
 /* Line 1792 of yacc.c  */
-#line 893 "yacc.y"
+#line 745 "yacc.y"
     {l.a("using_statement",2);}
     break;
 
   case 315:
 /* Line 1792 of yacc.c  */
-#line 896 "yacc.y"
+#line 748 "yacc.y"
     {l.a("resource_acquisition",1);}
     break;
 
   case 316:
 /* Line 1792 of yacc.c  */
-#line 897 "yacc.y"
+#line 749 "yacc.y"
     {l.a("resource_acquisition",1);}
     break;
 
   case 317:
 /* Line 1792 of yacc.c  */
-#line 901 "yacc.y"
+#line 753 "yacc.y"
     {l.a("fixed_statement",3);}
     break;
 
   case 318:
 /* Line 1792 of yacc.c  */
-#line 904 "yacc.y"
+#line 756 "yacc.y"
     {l.a("fixed_pointer_declarators",1);}
     break;
 
   case 319:
 /* Line 1792 of yacc.c  */
-#line 905 "yacc.y"
+#line 757 "yacc.y"
     {l.a("fixed_pointer_declarators",2);}
     break;
 
   case 320:
 /* Line 1792 of yacc.c  */
-#line 908 "yacc.y"
+#line 760 "yacc.y"
     {l.a("fixed_pointer_declarator",1);}
     break;
 
   case 321:
 /* Line 1792 of yacc.c  */
-#line 911 "yacc.y"
+#line 763 "yacc.y"
     {l.a("compilation_unit",2);}
     break;
 
   case 322:
 /* Line 1792 of yacc.c  */
-#line 912 "yacc.y"
+#line 764 "yacc.y"
     {l.a("compilation_unit",2);}
     break;
 
   case 323:
 /* Line 1792 of yacc.c  */
-#line 915 "yacc.y"
+#line 767 "yacc.y"
     {l.a("using_directives_opt",0);}
     break;
 
   case 324:
 /* Line 1792 of yacc.c  */
-#line 916 "yacc.y"
+#line 768 "yacc.y"
     {l.a("using_directives_opt",1);}
     break;
 
   case 325:
 /* Line 1792 of yacc.c  */
-#line 919 "yacc.y"
+#line 771 "yacc.y"
     {l.a("attributes_opt",0);}
     break;
 
   case 326:
 /* Line 1792 of yacc.c  */
-#line 920 "yacc.y"
+#line 772 "yacc.y"
     {l.a("attributes_opt",1);}
     break;
 
   case 327:
 /* Line 1792 of yacc.c  */
-#line 923 "yacc.y"
+#line 775 "yacc.y"
     {l.a("namespace_member_declarations_opt",0);}
     break;
 
   case 328:
 /* Line 1792 of yacc.c  */
-#line 924 "yacc.y"
+#line 776 "yacc.y"
     {l.a("namespace_member_declarations_opt",1);}
     break;
 
   case 329:
 /* Line 1792 of yacc.c  */
-#line 927 "yacc.y"
-    {SPL->addNamespace(*(yyvsp[(3) - (3)].r.base),(yyvsp[(3) - (3)].r.line_no),(yyvsp[(3) - (3)].r.col_no));}
+#line 779 "yacc.y"
+    {SPL->addNamespace(*(yyvsp@{(3) - (3)@}.r.base),(yyvsp@{(3) - (3)@}.r.line_no),(yyvsp@{(3) - (3)@}.r.col_no));}
     break;
 
   case 330:
 /* Line 1792 of yacc.c  */
-#line 928 "yacc.y"
+#line 780 "yacc.y"
     {l.a("namespace_declaration",4);SPL->endScope();}
     break;
 
   case 331:
 /* Line 1792 of yacc.c  */
-#line 931 "yacc.y"
+#line 783 "yacc.y"
     {l.a("comma_opt",0);}
     break;
 
   case 332:
 /* Line 1792 of yacc.c  */
-#line 932 "yacc.y"
+#line 784 "yacc.y"
     {l.a("comma_opt",0);}
     break;
 
   case 333:
 /* Line 1792 of yacc.c  */
-#line 937 "yacc.y"
+#line 789 "yacc.y"
     {		l.a("qualified_identifier",0);
-				(yyval.r.base) = new string((yyvsp[(1) - (1)].r.str));
+				(yyval.r.base) = new string((yyvsp@{(1) - (1)@}.r.str));
 		  }
     break;
 
   case 334:
 /* Line 1792 of yacc.c  */
-#line 941 "yacc.y"
+#line 793 "yacc.y"
     {	l.a("qualified_identifier",1);
-			(yyval.r.base) = new string(string(*(yyvsp[(1) - (2)].r.base)) + string((yyvsp[(2) - (2)].r.str)));
+			(yyval.r.base) = new string(string(*(yyvsp@{(1) - (2)@}.r.base)) + string((yyvsp@{(2) - (2)@}.r.str)));
 		}
     break;
 
   case 335:
 /* Line 1792 of yacc.c  */
-#line 947 "yacc.y"
-    {l.a("qualifier",0);(yyval.r.base) = new string(string((yyvsp[(1) - (2)].r.str)) + ".");}
+#line 799 "yacc.y"
+    {l.a("qualifier",0);(yyval.r.base) = new string(string((yyvsp@{(1) - (2)@}.r.str)) + ".");}
     break;
 
   case 336:
 /* Line 1792 of yacc.c  */
-#line 948 "yacc.y"
-    {l.a("qualifier",1);(yyval.r.base) = new string(*(yyvsp[(1) - (3)].r.base) + string((yyvsp[(2) - (3)].r.str)) + ".");}
+#line 800 "yacc.y"
+    {l.a("qualifier",1);(yyval.r.base) = new string(*(yyvsp@{(1) - (3)@}.r.base) + string((yyvsp@{(2) - (3)@}.r.str)) + ".");}
     break;
 
   case 337:
 /* Line 1792 of yacc.c  */
-#line 952 "yacc.y"
+#line 804 "yacc.y"
     {l.a("namespace_body",2);}
     break;
 
   case 338:
 /* Line 1792 of yacc.c  */
-#line 955 "yacc.y"
+#line 807 "yacc.y"
     {l.a("using_directives",1);}
     break;
 
   case 339:
 /* Line 1792 of yacc.c  */
-#line 956 "yacc.y"
+#line 808 "yacc.y"
     {l.a("using_directives",2);}
     break;
 
   case 340:
 /* Line 1792 of yacc.c  */
-#line 959 "yacc.y"
+#line 811 "yacc.y"
     {l.a("using_directive",1);}
     break;
 
   case 341:
 /* Line 1792 of yacc.c  */
-#line 960 "yacc.y"
+#line 812 "yacc.y"
     {l.a("using_directive",1);}
     break;
 
   case 342:
 /* Line 1792 of yacc.c  */
-#line 963 "yacc.y"
+#line 815 "yacc.y"
     {l.a("using_alias_directive",1);}
     break;
 
   case 343:
 /* Line 1792 of yacc.c  */
-#line 964 "yacc.y"
+#line 816 "yacc.y"
     {l.a("using_alias_directive",1,1);}
     break;
 
   case 344:
 /* Line 1792 of yacc.c  */
-#line 967 "yacc.y"
-    {l.a("using_namespace_directive",1);  SPL->add_using(*(yyvsp[(2) - (3)].r.base),(yyvsp[(1) - (3)].r.line_no),(yyvsp[(1) - (3)].r.col_no));}
+#line 819 "yacc.y"
+    {l.a("using_namespace_directive",1);  SPL->add_using(*(yyvsp@{(2) - (3)@}.r.base),(yyvsp@{(1) - (3)@}.r.line_no),(yyvsp@{(1) - (3)@}.r.col_no));}
     break;
 
   case 345:
 /* Line 1792 of yacc.c  */
-#line 968 "yacc.y"
-    {l.a("using_namespace_directive",1,1);SPL->add_using(*(yyvsp[(2) - (3)].r.base),(yyvsp[(1) - (3)].r.line_no),(yyvsp[(1) - (3)].r.col_no));}
+#line 820 "yacc.y"
+    {l.a("using_namespace_directive",1,1);SPL->add_using(*(yyvsp@{(2) - (3)@}.r.base),(yyvsp@{(1) - (3)@}.r.line_no),(yyvsp@{(1) - (3)@}.r.col_no));}
     break;
 
   case 346:
 /* Line 1792 of yacc.c  */
-#line 971 "yacc.y"
+#line 823 "yacc.y"
     {l.a("namespace_member_declarations",1);}
     break;
 
   case 347:
 /* Line 1792 of yacc.c  */
-#line 972 "yacc.y"
+#line 824 "yacc.y"
     {l.a("namespace_member_declarations",2);}
     break;
 
   case 348:
 /* Line 1792 of yacc.c  */
-#line 975 "yacc.y"
+#line 827 "yacc.y"
     {l.a("namespace_member_declaration",1);}
     break;
 
   case 349:
 /* Line 1792 of yacc.c  */
-#line 976 "yacc.y"
+#line 828 "yacc.y"
     {l.a("namespace_member_declaration",1);}
     break;
 
   case 350:
 /* Line 1792 of yacc.c  */
-#line 979 "yacc.y"
+#line 831 "yacc.y"
     {l.a("type_declaration",1);}
     break;
 
   case 351:
 /* Line 1792 of yacc.c  */
-#line 980 "yacc.y"
+#line 832 "yacc.y"
     {l.a("type_declaration",1);}
     break;
 
   case 352:
 /* Line 1792 of yacc.c  */
-#line 981 "yacc.y"
+#line 833 "yacc.y"
     {l.a("type_declaration",1);}
     break;
 
   case 353:
 /* Line 1792 of yacc.c  */
-#line 982 "yacc.y"
+#line 834 "yacc.y"
     {l.a("type_declaration",1);}
     break;
 
   case 354:
 /* Line 1792 of yacc.c  */
-#line 983 "yacc.y"
+#line 835 "yacc.y"
     {l.a("type_declaration",1);}
     break;
 
   case 355:
 /* Line 1792 of yacc.c  */
-#line 995 "yacc.y"
+#line 847 "yacc.y"
     {		
 		l.a("modifiers_opt",0);
 		(yyval.r.modifiers) = new queue<string>();
@@ -5336,403 +5232,403 @@ yyreduce:
 
   case 356:
 /* Line 1792 of yacc.c  */
-#line 1000 "yacc.y"
+#line 852 "yacc.y"
     {	
 		l.a("modifiers_opt",1);
-		(yyval.r.modifiers) = (yyvsp[(1) - (1)].r.modifiers);
+		(yyval.r.modifiers) = (yyvsp@{(1) - (1)@}.r.modifiers);
   }
     break;
 
   case 357:
 /* Line 1792 of yacc.c  */
-#line 1007 "yacc.y"
+#line 859 "yacc.y"
     {	
 		l.a("modifiers",1);
 		(yyval.r.modifiers) = new queue<string>();
-		(yyval.r.modifiers)->push(*(yyvsp[(1) - (1)].r.modifier));
+		(yyval.r.modifiers)->push(*(yyvsp@{(1) - (1)@}.r.modifier));
   }
     break;
 
   case 358:
 /* Line 1792 of yacc.c  */
-#line 1013 "yacc.y"
+#line 865 "yacc.y"
     {
 		l.a("modifiers",2);
-		(yyval.r.modifiers) = (yyvsp[(1) - (2)].r.modifiers);
-		(yyval.r.modifiers)->push(*(yyvsp[(2) - (2)].r.modifier));
+		(yyval.r.modifiers) = (yyvsp@{(1) - (2)@}.r.modifiers);
+		(yyval.r.modifiers)->push(*(yyvsp@{(2) - (2)@}.r.modifier));
   }
     break;
 
   case 359:
 /* Line 1792 of yacc.c  */
-#line 1020 "yacc.y"
+#line 872 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("ABSTRACT"); }
     break;
 
   case 360:
 /* Line 1792 of yacc.c  */
-#line 1021 "yacc.y"
+#line 873 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("EXTERN");	  }
     break;
 
   case 361:
 /* Line 1792 of yacc.c  */
-#line 1022 "yacc.y"
+#line 874 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("INTERNAL"); }
     break;
 
   case 362:
 /* Line 1792 of yacc.c  */
-#line 1023 "yacc.y"
+#line 875 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("NEW");      }
     break;
 
   case 363:
 /* Line 1792 of yacc.c  */
-#line 1024 "yacc.y"
+#line 876 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("OVERRIDE"); }
     break;
 
   case 364:
 /* Line 1792 of yacc.c  */
-#line 1025 "yacc.y"
+#line 877 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("PRIVATE");  }
     break;
 
   case 365:
 /* Line 1792 of yacc.c  */
-#line 1026 "yacc.y"
+#line 878 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("PROTECTED");}
     break;
 
   case 366:
 /* Line 1792 of yacc.c  */
-#line 1027 "yacc.y"
+#line 879 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("PUBLIC");   }
     break;
 
   case 367:
 /* Line 1792 of yacc.c  */
-#line 1028 "yacc.y"
+#line 880 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("READONLY"); }
     break;
 
   case 368:
 /* Line 1792 of yacc.c  */
-#line 1029 "yacc.y"
+#line 881 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("SEALED");   }
     break;
 
   case 369:
 /* Line 1792 of yacc.c  */
-#line 1030 "yacc.y"
+#line 882 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("STATIC");   }
     break;
 
   case 370:
 /* Line 1792 of yacc.c  */
-#line 1031 "yacc.y"
+#line 883 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("UNSAFE");   }
     break;
 
   case 371:
 /* Line 1792 of yacc.c  */
-#line 1032 "yacc.y"
+#line 884 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("VIRTUAL");  }
     break;
 
   case 372:
 /* Line 1792 of yacc.c  */
-#line 1033 "yacc.y"
+#line 885 "yacc.y"
     {l.a("modifier",0);(yyval.r.modifier) = new string("VOLATILE"); }
     break;
 
   case 373:
 /* Line 1792 of yacc.c  */
-#line 1044 "yacc.y"
+#line 896 "yacc.y"
     {
-		SPL->addClass(*(yyvsp[(2) - (5)].r.modifiers),string((yyvsp[(4) - (5)].r.str)),*(yyvsp[(5) - (5)].r.bases),(yyvsp[(4) - (5)].r.line_no),(yyvsp[(4) - (5)].r.col_no));
+		SPL->addClass(*(yyvsp@{(2) - (5)@}.r.modifiers),string((yyvsp@{(4) - (5)@}.r.str)),*(yyvsp@{(5) - (5)@}.r.bases),(yyvsp@{(4) - (5)@}.r.line_no),(yyvsp@{(4) - (5)@}.r.col_no));
   }
     break;
 
   case 374:
 /* Line 1792 of yacc.c  */
-#line 1047 "yacc.y"
+#line 899 "yacc.y"
     {l.a("class_declaration",6);SPL->endScope();}
     break;
 
   case 375:
 /* Line 1792 of yacc.c  */
-#line 1049 "yacc.y"
+#line 901 "yacc.y"
     {
-		SPL->addClass(*(yyvsp[(2) - (5)].r.modifiers),string((yyvsp[(4) - (5)].r.str)),*(yyvsp[(5) - (5)].r.bases),(yyvsp[(4) - (5)].r.line_no),(yyvsp[(4) - (5)].r.col_no));
+		SPL->addClass(*(yyvsp@{(2) - (5)@}.r.modifiers),string((yyvsp@{(4) - (5)@}.r.str)),*(yyvsp@{(5) - (5)@}.r.bases),(yyvsp@{(4) - (5)@}.r.line_no),(yyvsp@{(4) - (5)@}.r.col_no));
   }
     break;
 
   case 376:
 /* Line 1792 of yacc.c  */
-#line 1052 "yacc.y"
+#line 904 "yacc.y"
     {l.a("class_declaration",5);SPL->endScope();}
     break;
 
   case 377:
 /* Line 1792 of yacc.c  */
-#line 1057 "yacc.y"
+#line 909 "yacc.y"
     {l.a("class_base_opt",0);(yyval.r.bases) = new queue<string>();}
     break;
 
   case 378:
 /* Line 1792 of yacc.c  */
-#line 1058 "yacc.y"
-    {l.a("class_base_opt",1);(yyval.r.bases) = (yyvsp[(1) - (1)].r.bases);}
+#line 910 "yacc.y"
+    {l.a("class_base_opt",1);(yyval.r.bases) = (yyvsp@{(1) - (1)@}.r.bases);}
     break;
 
   case 379:
 /* Line 1792 of yacc.c  */
-#line 1061 "yacc.y"
-    {l.a("class_base",1);(yyval.r.bases) = new queue<string>();(yyval.r.bases)->push(*(yyvsp[(2) - (2)].r.base));}
+#line 913 "yacc.y"
+    {l.a("class_base",1);(yyval.r.bases) = new queue<string>();(yyval.r.bases)->push(*(yyvsp@{(2) - (2)@}.r.base));}
     break;
 
   case 380:
 /* Line 1792 of yacc.c  */
-#line 1062 "yacc.y"
-    {l.a("class_base",1);(yyval.r.bases) = (yyvsp[(2) - (2)].r.bases);}
+#line 914 "yacc.y"
+    {l.a("class_base",1);(yyval.r.bases) = (yyvsp@{(2) - (2)@}.r.bases);}
     break;
 
   case 381:
 /* Line 1792 of yacc.c  */
-#line 1064 "yacc.y"
+#line 916 "yacc.y"
     {
 		l.a("class_base",2);(yyval.r.bases) = new queue<string>();
-		(yyval.r.bases)->push(*(yyvsp[(2) - (4)].r.base));
-		while(!(yyvsp[(4) - (4)].r.bases)->empty())
+		(yyval.r.bases)->push(*(yyvsp@{(2) - (4)@}.r.base));
+		while(!(yyvsp@{(4) - (4)@}.r.bases)->empty())
 		{
-			(yyval.r.bases)->push((yyvsp[(4) - (4)].r.bases)->front());
-			(yyvsp[(4) - (4)].r.bases)->pop();
+			(yyval.r.bases)->push((yyvsp@{(4) - (4)@}.r.bases)->front());
+			(yyvsp@{(4) - (4)@}.r.bases)->pop();
 		}
   }
     break;
 
   case 382:
 /* Line 1792 of yacc.c  */
-#line 1076 "yacc.y"
+#line 928 "yacc.y"
     {
 		l.a("interface_type_list",1);
 		(yyval.r.bases) = new queue<string>();
-		(yyval.r.bases)->push(*(yyvsp[(1) - (1)].r.base));
+		(yyval.r.bases)->push(*(yyvsp@{(1) - (1)@}.r.base));
   }
     break;
 
   case 383:
 /* Line 1792 of yacc.c  */
-#line 1082 "yacc.y"
+#line 934 "yacc.y"
     {
 		l.a("interface_type_list",2);
-		(yyval.r.bases) = (yyvsp[(1) - (3)].r.bases);
-		(yyval.r.bases)->push(*(yyvsp[(3) - (3)].r.base));
+		(yyval.r.bases) = (yyvsp@{(1) - (3)@}.r.bases);
+		(yyval.r.bases)->push(*(yyvsp@{(3) - (3)@}.r.base));
   }
     break;
 
   case 384:
 /* Line 1792 of yacc.c  */
-#line 1090 "yacc.y"
+#line 942 "yacc.y"
     {l.a("class_body",1);}
     break;
 
   case 385:
 /* Line 1792 of yacc.c  */
-#line 1094 "yacc.y"
+#line 946 "yacc.y"
     {l.a("class_member_declarations_opt",0);}
     break;
 
   case 386:
 /* Line 1792 of yacc.c  */
-#line 1095 "yacc.y"
+#line 947 "yacc.y"
     {l.a("class_member_declarations_opt",1);}
     break;
 
   case 387:
 /* Line 1792 of yacc.c  */
-#line 1098 "yacc.y"
+#line 950 "yacc.y"
     {l.a("class_member_declarations",1);}
     break;
 
   case 388:
 /* Line 1792 of yacc.c  */
-#line 1099 "yacc.y"
+#line 951 "yacc.y"
     {l.a("class_member_declarations",2);}
     break;
 
   case 389:
 /* Line 1792 of yacc.c  */
-#line 1102 "yacc.y"
+#line 954 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 390:
 /* Line 1792 of yacc.c  */
-#line 1103 "yacc.y"
+#line 955 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 391:
 /* Line 1792 of yacc.c  */
-#line 1104 "yacc.y"
+#line 956 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 392:
 /* Line 1792 of yacc.c  */
-#line 1105 "yacc.y"
+#line 957 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 393:
 /* Line 1792 of yacc.c  */
-#line 1106 "yacc.y"
+#line 958 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 394:
 /* Line 1792 of yacc.c  */
-#line 1107 "yacc.y"
+#line 959 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 395:
 /* Line 1792 of yacc.c  */
-#line 1108 "yacc.y"
+#line 960 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 396:
 /* Line 1792 of yacc.c  */
-#line 1109 "yacc.y"
+#line 961 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 397:
 /* Line 1792 of yacc.c  */
-#line 1110 "yacc.y"
+#line 962 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 398:
 /* Line 1792 of yacc.c  */
-#line 1111 "yacc.y"
+#line 963 "yacc.y"
     {l.a("class_member_declaration",1);}
     break;
 
   case 399:
 /* Line 1792 of yacc.c  */
-#line 1115 "yacc.y"
+#line 967 "yacc.y"
     {		
 		         l.a("constant_declaration",4);
-	          SPL->addFieldConst(*(yyvsp[(2) - (6)].r.modifiers),string("CONST"),*(yyvsp[(4) - (6)].r.base),*(yyvsp[(5) - (6)].r.identifiers),(yyvsp[(5) - (6)].r.line_no),(yyvsp[(5) - (6)].r.col_no),(yyvsp[(4) - (6)].r.known_type));
+	          SPL->addFieldConst(*(yyvsp@{(2) - (6)@}.r.modifiers),string("CONST"),*(yyvsp@{(4) - (6)@}.r.base),*(yyvsp@{(5) - (6)@}.r.identifiers),(yyvsp@{(5) - (6)@}.r.line_no),(yyvsp@{(5) - (6)@}.r.col_no),(yyvsp@{(4) - (6)@}.r.known_type));
 		  }
     break;
 
   case 400:
 /* Line 1792 of yacc.c  */
-#line 1120 "yacc.y"
+#line 972 "yacc.y"
     {
 		    l.a("constant_declaration",4,1);
-         SPL->addFieldConst(*(yyvsp[(2) - (6)].r.modifiers),string("CONST"),*(yyvsp[(4) - (6)].r.base),*(yyvsp[(5) - (6)].r.identifiers),(yyvsp[(5) - (6)].r.line_no),(yyvsp[(5) - (6)].r.col_no),(yyvsp[(4) - (6)].r.known_type));
+         SPL->addFieldConst(*(yyvsp@{(2) - (6)@}.r.modifiers),string("CONST"),*(yyvsp@{(4) - (6)@}.r.base),*(yyvsp@{(5) - (6)@}.r.identifiers),(yyvsp@{(5) - (6)@}.r.line_no),(yyvsp@{(5) - (6)@}.r.col_no),(yyvsp@{(4) - (6)@}.r.known_type));
 
 		 }
     break;
 
   case 401:
 /* Line 1792 of yacc.c  */
-#line 1128 "yacc.y"
+#line 980 "yacc.y"
     {
-		        SPL->addField(*(yyvsp[(2) - (5)].r.modifiers),*(yyvsp[(3) - (5)].r.base),*(yyvsp[(4) - (5)].r.identifiers),(yyvsp[(4) - (5)].r.line_no),(yyvsp[(4) - (5)].r.col_no),(yyvsp[(3) - (5)].r.known_type));
+		        SPL->addField(*(yyvsp@{(2) - (5)@}.r.modifiers),*(yyvsp@{(3) - (5)@}.r.base),*(yyvsp@{(4) - (5)@}.r.identifiers),(yyvsp@{(4) - (5)@}.r.line_no),(yyvsp@{(4) - (5)@}.r.col_no),(yyvsp@{(3) - (5)@}.r.known_type));
   		      l.a("field_declaration",4);
 	      }
     break;
 
   case 402:
 /* Line 1792 of yacc.c  */
-#line 1133 "yacc.y"
+#line 985 "yacc.y"
     {
             l.a("field_declaration",4,1);
-	          SPL->addField(*(yyvsp[(2) - (5)].r.modifiers),*(yyvsp[(3) - (5)].r.base),*(yyvsp[(4) - (5)].r.identifiers),(yyvsp[(4) - (5)].r.line_no),(yyvsp[(4) - (5)].r.col_no),(yyvsp[(3) - (5)].r.known_type));
+	          SPL->addField(*(yyvsp@{(2) - (5)@}.r.modifiers),*(yyvsp@{(3) - (5)@}.r.base),*(yyvsp@{(4) - (5)@}.r.identifiers),(yyvsp@{(4) - (5)@}.r.line_no),(yyvsp@{(4) - (5)@}.r.col_no),(yyvsp@{(3) - (5)@}.r.known_type));
         }
     break;
 
   case 403:
 /* Line 1792 of yacc.c  */
-#line 1140 "yacc.y"
+#line 992 "yacc.y"
     {l.a("method_declaration",2);SPL->check_function(); SPL->endScope();}
     break;
 
   case 404:
 /* Line 1792 of yacc.c  */
-#line 1145 "yacc.y"
+#line 997 "yacc.y"
     {    l.a("method_header",5); 
-          SPL->addMethod(*(yyvsp[(2) - (7)].r.modifiers),*(yyvsp[(3) - (7)].r.base),string(*(yyvsp[(4) - (7)].r.base)),*(yyvsp[(6) - (7)].r.types_ids),(yyvsp[(4) - (7)].r.line_no),(yyvsp[(4) - (7)].r.col_no),(yyvsp[(3) - (7)].r.known_type),1);
+          SPL->addMethod(*(yyvsp@{(2) - (7)@}.r.modifiers),*(yyvsp@{(3) - (7)@}.r.base),string(*(yyvsp@{(4) - (7)@}.r.base)),*(yyvsp@{(6) - (7)@}.r.types_ids),(yyvsp@{(4) - (7)@}.r.line_no),(yyvsp@{(4) - (7)@}.r.col_no),(yyvsp@{(3) - (7)@}.r.known_type),1);
       }
     break;
 
   case 406:
 /* Line 1792 of yacc.c  */
-#line 1152 "yacc.y"
+#line 1004 "yacc.y"
     {   l.a("method_header",4);
-        	SPL->addMethod(*(yyvsp[(2) - (7)].r.modifiers),"VOID",string(*(yyvsp[(4) - (7)].r.base)),*(yyvsp[(6) - (7)].r.types_ids),(yyvsp[(4) - (7)].r.line_no),(yyvsp[(4) - (7)].r.col_no),1,1);
+        	SPL->addMethod(*(yyvsp@{(2) - (7)@}.r.modifiers),"VOID",string(*(yyvsp@{(4) - (7)@}.r.base)),*(yyvsp@{(6) - (7)@}.r.types_ids),(yyvsp@{(4) - (7)@}.r.line_no),(yyvsp@{(4) - (7)@}.r.col_no),1,1);
       }
     break;
 
   case 408:
 /* Line 1792 of yacc.c  */
-#line 1158 "yacc.y"
+#line 1010 "yacc.y"
     {    l.a("method_header",5); 
-               SPL->addMethod(*(yyvsp[(2) - (7)].r.modifiers),*(yyvsp[(3) - (7)].r.base),string(*(yyvsp[(4) - (7)].r.base)),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),(yyvsp[(4) - (7)].r.line_no),(yyvsp[(4) - (7)].r.col_no),(yyvsp[(3) - (7)].r.known_type),1);
+               SPL->addMethod(*(yyvsp@{(2) - (7)@}.r.modifiers),*(yyvsp@{(3) - (7)@}.r.base),string(*(yyvsp@{(4) - (7)@}.r.base)),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),(yyvsp@{(4) - (7)@}.r.line_no),(yyvsp@{(4) - (7)@}.r.col_no),(yyvsp@{(3) - (7)@}.r.known_type),1);
          }
     break;
 
   case 410:
 /* Line 1792 of yacc.c  */
-#line 1164 "yacc.y"
+#line 1016 "yacc.y"
     {   l.a("method_header",4);
-        	SPL->addMethod(*(yyvsp[(2) - (7)].r.modifiers),"VOID",string(*(yyvsp[(4) - (7)].r.base)),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),(yyvsp[(4) - (7)].r.line_no),(yyvsp[(4) - (7)].r.col_no),1,1);
+        	SPL->addMethod(*(yyvsp@{(2) - (7)@}.r.modifiers),"VOID",string(*(yyvsp@{(4) - (7)@}.r.base)),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),(yyvsp@{(4) - (7)@}.r.line_no),(yyvsp@{(4) - (7)@}.r.col_no),1,1);
          }
     break;
 
   case 412:
 /* Line 1792 of yacc.c  */
-#line 1174 "yacc.y"
+#line 1026 "yacc.y"
     {    l.a("method_header",5); 
-          SPL->addMethod(*(yyvsp[(2) - (8)].r.modifiers),*(yyvsp[(3) - (8)].r.base),string(*(yyvsp[(4) - (8)].r.base)),*(yyvsp[(6) - (8)].r.types_ids),(yyvsp[(4) - (8)].r.line_no),(yyvsp[(4) - (8)].r.col_no),(yyvsp[(3) - (8)].r.known_type),0);
+          SPL->addMethod(*(yyvsp@{(2) - (8)@}.r.modifiers),*(yyvsp@{(3) - (8)@}.r.base),string(*(yyvsp@{(4) - (8)@}.r.base)),*(yyvsp@{(6) - (8)@}.r.types_ids),(yyvsp@{(4) - (8)@}.r.line_no),(yyvsp@{(4) - (8)@}.r.col_no),(yyvsp@{(3) - (8)@}.r.known_type),0);
       }
     break;
 
   case 413:
 /* Line 1792 of yacc.c  */
-#line 1178 "yacc.y"
+#line 1030 "yacc.y"
     {   l.a("method_header",4);
-        	SPL->addMethod(*(yyvsp[(2) - (8)].r.modifiers),"VOID",string(*(yyvsp[(4) - (8)].r.base)),*(yyvsp[(6) - (8)].r.types_ids),(yyvsp[(4) - (8)].r.line_no),(yyvsp[(4) - (8)].r.col_no),1,0);
+        	SPL->addMethod(*(yyvsp@{(2) - (8)@}.r.modifiers),"VOID",string(*(yyvsp@{(4) - (8)@}.r.base)),*(yyvsp@{(6) - (8)@}.r.types_ids),(yyvsp@{(4) - (8)@}.r.line_no),(yyvsp@{(4) - (8)@}.r.col_no),1,0);
       }
     break;
 
   case 414:
 /* Line 1792 of yacc.c  */
-#line 1182 "yacc.y"
+#line 1034 "yacc.y"
     {    l.a("method_header",5); 
-               SPL->addMethod(*(yyvsp[(2) - (8)].r.modifiers),*(yyvsp[(3) - (8)].r.base),string(*(yyvsp[(4) - (8)].r.base)),queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>(),(yyvsp[(4) - (8)].r.line_no),(yyvsp[(4) - (8)].r.col_no),(yyvsp[(3) - (8)].r.known_type),0);
+               SPL->addMethod(*(yyvsp@{(2) - (8)@}.r.modifiers),*(yyvsp@{(3) - (8)@}.r.base),string(*(yyvsp@{(4) - (8)@}.r.base)),queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>(),(yyvsp@{(4) - (8)@}.r.line_no),(yyvsp@{(4) - (8)@}.r.col_no),(yyvsp@{(3) - (8)@}.r.known_type),0);
          }
     break;
 
   case 415:
 /* Line 1792 of yacc.c  */
-#line 1186 "yacc.y"
+#line 1038 "yacc.y"
     {   l.a("method_header",4);
-        	SPL->addMethod(*(yyvsp[(2) - (8)].r.modifiers),"VOID",string(*(yyvsp[(4) - (8)].r.base)),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),(yyvsp[(4) - (8)].r.line_no),(yyvsp[(4) - (8)].r.col_no),1,0);
+        	SPL->addMethod(*(yyvsp@{(2) - (8)@}.r.modifiers),"VOID",string(*(yyvsp@{(4) - (8)@}.r.base)),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),(yyvsp@{(4) - (8)@}.r.line_no),(yyvsp@{(4) - (8)@}.r.col_no),1,0);
          }
     break;
 
   case 416:
 /* Line 1792 of yacc.c  */
-#line 1193 "yacc.y"
+#line 1045 "yacc.y"
     {	   l.a("formal_parameter_list_opt",0);
                (yyval.r.types_ids) = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
         }
@@ -5740,1192 +5636,1192 @@ yyreduce:
 
   case 417:
 /* Line 1792 of yacc.c  */
-#line 1197 "yacc.y"
+#line 1049 "yacc.y"
     {   l.a("formal_parameter_list_opt",1);
-            (yyval.r.types_ids) = (yyvsp[(1) - (1)].r.types_ids) ;
+            (yyval.r.types_ids) = (yyvsp@{(1) - (1)@}.r.types_ids) ;
         }
     break;
 
   case 418:
 /* Line 1792 of yacc.c  */
-#line 1201 "yacc.y"
+#line 1053 "yacc.y"
     {   l.a("formal_parameter_list_opt",1);
-            (yyval.r.types_ids) = (yyvsp[(1) - (1)].r.types_ids) ;
+            (yyval.r.types_ids) = (yyvsp@{(1) - (1)@}.r.types_ids) ;
         }
     break;
 
   case 419:
 /* Line 1792 of yacc.c  */
-#line 1205 "yacc.y"
+#line 1057 "yacc.y"
     {   l.a("formal_parameter_list_opt",2);
             //merge queues
             (yyval.r.types_ids) = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >();
-            while(!((yyvsp[(1) - (3)].r.types_ids))->empty()) {((yyval.r.types_ids))->push(((yyvsp[(1) - (3)].r.types_ids))->front()); ((yyvsp[(1) - (3)].r.types_ids))->pop();}
-            while(!((yyvsp[(3) - (3)].r.types_ids))->empty()) {((yyval.r.types_ids))->push(((yyvsp[(3) - (3)].r.types_ids))->front()); ((yyvsp[(3) - (3)].r.types_ids))->pop();}
+            while(!((yyvsp@{(1) - (3)@}.r.types_ids))->empty()) {((yyval.r.types_ids))->push(((yyvsp@{(1) - (3)@}.r.types_ids))->front()); ((yyvsp@{(1) - (3)@}.r.types_ids))->pop();}
+            while(!((yyvsp@{(3) - (3)@}.r.types_ids))->empty()) {((yyval.r.types_ids))->push(((yyvsp@{(3) - (3)@}.r.types_ids))->front()); ((yyvsp@{(3) - (3)@}.r.types_ids))->pop();}
         }
     break;
 
   case 420:
 /* Line 1792 of yacc.c  */
-#line 1213 "yacc.y"
+#line 1065 "yacc.y"
     {l.a("return_type",1);}
     break;
 
   case 421:
 /* Line 1792 of yacc.c  */
-#line 1214 "yacc.y"
+#line 1066 "yacc.y"
     {l.a("return_type",0);}
     break;
 
   case 422:
 /* Line 1792 of yacc.c  */
-#line 1227 "yacc.y"
+#line 1079 "yacc.y"
     {   l.a("formal_parameter_list",1);
           (yyval.r.types_ids) = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
-		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp[(1) - (1)].r.base) ,*(yyvsp[(1) - (1)].r.identifier)),make_pair((yyvsp[(1) - (1)].r.line_no),(yyvsp[(1) - (1)].r.col_no))),(yyvsp[(1) - (1)].r.known_type)));
+		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp@{(1) - (1)@}.r.base) ,*(yyvsp@{(1) - (1)@}.r.identifier)),make_pair((yyvsp@{(1) - (1)@}.r.line_no),(yyvsp@{(1) - (1)@}.r.col_no))),(yyvsp@{(1) - (1)@}.r.known_type)));
       }
     break;
 
   case 423:
 /* Line 1792 of yacc.c  */
-#line 1232 "yacc.y"
+#line 1084 "yacc.y"
     {   l.a("formal_parameter_list",2);
-      		(yyval.r.types_ids) = (yyvsp[(1) - (3)].r.types_ids);
-		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp[(3) - (3)].r.base) ,*(yyvsp[(3) - (3)].r.identifier)),make_pair((yyvsp[(3) - (3)].r.line_no),(yyvsp[(3) - (3)].r.col_no))),(yyvsp[(3) - (3)].r.known_type))); 
+      		(yyval.r.types_ids) = (yyvsp@{(1) - (3)@}.r.types_ids);
+		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp@{(3) - (3)@}.r.base) ,*(yyvsp@{(3) - (3)@}.r.identifier)),make_pair((yyvsp@{(3) - (3)@}.r.line_no),(yyvsp@{(3) - (3)@}.r.col_no))),(yyvsp@{(3) - (3)@}.r.known_type))); 
       }
     break;
 
   case 424:
 /* Line 1792 of yacc.c  */
-#line 1239 "yacc.y"
+#line 1091 "yacc.y"
     {   l.a("formal_parameter_default_list",1);
           (yyval.r.types_ids) = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
-		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp[(1) - (1)].r.base) ,*(yyvsp[(1) - (1)].r.identifier)),make_pair((yyvsp[(1) - (1)].r.line_no),(yyvsp[(1) - (1)].r.col_no))),(yyvsp[(1) - (1)].r.known_type)));
+		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp@{(1) - (1)@}.r.base) ,*(yyvsp@{(1) - (1)@}.r.identifier)),make_pair((yyvsp@{(1) - (1)@}.r.line_no),(yyvsp@{(1) - (1)@}.r.col_no))),(yyvsp@{(1) - (1)@}.r.known_type)));
       }
     break;
 
   case 425:
 /* Line 1792 of yacc.c  */
-#line 1244 "yacc.y"
+#line 1096 "yacc.y"
     {  l.a("formal_parameter_default_list",2);
-          (yyval.r.types_ids) = (yyvsp[(1) - (3)].r.types_ids);
-		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp[(3) - (3)].r.base) ,*(yyvsp[(3) - (3)].r.identifier)),make_pair((yyvsp[(3) - (3)].r.line_no),(yyvsp[(3) - (3)].r.col_no))),(yyvsp[(3) - (3)].r.known_type))); 
+          (yyval.r.types_ids) = (yyvsp@{(1) - (3)@}.r.types_ids);
+		      (yyval.r.types_ids)->push(make_pair(make_pair(make_pair(*(yyvsp@{(3) - (3)@}.r.base) ,*(yyvsp@{(3) - (3)@}.r.identifier)),make_pair((yyvsp@{(3) - (3)@}.r.line_no),(yyvsp@{(3) - (3)@}.r.col_no))),(yyvsp@{(3) - (3)@}.r.known_type))); 
        }
     break;
 
   case 426:
 /* Line 1792 of yacc.c  */
-#line 1251 "yacc.y"
+#line 1103 "yacc.y"
     {	l.a("formal_parameter",1); 
-        (yyval.r.base) = (yyvsp[(1) - (1)].r.base) ;
-        (yyval.r.identifier) = (yyvsp[(1) - (1)].r.identifier);
-        (yyval.r.line_no) = (yyvsp[(1) - (1)].r.line_no);
-        (yyval.r.col_no) = (yyvsp[(1) - (1)].r.col_no);
-        (yyval.r.known_type) = (yyvsp[(1) - (1)].r.known_type);
+        (yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base) ;
+        (yyval.r.identifier) = (yyvsp@{(1) - (1)@}.r.identifier);
+        (yyval.r.line_no) = (yyvsp@{(1) - (1)@}.r.line_no);
+        (yyval.r.col_no) = (yyvsp@{(1) - (1)@}.r.col_no);
+        (yyval.r.known_type) = (yyvsp@{(1) - (1)@}.r.known_type);
       }
     break;
 
   case 427:
 /* Line 1792 of yacc.c  */
-#line 1259 "yacc.y"
+#line 1111 "yacc.y"
     { l.a("formal_parameter",1);
-        (yyval.r.base) = (yyvsp[(1) - (1)].r.base);
-        (yyval.r.identifier) = (yyvsp[(1) - (1)].r.identifier);
-        (yyval.r.line_no) = (yyvsp[(1) - (1)].r.line_no);
-        (yyval.r.col_no) = (yyvsp[(1) - (1)].r.col_no);
-        (yyval.r.known_type) = (yyvsp[(1) - (1)].r.known_type);
+        (yyval.r.base) = (yyvsp@{(1) - (1)@}.r.base);
+        (yyval.r.identifier) = (yyvsp@{(1) - (1)@}.r.identifier);
+        (yyval.r.line_no) = (yyvsp@{(1) - (1)@}.r.line_no);
+        (yyval.r.col_no) = (yyvsp@{(1) - (1)@}.r.col_no);
+        (yyval.r.known_type) = (yyvsp@{(1) - (1)@}.r.known_type);
       }
     break;
 
   case 428:
 /* Line 1792 of yacc.c  */
-#line 1269 "yacc.y"
+#line 1121 "yacc.y"
     { l.a("fixed_parameter",3);
-        (yyval.r.base) = (yyvsp[(3) - (4)].r.base);
-        (yyval.r.identifier) = new string ((yyvsp[(4) - (4)].r.str));  
-        (yyval.r.line_no) = (yyvsp[(4) - (4)].r.line_no);
-        (yyval.r.col_no) = (yyvsp[(4) - (4)].r.col_no); 
-        (yyval.r.known_type) = (yyvsp[(3) - (4)].r.known_type);
+        (yyval.r.base) = (yyvsp@{(3) - (4)@}.r.base);
+        (yyval.r.identifier) = new string ((yyvsp@{(4) - (4)@}.r.str));  
+        (yyval.r.line_no) = (yyvsp@{(4) - (4)@}.r.line_no);
+        (yyval.r.col_no) = (yyvsp@{(4) - (4)@}.r.col_no); 
+        (yyval.r.known_type) = (yyvsp@{(3) - (4)@}.r.known_type);
       }
     break;
 
   case 429:
 /* Line 1792 of yacc.c  */
-#line 1280 "yacc.y"
+#line 1132 "yacc.y"
     { l.a("formal_parameter_default",2);
-        (yyval.r.base) = (yyvsp[(1) - (3)].r.base) ;
-        (yyval.r.identifier) = (yyvsp[(1) - (3)].r.identifier);
-        (yyval.r.line_no) = (yyvsp[(1) - (3)].r.line_no);
-        (yyval.r.col_no) = (yyvsp[(1) - (3)].r.col_no);
-        (yyval.r.known_type) = (yyvsp[(1) - (3)].r.known_type);
+        (yyval.r.base) = (yyvsp@{(1) - (3)@}.r.base) ;
+        (yyval.r.identifier) = (yyvsp@{(1) - (3)@}.r.identifier);
+        (yyval.r.line_no) = (yyvsp@{(1) - (3)@}.r.line_no);
+        (yyval.r.col_no) = (yyvsp@{(1) - (3)@}.r.col_no);
+        (yyval.r.known_type) = (yyvsp@{(1) - (3)@}.r.known_type);
       }
     break;
 
   case 430:
 /* Line 1792 of yacc.c  */
-#line 1288 "yacc.y"
+#line 1140 "yacc.y"
     { l.a("formal_parameter_default",2);
-        (yyval.r.base) = (yyvsp[(1) - (3)].r.base);
-        (yyval.r.identifier) = (yyvsp[(1) - (3)].r.identifier);
-        (yyval.r.line_no) = (yyvsp[(1) - (3)].r.line_no);
-        (yyval.r.col_no) = (yyvsp[(1) - (3)].r.col_no);
-        (yyval.r.known_type) = (yyvsp[(1) - (3)].r.known_type);
+        (yyval.r.base) = (yyvsp@{(1) - (3)@}.r.base);
+        (yyval.r.identifier) = (yyvsp@{(1) - (3)@}.r.identifier);
+        (yyval.r.line_no) = (yyvsp@{(1) - (3)@}.r.line_no);
+        (yyval.r.col_no) = (yyvsp@{(1) - (3)@}.r.col_no);
+        (yyval.r.known_type) = (yyvsp@{(1) - (3)@}.r.known_type);
       }
     break;
 
   case 431:
 /* Line 1792 of yacc.c  */
-#line 1298 "yacc.y"
+#line 1150 "yacc.y"
     {l.a("parameter_modifier_opt",0);}
     break;
 
   case 432:
 /* Line 1792 of yacc.c  */
-#line 1299 "yacc.y"
+#line 1151 "yacc.y"
     {l.a("parameter_modifier_opt",0);}
     break;
 
   case 433:
 /* Line 1792 of yacc.c  */
-#line 1300 "yacc.y"
+#line 1152 "yacc.y"
     {l.a("parameter_modifier_opt",0);}
     break;
 
   case 434:
 /* Line 1792 of yacc.c  */
-#line 1304 "yacc.y"
+#line 1156 "yacc.y"
     { l.a("parameter_array",2);
-        (yyval.r.base) = (yyvsp[(3) - (4)].r.base);
-        (yyval.r.identifier) = new string ((yyvsp[(4) - (4)].r.str));
-        (yyval.r.line_no) = (yyvsp[(4) - (4)].r.line_no);
-        (yyval.r.col_no) = (yyvsp[(4) - (4)].r.col_no);
-        (yyval.r.known_type) = (yyvsp[(3) - (4)].r.known_type);
+        (yyval.r.base) = (yyvsp@{(3) - (4)@}.r.base);
+        (yyval.r.identifier) = new string ((yyvsp@{(4) - (4)@}.r.str));
+        (yyval.r.line_no) = (yyvsp@{(4) - (4)@}.r.line_no);
+        (yyval.r.col_no) = (yyvsp@{(4) - (4)@}.r.col_no);
+        (yyval.r.known_type) = (yyvsp@{(3) - (4)@}.r.known_type);
       }
     break;
 
   case 435:
 /* Line 1792 of yacc.c  */
-#line 1317 "yacc.y"
+#line 1169 "yacc.y"
     {l.a("property_declaration",7);}
     break;
 
   case 436:
 /* Line 1792 of yacc.c  */
-#line 1320 "yacc.y"
+#line 1172 "yacc.y"
     {l.a("accessor_declarations",2);}
     break;
 
   case 437:
 /* Line 1792 of yacc.c  */
-#line 1321 "yacc.y"
+#line 1173 "yacc.y"
     {l.a("accessor_declarations",2);}
     break;
 
   case 438:
 /* Line 1792 of yacc.c  */
-#line 1324 "yacc.y"
+#line 1176 "yacc.y"
     {l.a("set_accessor_declaration_opt",0);}
     break;
 
   case 439:
 /* Line 1792 of yacc.c  */
-#line 1325 "yacc.y"
+#line 1177 "yacc.y"
     {l.a("set_accessor_declaration_opt",1);}
     break;
 
   case 440:
 /* Line 1792 of yacc.c  */
-#line 1328 "yacc.y"
+#line 1180 "yacc.y"
     {l.a("get_accessor_declaration_opt",0);}
     break;
 
   case 441:
 /* Line 1792 of yacc.c  */
-#line 1329 "yacc.y"
+#line 1181 "yacc.y"
     {l.a("get_accessor_declaration_opt",1);}
     break;
 
   case 442:
 /* Line 1792 of yacc.c  */
-#line 1335 "yacc.y"
+#line 1187 "yacc.y"
     {l.a("get_accessor_declaration",4);}
     break;
 
   case 443:
 /* Line 1792 of yacc.c  */
-#line 1341 "yacc.y"
+#line 1193 "yacc.y"
     {l.a("set_accessor_declaration",4);}
     break;
 
   case 444:
 /* Line 1792 of yacc.c  */
-#line 1344 "yacc.y"
+#line 1196 "yacc.y"
     {l.a("accessor_body",1);}
     break;
 
   case 445:
 /* Line 1792 of yacc.c  */
-#line 1345 "yacc.y"
+#line 1197 "yacc.y"
     {l.a("accessor_body",0);}
     break;
 
   case 446:
 /* Line 1792 of yacc.c  */
-#line 1348 "yacc.y"
+#line 1200 "yacc.y"
     {l.a("event_declaration",4);}
     break;
 
   case 447:
 /* Line 1792 of yacc.c  */
-#line 1352 "yacc.y"
+#line 1204 "yacc.y"
     {l.a("event_declaration",7);}
     break;
 
   case 448:
 /* Line 1792 of yacc.c  */
-#line 1355 "yacc.y"
+#line 1207 "yacc.y"
     {l.a("event_accessor_declarations",2);}
     break;
 
   case 449:
 /* Line 1792 of yacc.c  */
-#line 1356 "yacc.y"
+#line 1208 "yacc.y"
     {l.a("event_accessor_declarations",2);}
     break;
 
   case 450:
 /* Line 1792 of yacc.c  */
-#line 1362 "yacc.y"
+#line 1214 "yacc.y"
     {l.a("add_accessor_declaration",4);}
     break;
 
   case 451:
 /* Line 1792 of yacc.c  */
-#line 1368 "yacc.y"
+#line 1220 "yacc.y"
     {l.a("remove_accessor_declaration",4);}
     break;
 
   case 452:
 /* Line 1792 of yacc.c  */
-#line 1374 "yacc.y"
+#line 1226 "yacc.y"
     {l.a("indexer_declaration",6);}
     break;
 
   case 453:
 /* Line 1792 of yacc.c  */
-#line 1377 "yacc.y"
+#line 1229 "yacc.y"
     {l.a("indexer_declarator",2);}
     break;
 
   case 454:
 /* Line 1792 of yacc.c  */
-#line 1379 "yacc.y"
+#line 1231 "yacc.y"
     {l.a("indexer_declarator",3);}
     break;
 
   case 455:
 /* Line 1792 of yacc.c  */
-#line 1382 "yacc.y"
+#line 1234 "yacc.y"
     {l.a("qualified_this",1);}
     break;
 
   case 456:
 /* Line 1792 of yacc.c  */
-#line 1386 "yacc.y"
+#line 1238 "yacc.y"
     {l.a("operator_declaration",4);}
     break;
 
   case 457:
 /* Line 1792 of yacc.c  */
-#line 1389 "yacc.y"
+#line 1241 "yacc.y"
     {l.a("operator_declarator",2);}
     break;
 
   case 458:
 /* Line 1792 of yacc.c  */
-#line 1390 "yacc.y"
+#line 1242 "yacc.y"
     {l.a("operator_declarator",2);}
     break;
 
   case 459:
 /* Line 1792 of yacc.c  */
-#line 1393 "yacc.y"
+#line 1245 "yacc.y"
     {l.a("overloadable_operator_declarator",3);}
     break;
 
   case 460:
 /* Line 1792 of yacc.c  */
-#line 1394 "yacc.y"
+#line 1246 "yacc.y"
     {l.a("overloadable_operator_declarator",4);}
     break;
 
   case 461:
 /* Line 1792 of yacc.c  */
-#line 1397 "yacc.y"
+#line 1249 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 462:
 /* Line 1792 of yacc.c  */
-#line 1398 "yacc.y"
+#line 1250 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 463:
 /* Line 1792 of yacc.c  */
-#line 1399 "yacc.y"
+#line 1251 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 464:
 /* Line 1792 of yacc.c  */
-#line 1400 "yacc.y"
+#line 1252 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 465:
 /* Line 1792 of yacc.c  */
-#line 1401 "yacc.y"
+#line 1253 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 466:
 /* Line 1792 of yacc.c  */
-#line 1402 "yacc.y"
+#line 1254 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 467:
 /* Line 1792 of yacc.c  */
-#line 1403 "yacc.y"
+#line 1255 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 468:
 /* Line 1792 of yacc.c  */
-#line 1404 "yacc.y"
+#line 1256 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 469:
 /* Line 1792 of yacc.c  */
-#line 1405 "yacc.y"
+#line 1257 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 470:
 /* Line 1792 of yacc.c  */
-#line 1406 "yacc.y"
+#line 1258 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 471:
 /* Line 1792 of yacc.c  */
-#line 1407 "yacc.y"
+#line 1259 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 472:
 /* Line 1792 of yacc.c  */
-#line 1408 "yacc.y"
+#line 1260 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 473:
 /* Line 1792 of yacc.c  */
-#line 1409 "yacc.y"
+#line 1261 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 474:
 /* Line 1792 of yacc.c  */
-#line 1410 "yacc.y"
+#line 1262 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 475:
 /* Line 1792 of yacc.c  */
-#line 1411 "yacc.y"
+#line 1263 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 476:
 /* Line 1792 of yacc.c  */
-#line 1412 "yacc.y"
+#line 1264 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 477:
 /* Line 1792 of yacc.c  */
-#line 1413 "yacc.y"
+#line 1265 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 478:
 /* Line 1792 of yacc.c  */
-#line 1414 "yacc.y"
+#line 1266 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 479:
 /* Line 1792 of yacc.c  */
-#line 1415 "yacc.y"
+#line 1267 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 480:
 /* Line 1792 of yacc.c  */
-#line 1416 "yacc.y"
+#line 1268 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 481:
 /* Line 1792 of yacc.c  */
-#line 1417 "yacc.y"
+#line 1269 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 482:
 /* Line 1792 of yacc.c  */
-#line 1418 "yacc.y"
+#line 1270 "yacc.y"
     {l.a("overloadable_operator",0);}
     break;
 
   case 483:
 /* Line 1792 of yacc.c  */
-#line 1421 "yacc.y"
+#line 1273 "yacc.y"
     {l.a("conversion_operator_declarator",2);}
     break;
 
   case 484:
 /* Line 1792 of yacc.c  */
-#line 1422 "yacc.y"
+#line 1274 "yacc.y"
     {l.a("conversion_operator_declarator",2);}
     break;
 
   case 485:
 /* Line 1792 of yacc.c  */
-#line 1426 "yacc.y"
+#line 1278 "yacc.y"
     {
-  SPL->addMethod(*(yyvsp[(2) - (6)].r.modifiers),"",string((yyvsp[(3) - (6)].r.str)),*(yyvsp[(5) - (6)].r.types_ids),(yyvsp[(3) - (6)].r.line_no),(yyvsp[(3) - (6)].r.col_no),1,1);
+  SPL->addMethod(*(yyvsp@{(2) - (6)@}.r.modifiers),"",string((yyvsp@{(3) - (6)@}.r.str)),*(yyvsp@{(5) - (6)@}.r.types_ids),(yyvsp@{(3) - (6)@}.r.line_no),(yyvsp@{(3) - (6)@}.r.col_no),1,1);
   }
     break;
 
   case 486:
 /* Line 1792 of yacc.c  */
-#line 1429 "yacc.y"
+#line 1281 "yacc.y"
     {l.a("constructor_declaration",4);SPL->endScope();}
     break;
 
   case 487:
 /* Line 1792 of yacc.c  */
-#line 1432 "yacc.y"
+#line 1284 "yacc.y"
     {l.a("constructor_initializer_opt",0);}
     break;
 
   case 488:
 /* Line 1792 of yacc.c  */
-#line 1433 "yacc.y"
+#line 1285 "yacc.y"
     {l.a("constructor_initializer_opt",1);}
     break;
 
   case 489:
 /* Line 1792 of yacc.c  */
-#line 1436 "yacc.y"
+#line 1288 "yacc.y"
     {l.a("constructor_initializer",1);}
     break;
 
   case 490:
 /* Line 1792 of yacc.c  */
-#line 1437 "yacc.y"
+#line 1289 "yacc.y"
     {l.a("constructor_initializer",1);}
     break;
 
   case 491:
 /* Line 1792 of yacc.c  */
-#line 1453 "yacc.y"
+#line 1305 "yacc.y"
     {l.a("destructor_declaration",3);}
     break;
 
   case 492:
 /* Line 1792 of yacc.c  */
-#line 1456 "yacc.y"
+#line 1308 "yacc.y"
     {l.a("operator_body",1);}
     break;
 
   case 493:
 /* Line 1792 of yacc.c  */
-#line 1457 "yacc.y"
+#line 1309 "yacc.y"
     {l.a("operator_body",0);}
     break;
 
   case 494:
 /* Line 1792 of yacc.c  */
-#line 1460 "yacc.y"
+#line 1312 "yacc.y"
     {l.a("constructor_body",1);}
     break;
 
   case 495:
 /* Line 1792 of yacc.c  */
-#line 1461 "yacc.y"
+#line 1313 "yacc.y"
     {l.a("constructor_body",0);}
     break;
 
   case 496:
 /* Line 1792 of yacc.c  */
-#line 1466 "yacc.y"
+#line 1318 "yacc.y"
     {l.a("struct_declaration",5);}
     break;
 
   case 497:
 /* Line 1792 of yacc.c  */
-#line 1469 "yacc.y"
+#line 1321 "yacc.y"
     {l.a("struct_interfaces_opt",0);}
     break;
 
   case 498:
 /* Line 1792 of yacc.c  */
-#line 1470 "yacc.y"
+#line 1322 "yacc.y"
     {l.a("struct_interfaces_opt",1);}
     break;
 
   case 499:
 /* Line 1792 of yacc.c  */
-#line 1473 "yacc.y"
+#line 1325 "yacc.y"
     {l.a("struct_interfaces",1);}
     break;
 
   case 500:
 /* Line 1792 of yacc.c  */
-#line 1476 "yacc.y"
+#line 1328 "yacc.y"
     {l.a("struct_body",1);}
     break;
 
   case 501:
 /* Line 1792 of yacc.c  */
-#line 1479 "yacc.y"
+#line 1331 "yacc.y"
     {l.a("struct_member_declarations_opt",0);}
     break;
 
   case 502:
 /* Line 1792 of yacc.c  */
-#line 1480 "yacc.y"
+#line 1332 "yacc.y"
     {l.a("struct_member_declarations_opt",1);}
     break;
 
   case 503:
 /* Line 1792 of yacc.c  */
-#line 1483 "yacc.y"
+#line 1335 "yacc.y"
     {l.a("struct_member_declarations",1);}
     break;
 
   case 504:
 /* Line 1792 of yacc.c  */
-#line 1484 "yacc.y"
+#line 1336 "yacc.y"
     {l.a("struct_member_declarations",2);}
     break;
 
   case 505:
 /* Line 1792 of yacc.c  */
-#line 1487 "yacc.y"
+#line 1339 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 506:
 /* Line 1792 of yacc.c  */
-#line 1488 "yacc.y"
+#line 1340 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 507:
 /* Line 1792 of yacc.c  */
-#line 1489 "yacc.y"
+#line 1341 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 508:
 /* Line 1792 of yacc.c  */
-#line 1490 "yacc.y"
+#line 1342 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 509:
 /* Line 1792 of yacc.c  */
-#line 1491 "yacc.y"
+#line 1343 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 510:
 /* Line 1792 of yacc.c  */
-#line 1492 "yacc.y"
+#line 1344 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 511:
 /* Line 1792 of yacc.c  */
-#line 1493 "yacc.y"
+#line 1345 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 512:
 /* Line 1792 of yacc.c  */
-#line 1494 "yacc.y"
+#line 1346 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 513:
 /* Line 1792 of yacc.c  */
-#line 1496 "yacc.y"
+#line 1348 "yacc.y"
     {l.a("struct_member_declaration",1);}
     break;
 
   case 514:
 /* Line 1792 of yacc.c  */
-#line 1501 "yacc.y"
+#line 1353 "yacc.y"
     {l.a("array_initializer",1);}
     break;
 
   case 515:
 /* Line 1792 of yacc.c  */
-#line 1502 "yacc.y"
+#line 1354 "yacc.y"
     {l.a("array_initializer",1);}
     break;
 
   case 516:
 /* Line 1792 of yacc.c  */
-#line 1505 "yacc.y"
+#line 1357 "yacc.y"
     {l.a("variable_initializer_list_opt",0);}
     break;
 
   case 517:
 /* Line 1792 of yacc.c  */
-#line 1506 "yacc.y"
+#line 1358 "yacc.y"
     {l.a("variable_initializer_list_opt",1);}
     break;
 
   case 518:
 /* Line 1792 of yacc.c  */
-#line 1509 "yacc.y"
+#line 1361 "yacc.y"
     {l.a("variable_initializer_list",1);}
     break;
 
   case 519:
 /* Line 1792 of yacc.c  */
-#line 1510 "yacc.y"
+#line 1362 "yacc.y"
     {l.a("variable_initializer_list",2);}
     break;
 
   case 520:
 /* Line 1792 of yacc.c  */
-#line 1516 "yacc.y"
+#line 1368 "yacc.y"
     {
-		SPL->addInterface(*(yyvsp[(2) - (5)].r.modifiers),string((yyvsp[(4) - (5)].r.str)),*(yyvsp[(5) - (5)].r.bases),(yyvsp[(4) - (5)].r.line_no),(yyvsp[(4) - (5)].r.col_no));		
+		SPL->addInterface(*(yyvsp@{(2) - (5)@}.r.modifiers),string((yyvsp@{(4) - (5)@}.r.str)),*(yyvsp@{(5) - (5)@}.r.bases),(yyvsp@{(4) - (5)@}.r.line_no),(yyvsp@{(4) - (5)@}.r.col_no));		
   }
     break;
 
   case 521:
 /* Line 1792 of yacc.c  */
-#line 1519 "yacc.y"
+#line 1371 "yacc.y"
     {l.a("interface_declaration",5);SPL->endScope();}
     break;
 
   case 522:
 /* Line 1792 of yacc.c  */
-#line 1523 "yacc.y"
+#line 1375 "yacc.y"
     {l.a("interface_base_opt",0);(yyval.r.bases) = new queue<string>();}
     break;
 
   case 523:
 /* Line 1792 of yacc.c  */
-#line 1524 "yacc.y"
-    {l.a("interface_base_opt",1);(yyval.r.bases) = (yyvsp[(1) - (1)].r.bases);}
+#line 1376 "yacc.y"
+    {l.a("interface_base_opt",1);(yyval.r.bases) = (yyvsp@{(1) - (1)@}.r.bases);}
     break;
 
   case 524:
 /* Line 1792 of yacc.c  */
-#line 1527 "yacc.y"
-    {l.a("interface_base",1);(yyval.r.bases) = (yyvsp[(2) - (2)].r.bases);}
+#line 1379 "yacc.y"
+    {l.a("interface_base",1);(yyval.r.bases) = (yyvsp@{(2) - (2)@}.r.bases);}
     break;
 
   case 525:
 /* Line 1792 of yacc.c  */
-#line 1530 "yacc.y"
+#line 1382 "yacc.y"
     {l.a("interface_body",1);}
     break;
 
   case 526:
 /* Line 1792 of yacc.c  */
-#line 1533 "yacc.y"
+#line 1385 "yacc.y"
     {l.a("interface_member_declarations_opt",0);}
     break;
 
   case 527:
 /* Line 1792 of yacc.c  */
-#line 1534 "yacc.y"
+#line 1386 "yacc.y"
     {l.a("interface_member_declarations_opt",1);}
     break;
 
   case 528:
 /* Line 1792 of yacc.c  */
-#line 1537 "yacc.y"
+#line 1389 "yacc.y"
     {l.a("interface_member_declarations",1);}
     break;
 
   case 529:
 /* Line 1792 of yacc.c  */
-#line 1538 "yacc.y"
+#line 1390 "yacc.y"
     {l.a("interface_member_declarations",2);}
     break;
 
   case 530:
 /* Line 1792 of yacc.c  */
-#line 1541 "yacc.y"
+#line 1393 "yacc.y"
     {l.a("interface_member_declaration",1);}
     break;
 
   case 531:
 /* Line 1792 of yacc.c  */
-#line 1542 "yacc.y"
+#line 1394 "yacc.y"
     {l.a("interface_member_declaration",1);}
     break;
 
   case 532:
 /* Line 1792 of yacc.c  */
-#line 1543 "yacc.y"
+#line 1395 "yacc.y"
     {l.a("interface_member_declaration",1);}
     break;
 
   case 533:
 /* Line 1792 of yacc.c  */
-#line 1544 "yacc.y"
+#line 1396 "yacc.y"
     {l.a("interface_member_declaration",1);}
     break;
 
   case 534:
 /* Line 1792 of yacc.c  */
-#line 1549 "yacc.y"
+#line 1401 "yacc.y"
     {
      l.a("interface_method_declaration",5);
-	 SPL->addMethod(*(yyvsp[(2) - (8)].r.modifiers),*(yyvsp[(3) - (8)].r.base),string((yyvsp[(4) - (8)].r.str)),*(yyvsp[(6) - (8)].r.types_ids),(yyvsp[(4) - (8)].r.line_no),(yyvsp[(4) - (8)].r.col_no),(yyvsp[(3) - (8)].r.known_type),0);
+	 SPL->addMethod(*(yyvsp@{(2) - (8)@}.r.modifiers),*(yyvsp@{(3) - (8)@}.r.base),string((yyvsp@{(4) - (8)@}.r.str)),*(yyvsp@{(6) - (8)@}.r.types_ids),(yyvsp@{(4) - (8)@}.r.line_no),(yyvsp@{(4) - (8)@}.r.col_no),(yyvsp@{(3) - (8)@}.r.known_type),0);
 	 SPL->endScope();
     }
     break;
 
   case 535:
 /* Line 1792 of yacc.c  */
-#line 1555 "yacc.y"
+#line 1407 "yacc.y"
     {
 	  l.a("interface_method_declaration",4);
-	  SPL->addMethod(*(yyvsp[(2) - (8)].r.modifiers),"VOID",string((yyvsp[(4) - (8)].r.str)),*(yyvsp[(6) - (8)].r.types_ids),(yyvsp[(4) - (8)].r.line_no),(yyvsp[(4) - (8)].r.col_no),1,0);
+	  SPL->addMethod(*(yyvsp@{(2) - (8)@}.r.modifiers),"VOID",string((yyvsp@{(4) - (8)@}.r.str)),*(yyvsp@{(6) - (8)@}.r.types_ids),(yyvsp@{(4) - (8)@}.r.line_no),(yyvsp@{(4) - (8)@}.r.col_no),1,0);
 	  SPL->endScope();
     }
     break;
 
   case 536:
 /* Line 1792 of yacc.c  */
-#line 1562 "yacc.y"
+#line 1414 "yacc.y"
     {l.a("new_opt",0); (yyval.r.modifiers) = new queue<string>();}
     break;
 
   case 537:
 /* Line 1792 of yacc.c  */
-#line 1563 "yacc.y"
+#line 1415 "yacc.y"
     {l.a("new_opt",0);(yyval.r.modifiers) = new queue<string>() ; (yyval.r.modifiers)->push("NEW");}
     break;
 
   case 538:
 /* Line 1792 of yacc.c  */
-#line 1569 "yacc.y"
+#line 1421 "yacc.y"
     {l.a("interface_property_declaration",1);}
     break;
 
   case 539:
 /* Line 1792 of yacc.c  */
-#line 1569 "yacc.y"
+#line 1421 "yacc.y"
     {l.a("interface_property_declaration",1);}
     break;
 
   case 540:
 /* Line 1792 of yacc.c  */
-#line 1576 "yacc.y"
+#line 1428 "yacc.y"
     {l.a("interface_indexer_declaration",7);}
     break;
 
   case 541:
 /* Line 1792 of yacc.c  */
-#line 1576 "yacc.y"
+#line 1428 "yacc.y"
     {l.a("interface_indexer_declaration",7);}
     break;
 
   case 542:
 /* Line 1792 of yacc.c  */
-#line 1580 "yacc.y"
+#line 1432 "yacc.y"
     {l.a("interface_accessors",2);}
     break;
 
   case 543:
 /* Line 1792 of yacc.c  */
-#line 1581 "yacc.y"
+#line 1433 "yacc.y"
     {l.a("interface_accessors",2);}
     break;
 
   case 544:
 /* Line 1792 of yacc.c  */
-#line 1582 "yacc.y"
+#line 1434 "yacc.y"
     {l.a("interface_accessors",4);}
     break;
 
   case 545:
 /* Line 1792 of yacc.c  */
-#line 1583 "yacc.y"
+#line 1435 "yacc.y"
     {l.a("interface_accessors",4);}
     break;
 
   case 546:
 /* Line 1792 of yacc.c  */
-#line 1586 "yacc.y"
+#line 1438 "yacc.y"
     {l.a("interface_event_declaration",4);}
     break;
 
   case 547:
 /* Line 1792 of yacc.c  */
-#line 1591 "yacc.y"
+#line 1443 "yacc.y"
     {l.a("interface_empty_body",0);}
     break;
 
   case 548:
 /* Line 1792 of yacc.c  */
-#line 1592 "yacc.y"
+#line 1444 "yacc.y"
     {l.a("interface_empty_body",0);}
     break;
 
   case 549:
 /* Line 1792 of yacc.c  */
-#line 1597 "yacc.y"
+#line 1449 "yacc.y"
     {l.a("enum_declaration",5);}
     break;
 
   case 550:
 /* Line 1792 of yacc.c  */
-#line 1600 "yacc.y"
+#line 1452 "yacc.y"
     {l.a("enum_base_opt",0);}
     break;
 
   case 551:
 /* Line 1792 of yacc.c  */
-#line 1601 "yacc.y"
+#line 1453 "yacc.y"
     {l.a("enum_base_opt",1);}
     break;
 
   case 552:
 /* Line 1792 of yacc.c  */
-#line 1604 "yacc.y"
+#line 1456 "yacc.y"
     {l.a("enum_base",1);}
     break;
 
   case 553:
 /* Line 1792 of yacc.c  */
-#line 1607 "yacc.y"
+#line 1459 "yacc.y"
     {l.a("enum_body",1);}
     break;
 
   case 554:
 /* Line 1792 of yacc.c  */
-#line 1608 "yacc.y"
+#line 1460 "yacc.y"
     {l.a("enum_body",1);}
     break;
 
   case 555:
 /* Line 1792 of yacc.c  */
-#line 1611 "yacc.y"
+#line 1463 "yacc.y"
     {l.a("enum_member_declarations_opt",0);}
     break;
 
   case 556:
 /* Line 1792 of yacc.c  */
-#line 1612 "yacc.y"
+#line 1464 "yacc.y"
     {l.a("enum_member_declarations_opt",1);}
     break;
 
   case 557:
 /* Line 1792 of yacc.c  */
-#line 1615 "yacc.y"
+#line 1467 "yacc.y"
     {l.a("enum_member_declarations",1);}
     break;
 
   case 558:
 /* Line 1792 of yacc.c  */
-#line 1616 "yacc.y"
+#line 1468 "yacc.y"
     {l.a("enum_member_declarations",2);}
     break;
 
   case 559:
 /* Line 1792 of yacc.c  */
-#line 1619 "yacc.y"
+#line 1471 "yacc.y"
     {l.a("enum_member_declaration",1);}
     break;
 
   case 560:
 /* Line 1792 of yacc.c  */
-#line 1620 "yacc.y"
+#line 1472 "yacc.y"
     {l.a("enum_member_declaration",2);}
     break;
 
   case 561:
 /* Line 1792 of yacc.c  */
-#line 1625 "yacc.y"
+#line 1477 "yacc.y"
     {l.a("enum_member_declaration",4);}
     break;
 
   case 562:
 /* Line 1792 of yacc.c  */
-#line 1626 "yacc.y"
+#line 1478 "yacc.y"
     {l.a("enum_member_declaration",4,1);}
     break;
 
   case 563:
 /* Line 1792 of yacc.c  */
-#line 1631 "yacc.y"
+#line 1483 "yacc.y"
     {l.a("attributes",1);}
     break;
 
   case 564:
 /* Line 1792 of yacc.c  */
-#line 1634 "yacc.y"
+#line 1486 "yacc.y"
     {l.a("attribute_sections",1);}
     break;
 
   case 565:
 /* Line 1792 of yacc.c  */
-#line 1635 "yacc.y"
+#line 1487 "yacc.y"
     {l.a("attribute_sections",2);}
     break;
 
   case 566:
 /* Line 1792 of yacc.c  */
-#line 1638 "yacc.y"
+#line 1490 "yacc.y"
     {l.a("attribute_section",4);}
     break;
 
   case 567:
 /* Line 1792 of yacc.c  */
-#line 1639 "yacc.y"
+#line 1491 "yacc.y"
     {l.a("attribute_section",4);}
     break;
 
   case 568:
 /* Line 1792 of yacc.c  */
-#line 1642 "yacc.y"
+#line 1494 "yacc.y"
     {l.a("attribute_target_specifier_opt",0);}
     break;
 
   case 569:
 /* Line 1792 of yacc.c  */
-#line 1643 "yacc.y"
+#line 1495 "yacc.y"
     {l.a("attribute_target_specifier_opt",1);}
     break;
 
   case 570:
 /* Line 1792 of yacc.c  */
-#line 1646 "yacc.y"
+#line 1498 "yacc.y"
     {l.a("attribute_target_specifier",1);}
     break;
 
   case 571:
 /* Line 1792 of yacc.c  */
-#line 1649 "yacc.y"
+#line 1501 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 572:
 /* Line 1792 of yacc.c  */
-#line 1650 "yacc.y"
+#line 1502 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 573:
 /* Line 1792 of yacc.c  */
-#line 1651 "yacc.y"
+#line 1503 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 574:
 /* Line 1792 of yacc.c  */
-#line 1652 "yacc.y"
+#line 1504 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 575:
 /* Line 1792 of yacc.c  */
-#line 1653 "yacc.y"
+#line 1505 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 576:
 /* Line 1792 of yacc.c  */
-#line 1654 "yacc.y"
+#line 1506 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 577:
 /* Line 1792 of yacc.c  */
-#line 1655 "yacc.y"
+#line 1507 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 578:
 /* Line 1792 of yacc.c  */
-#line 1656 "yacc.y"
+#line 1508 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 579:
 /* Line 1792 of yacc.c  */
-#line 1657 "yacc.y"
+#line 1509 "yacc.y"
     {l.a("attribute_target",1);}
     break;
 
   case 580:
 /* Line 1792 of yacc.c  */
-#line 1660 "yacc.y"
+#line 1512 "yacc.y"
     {l.a("attribute_list",1);}
     break;
 
   case 581:
 /* Line 1792 of yacc.c  */
-#line 1661 "yacc.y"
+#line 1513 "yacc.y"
     {l.a("attribute_list",2);}
     break;
 
   case 582:
 /* Line 1792 of yacc.c  */
-#line 1664 "yacc.y"
+#line 1516 "yacc.y"
     {l.a("attribute",2);}
     break;
 
   case 583:
 /* Line 1792 of yacc.c  */
-#line 1667 "yacc.y"
+#line 1519 "yacc.y"
     {l.a("attribute_arguments_opt",0);}
     break;
 
   case 584:
 /* Line 1792 of yacc.c  */
-#line 1668 "yacc.y"
+#line 1520 "yacc.y"
     {l.a("attribute_arguments_opt",1);}
     break;
 
   case 585:
 /* Line 1792 of yacc.c  */
-#line 1671 "yacc.y"
+#line 1523 "yacc.y"
     {l.a("attribute_name",1);}
     break;
 
   case 586:
 /* Line 1792 of yacc.c  */
-#line 1674 "yacc.y"
+#line 1526 "yacc.y"
     {l.a("attribute_arguments",1);}
     break;
 
   case 587:
 /* Line 1792 of yacc.c  */
-#line 1681 "yacc.y"
+#line 1533 "yacc.y"
     { /* lex_enter_attrib(); */ l.a("ENTER_attrib",1);}
     break;
 
   case 588:
 /* Line 1792 of yacc.c  */
-#line 1684 "yacc.y"
+#line 1536 "yacc.y"
     { /* lex_exit_attrib(); */ l.a("EXIT_attrib",1);}
     break;
 
   case 589:
 /* Line 1792 of yacc.c  */
-#line 1687 "yacc.y"
+#line 1539 "yacc.y"
     { /* lex_enter_accessor(); */ l.a("ENTER_accessor_decl",1);}
     break;
 
   case 590:
 /* Line 1792 of yacc.c  */
-#line 1690 "yacc.y"
+#line 1542 "yacc.y"
     { /* lex_exit_accessor();*/l.a("EXIT_accessor_decl",1); }
     break;
 
   case 591:
 /* Line 1792 of yacc.c  */
-#line 1693 "yacc.y"
+#line 1545 "yacc.y"
     { /* lex_enter_getset();*/l.a("ENTER_getset",1); }
     break;
 
   case 592:
 /* Line 1792 of yacc.c  */
-#line 1696 "yacc.y"
+#line 1548 "yacc.y"
     { /* lex_exit_getset();*/l.a("EXIT_getset",1); }
     break;
 
   case 593:
 /* Line 1792 of yacc.c  */
-#line 1704 "yacc.y"
+#line 1556 "yacc.y"
     {l.a("CLASS",0);}
     break;
 
   case 594:
 /* Line 1792 of yacc.c  */
-#line 1705 "yacc.y"
+#line 1557 "yacc.y"
     {l.a("CLASS",0,1);yyclearin;}
     break;
 
   case 595:
 /* Line 1792 of yacc.c  */
-#line 1708 "yacc.y"
+#line 1560 "yacc.y"
     {l.a("left_bracket_circle",0);}
     break;
 
   case 596:
 /* Line 1792 of yacc.c  */
-#line 1709 "yacc.y"
+#line 1561 "yacc.y"
     {l.a("left_bracket_circle",0,1);yyclearin;}
     break;
 
   case 597:
 /* Line 1792 of yacc.c  */
-#line 1712 "yacc.y"
+#line 1564 "yacc.y"
     {l.a("right_bracket_circle",0);}
     break;
 
   case 598:
 /* Line 1792 of yacc.c  */
-#line 1713 "yacc.y"
+#line 1565 "yacc.y"
     {l.a("right_bracket_circle",0,1);yyclearin;}
     break;
 
   case 599:
 /* Line 1792 of yacc.c  */
-#line 1716 "yacc.y"
+#line 1568 "yacc.y"
     { l.a("semicolon",0);}
     break;
 
   case 600:
 /* Line 1792 of yacc.c  */
-#line 1717 "yacc.y"
+#line 1569 "yacc.y"
     { l.a("semicolon",0,1);}
     break;
 
   case 601:
 /* Line 1792 of yacc.c  */
-#line 1720 "yacc.y"
+#line 1572 "yacc.y"
     {l.a("in",0);}
     break;
 
   case 602:
 /* Line 1792 of yacc.c  */
-#line 1721 "yacc.y"
+#line 1573 "yacc.y"
     {l.a("in",0,1);}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 6929 "yacc.tab.cpp"
+#line @oline@ @ofile@
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -7157,7 +7053,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 1726 "yacc.y"
+#line 1578 "yacc.y"
 
 
 void yyerror(const char* s)
@@ -7169,3 +7065,251 @@ void yyerror(const char* s)
 
 
 
+@output(yacc.tab.h@)@
+/* A Bison parser, made by GNU Bison 2.7.  */
+
+/* Bison interface for Yacc-like parsers in C
+   
+      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
+   
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+
+/* As a special exception, you may create a larger work that contains
+   part or all of the Bison parser skeleton and distribute that work
+   under terms of your choice, so long as that work isn't itself a
+   parser generator using the skeleton or a modified version thereof
+   as a parser skeleton.  Alternatively, if you modify or redistribute
+   the parser skeleton itself, you may (at your option) remove this
+   special exception, which will cause the skeleton and the resulting
+   Bison output files to be licensed under the GNU General Public
+   License without this special exception.
+   
+   This special exception was added by the Free Software Foundation in
+   version 2.2 of Bison.  */
+
+#ifndef YY_YY_YACC_TAB_H_INCLUDED
+# define YY_YY_YACC_TAB_H_INCLUDED
+/* Enabling traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
+
+/* Tokens.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     RANK_SPECIFIER = 258,
+     IDENTIFIER = 259,
+     INTEGER_LITERAL = 260,
+     REAL_LITERAL = 261,
+     CHARACTER_LITERAL = 262,
+     STRING_LITERAL = 263,
+     ABSTRACT = 264,
+     AS = 265,
+     BASE = 266,
+     BOOL = 267,
+     BREAK = 268,
+     BYTE = 269,
+     CASE = 270,
+     CATCH = 271,
+     CHAR = 272,
+     CHECKED = 273,
+     CLASS = 274,
+     CONST = 275,
+     CONTINUE = 276,
+     DECIMAL = 277,
+     DEFAULT = 278,
+     DELEGATE = 279,
+     DO = 280,
+     DOUBLE = 281,
+     ELSE = 282,
+     ENUM = 283,
+     EVENT = 284,
+     EXPLICIT = 285,
+     EXTERN = 286,
+     FALSE = 287,
+     FINALLY = 288,
+     FIXED = 289,
+     FLOAT = 290,
+     FOR = 291,
+     FOREACH = 292,
+     GOTO = 293,
+     IF = 294,
+     IMPLICIT = 295,
+     IN = 296,
+     INT = 297,
+     INTERFACE = 298,
+     INTERNAL = 299,
+     IS = 300,
+     LOCK = 301,
+     LONG = 302,
+     NAMESPACE = 303,
+     NEW = 304,
+     NULL_LITERAL = 305,
+     OBJECT = 306,
+     OPERATOR = 307,
+     OUT = 308,
+     OVERRIDE = 309,
+     PARAMS = 310,
+     PRIVATE = 311,
+     PROTECTED = 312,
+     PUBLIC = 313,
+     READONLY = 314,
+     REF = 315,
+     RETURN = 316,
+     SBYTE = 317,
+     SEALED = 318,
+     SHORT = 319,
+     SIZEOF = 320,
+     STACKALLOC = 321,
+     STATIC = 322,
+     STRING = 323,
+     STRUCT = 324,
+     SWITCH = 325,
+     THIS = 326,
+     THROW = 327,
+     TRUE = 328,
+     TRY = 329,
+     TYPEOF = 330,
+     UINT = 331,
+     ULONG = 332,
+     UNCHECKED = 333,
+     UNSAFE = 334,
+     USHORT = 335,
+     USING = 336,
+     VIRTUAL = 337,
+     VOID = 338,
+     VOLATILE = 339,
+     WHILE = 340,
+     ASSEMBLY = 341,
+     FIELD = 342,
+     METHOD = 343,
+     MODULE = 344,
+     PARAM = 345,
+     PROPERTY = 346,
+     TYPE = 347,
+     GET = 348,
+     SET = 349,
+     ADD = 350,
+     REMOVE = 351,
+     COMMA = 352,
+     LEFT_BRACKET = 353,
+     RIGHT_BRACKET = 354,
+     LEFT_BRACKET_GROUP = 355,
+     RIGHT_BRACKET_GROUP = 356,
+     LEFT_BRACKET_CIRCLE = 357,
+     RIGHT_BRACKET_CIRCLE = 358,
+     GREATER = 359,
+     SMALLER = 360,
+     SEMICOLON = 361,
+     COLON = 362,
+     DOT = 363,
+     PLUS = 364,
+     MINUS = 365,
+     STAR = 366,
+     SLASH = 367,
+     PERCENT = 368,
+     AND = 369,
+     OR = 370,
+     EXCLAMATION_POINT = 371,
+     TILDE = 372,
+     QUESTION_MARK = 373,
+     POWER = 374,
+     EQUAL = 375,
+     PLUSEQ = 376,
+     MINUSEQ = 377,
+     STAREQ = 378,
+     DIVEQ = 379,
+     MODEQ = 380,
+     XOREQ = 381,
+     ANDEQ = 382,
+     OREQ = 383,
+     LTLT = 384,
+     GTGT = 385,
+     GTGTEQ = 386,
+     LTLTEQ = 387,
+     EQEQ = 388,
+     NOTEQ = 389,
+     LEQ = 390,
+     GEQ = 391,
+     ANDAND = 392,
+     OROR = 393,
+     PLUSPLUS = 394,
+     MINUSMINUS = 395,
+     ARROW = 396,
+     THEN = 397
+   };
+#endif
+
+
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+typedef union YYSTYPE
+{
+/* Line 2058 of yacc.c  */
+#line 42 "yacc.y"
+
+	struct R{
+		int i;
+		float f;
+		char c;
+		char* str;
+		int line_no;
+		int col_no;
+
+		string *modifier,*base;
+		queue<string> *modifiers ,*bases;
+
+		string *identifier;
+		queue<string> *identifiers ;
+		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+
+		Procedure* proc;
+		Symbol* symbol;
+		Expression *exp;
+
+		bool known_type;
+        
+		}r;
+	
+
+/* Line 2058 of yacc.c  */
+#line @oline@ @ofile@
+} YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+#endif
+
+extern YYSTYPE yylval;
+
+#ifdef YYPARSE_PARAM
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void *YYPARSE_PARAM);
+#else
+int yyparse ();
+#endif
+#else /* ! YYPARSE_PARAM */
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void);
+#else
+int yyparse ();
+#endif
+#endif /* ! YYPARSE_PARAM */
+
+#endif /* !YY_YY_YACC_TAB_H_INCLUDED  */

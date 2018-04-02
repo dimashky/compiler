@@ -7,10 +7,18 @@ using namespace::std;
 
 class Identifier : public Expression
 {
+public:
 	Symbol *symbol;
 
-public:
 	Identifier(Symbol *symbol);
+	 string getType() {
+		return "id";
+	}
+
+	 void print(int lev) {
+		 cout << "lev " << lev << endl;
+		 cout << symbol->getName() << endl;
+	 }
 	~Identifier();
 };
 

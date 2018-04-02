@@ -2,7 +2,7 @@
 
 
 
-Expression::Expression()
+Expression::Expression(Node* parent):Node(parent)
 {
 }
 

@@ -4,22 +4,24 @@
 
 
 enum Operator {
-	//Operators
-	PLUS, MINUS, TILDE, PLUSPLUS, MINUSMINUS, TRUE, FALSE, STAR,
-	SLASH, PERCENT, AND, OR, POWER, LTLT, GTGT,
-
-	//cond Op
-	QUESTION_MARK, OROR, ANDAND, GREATER, SMALLER, GEQ, LEQ, NOTEQ, EQEQ, EXCLAMATION_POINT,
-
-	//assignment Op
-	EQUAL, PLUSEQ, MINUSEQ, STAREQ, DIVEQ, MODEQ, XOREQ, ANDEQ, OREQ, GTGTEQ, LTLTEQ
+	Plus, Minus, tilde, post_plusplus,pre_plusplus, pre_minusminus, post_minusminus, True, False,
+	star, slash, percent, And, Or , power, ltlt, gtgt, question_mark, oror, andand, Greater, smaller, geq, leq, noteq, eqeq,
+	exclamation_point, Equal, pluseq, minuseq, stareq, diveq, modeq, xoreq, andeq, oreq, gtgteq, ltlteq,Is,As
 };
 
 
-class Expression
+class Expression : public Node
 {
 public:
-	Expression();
+	Expression() {}
+	Expression(Node* parent);
+	
+	virtual void print(int lev) = 0;
+	
+	virtual string getType() {
+		return "exp";
+	}
+
 	~Expression();
 };
 

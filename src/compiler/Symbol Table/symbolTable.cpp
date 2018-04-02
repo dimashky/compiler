@@ -18,6 +18,7 @@ queue<pair<Symbol*, symbolTable*>> symbolTable::extended_abstract_classes = queu
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
+
 symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
 {
 	this->parent = parent;
@@ -37,7 +38,6 @@ symbolTable* symbolTable::get_parent()
 {
 	return parent;
 }
-
 
 void symbolTable::add_scope()
 {
@@ -86,7 +86,6 @@ void symbolTable::add_symbol_without_open_brackets(Symbol* symbol)
 	return;
 }
 
-
 void symbolTable::addNamespace(Symbol* symbol)
 {
 	symbolTable *parent = NULL;
@@ -131,7 +130,6 @@ void symbolTable::addNamespace(Symbol* symbol)
 	}
 	return;
 }
-
 
 void symbolTable::addField(Symbol* symbol, bool known_type)
 {
@@ -649,8 +647,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 	return;
 }
 
-
-
 void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers)
 {
 	symbolTable *parent = NULL;
@@ -879,6 +875,7 @@ void symbolTable::closePrintFiles()
 	fclose(nodeFile);
 	fclose(edgeFile);
 }
+
 int symbolTable::print(int nodeID)
 {
 	if (owner != NULL) {
@@ -921,4 +918,5 @@ int symbolTable::print(int nodeID)
 }
 
 FILE* symbolTable::nodeFile;
+
 FILE* symbolTable::edgeFile;

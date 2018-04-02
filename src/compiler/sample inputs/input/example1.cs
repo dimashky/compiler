@@ -1,53 +1,13 @@
-namespace a
+class x
 {
-    class aa
+    void f()
     {
-
-    }
-
-    class aa11
-    {
-
-    }
-
-    class aafewfew
-    {
-
-    }
-
-    class aafwejfbejfkwebfejk
-    {
-        class aafewfew
+        if(1 == 1)
         {
-            class dwqdwaafewfew
-            {
-                public void acscascas() { }
-                class aafedddddwfew
-                {
-                    
+            int x,y;
+            
 
-                }
-            }
+            x = (1) * ((2)+3) / 12 * 3 * 3 / 3 + 3 - 9 - 9 + 6 + 9 + 9 + 9 + 9 / 1 - 123;
         }
     }
-}
-namespace dd
-{
-
-}
-
-namespace eefwe
-{
-
-}
-
-class cccP
-{
-    int x;
-    int y;
-    float r, t, y, u;
-}
-interface ascascas
-{
-
 }

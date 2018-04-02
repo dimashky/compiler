@@ -5,9 +5,10 @@
 class Assignment :public Statement
 {
 	Object *left;
-	Expression *right;
+	Node *right;
+	Operator op;
 public:
-	Assignment(Object *left, Expression *right, Node* parent);
+	Assignment(Object *left, Operator op, Node *right, Node* parent);
 	~Assignment();
 };
 

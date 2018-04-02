@@ -34,9 +34,6 @@
     <Filter Include="Source Files\Symbol Table">
       <UniqueIdentifier>{7e420974-b1a0-4fad-b4e3-fa49a063d515}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Tools">
-      <UniqueIdentifier>{084973da-9cb3-425b-a6f4-229f38b2bbc0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\I/O\input">
       <UniqueIdentifier>{97c22513-d26d-4791-840d-74d7923f7fe4}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="Source Files\AST\Statement">
       <UniqueIdentifier>{3ea7819b-308c-4890-aac9-3192336b2782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logs\Tools">
+      <UniqueIdentifier>{084973da-9cb3-425b-a6f4-229f38b2bbc0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -198,11 +198,11 @@
     <ClCompile Include="AST\Statement\Block.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
-    <ClCompile Include="AST\Statement\Assignment.cpp">
-      <Filter>Source Files\AST\Statement</Filter>
-    </ClCompile>
     <ClCompile Include="AST\Expression\AutoConst.cpp">
       <Filter>Source Files\AST\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\Assignment.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -258,13 +258,13 @@
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
     <ClInclude Include="tools\dirent.h">
-      <Filter>Source Files\Tools</Filter>
+      <Filter>Source Files\logs\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
     </ClInclude>
     <ClInclude Include="tools\tools.h">
-      <Filter>Source Files\Tools</Filter>
+      <Filter>Source Files\logs\Tools</Filter>
     </ClInclude>
     <ClInclude Include="AST\Node.h">
       <Filter>Source Files\AST</Filter>
@@ -308,11 +308,11 @@
     <ClInclude Include="AST\Statement\Block.h">
       <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
-    <ClInclude Include="AST\Statement\Assignment.h">
-      <Filter>Source Files\AST\Statement</Filter>
-    </ClInclude>
     <ClInclude Include="AST\Expression\AutoConst.h">
       <Filter>Source Files\AST\Expression</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Assignment.h">
+      <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

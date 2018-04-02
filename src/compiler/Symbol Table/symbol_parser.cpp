@@ -186,6 +186,12 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 //notify this in AST
 void symbolParser::add_scope()
 {
+	Block* b = new Block(Node::current);
+
+	((Block*)Node::current)->add(b);
+
+	Node::setCurrent(b);
+
 	symboltable->add_scope();
 }
 

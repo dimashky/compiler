@@ -7,6 +7,7 @@ protected:
 	Node* parent;
 
 public:
+	Node(){}
 	static Node* current;
 	Node(Node* parent);
 	static void setCurrent(Node* current) {

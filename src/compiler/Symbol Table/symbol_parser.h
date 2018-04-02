@@ -37,5 +37,9 @@ public:
 	void clear_given_usings() {
 		given_usings.clear();
 	}
+
+	Symbol* find(string s) {
+		return symboltable->findIdentifier(s);
+	}
 	symbolTable* getSymbolTableRoot();
 };

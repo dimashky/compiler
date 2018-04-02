@@ -3,12 +3,18 @@
 
 class AutoConst :public Expression
 {
-	string type; 
-	void* value;
-
   public:
-	AutoConst();
-	AutoConst(string type , void* value);
+	  string type;
+	  void* value;
+	AutoConst(string type , void* value, Node* parent);
+	 string getType() {
+		return "auto";
+	}
+
+	 void print(int lev) {
+		 cout << "lev " << lev << endl;
+		 cout << *((int*)value) << endl;
+	 }
 	~AutoConst();
 };
 
