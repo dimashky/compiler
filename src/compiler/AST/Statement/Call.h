@@ -5,8 +5,7 @@ class Call :public Statement
 {
 	Symbol *symbol;
 public:
-	Call();
-	Call(Symbol *symbol);
+	Call(Symbol *symbol  , Node* parent);
 	~Call();
 };
 

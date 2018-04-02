@@ -4,7 +4,7 @@ class Block :public Statement
 {
 	vector<Statement*> statements;
 public:
-	Block();
+	Block(Node *parent);
 	void add(Statement* statement);
 	~Block();
 };

@@ -1,8 +1,6 @@
 #include "If.h"
-If::If()
-{
-}
-If::If(Expression *codnition, Statement *statement)
+
+If::If(Expression *codnition, Statement *statement , Node *parent) :Statement(parent)
 {
 	this->codnition = codnition; 
 	this->statement = statement;

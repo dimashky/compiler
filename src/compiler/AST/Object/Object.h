@@ -7,10 +7,14 @@ using namespace std;
 
 class Object : public Node
 {
-	Symbol* symbol;
 protected:
+
 public:
-	Object(Symbol *symbol);
+	Symbol* symbol;
+
+	Object(Symbol *symbol, Node* parent);
+	virtual void print(int lev) = 0;
+
 	~Object();
 };
 

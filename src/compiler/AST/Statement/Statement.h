@@ -1,9 +1,9 @@
 #pragma once
 #include "../Node.h"
-class Statement :public Node
+class Statement : public Node
 {
 public:
-	Statement();
+	Statement(Node* parent);
 	~Statement();
 };
 

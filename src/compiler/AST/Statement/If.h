@@ -7,8 +7,7 @@ class If :public Statement
 	Expression *codnition;
 	Statement *statement;
 public:
-	If();
-	If(Expression *codnition, Statement *statement);
+	If(Expression *codnition, Statement *statement, Node *parent);
 	~If();
 };
 
