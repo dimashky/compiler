@@ -829,3 +829,5 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+
+src/compiler/data/
