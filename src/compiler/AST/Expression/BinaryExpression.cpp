@@ -7,11 +7,6 @@ BinaryExpression::BinaryExpression(Expression *left, Operator op1, Expression *r
 	this->left = left; 
 	this->right = right; 
 	op = op1;
-	cout << "===========" << endl;
-	left->print(0);
-	cout << op << endl
-		;right->print(0);
-	cout << "========" << endl;
 }
 
 BinaryExpression::~BinaryExpression()

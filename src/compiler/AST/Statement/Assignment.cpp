@@ -1,6 +1,6 @@
 #include "Assignment.h"
 
-Assignment::Assignment(Object *left, Operator op, Node *right, Node *parent) :Statement(parent)
+Assignment::Assignment(Identifier *left, Operator op, Node *right, Node *parent) :Statement(parent)
 {
 	this->left = left; 
 	this->right = right;

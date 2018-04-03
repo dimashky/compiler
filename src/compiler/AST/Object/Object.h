@@ -14,7 +14,7 @@ public:
 
 	Object(Symbol *symbol, Node* parent);
 	virtual void print(int lev) = 0;
-
+	virtual string getType() = 0;
 	~Object();
 };
 

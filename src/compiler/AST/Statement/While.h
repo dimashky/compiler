@@ -9,5 +9,8 @@ class While :public Statement
 public:
 	While(Expression *condition, Statement *statement, Node *parent);
 	~While();
+	string getType() {
+		return "while";
+	}
 };
 

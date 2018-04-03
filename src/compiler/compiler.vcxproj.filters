@@ -186,9 +186,6 @@
     <ClCompile Include="AST\Statement\While.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
-    <ClCompile Include="AST\Statement\IfElse.cpp">
-      <Filter>Source Files\AST\Statement</Filter>
-    </ClCompile>
     <ClCompile Include="AST\Statement\If.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
@@ -294,9 +291,6 @@
       <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
     <ClInclude Include="AST\Statement\While.h">
-      <Filter>Source Files\AST\Statement</Filter>
-    </ClInclude>
-    <ClInclude Include="AST\Statement\IfElse.h">
       <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
     <ClInclude Include="AST\Statement\If.h">

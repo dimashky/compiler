@@ -53,7 +53,6 @@
     <ClCompile Include="AST\Statement\Block.cpp" />
     <ClCompile Include="AST\Statement\Call.cpp" />
     <ClCompile Include="AST\Statement\If.cpp" />
-    <ClCompile Include="AST\Statement\IfElse.cpp" />
     <ClCompile Include="AST\Statement\Statement.cpp" />
     <ClCompile Include="AST\Statement\While.cpp" />
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp" />
@@ -86,7 +85,6 @@
     <ClInclude Include="AST\Statement\Block.h" />
     <ClInclude Include="AST\Statement\Call.h" />
     <ClInclude Include="AST\Statement\If.h" />
-    <ClInclude Include="AST\Statement\IfElse.h" />
     <ClInclude Include="AST\Statement\Statement.h" />
     <ClInclude Include="AST\Statement\While.h" />
     <ClInclude Include="Error Handler\error_handler.h" />

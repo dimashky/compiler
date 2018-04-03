@@ -17,6 +17,8 @@ public:
 		if(Node::current != nullptr)
 		Node::current = Node::current->parent;
 	}
+	virtual string getType() = 0;
+	virtual void print(int lev) = 0;
 	~Node();
 };
 

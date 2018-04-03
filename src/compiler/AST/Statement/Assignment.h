@@ -1,14 +1,25 @@
 #pragma once
 #include "Statement.h"
-#include "../Object/Object.h"
+#include "../Expression/Identifier.h"
 #include "../Expression/Expression.h"
 class Assignment :public Statement
 {
-	Object *left;
+	Identifier *left;
 	Node *right;
 	Operator op;
 public:
-	Assignment(Object *left, Operator op, Node *right, Node* parent);
+	Assignment(Identifier *left, Operator op, Node *right, Node* parent);
 	~Assignment();
+	string getType() {
+		return "assignment";
+	}
+
+	void print(int lev) {
+		cout << "lev " << lev << endl;
+		cout << op << endl;
+		left->print(lev + 1);
+		right->print(lev + 1);
+	}
+
 };
 

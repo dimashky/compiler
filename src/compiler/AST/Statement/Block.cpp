@@ -2,7 +2,7 @@
 Block::Block(Node *parent) :Statement(parent)
 {
 }
-void Block::add(Statement* statement)
+void Block::add(Node* statement)
 {
 	this->statements.push_back(statement);
 	return;

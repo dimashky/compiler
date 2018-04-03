@@ -88,9 +88,8 @@ int main()
 	for (int i = 0;i < symbolTable::deleted.size();i++)
 		delete symbolTable::deleted[i];
 	
-	cout << AST->locals.size() << endl;
-
-	AST->print(0);
+	
+	//AST->print(0);
 
  	system("pause");
 	return 0;

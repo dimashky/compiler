@@ -9,7 +9,7 @@ private:
 public:
 	UnaryExpression(Operator op, Expression *expression, Node* parent);
 	virtual string getType() {
-		return "Uexp";
+		return "uexpression";
 	}
 
 

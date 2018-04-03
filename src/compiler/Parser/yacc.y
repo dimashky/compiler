@@ -60,6 +60,8 @@
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
 
+		queue<Node*>*exps;
+
 		Procedure* proc;
 		Symbol* symbol;
 		Expression *exp;
@@ -572,7 +574,7 @@ assignment
   : unary_expression assignment_operator expression                        	
   {
 		l.a("assignment",3);
-		$<r.st>$ = new Assignment(new Variable(((Identifier*)$<r.exp>1)->symbol,Node::current),$<r.op>2,$<r.node>3,Node::current);
+		$<r.st>$ = new Assignment((Identifier*)$<r.exp>1,$<r.op>2,$<r.node>3,Node::current);
   }
   ;
 
@@ -594,10 +596,14 @@ expression
   | assignment			                                                  {l.a("expression",1);$<r.node>$ = $<r.st>1;}
   ;
 constant_expression
-  : expression	                                                      {l.a("constant_expression",1);}
+  : expression	                                                      
+  {
+		l.a("constant_expression",1);
+		$<r.node>$ = $<r.node>1;
+  }
   ;
 boolean_expression
-  : expression	                                                       {l.a("boolean_expression",1);}
+  : expression	                                                       {l.a("boolean_expression",1);$<r.node>$ = $<r.node>1;}
   ;
 /***** C.2.5 Statements *****/
 statement
@@ -609,8 +615,8 @@ embedded_statement
   : block					                                             {l.a("embedded_statement",1);}
   | empty_statement			                                             {l.a("embedded_statement",1);}
   | expression_statement	                                             {l.a("embedded_statement",1);}
-  | selection_statement		                                             {l.a("embedded_statement",1);}
-  | iteration_statement		                                             {l.a("embedded_statement",1);}
+  | selection_statement		                                             {l.a("embedded_statement",1);}//it will added from its rules
+  | iteration_statement		                                             {l.a("embedded_statement",1);}//it will added from its rules
   | jump_statement			                                             {l.a("embedded_statement",1);}
   | try_statement			                                             {l.a("embedded_statement",1);}
   | checked_statement		                                             {l.a("embedded_statement",1);}
@@ -650,34 +656,41 @@ local_variable_declaration
 	{
 		l.a("local_variable_declaration",2);
 
-		SPL->addLocalVariable(*$<r.base>1,*$<r.identifiers>2,$<r.known_type>1,false,$<r.line_no>2,$<r.col_no>2) ;
+		SPL->addLocalVariable(*$<r.base>1,*$<r.identifiers>2,*$<r.exps>2,$<r.known_type>1,false,$<r.line_no>2,$<r.col_no>2) ;
 	}
   ;
 variable_declarators
   : variable_declarator			       
 			{	 l.a("variable_declarators",1); 
 				 $<r.identifiers>$ = new queue<string>();
+				 $<r.exps>$ = new queue<Node*>();
 				 $<r.identifiers>$->push(*$<r.identifier>1);
+				 $<r.exps>$->push($<r.node>1);
 		   }
   | variable_declarators COMMA variable_declarator		                
 		   {      l.a("variable_declarators",2);
 				  $<r.identifiers>$ = $<r.identifiers>1;
+				  $<r.exps>$ = $<r.exps>1;
+				  
 				  $<r.identifiers>$->push(*$<r.identifier>3);
+				  $<r.exps>$->push($<r.node>3);
 		   }
   ;
 variable_declarator
   : IDENTIFIER                
 		  {		 l.a("variable_declarator",0); 
 				 $<r.identifier>$ = new string ($<r.str>1) ; 
+				 $<r.node>$ = nullptr;
 		  }
   | IDENTIFIER EQUAL variable_initializer	        
 		   {		l.a("variable_declarator",1); 
 					$<r.identifier>$ = new string ($<r.str>1);
+					$<r.node>$ = $<r.node>3;
 		   }
   ;
 variable_initializer
-  : expression				                                       {l.a("variable_initializer",1);}
-  | array_initializer		                                       {l.a("variable_initializer",1);}
+  : expression				                                       {l.a("variable_initializer",1);$<r.node>$ = $<r.node>1;}
+  | array_initializer		                                       {l.a("variable_initializer",1);}// needed!!
   | stackalloc_initializer	                                       {l.a("variable_initializer",1);}
   ;
 stackalloc_initializer
@@ -687,7 +700,7 @@ local_constant_declaration
   : CONST type constant_declarators														
   {
 		l.a("local_constant_declaration",2);
-		SPL->addLocalVariable(*$<r.base>2,*$<r.identifiers>3,$<r.known_type>2,true,$<r.line_no>2,$<r.col_no>2) ;
+		SPL->addLocalVariable(*$<r.base>2,*$<r.identifiers>3,*$<r.exps>3,$<r.known_type>2,true,$<r.line_no>2,$<r.col_no>2) ;
   }
   ;
 constant_declarators
@@ -696,38 +709,46 @@ constant_declarators
 		l.a("constant_declarators",1);
   		$<r.identifiers>$ = new queue<string>();
 		$<r.identifiers>$->push(*$<r.identifier>1);
+
+		$<r.exps>$ = new queue<Node*>();
+		$<r.exps>$->push($<r.node>1);
   }
   | constant_declarators COMMA constant_declarator										
   {
 		l.a("constant_declarators",2);
 	  	$<r.identifiers>$ = $<r.identifiers>1;
 		$<r.identifiers>$->push(*$<r.identifier>3);	
+
+		$<r.exps>$ = $<r.exps>1;		  
+		$<r.exps>$->push($<r.node>3);
+		
   }
   ;
 constant_declarator
-  : IDENTIFIER EQUAL constant_expression                            					{l.a("constant_declarator",1);$<r.identifier>$ = new string($<r.str>1);}
+  : IDENTIFIER EQUAL constant_expression                            					
+  {
+		l.a("constant_declarator",1);
+		$<r.identifier>$ = new string($<r.str>1);
+		$<r.node>$ = $<r.node>3;
+  }
   ;
-  /*
-expression_statement
-  : statement_expression SEMICOLON									{l.a("expression_statement",1);}
-  |	statement_expression error		                                {l.a("expression_statement",1,1);}
-  ;
-  */
+
   expression_statement
   : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);}
   | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);}
-  | assignment						SEMICOLON							  {l.a("expression_statement",1);}
-  | post_increment_expression  		SEMICOLON                             {l.a("expression_statement",1);}
-  | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
-  | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);}
-  | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);}
-  | invocation_expression			error                             { l.a("expression_statement",1,1);}
-  | object_creation_expression		error							  {l.a("expression_statement",1,1);}
-  | assignment						error							  {l.a("expression_statement",1,1);}
-  | post_increment_expression 		error                             {l.a("expression_statement",1,1);}
-  | post_decrement_expression		error                             {l.a("expression_statement",1,1);}
-  | pre_increment_expression		error                             {l.a("expression_statement",1,1);}
-  | pre_decrement_expression		error                             {l.a("expression_statement",1,1);}
+  | assignment						SEMICOLON							  {l.a("expression_statement",1);SPL->addStatement($<r.st>1);}
+  | post_increment_expression  		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
+  | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
+  | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
+  | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
+  
+  | invocation_expression			error								  { l.a("expression_statement",1,1);}
+  | object_creation_expression		error							      {l.a("expression_statement",1,1);}
+  | assignment						error							      {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
+  | post_increment_expression 		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
+  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
+  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
+  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
   ;
 statement_expression
   : invocation_expression	 										{l.a("statement_expression",1);}
@@ -739,13 +760,14 @@ statement_expression
   | pre_decrement_expression										{l.a("statement_expression",1);}
   ;
 selection_statement
-  : if_statement		                                                  {l.a("selection_statement",1);}
+  : if_statement		                                                 {l.a("selection_statement",1);}
   | switch_statement													 {l.a("selection_statement",1);}
   ;
 if_statement
-  : IF left_bracket_circle boolean_expression right_bracket_circle embedded_statement %prec THEN				      {l.a("if_statement",2);}
-  | IF left_bracket_circle boolean_expression right_bracket_circle embedded_statement ELSE embedded_statement	{l.a("if_statement",3);}
+  : IF left_bracket_circle boolean_expression right_bracket_circle {SPL->addStatement(new If((Expression*)$<r.node>3,Node::current));} embedded_statement %prec THEN {l.a("if_statement",2);SPL->closeASTscope();}
+  | IF left_bracket_circle boolean_expression right_bracket_circle {SPL->addStatement(new If((Expression*)$<r.node>3,Node::current));} embedded_statement {SPL->closeASTscope(true);} ELSE embedded_statement	{l.a("if_statement",3);SPL->closeASTscope();}
   ;
+
 switch_statement
   : SWITCH left_bracket_circle expression right_bracket_circle switch_block		{l.a("switch_statement",2);}
   ;
@@ -772,7 +794,7 @@ switch_label
   | DEFAULT COLON					                            {l.a("switch_label",0);}
   ;
 iteration_statement
-  : while_statement		                                {l.a("iteration_statement",1);}
+  : while_statement		                                {l.a("iteration_statement",1);$<r.st>$ = $<r.st>1;}
   | do_statement		                                {l.a("iteration_statement",1);}
   | for_statement		                                {l.a("iteration_statement",1);}
   | foreach_statement	                                {l.a("iteration_statement",1);}

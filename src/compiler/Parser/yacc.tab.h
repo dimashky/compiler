@@ -211,6 +211,8 @@ typedef union YYSTYPE
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
 
+		queue<Node*>*exps;
+
 		Procedure* proc;
 		Symbol* symbol;
 		Expression *exp;
@@ -224,7 +226,7 @@ typedef union YYSTYPE
 	
 
 /* Line 2058 of yacc.c  */
-#line 228 "yacc.tab.h"
+#line 230 "yacc.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -8,7 +8,7 @@ public:
 	BinaryExpression(Expression *left, Operator op, Expression *right, Node* parent);
 	~BinaryExpression();
 	virtual string getType() {
-		return "Bexp";
+		return "bexpression";
 	}
 
 	void print(int lev) {

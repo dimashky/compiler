@@ -12,7 +12,7 @@ public:
 
 	Identifier(Symbol *symbol);
 	 string getType() {
-		return "id";
+		return "identifier";
 	}
 
 	 void print(int lev) {

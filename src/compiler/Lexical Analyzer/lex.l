@@ -36,7 +36,8 @@
 		int col_no;
 		string *modifier,*base;
 		queue<string> *modifiers,*bases;
-		
+		queue<Node*>*exps;
+
 		Procedure* proc;
 		Symbol* symbol;
 		Expression* exp;
@@ -56,7 +57,6 @@
 			
 			proc = new Procedure(nullptr,nullptr);
 			symbol = new Symbol("",0,0);
-			st = new Statement(nullptr);
 
 			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){

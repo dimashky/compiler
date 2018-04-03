@@ -24,7 +24,6 @@ void symbolParser::print(queue<string> &s1, char* s2)
 void symbolParser::endScope()
 {
 	Node::Up();
-
 	symboltable->closeScope();
 }
 
@@ -127,7 +126,7 @@ vector<Symbol*> symbolParser::addField(queue<string>modifiers, string typeIdenti
 		symboltable->addField(newField, known_type);
 		identifiers.pop();
 
-		Variable* field = new Variable(newField, Node::current);
+		Variable* field = new Variable(newField,nullptr, Node::current);
 
 		((Procedure*)Node::current)->add(field);
 
@@ -154,7 +153,7 @@ vector<Symbol*> symbolParser::addFieldConst(queue<string>modifiers,string  modif
 		identifiers.pop();
 
 
-		Variable* field = new Variable(newField, Node::current);
+		Variable* field = new Variable(newField,nullptr, Node::current);
 
 		((Procedure*)Node::current)->add(field);
 
@@ -186,16 +185,24 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 //notify this in AST
 void symbolParser::add_scope()
 {
+	
 	Block* b = new Block(Node::current);
 
-	((Block*)Node::current)->add(b);
+	
+	if (Node::current->getType() == "block")
+		((Block*)Node::current)->add(b);
+	else if (Node::current->getType() == "if")
+		((If*)Node::current)->setIfStatement(b);
+	
+
 
 	Node::setCurrent(b);
 
+	
 	symboltable->add_scope();
 }
 
-vector<Symbol*> symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, bool known_type, bool constant, int line_no, int col_no)
+vector<Symbol*> symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, queue<Node*>exps, bool known_type, bool constant, int line_no, int col_no)
 {
 	vector<Symbol*> arr;
 
@@ -203,7 +210,18 @@ vector<Symbol*> symbolParser::addLocalVariable(string typeIdentifier, queue<stri
 	{
 		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, constant, line_no, col_no);
 		symboltable->addLocalVariable(newLocalVariable, known_type);
+		
+		Variable* field = new Variable(newLocalVariable, (Expression*)exps.front(), Node::current);
+
+		if (Node::current->getType() == "procedure")
+			((Procedure*)Node::current)->add(field);
+
+		else
+			((Block*)Node::current)->add(field);
+
+		
 		identifiers.pop();
+		exps.pop();
 
 		arr.push_back(newLocalVariable);
 	}
