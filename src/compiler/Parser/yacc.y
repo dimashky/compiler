@@ -764,8 +764,11 @@ selection_statement
   | switch_statement													 {l.a("selection_statement",1);}
   ;
 if_statement
-  : IF left_bracket_circle boolean_expression right_bracket_circle {SPL->addStatement(new If((Expression*)$<r.node>3,Node::current));} embedded_statement %prec THEN {l.a("if_statement",2);SPL->closeASTscope();}
-  | IF left_bracket_circle boolean_expression right_bracket_circle {SPL->addStatement(new If((Expression*)$<r.node>3,Node::current));} embedded_statement {SPL->closeASTscope(true);} ELSE embedded_statement	{l.a("if_statement",3);SPL->closeASTscope();}
+  : IF  do_if_exp embedded_statement %prec THEN {l.a("if_statement",2);SPL->closeASTscope();}
+  | IF  do_if_exp embedded_statement ELSE {SPL->closeASTscope(true);} embedded_statement	{l.a("if_statement",3);SPL->closeASTscope();}
+  ;
+  do_if_exp:
+	 left_bracket_circle boolean_expression right_bracket_circle {SPL->addStatement(new If((Expression*)$<r.node>2,Node::current));}
   ;
 
 switch_statement
