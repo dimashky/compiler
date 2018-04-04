@@ -764,7 +764,7 @@ selection_statement
   | switch_statement													 {l.a("selection_statement",1);}
   ;
 if_statement
-  : IF  do_if_exp embedded_statement %prec THEN {l.a("if_statement",2);SPL->closeASTscope();}
+  : IF  do_if_exp embedded_statement THEN {l.a("if_statement",2);SPL->closeASTscope();}
   | IF  do_if_exp embedded_statement ELSE {SPL->closeASTscope(true);} embedded_statement	{l.a("if_statement",3);SPL->closeASTscope();}
   ;
   do_if_exp:
