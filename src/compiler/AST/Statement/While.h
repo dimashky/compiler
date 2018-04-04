@@ -12,6 +12,8 @@ public:
 
 	While(Expression *condition, Statement *statement, Node *parent);
 	
+	int print(int);
+
 	string getType();
 
 	~While();

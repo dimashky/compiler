@@ -7,10 +7,11 @@ Variable::Variable(Symbol* symbol, Expression *equal, Node* parent) :Object(symb
 	equal->print(111);
 }
 
-void Variable::print(int level)
+int Variable::print(int nodeCnt)
 {
 	if (this->symbol != nullptr)
-		cout << this->symbol->getName() << endl << endl;
+		fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#76fc67'},", nodeCnt, this->symbol->getName().c_str());
+	return nodeCnt;
 }
 
 string Variable::getType()

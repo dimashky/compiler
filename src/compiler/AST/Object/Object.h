@@ -12,7 +12,7 @@ protected:
 public:
 
 	Object(Symbol *symbol, Node* parent);
-	virtual void print(int lev) = 0;
+	virtual int print(int) = 0;
 	virtual string getType() = 0;
 
 	Symbol* getSymbol();

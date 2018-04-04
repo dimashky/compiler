@@ -13,7 +13,7 @@ public:
 
 	void setIfStatement(Node* statement);
 
-	void print(int lev);
+	int print(int);
 
 	void setElseStatement(Node* statement);
 

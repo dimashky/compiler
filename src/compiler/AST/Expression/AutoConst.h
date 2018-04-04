@@ -16,7 +16,7 @@ class AutoConst :public Expression
 	void* getValue();
 	void setValue(void* value);
 
-	void print(int);
+	int print(int);
 
 
 	~AutoConst();

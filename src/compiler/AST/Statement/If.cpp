@@ -15,17 +15,26 @@ void If::setIfStatement(Node* statement) {
 	this->ifStatement = statement;
 };
 
-void If::print(int level) {
+int If::print(int nodeCnt) {
 
-	cout << "if" << endl;
+	int currentId = nodeCnt;
 
-	codnition->print(level + 1);
+	fprintf(nodesFile, "{ id:%d, label:'IF', shape: 'box', color:'#74bffc'},", currentId);
 
-	if (ifStatement)
-		ifStatement->print(level + 1);
+	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+	nodeCnt = codnition->print(nodeCnt + 1);
 
-	if (elseStatement)
-		elseStatement->print(level + 1);
+	if (ifStatement) {
+		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+		nodeCnt = ifStatement->print(nodeCnt + 1);
+	}
+
+	if (elseStatement) {
+		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+		nodeCnt = elseStatement->print(nodeCnt + 1);
+	}
+	
+	return nodeCnt;
 }
 
 void If::setElseStatement(Node* statement) {

@@ -18,7 +18,7 @@ public:
 
 	string getType();
 
-	void print(int lev);
+	int print(int);
 
 	~Procedure();
 };

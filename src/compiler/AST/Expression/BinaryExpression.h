@@ -9,6 +9,6 @@ public:
 	~BinaryExpression();
 	string getType();
 
-	void print(int);
+	int print(int);
 };
 

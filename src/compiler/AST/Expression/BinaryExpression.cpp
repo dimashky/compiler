@@ -14,12 +14,18 @@ string BinaryExpression::getType() {
 	return "bexpression";
 }
 
-void BinaryExpression::print(int level) {
+int BinaryExpression::print(int nodeCnt) {
 
-	cout << op << endl;
+	int currentId = nodeCnt;
 
-	left->print(level + 1);
-	right->print(level + 1);
+	fprintf(nodesFile, "{ id:%d, label:'%d', shape: 'box', color:'#fce2be'},", currentId, op);
+
+	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+	nodeCnt = left->print(nodeCnt + 1);
+	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+	nodeCnt = right->print(nodeCnt + 1);
+
+	return nodeCnt;
 }
 
 BinaryExpression::~BinaryExpression()

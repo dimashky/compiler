@@ -12,7 +12,7 @@ public:
 
 	string getType();
 
-	void print(int);
+	int print(int);
 
 	~Assignment();
 };

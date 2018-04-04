@@ -7,7 +7,12 @@ protected:
 	Node* parent;
 
 public:
-	
+	static FILE* edgesFile, *nodesFile;
+
+	static void openFiles();
+	static void closeFiles();
+
+
 	static Node* current;
 
 	Node(){}
@@ -21,7 +26,7 @@ public:
 	
 	virtual string getType() = 0;
 	
-	virtual void print(int lev) = 0;
+	virtual int print(int) = 0;
 	
 	~Node();
 };

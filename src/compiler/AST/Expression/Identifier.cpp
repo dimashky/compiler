@@ -17,9 +17,11 @@ void Identifier::setSymbol(Symbol *symbol)
 {
 	this->symbol = symbol;
 }
-void Identifier::print(int level)
+int Identifier::print(int nodeCnt)
 {
-	cout << symbol->getName() << endl;
+	fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#fc0800'},", nodeCnt, this->symbol->getName().c_str());
+	
+	return nodeCnt;
 }
 
 

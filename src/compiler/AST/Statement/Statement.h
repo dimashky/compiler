@@ -7,7 +7,7 @@ public:
 	
 	virtual string getType() = 0;
 	
-	virtual void print(int lev) = 0;
+	virtual int print(int) = 0;
 	
 	~Statement();
 };

@@ -11,18 +11,24 @@ void Procedure::add(Object* object)
 	return;
 }
 
-void Procedure::print(int level)
+int Procedure::print(int nodeCnt)
 {
+	int currentId = nodeCnt;
 	if (this->symbol != nullptr)
-		cout << this->symbol->getName() << endl << endl;
+		fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#74bffc'},", currentId, this->symbol->getName().c_str());
 	else
-		cout << "Global namespace\n";
+		fprintf(nodesFile, "{ id:%d, label:'Global Namespace', shape: 'box', color:'#74bffc'},", nodeCnt);
 
 	for (int i = 0; i < locals.size(); i++) {
-		locals[i]->print(level + 1);
+		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+		nodeCnt = locals[i]->print(nodeCnt + 1);
 	}
-	if (block)
-		block->print(level + 1);
+	if (block) {
+		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+		nodeCnt = block->print(nodeCnt + 1);
+	}
+
+	return nodeCnt;
 }
 
 Block* Procedure::getBlock()

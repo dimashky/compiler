@@ -10,7 +10,7 @@ public:
 	UnaryExpression(Operator op, Expression *expression, Node* parent);
 	 string getType();
 
-	 void print(int level);
+	 int print(int);
 	~UnaryExpression();
 };
 

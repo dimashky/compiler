@@ -16,7 +16,7 @@ public:
 	Expression() {}
 	Expression(Node* parent);
 	
-	virtual void print(int lev) = 0;
+	virtual int print(int) = 0;
 	
 	virtual string getType();
 

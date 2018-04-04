@@ -8,17 +8,15 @@ AutoConst::AutoConst(string type, void* value, Node* parent):Expression(parent)
 
 string AutoConst::getType() 
 {
-	return "auto";
+	return this->type;
 }
 
-void AutoConst::print(int level)
+int AutoConst::print(int nodeCnt)
 {
 	// needs to procces value type use only integers now  
-	cout << *((int*)value) << endl;
-}
-string AutoConst::getType()
-{
-	return type; 
+	fprintf(nodesFile, "{ id:%d, label:'%d', shape: 'box', color:'#47fcfc'},", nodeCnt, *((int*)value));
+	return nodeCnt;
+
 }
 void AutoConst::setType(string type)
 {

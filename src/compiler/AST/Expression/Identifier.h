@@ -18,7 +18,7 @@ public:
 	Symbol* getSymbol();
 	void setSymbol(Symbol *symbol);
 
-	void print(int lev);
+	int print(int);
 	~Identifier();
 };
 

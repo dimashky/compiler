@@ -11,10 +11,15 @@ string UnaryExpression::getType()
 {
 	return "uexpression";
 }
-void UnaryExpression::print(int level)
+int UnaryExpression::print(int nodeCnt)
 {
-	cout << op << endl;
-	expression->print(level + 1);
+	fprintf(nodesFile, "{ id:%d, label:'%d', shape: 'box', color:'#74bffc'},", nodeCnt, op);
+
+	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", nodeCnt, nodeCnt + 1);
+
+	nodeCnt = expression->print(nodeCnt + 1);
+	
+	return nodeCnt;
 }
 
 
