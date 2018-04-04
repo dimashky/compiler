@@ -5,6 +5,11 @@ While::While(Expression *condition, Statement *statement,Node *parent) :Statemen
 	this->condition = condition; 
 	this->statement = statement; 
 }
+
+string While::getType() {
+	return "while";
+}
+
 While::~While()
 {
 }

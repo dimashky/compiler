@@ -7,8 +7,6 @@ class Call :public Statement
 public:
 	Call(Symbol *symbol  , Node* parent);
 	~Call();
-	string getType() {
-		return "call";
-	}
+	string getType();
 };
 

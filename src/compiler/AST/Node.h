@@ -7,18 +7,22 @@ protected:
 	Node* parent;
 
 public:
-	Node(){}
+	
 	static Node* current;
+
+	Node(){}
+		
 	Node(Node* parent);
-	static void setCurrent(Node* current) {
-		Node::current = current;
-	}
-	static void Up() {
-		if(Node::current != nullptr)
-		Node::current = Node::current->parent;
-	}
+	
+	static void setCurrent(Node* current);
+
+	static void Up();
+
+	
 	virtual string getType() = 0;
+	
 	virtual void print(int lev) = 0;
+	
 	~Node();
 };
 

@@ -6,7 +6,13 @@ class x
         {
 
         }
-        int xx;
+        if(1 == 424)
+        {
 
+        }
+        else
+        {
+
+        }
     }
 }

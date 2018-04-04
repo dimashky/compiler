@@ -18,9 +18,7 @@ public:
 	
 	virtual void print(int lev) = 0;
 	
-	virtual string getType() {
-		return "expression";
-	}
+	virtual string getType();
 
 	~Expression();
 };

@@ -9,6 +9,19 @@ BinaryExpression::BinaryExpression(Expression *left, Operator op1, Expression *r
 	op = op1;
 }
 
+
+string BinaryExpression::getType() {
+	return "bexpression";
+}
+
+void BinaryExpression::print(int level) {
+
+	cout << op << endl;
+
+	left->print(level + 1);
+	right->print(level + 1);
+}
+
 BinaryExpression::~BinaryExpression()
 {
 }

@@ -8,16 +8,9 @@ private:
 	Expression *expression;
 public:
 	UnaryExpression(Operator op, Expression *expression, Node* parent);
-	virtual string getType() {
-		return "uexpression";
-	}
+	 string getType();
 
-
-	void print(int lev) {
-		cout << "lev " << lev << endl;
-		cout << op << endl;
-		expression->print(lev + 1);
-	}
+	 void print(int level);
 	~UnaryExpression();
 };
 

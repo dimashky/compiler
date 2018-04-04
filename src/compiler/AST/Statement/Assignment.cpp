@@ -5,11 +5,18 @@ Assignment::Assignment(Identifier *left, Operator op, Node *right, Node *parent)
 	this->left = left; 
 	this->right = right;
 	this->op = op;
+}
 
-	cout << "===============" << endl;
-	cout << left->symbol->getName() << endl;
+string Assignment::getType() {
+	return "assignment";
+}
+
+void Assignment::print(int level) {
+
 	cout << op << endl;
-	cout << "=============" << endl;
+
+	left->print(level + 1);
+	right->print(level + 1);
 }
 Assignment::~Assignment()
 {

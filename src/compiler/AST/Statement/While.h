@@ -4,13 +4,16 @@
 #include"../Statement/Statement.h"
 class While :public Statement
 {
+
 	Expression *condition;
 	Statement *statement;
+
 public:
+
 	While(Expression *condition, Statement *statement, Node *parent);
+	
+	string getType();
+
 	~While();
-	string getType() {
-		return "while";
-	}
 };
 

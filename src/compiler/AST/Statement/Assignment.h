@@ -9,17 +9,11 @@ class Assignment :public Statement
 	Operator op;
 public:
 	Assignment(Identifier *left, Operator op, Node *right, Node* parent);
+
+	string getType();
+
+	void print(int);
+
 	~Assignment();
-	string getType() {
-		return "assignment";
-	}
-
-	void print(int lev) {
-		cout << "lev " << lev << endl;
-		cout << op << endl;
-		left->print(lev + 1);
-		right->print(lev + 1);
-	}
-
 };
 
