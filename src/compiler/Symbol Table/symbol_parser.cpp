@@ -202,6 +202,9 @@ void symbolParser::add_scope()
 		((DoWhile*)Node::current)->setStatement(b);
 	else if (Node::current->getType() == "for")
 		((For*)Node::current)->setStatement(b);
+	else if (Node::current->getType() == "foreach") {
+		((Foreach*)Node::current)->setStatement(b);
+	}
 
 
 	Node::setCurrent(b);

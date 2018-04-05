@@ -13,6 +13,8 @@
 #include "../AST/Statement/Block.h"
 #include "../AST/Statement/While.h"
 #include "../AST/Statement/DoWhile.h"
+#include "../AST/Statement/Foreach.h"
+#include "../AST/Statement/For.h"
 using namespace std;
 
 class symbolParser
@@ -62,10 +64,13 @@ public:
 			((DoWhile*)Node::current)->setStatement(st);
 		}
 		else if (Node::current->getType() == "for") {
-			((DoWhile*)Node::current)->setStatement(st);
+			((For*)Node::current)->setStatement(st);
+		}
+		else if (Node::current->getType() == "foreach") {
+			((Foreach*)Node::current)->setStatement(st);
 		}
 
-		if (st->getType() == "if" || st->getType() == "while" || st->getType() == "dowhile" || st->getType() == "for")
+		if (st->getType() == "if" || st->getType() == "while" || st->getType() == "dowhile" || st->getType() == "for" || st->getType() == "foreach")
 			Node::setCurrent(st);
 	}
 

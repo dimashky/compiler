@@ -3,7 +3,9 @@ class x
     void f()
     {
 
-        int x = 2 + 1;
-        
+        foreach(int a in dd)
+        {
+            int x = x + 1;
+        }
     }
 }
