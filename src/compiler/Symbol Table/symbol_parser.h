@@ -11,6 +11,8 @@
 #include"Method.h"
 #include "../AST/Statement/If.h"
 #include "../AST/Statement/Block.h"
+#include "../AST/Statement/While.h"
+#include "../AST/Statement/DoWhile.h"
 using namespace std;
 
 class symbolParser
@@ -54,17 +56,21 @@ public:
 			((If*)Node::current)->setIfStatement(st);
 		}
 		else if (Node::current->getType() == "while") {
-
+			((While*)Node::current)->setStatement(st);
+		}
+		else if (Node::current->getType() == "dowhile") {
+			((DoWhile*)Node::current)->setStatement(st);
+		}
+		else if (Node::current->getType() == "for") {
+			((DoWhile*)Node::current)->setStatement(st);
 		}
 
-		if (st->getType() == "if")
-		{
+		if (st->getType() == "if" || st->getType() == "while" || st->getType() == "dowhile" || st->getType() == "for")
 			Node::setCurrent(st);
-		}
 	}
+
 	void closeASTscope(bool ifElse = false) {
 		if (ifElse) {
-			cout << "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" << endl;
 			Node* currentIf = Node::current;
 			Node::Up();
 			Block* elseBlock = new Block(Node::current);

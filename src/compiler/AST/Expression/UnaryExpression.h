@@ -5,9 +5,9 @@ class UnaryExpression :
 {
 private:
 	Operator op;
-	Expression *expression;
+	Node *expression;
 public:
-	UnaryExpression(Operator op, Expression *expression, Node* parent);
+	UnaryExpression(Operator op, Node *expression, Node* parent);
 	 string getType();
 
 	 int print(int);

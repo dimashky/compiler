@@ -4,10 +4,10 @@
 #include"../Statement/Statement.h"
 class If :public Statement
 {
-	Expression *codnition;
+	Node *codnition;
 	Node *ifStatement, *elseStatement;
 public:
-	If(Expression *codnition, Node *parent);
+	If(Node *codnition, Node *parent);
 
 	string getType();
 

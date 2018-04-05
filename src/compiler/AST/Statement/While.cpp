@@ -1,6 +1,6 @@
 #include "While.h"
 
-While::While(Expression *condition, Statement *statement,Node *parent) :Statement(parent)
+While::While(Node *condition, Node *statement,Node *parent) :Statement(parent)
 {
 	this->condition = condition; 
 	this->statement = statement; 

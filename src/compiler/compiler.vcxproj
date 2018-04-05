@@ -52,6 +52,8 @@
     <ClCompile Include="AST\Statement\Assignment.cpp" />
     <ClCompile Include="AST\Statement\Block.cpp" />
     <ClCompile Include="AST\Statement\Call.cpp" />
+    <ClCompile Include="AST\Statement\DoWhile.cpp" />
+    <ClCompile Include="AST\Statement\For.cpp" />
     <ClCompile Include="AST\Statement\If.cpp" />
     <ClCompile Include="AST\Statement\Statement.cpp" />
     <ClCompile Include="AST\Statement\While.cpp" />
@@ -84,6 +86,8 @@
     <ClInclude Include="AST\Statement\Assignment.h" />
     <ClInclude Include="AST\Statement\Block.h" />
     <ClInclude Include="AST\Statement\Call.h" />
+    <ClInclude Include="AST\Statement\DoWhile.h" />
+    <ClInclude Include="AST\Statement\For.h" />
     <ClInclude Include="AST\Statement\If.h" />
     <ClInclude Include="AST\Statement\Statement.h" />
     <ClInclude Include="AST\Statement\While.h" />

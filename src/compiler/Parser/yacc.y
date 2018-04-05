@@ -26,7 +26,8 @@
 	#include "../AST/Expression/UnaryExpression.h"
 	#include "../AST/Statement/Statement.h"
 	#include "../AST/Statement/Assignment.h"
-
+	#include "../AST/Statement/While.h"
+	#include "../AST/Statement/For.h"
 
 	extern symbolParser* SPL;
 
@@ -60,7 +61,7 @@
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
 
-		queue<Node*>*exps;
+		queue<Node*>*nodes,*exps;
 
 		Procedure* proc;
 		Symbol* symbol;
@@ -137,16 +138,16 @@
 
 /***** C.1.8 Literals *****/
 literal
-  : boolean_literal		{l.a("boolean_literal",1);	  $<r.exp>$ = $<r.exp>1;}
-  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.exp>$ = new AutoConst("INT",new int($<r.i>1),Node::current);}
-  | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.exp>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current);}
-  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.exp>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current);}
-  | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.exp>$ = new AutoConst("STRING",new string($<r.str>1),Node::current);}
-  | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.exp>$ = new AutoConst("NULL",nullptr,Node::current);}
+  : boolean_literal		{l.a("boolean_literal",1);	  $<r.node>$ = $<r.node>1;}
+  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.node>$ = new AutoConst("INT",new int($<r.i>1),Node::current);}
+  | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.node>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current);}
+  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current);}
+  | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.node>$ = new AutoConst("STRING",new string($<r.str>1),Node::current);}
+  | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.node>$ = new AutoConst("NULL",nullptr,Node::current);}
   ;
 boolean_literal
-  : TRUE				{l.a("TRUE",0);$<r.exp>$ = new AutoConst("BOOL",new bool(true),Node::current);}
-  | FALSE				{l.a("FALSE",0);$<r.exp>$ = new AutoConst("BOOL",new bool(false),Node::current);}
+  : TRUE				{l.a("TRUE",0);$<r.node>$ = new AutoConst("BOOL",new bool(true),Node::current);}
+  | FALSE				{l.a("FALSE",0);$<r.node>$ = new AutoConst("BOOL",new bool(false),Node::current);}
   ;
 /********** C.2 Syntactic grammar **********/
 
@@ -237,11 +238,11 @@ argument
   | OUT variable_reference				{l.a("argument",1);}
   ;
 primary_expression
-  : parenthesized_expression			{l.a("primary_expression",1);$<r.exp>$ = $<r.exp>1;}
-  | primary_expression_no_parenthesis	{l.a("primary_expression",1);$<r.exp>$ = $<r.exp>1;}
+  : parenthesized_expression			{l.a("primary_expression",1);$<r.node>$ = $<r.node>1;}
+  | primary_expression_no_parenthesis	{l.a("primary_expression",1);$<r.node>$ = $<r.node>1;}
   ;
 primary_expression_no_parenthesis
-  : literal							{l.a("primary_expression_no_parenthesis",1);$<r.exp>$ = $<r.exp>1;}//return value like 1 or 1.2 or "Qdwqwdw" or 'c' or true in exp
+  : literal							{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}//return value like 1 or 1.2 or "Qdwqwdw" or 'c' or true in exp
   | array_creation_expression		{l.a("primary_expression_no_parenthesis",1);}
   | member_access					{l.a("primary_expression_no_parenthesis",1);}
   | invocation_expression			{l.a("primary_expression_no_parenthesis",1);}
@@ -255,7 +256,7 @@ primary_expression_no_parenthesis
   | unchecked_expression			{l.a("primary_expression_no_parenthesis",1);}//no need
   ;
 parenthesized_expression
-  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE		{l.a("parenthesized_expression",1);$<r.exp>$ = $<r.exp>2;}
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE		{l.a("parenthesized_expression",1);$<r.node>$ = $<r.node>2;}
   ;
 member_access
   : primary_expression DOT IDENTIFIER	{l.a("member_access",1);}
@@ -290,10 +291,10 @@ base_access
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",1);}//expression_list return expression , expression ... etc
   ;
 post_increment_expression
-  : postfix_expression PLUSPLUS		{l.a("post_increment_expression",1);$<r.exp>$ = new UnaryExpression(post_plusplus,$<r.exp>1,Node::current);}
+  : postfix_expression PLUSPLUS		{l.a("post_increment_expression",1);$<r.node>$ = new UnaryExpression(post_plusplus,$<r.node>1,Node::current);}
   ;
 post_decrement_expression
-  : postfix_expression MINUSMINUS	{l.a("post_decrement_expression",1);$<r.exp>$ = new UnaryExpression(post_minusminus,$<r.exp>1,Node::current);}
+  : postfix_expression MINUSMINUS	{l.a("post_decrement_expression",1);$<r.node>$ = new UnaryExpression(post_minusminus,$<r.node>1,Node::current);}
   ;
 new_expression
   : object_creation_expression		{l.a("new_expression",1);}
@@ -323,38 +324,38 @@ pointer_member_access
   : postfix_expression  ARROW IDENTIFIER		{l.a("pointer_member_access",1);}
   ;
 addressof_expression
-  : AND unary_expression		{l.a("addressof_expression",1);$<r.exp>$ = new UnaryExpression(And,$<r.exp>2,Node::current);}
+  : AND unary_expression		{l.a("addressof_expression",1);$<r.node>$ = new UnaryExpression(And,$<r.node>2,Node::current);}
   ;
 sizeof_expression
   : SIZEOF LEFT_BRACKET_CIRCLE type RIGHT_BRACKET_CIRCLE		{l.a("sizeof_expression",1);}
   ;
 postfix_expression
-  : primary_expression			{l.a("postfix_expression",1);$<r.exp>$ = $<r.exp>1;}
-  | qualified_identifier		{l.a("postfix_expression",1);$<r.exp>$ = new Identifier(SPL->find(*$<r.base>1));}//this return a.b.c in "base string"
-  | post_increment_expression  	{l.a("postfix_expression",1);$<r.exp>$ = $<r.exp>1;}
-  | post_decrement_expression	{l.a("postfix_expression",1);$<r.exp>$ = $<r.exp>1;}
+  : primary_expression			{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
+  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(SPL->find(*$<r.base>1));}//this return a.b.c in "base string"
+  | post_increment_expression  	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
+  | post_decrement_expression	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | pointer_member_access		{l.a("postfix_expression",1);}
   ;
 unary_expression_not_plusminus
-  : EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus",1);$<r.exp>$ = new UnaryExpression(exclamation_point,$<r.exp>2,Node::current);}
-  | TILDE unary_expression				{l.a("unary_expression_not_plusminus",1);$<r.exp>$ = new UnaryExpression(tilde,$<r.exp>2,Node::current);}	
+  : EXCLAMATION_POINT unary_expression	{l.a("unary_expression_not_plusminus",1);$<r.node>$ = new UnaryExpression(exclamation_point,$<r.node>2,Node::current);}
+  | TILDE unary_expression				{l.a("unary_expression_not_plusminus",1);$<r.node>$ = new UnaryExpression(tilde,$<r.node>2,Node::current);}	
   | cast_expression						{l.a("unary_expression_not_plusminus",1);}//this isn't proccessed notify !!
-  | postfix_expression 		        	{l.a("unary_expression_not_plusminus",1);$<r.exp>$ = $<r.exp>1;}
+  | postfix_expression 		        	{l.a("unary_expression_not_plusminus",1);$<r.node>$ = $<r.node>1;}
   ;
 pre_increment_expression
-  : PLUSPLUS unary_expression	{l.a("pre_increment_expression",1);$<r.exp>$ = $<r.exp>2;}
+  : PLUSPLUS unary_expression	{l.a("pre_increment_expression",1);$<r.node>$ = $<r.node>2;}
   ;
 pre_decrement_expression
-  : MINUSMINUS unary_expression	{l.a("pre_decrement_expression",1);$<r.exp>$ = $<r.exp>2;}
+  : MINUSMINUS unary_expression	{l.a("pre_decrement_expression",1);$<r.node>$ = $<r.node>2;}
   ;
 unary_expression
-  : PLUS unary_expression			{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>2;}
-  | MINUS unary_expression			{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>2;}
-  | STAR unary_expression			{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>2;}
-  | pre_increment_expression		{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>1;}
-  | pre_decrement_expression		{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>1;}
-  | addressof_expression			{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>1;}
-  | unary_expression_not_plusminus	{l.a("unary_expression",1);$<r.exp>$ = $<r.exp>1;}
+  : PLUS unary_expression			{l.a("unary_expression",1);$<r.node>$ = $<r.node>2;}
+  | MINUS unary_expression			{l.a("unary_expression",1);$<r.node>$ = $<r.node>2;}
+  | STAR unary_expression			{l.a("unary_expression",1);$<r.node>$ = $<r.node>2;}
+  | pre_increment_expression		{l.a("unary_expression",1);$<r.node>$ = $<r.node>1;}
+  | pre_decrement_expression		{l.a("unary_expression",1);$<r.node>$ = $<r.node>1;}
+  | addressof_expression			{l.a("unary_expression",1);$<r.node>$ = $<r.node>1;}
+  | unary_expression_not_plusminus	{l.a("unary_expression",1);$<r.node>$ = $<r.node>1;}
   ;
 /* For cast_expression we really just want a (type) in the brackets,
  * but have to do some factoring to get rid of conflict with expressions.
@@ -382,21 +383,21 @@ type_qual
   | STAR			{l.a("type_qual",0);}
   ;
 multiplicative_expression
-  : unary_expression									{$<r.exp>$ = $<r.exp>1;}
+  : unary_expression									{$<r.node>$ = $<r.node>1;}
   | multiplicative_expression STAR unary_expression		
   {
 		l.a("multiplicative_expression STAR",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,star,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,star,$<r.node>3,Node::current);
   }
   | multiplicative_expression SLASH unary_expression	
   {
 		l.a("multiplicative_expression SLASH",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,slash,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,slash,$<r.node>3,Node::current);
   }
   | multiplicative_expression PERCENT unary_expression	
   {
 		l.a("multiplicative_expression PERCENT",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,percent,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,percent,$<r.node>3,Node::current);
   }
   ;
 
@@ -404,17 +405,17 @@ additive_expression
   : multiplicative_expression								
   {
 		l.a("additive_expression multiplicative_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | additive_expression PLUS multiplicative_expression		
   {
 		l.a("additive_expression PLUS",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,Plus,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,Plus,$<r.node>3,Node::current);
   }
   | additive_expression MINUS multiplicative_expression		
   {
 		l.a("additive_expression MINUS",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,Minus,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,Minus,$<r.node>3,Node::current);
   }
   ;
 
@@ -422,17 +423,17 @@ shift_expression
   : additive_expression							    
   {
 		l.a("shift_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | shift_expression LTLT additive_expression	    
   {
 		l.a("shift_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,ltlt,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,ltlt,$<r.node>3,Node::current);
   }
   | shift_expression GTGT additive_expression	    
   {
 		l.a("shift_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,gtgt,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,gtgt,$<r.node>3,Node::current);
   }
   ;
 
@@ -440,37 +441,37 @@ relational_expression
   : shift_expression								                	
   {
 		l.a("relational_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | relational_expression SMALLER shift_expression						
   {
 		l.a("relational_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,smaller,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,smaller,$<r.node>3,Node::current);  
   }
   | relational_expression GREATER shift_expression						
   {
 		l.a("relational_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,Greater,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,Greater,$<r.node>3,Node::current);  
   }
   | relational_expression LEQ shift_expression							
   {
 		l.a("relational_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,leq,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,leq,$<r.node>3,Node::current);  
   }
   | relational_expression GEQ shift_expression							
   {
 		l.a("relational_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,geq,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,geq,$<r.node>3,Node::current);  
   }	
   | relational_expression IS type										
   {
 		l.a("relational_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,Is,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,Is,$<r.node>3,Node::current);  
   }
   | relational_expression AS type										
   {
 		l.a("relational_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,As,$<r.exp>3,Node::current);		
+		$<r.node>$ = new BinaryExpression($<r.node>1,As,$<r.node>3,Node::current);		
   }
   ;
 
@@ -478,17 +479,17 @@ equality_expression
   : relational_expression							              	
   {
 		l.a("equality_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | equality_expression EQEQ relational_expression					
   {
 		l.a("equality_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,eqeq,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,eqeq,$<r.node>3,Node::current);  
   }
   | equality_expression NOTEQ relational_expression					
   {
 		l.a("equality_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,noteq,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,noteq,$<r.node>3,Node::current);  
   }
   ;
 
@@ -496,24 +497,24 @@ and_expression
   : equality_expression					                    	
   {
 		l.a("and_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | and_expression AND equality_expression						
   {
 		l.a("and_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,And,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,And,$<r.node>3,Node::current);
   }
   ;
 exclusive_or_expression
   : and_expression									              	
   {
 		l.a("exclusive_or_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | exclusive_or_expression POWER and_expression					
   {
 		l.a("exclusive_or_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,power,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,power,$<r.node>3,Node::current);  
   }
   ;
 
@@ -521,12 +522,12 @@ inclusive_or_expression
   : exclusive_or_expression									              
   {
 		l.a("inclusive_or_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | inclusive_or_expression OR exclusive_or_expression						
   {
 		l.a("inclusive_or_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,Or,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,Or,$<r.node>3,Node::current);  
   }
   ;
 
@@ -534,12 +535,12 @@ conditional_and_expression
   : inclusive_or_expression									                    	
   {
 		l.a("conditional_and_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | conditional_and_expression ANDAND inclusive_or_expression						
   {
 		l.a("conditional_and_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,andand,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,andand,$<r.node>3,Node::current);
   }
   ;
 
@@ -547,12 +548,12 @@ conditional_or_expression
   : conditional_and_expression									                  
   {
 		l.a("conditional_or_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | conditional_or_expression OROR conditional_and_expression					  
   {
 		l.a("conditional_or_expression",2);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,oror,$<r.exp>3,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>1,oror,$<r.node>3,Node::current);
   
   }
   ;
@@ -561,12 +562,12 @@ conditional_expression
   : conditional_or_expression											                	
   {
 		l.a("conditional_expression",1);
-		$<r.exp>$ = $<r.exp>1;
+		$<r.node>$ = $<r.node>1;
   }
   | conditional_or_expression QUESTION_MARK expression COLON expression						
   {
 		l.a("conditional_expression",3);
-		$<r.exp>$ = new BinaryExpression($<r.exp>1,question_mark,$<r.exp>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,question_mark,$<r.node>3,Node::current);  
   }
   ;
 
@@ -574,7 +575,7 @@ assignment
   : unary_expression assignment_operator expression                        	
   {
 		l.a("assignment",3);
-		$<r.st>$ = new Assignment((Identifier*)$<r.exp>1,$<r.op>2,$<r.node>3,Node::current);
+		$<r.node>$ = new Assignment((Identifier*)$<r.node>1,$<r.op>2,$<r.node>3,Node::current);
   }
   ;
 
@@ -592,8 +593,8 @@ assignment_operator
   | LTLTEQ	                                                            {l.a("assignment_operator LTLTEQ",0);$<r.op>$ = ltlteq;}
   ;
 expression
-  : conditional_expression												  {l.a("expression",1);$<r.node>$ = $<r.exp>1;}
-  | assignment			                                                  {l.a("expression",1);$<r.node>$ = $<r.st>1;}
+  : conditional_expression												  {l.a("expression",1);$<r.node>$ = $<r.node>1;}
+  | assignment			                                                  {l.a("expression",1);$<r.node>$ = $<r.node>1;}
   ;
 constant_expression
   : expression	                                                      
@@ -736,28 +737,28 @@ constant_declarator
   expression_statement
   : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);}
   | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);}
-  | assignment						SEMICOLON							  {l.a("expression_statement",1);SPL->addStatement($<r.st>1);}
-  | post_increment_expression  		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
-  | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
-  | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
-  | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.exp>1);}
+  | assignment						SEMICOLON							  {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
+  | post_increment_expression  		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
+  | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
+  | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
+  | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   
   | invocation_expression			error								  { l.a("expression_statement",1,1);}
   | object_creation_expression		error							      {l.a("expression_statement",1,1);}
-  | assignment						error							      {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
-  | post_increment_expression 		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
-  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
-  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
-  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.exp>1);}
+  | assignment						error							      {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
+  | post_increment_expression 		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
+  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
+  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
+  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
   ;
 statement_expression
   : invocation_expression	 										{l.a("statement_expression",1);}
   | object_creation_expression	 						    		{l.a("statement_expression",1);}
-  | assignment		          										{l.a("statement_expression",1);}
-  | post_increment_expression										{l.a("statement_expression",1);}
-  | post_decrement_expression									    {l.a("statement_expression",1);}
-  | pre_increment_expression									    {l.a("statement_expression",1);}
-  | pre_decrement_expression										{l.a("statement_expression",1);}
+  | assignment		          										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
+  | post_increment_expression										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
+  | post_decrement_expression									    {l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
+  | pre_increment_expression									    {l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
+  | pre_decrement_expression										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
   ;
 selection_statement
   : if_statement		                                                 {l.a("selection_statement",1);}
@@ -793,11 +794,11 @@ switch_labels
   | switch_labels switch_label	                      {l.a("switch_labels",2);}
   ;
 switch_label
-  : CASE constant_expression COLON	                  {l.a("switch_label",1);}
-  | DEFAULT COLON					                            {l.a("switch_label",0);}
+  : CASE constant_expression COLON	                    {l.a("switch_label",1);}
+  | DEFAULT COLON					                    {l.a("switch_label",0);}
   ;
 iteration_statement
-  : while_statement		                                {l.a("iteration_statement",1);$<r.st>$ = $<r.st>1;}
+  : while_statement		                                {l.a("iteration_statement",1);$<r.node>$ = $<r.node>1;}
   | do_statement		                                {l.a("iteration_statement",1);}
   | for_statement		                                {l.a("iteration_statement",1);}
   | foreach_statement	                                {l.a("iteration_statement",1);}
@@ -806,45 +807,71 @@ unsafe_statement
   : UNSAFE block	{l.a("unsafe_statement",1);}
   ;
 while_statement
-  : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2);}
+  : WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE {SPL->addStatement(new While($<r.node>3,nullptr,Node::current));} embedded_statement	{l.a("while_statement",2);SPL->closeASTscope();}
   | WHILE LEFT_BRACKET_CIRCLE error				 RIGHT_BRACKET_CIRCLE embedded_statement	{l.a("while_statement",2,1);}
   | WHILE error {yyclearin;}  boolean_expression error				  embedded_statement	{  } {l.a("while_statement",2,1);}
   ;
 do_statement
-  : DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE SEMICOLON	{l.a("do_statement",2);}
-  | DO embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression RIGHT_BRACKET_CIRCLE error		{ l.a("do_statement",2,1);}
+  : do_init embedded_statement WHILE LEFT_BRACKET_CIRCLE boolean_expression
+  {
+		l.a("do_statement",2);
+		((DoWhile*)Node::current)->setCondition($<r.node>5);
+		SPL->closeASTscope();
+  }
+  RIGHT_BRACKET_CIRCLE SEMICOLON
+  ;
+
+  do_init: DO{ SPL->addStatement(new DoWhile(nullptr,nullptr,Node::current)); }
   ;
 
 for_statement
-  : FOR left_bracket_circle for_initializer_opt semicolon for_condition_opt semicolon for_iterator_opt right_bracket_circle embedded_statement			{l.a("for_statement",8);}
+  : for_init left_bracket_circle for_initializer_opt semicolon for_condition_opt semicolon for_iterator_opt right_bracket_circle embedded_statement			{l.a("for_statement",8);SPL->closeASTscope();}
+  ;
+  for_init
+  : FOR {SPL->addStatement(new For(Node::current));}
   ;
 
 
 for_initializer_opt
   : /* Nothing */   {l.a("for_initializer_opt",0);}
-  | for_initializer	{l.a("for_initializer_opt",1);}
+  | for_initializer	
+  {
+		l.a("for_initializer_opt",1);
+		if($<r.nodes>1 != nullptr) {
+			((For*)Node::current)->setInitializers(*$<r.nodes>1);
+		}
+  }
   ;
 for_condition_opt
-  : /* Nothing */ {l.a("for_condition_opt",0);}
-  | for_condition	{l.a("for_condition_opt",1);}
+  : /* Nothing */   {l.a("for_condition_opt",0);}
+  | for_condition	
+  {
+		l.a("for_condition_opt",1);
+		((For*)Node::current)->setCondition($<r.node>1);
+		
+  }
   ;
 for_iterator_opt
   : /* Nothing */	{l.a("for_iterator_opt",0);}
-  | for_iterator	{l.a("for_iterator_opt",1);}
+  | for_iterator	
+  {
+		l.a("for_iterator_opt",1);
+		((For*)Node::current)->setIterators(*$<r.nodes>1);
+  }
   ;
 for_initializer
-  : local_variable_declaration		{l.a("for_initializer",1);}
-  | statement_expression_list		{l.a("for_initializer",1);}
+  : local_variable_declaration		{l.a("for_initializer",1);$<r.nodes>$ = nullptr;}
+  | statement_expression_list		{l.a("for_initializer",1);$<r.nodes>$ = $<r.nodes>1;}
   ;
 for_condition
-  : boolean_expression	{l.a("for_condition",1);}
+  : boolean_expression	{l.a("for_condition",1);$<r.node>$ = $<r.node>1;}
   ;
 for_iterator
-  : statement_expression_list	{l.a("for_iterator",1);}
+  : statement_expression_list	{l.a("for_iterator",1);$<r.nodes>$ = $<r.nodes>1;}
   ;
 statement_expression_list
-  : statement_expression									{l.a("statement_expression_list",1);}
-  | statement_expression_list COMMA statement_expression	{l.a("statement_expression_list",2);}
+  : statement_expression									{l.a("statement_expression_list",1);$<r.nodes>$ = new queue<Node*>();$<r.nodes>$->push($<r.node>1);}
+  | statement_expression_list COMMA statement_expression	{l.a("statement_expression_list",2);$<r.nodes>$ = $<r.nodes>1;$<r.nodes>$->push($<r.node>3);}
   ;
 foreach_statement
   : FOREACH left_bracket_circle type				 IDENTIFIER in expression right_bracket_circle embedded_statement			{l.a("foreach_statement",7);}

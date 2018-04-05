@@ -2,7 +2,7 @@
 
 #include "AutoConst.h"
 
-BinaryExpression::BinaryExpression(Expression *left, Operator op1, Expression *right,Node* parent):Expression(parent)
+BinaryExpression::BinaryExpression(Node *left, Operator op1, Node *right,Node* parent):Expression(parent)
 {
 	this->left = left; 
 	this->right = right; 

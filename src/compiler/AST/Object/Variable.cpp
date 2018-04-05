@@ -3,8 +3,7 @@
 Variable::Variable(Symbol* symbol, Expression *equal, Node* parent) :Object(symbol, parent)
 {
 	this->equal = equal;
-	if(equal)
-	equal->print(111);
+	
 }
 
 int Variable::print(int nodeCnt)

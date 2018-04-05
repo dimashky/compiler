@@ -5,16 +5,20 @@
 class While :public Statement
 {
 
-	Expression *condition;
-	Statement *statement;
+	Node *condition, *statement;
 
 public:
 
-	While(Expression *condition, Statement *statement, Node *parent);
+	While(Node *condition, Node *statement, Node *parent);
 	
 	int print(int);
 
 	string getType();
+
+	void setStatement(Node* statement) {
+		this->statement = statement;
+	}
+
 
 	~While();
 };

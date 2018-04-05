@@ -3,9 +3,9 @@
 class BinaryExpression : public Expression
 {
 	Operator op;
-	Expression *left, *right;
+	Node *left, *right;
 public:
-	BinaryExpression(Expression *left, Operator op, Expression *right, Node* parent);
+	BinaryExpression(Node *left, Operator op, Node *right, Node* parent);
 	~BinaryExpression();
 	string getType();
 

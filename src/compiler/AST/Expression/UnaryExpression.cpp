@@ -2,7 +2,7 @@
 #include "Identifier.h"
 
 
-UnaryExpression::UnaryExpression(Operator op, Expression *expression, Node* parent):Expression(parent)
+UnaryExpression::UnaryExpression(Operator op, Node *expression, Node* parent):Expression(parent)
 {
 	this->op = op; 
 	this->expression = expression;

@@ -36,7 +36,7 @@
 		int col_no;
 		string *modifier,*base;
 		queue<string> *modifiers,*bases;
-		queue<Node*>*exps;
+		queue<Node*>*nodes,*exps;
 
 		Procedure* proc;
 		Symbol* symbol;

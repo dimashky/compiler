@@ -4,6 +4,9 @@
 #include "../Error Handler/error_handler.h"
 #include "../AST/Object/Procedure.h"
 #include "../AST/Object/Variable.h"
+#include "../AST/Statement/While.h"
+#include "../AST/Statement/DoWhile.h"
+#include "../AST/Statement/For.h"
 
 extern errorHandler error_handler;
 extern Procedure* AST;
@@ -193,7 +196,12 @@ void symbolParser::add_scope()
 		((Block*)Node::current)->add(b);
 	else if (Node::current->getType() == "if")
 		((If*)Node::current)->setIfStatement(b);
-	
+	else if(Node::current->getType() == "while")
+		((While*)Node::current)->setStatement(b);
+	else if (Node::current->getType() == "dowhile")
+		((DoWhile*)Node::current)->setStatement(b);
+	else if (Node::current->getType() == "for")
+		((For*)Node::current)->setStatement(b);
 
 
 	Node::setCurrent(b);
@@ -215,10 +223,12 @@ vector<Symbol*> symbolParser::addLocalVariable(string typeIdentifier, queue<stri
 
 		if (Node::current->getType() == "procedure")
 			((Procedure*)Node::current)->add(field);
-
+		else if(Node::current->getType() == "for") 
+			((For*)Node::current)->addInitializer(field);
 		else
+		{
 			((Block*)Node::current)->add(field);
-
+		}
 		
 		identifiers.pop();
 		exps.pop();
