@@ -875,11 +875,11 @@ statement_expression_list
   | statement_expression_list COMMA statement_expression	{l.a("statement_expression_list",2);$<r.nodes>$ = $<r.nodes>1;$<r.nodes>$->push($<r.node>3);}
   ;
 foreach_statement
-  : for_init embedded_statement {l.a("foreach_statement",7);SPL->closeASTscope();}
+  : FOREACH left_bracket_circle type for_init embedded_statement {l.a("foreach_statement",7);SPL->closeASTscope();}
   ;
   
   for_init
-  : FOREACH left_bracket_circle type IDENTIFIER in expression right_bracket_circle {SPL->addStatement(new Foreach(new Symbol(*(new string($<r.str>4)),0,0),$<r.node>6,Node::current));}
+  : IDENTIFIER in expression right_bracket_circle {SPL->addStatement(new Foreach(new Symbol(*(new string($<r.str>1)),0,0),$<r.node>3,Node::current));}
   ;
 
 jump_statement
