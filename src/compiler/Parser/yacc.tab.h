@@ -194,7 +194,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 49 "yacc.y"
+#line 50 "yacc.y"
 
 	struct R{
 		int i;
@@ -211,6 +211,10 @@ typedef union YYSTYPE
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
 
+		vector<pair<Node*,int> >*args;
+		pair<Node*,int>* arg;
+
+
 		queue<Node*>*nodes,*exps;
 
 		Procedure* proc;
@@ -226,7 +230,7 @@ typedef union YYSTYPE
 	
 
 /* Line 2058 of yacc.c  */
-#line 230 "yacc.tab.h"
+#line 234 "yacc.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
