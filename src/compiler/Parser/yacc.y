@@ -29,6 +29,7 @@
 	#include "../AST/Statement/While.h"
 	#include "../AST/Statement/For.h"
 	#include "../AST/Statement/Foreach.h"
+	#include "../AST/Statement/Call.h"
 
 	extern symbolParser* SPL;
 
@@ -61,6 +62,10 @@
 		string *identifier;
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+
+		vector<pair<Node*,int> >*args;
+		pair<Node*,int>* arg;
+
 
 		queue<Node*>*nodes,*exps;
 
@@ -226,17 +231,27 @@ rank_specifier
   ;
 /***** C.2.3 Variables *****/
 variable_reference
-  : expression								{l.a("variable_reference",1);}
+  : expression								{l.a("variable_reference",1);$<r.node>$ = $<r.node>1;}
   ;
 /***** C.2.4 Expressions *****/
 argument_list
-  : argument						{l.a("argument_list",1);}
-  | argument_list COMMA argument	{l.a("argument_list",2);}
+  : argument						
+  {
+		l.a("argument_list",1);
+		$<r.args>$ = new vector<pair<Node*,int> >(); 
+		$<r.args>$->push_back(*$<r.arg>1);
+  }
+  | argument_list COMMA argument	
+  {
+		l.a("argument_list",2);
+		$<r.args>$ = $<r.args>1;
+		$<r.args>$->push_back(*$<r.arg>3);
+  }
   ;
 argument
-  : expression							{l.a("argument",1);}
-  | REF variable_reference				{l.a("argument",1);}
-  | OUT variable_reference				{l.a("argument",1);}
+  : expression							{l.a("argument",1);$<r.arg>$ = new pair<Node*,int>($<r.node>1,0);}
+  | REF variable_reference				{l.a("argument",1);$<r.arg>$ = new pair<Node*,int>($<r.node>2,1);}
+  | OUT variable_reference				{l.a("argument",1);$<r.arg>$ = new pair<Node*,int>($<r.node>2,2);}
   ;
 primary_expression
   : parenthesized_expression			{l.a("primary_expression",1);$<r.node>$ = $<r.node>1;}
@@ -246,7 +261,7 @@ primary_expression_no_parenthesis
   : literal							{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}//return value like 1 or 1.2 or "Qdwqwdw" or 'c' or true in exp
   | array_creation_expression		{l.a("primary_expression_no_parenthesis",1);}
   | member_access					{l.a("primary_expression_no_parenthesis",1);}
-  | invocation_expression			{l.a("primary_expression_no_parenthesis",1);}
+  | invocation_expression			{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}
   | element_access					{l.a("primary_expression_no_parenthesis",1);}
   | this_access						{l.a("primary_expression_no_parenthesis",1);}//return THIS
   | base_access						{l.a("primary_expression_no_parenthesis",1);}//return base.x
@@ -266,11 +281,16 @@ member_access
   ;
 invocation_expression
   : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE			 {l.a("invocation_expression",2);}
-  | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE							 {l.a("invocation_expression",2);}
+  | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE							 
+  {
+		l.a("invocation_expression",2);
+		$<r.node>$ = new Call(new Symbol(*$<r.base>1,-1,-1),Node::current);
+		((Call*)$<r.node>$)->setParams(*$<r.args>3);
+  }
   ;
 argument_list_opt
-  : /* Nothing */		{l.a("argument_list_opt",0);}
-  | argument_list		{l.a("argument_list_opt",1);}
+  : /* Nothing */		{l.a("argument_list_opt",0);$<r.args>$ = new vector<pair<Node*,int> >();}
+  | argument_list		{l.a("argument_list_opt",1);$<r.args>$ = $<r.args>1;}
   ;
 element_access
   : primary_expression LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access",2);}
@@ -616,7 +636,7 @@ statement
 embedded_statement
   : block					                                             {l.a("embedded_statement",1);}
   | empty_statement			                                             {l.a("embedded_statement",1);}
-  | expression_statement	                                             {l.a("embedded_statement",1);}
+  | expression_statement	                                             {l.a("embedded_statement",1);}//it will added from its rules
   | selection_statement		                                             {l.a("embedded_statement",1);}//it will added from its rules
   | iteration_statement		                                             {l.a("embedded_statement",1);}//it will added from its rules
   | jump_statement			                                             {l.a("embedded_statement",1);}
@@ -736,7 +756,7 @@ constant_declarator
   ;
 
   expression_statement
-  : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);}
+  : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);}
   | assignment						SEMICOLON							  {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   | post_increment_expression  		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
@@ -744,16 +764,16 @@ constant_declarator
   | pre_increment_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   | pre_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   
-  | invocation_expression			error								  { l.a("expression_statement",1,1);}
+  | invocation_expression			error								  {l.a("expression_statement",1,1);}
   | object_creation_expression		error							      {l.a("expression_statement",1,1);}
-  | assignment						error							      {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
-  | post_increment_expression 		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
-  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
-  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
-  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);SPL->addStatement($<r.node>1);}
+  | assignment						error							      {l.a("expression_statement",1,1);}
+  | post_increment_expression 		error                                 {l.a("expression_statement",1,1);}
+  | post_decrement_expression		error                                 {l.a("expression_statement",1,1);}
+  | pre_increment_expression		error                                 {l.a("expression_statement",1,1);}
+  | pre_decrement_expression		error                                 {l.a("expression_statement",1,1);}
   ;
 statement_expression
-  : invocation_expression	 										{l.a("statement_expression",1);}
+  : invocation_expression	 										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
   | object_creation_expression	 						    		{l.a("statement_expression",1);}
   | assignment		          										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
   | post_increment_expression										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
