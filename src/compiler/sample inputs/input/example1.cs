@@ -1,7 +1,15 @@
-class x
+class cc
 {
-    void f()
+    int xx;
+    public cc()
     {
-        string s = 'c';
+        xx = 33;
+
+    }
+
+    public cc(string s) : this()
+    {
+        this.xxx();
+        cc e12 = new cc();
     }
 }

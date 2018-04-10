@@ -8,6 +8,8 @@ class Call :public Statement
 
 	vector<pair<Node*,int> >params;
 
+	bool new_expression, known_type;
+
 	/*
 	*	pair.second hold one of these values : 
 	*		0 => nothing
@@ -19,7 +21,7 @@ class Call :public Statement
 
 public:
 
-	Call(Symbol *symbol  , Node* parent);
+	Call(Symbol *symbol, Node* parent, bool new_expression = false, bool known_type = false);
 
 	void setParams(vector<pair<Node*, int> > params) {
 		this->params = params;
@@ -36,7 +38,7 @@ public:
 
 		cout << params.size() << endl;
 
-
+		cout << new_expression << " " << known_type << endl;
 
 		cout << "--------------------------" << endl;
 		

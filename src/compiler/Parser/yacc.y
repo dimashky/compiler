@@ -260,27 +260,42 @@ primary_expression
 primary_expression_no_parenthesis
   : literal							{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}//return value like 1 or 1.2 or "Qdwqwdw" or 'c' or true in exp
   | array_creation_expression		{l.a("primary_expression_no_parenthesis",1);}
-  | member_access					{l.a("primary_expression_no_parenthesis",1);}
+  | member_access					{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}
   | invocation_expression			{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}
-  | element_access					{l.a("primary_expression_no_parenthesis",1);}
-  | this_access						{l.a("primary_expression_no_parenthesis",1);}//return THIS
-  | base_access						{l.a("primary_expression_no_parenthesis",1);}//return base.x
-  | new_expression					{l.a("primary_expression_no_parenthesis",1);}//return new Object()
-  | typeof_expression				{l.a("primary_expression_no_parenthesis",1);}//return type of 
-  | sizeof_expression				{l.a("primary_expression_no_parenthesis",1);}//return size of
-  | checked_expression				{l.a("primary_expression_no_parenthesis",1);}//no need
-  | unchecked_expression			{l.a("primary_expression_no_parenthesis",1);}//no need
+  | element_access					{l.a("primary_expression_no_parenthesis",1);}							//return fields indexing
+  | this_access						{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}	//return this
+  | base_access						{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}	//indexing isn't return any thing!!
+  | new_expression					{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}   //return new Object()
+  | typeof_expression				{l.a("primary_expression_no_parenthesis",1);}							//return type of 
+  | sizeof_expression				{l.a("primary_expression_no_parenthesis",1);} 							//return size of
+  | checked_expression				{l.a("primary_expression_no_parenthesis",1);} 							//no need
+  | unchecked_expression			{l.a("primary_expression_no_parenthesis",1);} 							//no need
   ;
 parenthesized_expression
   : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE		{l.a("parenthesized_expression",1);$<r.node>$ = $<r.node>2;}
   ;
 member_access
-  : primary_expression DOT IDENTIFIER	{l.a("member_access",1);}
+  : primary_expression DOT IDENTIFIER	
+  {
+		l.a("member_access",1);
+		if($<r.node>1->getType() == "identifier") {
+			$<r.node>$ = new Identifier(new Symbol(((Identifier*)$<r.node>1)->getSymbol()->getName() + '.' + string($<r.str>3),-1,-1));
+		}
+  }
   | primitive_type DOT IDENTIFIER		{l.a("member_access",1);}
   | class_type DOT IDENTIFIER			{l.a("member_access",1);}
   ;
 invocation_expression
-  : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE			 {l.a("invocation_expression",2);}
+  : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE			 
+  {
+		l.a("invocation_expression",2);
+		cout << "Qwdqwdqwdqw" << endl;
+		if($<r.node>1->getType()=="identifier") {
+			$<r.node>$ = new Call(((Identifier*)$<r.node>1)->getSymbol(),Node::current);
+			((Call*)$<r.node>$)->setParams(*$<r.args>3);
+		}
+  
+  }
   | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE							 
   {
 		l.a("invocation_expression",2);
@@ -305,10 +320,18 @@ expression_list
   | expression_list COMMA expression	{l.a("expression_list",2);}
   ;
 this_access
-  : THIS	{l.a("this_access",0);}
+  : THIS	
+  {
+		l.a("this_access",0);
+		$<r.node>$ = new Identifier(new Symbol("this",-1,-1));
+  }
   ;
 base_access
-  : BASE DOT IDENTIFIER									{l.a("base_access",0);}
+  : BASE DOT IDENTIFIER									
+  {
+		l.a("base_access",0);
+		$<r.node>$ = new Identifier(new Symbol("base." + string($<r.str>3),-1,-1));
+  }
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",1);}//expression_list return expression , expression ... etc
   ;
 post_increment_expression
@@ -318,10 +341,16 @@ post_decrement_expression
   : postfix_expression MINUSMINUS	{l.a("post_decrement_expression",1);$<r.node>$ = new UnaryExpression(post_minusminus,$<r.node>1,Node::current);}
   ;
 new_expression
-  : object_creation_expression		{l.a("new_expression",1);}
+  : object_creation_expression		{l.a("new_expression",1);$<r.node>$ = $<r.node>1;}
   ;
 object_creation_expression
-  : NEW type LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		{l.a("object_creation_expression",2);}//type will be returned in base, 
+  : NEW type LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		
+  {
+		l.a("object_creation_expression",2);
+		$<r.node>$ = new Call(new Symbol(*$<r.base>2,-1,-1),Node::current,true,$<r.known_type>2);
+		((Call*)$<r.node>$)->setParams(*$<r.args>4);
+
+  }
   ;
 array_creation_expression
   : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		{l.a("array_creation_expression",4);}
@@ -1507,7 +1536,7 @@ constructor_declaration
   constructor_initializer_opt constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
   ;
 constructor_initializer_opt
-  : /* Nothing */             {l.a("constructor_initializer_opt",0);}
+  : /* Nothing */				{l.a("constructor_initializer_opt",0);}
   | constructor_initializer		{l.a("constructor_initializer_opt",1);}
   ;
 constructor_initializer
