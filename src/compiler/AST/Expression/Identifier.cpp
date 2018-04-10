@@ -1,7 +1,7 @@
 #include "Identifier.h"
 
 
-Identifier::Identifier(Symbol *symbol)
+Identifier::Identifier(Symbol *symbol) : Expression(Node::current)
 {
 	this->symbol = symbol;
 }

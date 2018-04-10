@@ -289,7 +289,7 @@ invocation_expression
   : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE			 
   {
 		l.a("invocation_expression",2);
-		cout << "Qwdqwdqwdqw" << endl;
+
 		if($<r.node>1->getType()=="identifier") {
 			$<r.node>$ = new Call(((Identifier*)$<r.node>1)->getSymbol(),Node::current);
 			((Call*)$<r.node>$)->setParams(*$<r.args>3);

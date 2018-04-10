@@ -13,12 +13,14 @@ public:
 
 	Identifier(Symbol *symbol);
 
+	int print(int);
+
 	string getType();
 
 	Symbol* getSymbol();
+	
 	void setSymbol(Symbol *symbol);
 
-	int print(int);
 	~Identifier();
 };
 

@@ -26,6 +26,10 @@ string While::getType() {
 	return "while";
 }
 
+void While::setStatement(Node* statement) {
+	this->statement = statement;
+}
+
 While::~While()
 {
 }

@@ -7,7 +7,10 @@
 class Foreach :public Statement
 {
 
+private:
+
 	Variable *symbolLeft;
+
 	Node *statement, *symbolRight;
 
 public:
@@ -18,9 +21,7 @@ public:
 
 	string getType();
 
-	void setStatement(Node* statement) {
-		this->statement = statement;
-	}
+	void setStatement(Node* statement);
 
 	~Foreach();
 };

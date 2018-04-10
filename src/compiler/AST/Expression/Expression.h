@@ -12,12 +12,13 @@ enum Operator {
 
 class Expression : public Node
 {
+
 public:
-	Expression() {}
+
 	Expression(Node* parent);
-	
+
 	virtual int print(int) = 0;
-	
+
 	virtual string getType();
 
 	~Expression();

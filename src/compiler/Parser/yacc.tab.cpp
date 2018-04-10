@@ -3482,7 +3482,7 @@ yyreduce:
   case 60:
 /* Line 1792 of yacc.c  */
 #line 268 "yacc.y"
-    {l.a("primary_expression_no_parenthesis",1);}
+    {l.a("primary_expression_no_parenthesis",1);(yyval.r.node) = (yyvsp[(1) - (1)].r.node);}
     break;
 
   case 61:
@@ -3543,7 +3543,7 @@ yyreduce:
 #line 290 "yacc.y"
     {
 		l.a("invocation_expression",2);
-		cout << "Qwdqwdqwdqw" << endl;
+
 		if((yyvsp[(1) - (4)].r.node)->getType()=="identifier") {
 			(yyval.r.node) = new Call(((Identifier*)(yyvsp[(1) - (4)].r.node))->getSymbol(),Node::current);
 			((Call*)(yyval.r.node))->setParams(*(yyvsp[(3) - (4)].r.args));
@@ -3649,7 +3649,7 @@ yyreduce:
   case 84:
 /* Line 1792 of yacc.c  */
 #line 344 "yacc.y"
-    {l.a("new_expression",1);}
+    {l.a("new_expression",1);(yyval.r.node) = (yyvsp[(1) - (1)].r.node);}
     break;
 
   case 85:

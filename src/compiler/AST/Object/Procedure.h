@@ -5,20 +5,26 @@
 #include "Variable.h"
 class Procedure :public Object
 {
+
+private:
+
 	Block* block;
+
 	vector<Object*> locals;
 
 public:
 
 	Procedure(Symbol* symbol,Node*parent);
+
 	void add(Object* object);
 
-	void setBlock(Block* block);
+	int print(int);
+
 	Block* getBlock();
 
 	string getType();
 
-	int print(int);
+	void setBlock(Block* block);
 
 	~Procedure();
 };

@@ -26,6 +26,14 @@ string DoWhile::getType() {
 	return "dowhile";
 }
 
+void DoWhile::setStatement(Node* statement) {
+	this->statement = statement;
+}
+
+void DoWhile::setCondition(Node* condition) {
+	this->condition = condition;
+}
+
 DoWhile::~DoWhile()
 {
 }

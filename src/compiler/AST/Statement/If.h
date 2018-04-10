@@ -9,11 +9,11 @@ class If :public Statement
 public:
 	If(Node *codnition, Node *parent);
 
+	int print(int);
+
 	string getType();
 
 	void setIfStatement(Node* statement);
-
-	int print(int);
 
 	void setElseStatement(Node* statement);
 

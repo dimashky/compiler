@@ -5,7 +5,10 @@
 class For :public Statement
 {
 
+private:
+
 	queue<Node*> initializers, iterators;
+	
 	Node* condition, *statement;
 
 public:
@@ -14,27 +17,17 @@ public:
 	
 	int print(int);
 
+	void setCondition(Node* condition);
+
+	void setInitializers(queue<Node*>initializers);
+
+	void addInitializer(Node* initializer);
+
+	void setStatement(Node* statement);
+
+	void setIterators(queue<Node*>iterators);
+
 	string getType();
-
-	void setCondition(Node* condition) {
-		this->condition = condition;
-	}
-
-	void setInitializers(queue<Node*>initializers) {
-		this->initializers = initializers;
-	}
-
-	void addInitializer(Node* initializer) {
-		this->initializers.push(initializer);
-	}
-
-	void setStatement(Node* statement) {
-		this->statement = statement;
-	}
-
-	void setIterators(queue<Node*>iterators) {
-		this->iterators = iterators;
-	}
 
 	~For();
 };

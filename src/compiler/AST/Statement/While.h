@@ -5,6 +5,8 @@
 class While :public Statement
 {
 
+private:
+
 	Node *condition, *statement;
 
 public:
@@ -15,10 +17,7 @@ public:
 
 	string getType();
 
-	void setStatement(Node* statement) {
-		this->statement = statement;
-	}
-
+	void setStatement(Node* statement);
 
 	~While();
 };
