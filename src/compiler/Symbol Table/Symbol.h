@@ -17,6 +17,11 @@ public:
 	int getColNo();
 	virtual string getType();
 
+	void setColNo(int col_no) {
+		this->col_no = col_no;
+		return;
+	}
+
 	~Symbol();
 
 };
