@@ -7,11 +7,17 @@ using namespace::std;
 
 class Identifier : public Expression
 {
+private:
+
 	Symbol *symbol;
+	
+	bool is_array;
+
+	vector<Node*>dimensions;
 
 public:
 
-	Identifier(Symbol *symbol);
+	Identifier(Symbol *symbol, bool is_array = false);
 
 	int print(int);
 
@@ -20,6 +26,8 @@ public:
 	Symbol* getSymbol();
 	
 	void setSymbol(Symbol *symbol);
+
+	void setArrayDimensions(queue<Node*>dimensions);
 
 	~Identifier();
 };

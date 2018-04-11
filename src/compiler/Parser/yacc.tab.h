@@ -223,6 +223,7 @@ typedef union YYSTYPE
 		Statement* st;
 		Operator op;
 		Node* node;
+		int array_dimension;
 
 		bool known_type;
         
@@ -230,7 +231,7 @@ typedef union YYSTYPE
 	
 
 /* Line 2058 of yacc.c  */
-#line 234 "yacc.tab.h"
+#line 235 "yacc.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

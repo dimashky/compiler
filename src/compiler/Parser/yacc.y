@@ -75,6 +75,7 @@
 		Statement* st;
 		Operator op;
 		Node* node;
+		int array_dimension;
 
 		bool known_type;
         
@@ -308,16 +309,44 @@ argument_list_opt
   | argument_list		{l.a("argument_list_opt",1);$<r.args>$ = $<r.args>1;}
   ;
 element_access
-  : primary_expression LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access",2);}
-  | qualified_identifier LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("element_access",2);}
+  : primary_expression LEFT_BRACKET expression_list RIGHT_BRACKET		
+  {
+		l.a("element_access",2);
+  }
+  | qualified_identifier LEFT_BRACKET expression_list RIGHT_BRACKET		
+  {
+		l.a("element_access",2);
+		$<r.node>$ = new Identifier(new Symbol(*$<r.base>1,$<r.line_no>2,-13),true);
+		((Identifier*)$<r.node>$)->setArrayDimensions(*$<r.exps>3);
+  }
   ;
 expression_list_opt
-  : /* Nothing */     {l.a("expression_list_opt",0);}
-  | expression_list		{l.a("expression_list_opt",1);}
+  : /* Nothing */     
+  {
+		l.a("expression_list_opt",0);
+  		$<r.exps>$ = new queue<Node*>();
+  }
+  | expression_list		
+  {
+		l.a("expression_list_opt",1);
+  		$<r.exps>$ = $<r.exps>1;
+  }
   ;
 expression_list
-  : expression							{l.a("expression_list",1);}
-  | expression_list COMMA expression	{l.a("expression_list",2);}
+  : expression							
+  {
+		l.a("expression_list",1);
+		$<r.exps>$ = new queue<Node*>();
+		$<r.exps>$->push($<r.node>1);
+  
+  }
+  | expression_list COMMA expression	
+  {
+		l.a("expression_list",2);
+		$<r.exps>$ = $<r.exps>1;
+		$<r.exps>$->push($<r.node>3);
+  
+  }
   ;
 this_access
   : THIS	

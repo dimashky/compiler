@@ -1,21 +1,8 @@
-class c
+class a
 {
-}
-
-class cc:c
-{
-    int q;
-    void qwe()
+    int[,,,,,,] x;
+    void f()
     {
-
-        {
-
-            {
-                this.q = 1;
-
-            }
-            int q;
-        }
-
+        x[10,3,4,5,6,7] = 12;
     }
 }

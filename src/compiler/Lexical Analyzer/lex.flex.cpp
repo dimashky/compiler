@@ -824,7 +824,7 @@ char *yytext;
 		Statement* st;
 		Operator op;
 		Node* node;
-
+		int array_dimension;
 
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
