@@ -1,5 +1,5 @@
 #include "Node.h"
-
+#include "../Symbol Table/symbolTable.h"
 Node* Node::current = nullptr;
 FILE* Node::nodesFile = nullptr;
 FILE* Node::edgesFile = nullptr;
@@ -8,6 +8,10 @@ FILE* Node::edgesFile = nullptr;
 Node::Node(Node* parent)
 {
 	this->parent = parent;
+	if (symbolTable::openBrackets.empty())
+		this->symboltable = nullptr;
+	else
+		this->symboltable = symbolTable::openBrackets.top();
 }
 
 void Node::setCurrent(Node* current) {

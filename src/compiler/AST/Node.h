@@ -5,6 +5,7 @@ class Node
 {
 protected:
 	Node* parent;
+	void* symboltable;
 
 public:
 	static FILE* edgesFile, *nodesFile;
