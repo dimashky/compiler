@@ -12,6 +12,7 @@ private:
 	Attribute* attribute;
 	string type_variable;
 	Symbol* type_ref;
+	bool is_private;
 public:
 
 	Field(queue<string>&modifiers , string type_variable,string name, int line_no, int col_no);
@@ -19,6 +20,10 @@ public:
 	string get_type_name();
 	void set_type(Symbol* type_ref);
 	void add_attributes(queue<string>&attributes);
+
+	bool get_is_private() {
+		return this->is_private;
+	}
 	~Field();
 
 };
