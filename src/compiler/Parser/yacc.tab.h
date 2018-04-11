@@ -210,6 +210,7 @@ typedef union YYSTYPE
 		string *identifier;
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+		queue<int>* params_dimension;
 
 		vector<pair<Node*,int> >*args;
 		pair<Node*,int>* arg;
@@ -231,7 +232,7 @@ typedef union YYSTYPE
 	
 
 /* Line 2058 of yacc.c  */
-#line 235 "yacc.tab.h"
+#line 236 "yacc.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -62,6 +62,7 @@
 		string *identifier;
 		queue<string> *identifiers ;
 		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+		queue<int>* params_dimension;
 
 		vector<pair<Node*,int> >*args;
 		pair<Node*,int>* arg;
@@ -169,8 +170,20 @@ type_name
   
 /***** C.2.2 Types *****/
 type
-  : non_array_type	{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}
-  | array_type		{l.a("type",1);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}
+  : non_array_type	
+  {
+		l.a("type",1);
+		$<r.known_type>$ = $<r.known_type>1;
+		$<r.base>$ = $<r.base>1;
+		$<r.array_dimension>$ = 0;
+  }
+  | array_type		
+  {
+		l.a("type",1);
+		$<r.known_type>$ = $<r.known_type>1;
+		$<r.base>$ = $<r.base>1;
+		$<r.array_dimension>$ = $<r.array_dimension>1;
+  }
   ;
   
 non_array_type
@@ -220,15 +233,39 @@ pointer_type
   ;
 array_type
   : array_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = $<r.known_type>1;$<r.base>$ = $<r.base>1;}
-  | simple_type rank_specifier				{l.a("array_type",2);$<r.known_type>$ = true;$<r.base>$ = $<r.base>1;}
-  | qualified_identifier rank_specifier		{l.a("array_type",2);$<r.known_type>$ = false;$<r.base>$ = $<r.base>1;}
+  | simple_type rank_specifier				
+  {
+		l.a("array_type",2);
+		$<r.known_type>$ = true;
+		$<r.base>$ = $<r.base>1;
+		$<r.array_dimension>$ = $<r.array_dimension>2;
+  }
+  | qualified_identifier rank_specifier		
+  {
+		l.a("array_type",2);
+		$<r.known_type>$ = false;
+		$<r.base>$ = $<r.base>1;
+		$<r.array_dimension>$ = $<r.array_dimension>2;
+  }
   ;
 rank_specifiers_opt
   : /* Nothing */							{l.a("rank_specifiers_opt",0);}
   | rank_specifier rank_specifiers_opt		{l.a("rank_specifiers_opt",2);}
   ;
 rank_specifier
-  : RANK_SPECIFIER							{l.a("rank_specifier",0);}
+  : RANK_SPECIFIER							
+  {
+		l.a("rank_specifier",0);
+		string *s = new string($<r.str>1);
+		int dimenstion = 1;
+		for(int i = 0;i< (*s).size();i++){
+			if((*s)[i] == ',') {
+				dimenstion++;
+			}
+		}
+		$<r.array_dimension>$ = dimenstion;
+  
+  }
   ;
 /***** C.2.3 Variables *****/
 variable_reference
@@ -263,7 +300,7 @@ primary_expression_no_parenthesis
   | array_creation_expression		{l.a("primary_expression_no_parenthesis",1);}
   | member_access					{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}
   | invocation_expression			{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}
-  | element_access					{l.a("primary_expression_no_parenthesis",1);}							//return fields indexing
+  | element_access					{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}   //return fields indexing
   | this_access						{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}	//return this
   | base_access						{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}	//indexing isn't return any thing!!
   | new_expression					{l.a("primary_expression_no_parenthesis",1);$<r.node>$ = $<r.node>1;}   //return new Object()
@@ -736,7 +773,7 @@ local_variable_declaration
 	{
 		l.a("local_variable_declaration",2);
 
-		SPL->addLocalVariable(*$<r.base>1,*$<r.identifiers>2,*$<r.exps>2,$<r.known_type>1,false,$<r.line_no>2,$<r.col_no>2) ;
+		SPL->addLocalVariable($<r.array_dimension>1,*$<r.base>1,*$<r.identifiers>2,*$<r.exps>2,$<r.known_type>1,false,$<r.line_no>2,$<r.col_no>2) ;
 	}
   ;
 variable_declarators
@@ -780,7 +817,7 @@ local_constant_declaration
   : CONST type constant_declarators														
   {
 		l.a("local_constant_declaration",2);
-		SPL->addLocalVariable(*$<r.base>2,*$<r.identifiers>3,*$<r.exps>3,$<r.known_type>2,true,$<r.line_no>2,$<r.col_no>2) ;
+		SPL->addLocalVariable($<r.array_dimension>2,*$<r.base>2,*$<r.identifiers>3,*$<r.exps>3,$<r.known_type>2,true,$<r.line_no>2,$<r.col_no>2) ;
   }
   ;
 constant_declarators
@@ -1248,30 +1285,33 @@ class_member_declaration
   | destructor_declaration				{l.a("class_member_declaration",1);}
   | type_declaration					{l.a("class_member_declaration",1);}
   ;
+
+
 constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
-		  {		
-		         l.a("constant_declaration",4);
-	          SPL->addFieldConst(*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
-		  }
+  {		
+		l.a("constant_declaration",4);
+		SPL->addFieldConst($<r.array_dimension>4,*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
+  }
   | attributes_opt modifiers_opt CONST type constant_declarators error		
-         {
-		    l.a("constant_declaration",4,1);
-         SPL->addFieldConst(*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
-
-		 }
+  {
+		l.a("constant_declaration",4,1);
+		SPL->addFieldConst($<r.array_dimension>4,*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
+  }
   ;
+
+
 field_declaration
   : attributes_opt modifiers_opt type variable_declarators SEMICOLON
-	      {
-		        SPL->addField(*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
-  		      l.a("field_declaration",4);
-	      }
+  {
+		SPL->addField($<r.array_dimension>3,*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+  		l.a("field_declaration",4);
+  }
   | attributes_opt modifiers_opt type variable_declarators error			
-        {
-            l.a("field_declaration",4,1);
-	          SPL->addField(*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
-        }
+  {
+		l.a("field_declaration",4,1);
+	    SPL->addField($<r.array_dimension>3,*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+  }
   ;
 
 method_declaration
@@ -1280,73 +1320,85 @@ method_declaration
 
 method_header
   : attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE
-  {    l.a("method_header",5); 
-          SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
-      }
-  
-   block	
-      
+  {
+		l.a("method_header",5); 
+        SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,*$<r.params_dimension>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
+  }
+  block	    
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	
-   {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,1);
-      }
-  block
-     
+  {   
+		l.a("method_header",4);
+        SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,*$<r.params_dimension>6,$<r.line_no>4,$<r.col_no>4,1,1);
+  }
+  block   
   | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE
-  {    l.a("method_header",5); 
-               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
-         } block
-		  
+  {    
+		l.a("method_header",5); 
+        SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),queue<int>(),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,1);
+  }
+  block  
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE
-  
-   {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,1,1);
-         }
-
-  	block
-		
-
-
-
-   | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	SEMICOLON
-      {    l.a("method_header",5); 
-          SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
-      }
+  {   
+		l.a("method_header",4);
+        SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),queue<int>(),$<r.line_no>4,$<r.col_no>4,1,1);
+  }
+  block	
+  | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	SEMICOLON
+  {    l.a("method_header",5); 
+	SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),*$<r.types_ids>6,*$<r.params_dimension>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+  }
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE	SEMICOLON
-      {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,0);
-      }
+  {   
+		l.a("method_header",4);
+        SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*$<r.types_ids>6,*$<r.params_dimension>6,$<r.line_no>4,$<r.col_no>4,1,0);
+  }
   | attributes_opt modifiers_opt type qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE SEMICOLON
-		  {    l.a("method_header",5); 
-               SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>(),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
-         }
+  {    
+		l.a("method_header",5); 
+        SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string(*$<r.base>4),queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>(),queue<int>(),$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+  }
   | attributes_opt modifiers_opt VOID qualified_identifier LEFT_BRACKET_CIRCLE error RIGHT_BRACKET_CIRCLE	SEMICOLON
-		 {   l.a("method_header",4);
-        	SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),$<r.line_no>4,$<r.col_no>4,1,0);
-         }
+  {   
+		l.a("method_header",4);
+        SPL->addMethod(*$<r.modifiers>2,"VOID",string(*$<r.base>4),*(new queue<pair<pair<pair<string,string>,pair<int,int>>,bool>>()),queue<int>(),$<r.line_no>4,$<r.col_no>4,1,0);
+  }
   ;
 
 formal_parameter_list_opt
   : /* Nothing */												
-        {	   l.a("formal_parameter_list_opt",0);
-               $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
-        }
+  {
+  	   l.a("formal_parameter_list_opt",0);
+	   $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
+	   $<r.params_dimension>$ = new queue<int>();
+  }
   | formal_parameter_list									
-        {   l.a("formal_parameter_list_opt",1);
-            $<r.types_ids>$ = $<r.types_ids>1 ;
-        }
+  {   
+		l.a("formal_parameter_list_opt",1);
+        $<r.types_ids>$ = $<r.types_ids>1 ;
+		$<r.params_dimension>$ = $<r.params_dimension>1;
+  }
   | formal_parameter_default_list								
-        {   l.a("formal_parameter_list_opt",1);
-            $<r.types_ids>$ = $<r.types_ids>1 ;
-        }
+  {   
+		l.a("formal_parameter_list_opt",1);
+        $<r.types_ids>$ = $<r.types_ids>1 ;
+		$<r.params_dimension>$ = $<r.params_dimension>1;
+  }
   | formal_parameter_list COMMA formal_parameter_default_list   
-        {   l.a("formal_parameter_list_opt",2);
-            //merge queues
-            $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >();
-            while(!($<r.types_ids>1)->empty()) {($<r.types_ids>$)->push(($<r.types_ids>1)->front()); ($<r.types_ids>1)->pop();}
-            while(!($<r.types_ids>3)->empty()) {($<r.types_ids>$)->push(($<r.types_ids>3)->front()); ($<r.types_ids>3)->pop();}
-        }
+  {   
+		l.a("formal_parameter_list_opt",2);
+        
+		$<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >();
+		
+		$<r.params_dimension>$ = $<r.params_dimension>1;
+        
+		while(!($<r.types_ids>1)->empty()) {($<r.types_ids>$)->push(($<r.types_ids>1)->front()); ($<r.types_ids>1)->pop();}
+        
+		while(!($<r.types_ids>3)->empty()) {($<r.types_ids>$)->push(($<r.types_ids>3)->front()); ($<r.types_ids>3)->pop();}
+
+		while(!($<r.params_dimension>3)->empty()) {($<r.params_dimension>$)->push(($<r.params_dimension>3)->front()); ($<r.params_dimension>3)->pop();}
+  }
   ;
+
 return_type
   : type					{l.a("return_type",1);}
   | VOID					{l.a("return_type",0);}
@@ -1362,27 +1414,41 @@ method_body
 
 formal_parameter_list
   : formal_parameter								
-      {   l.a("formal_parameter_list",1);
-          $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
-		      $<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>1 ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)),$<r.known_type>1));
-      }
+  {
+		l.a("formal_parameter_list",1);
+        $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
+		$<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>1 ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)),$<r.known_type>1));
+		$<r.params_dimension>$ = new queue<int>();
+		$<r.params_dimension>$->push($<r.array_dimension>1);
+  }
   | formal_parameter_list COMMA formal_parameter	
-      {   l.a("formal_parameter_list",2);
-      		$<r.types_ids>$ = $<r.types_ids>1;
-		      $<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>3 ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3)),$<r.known_type>3)); 
-      }
+  {   
+		l.a("formal_parameter_list",2);
+      	$<r.types_ids>$ = $<r.types_ids>1;
+		$<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>3 ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3)),$<r.known_type>3)); 
+		$<r.params_dimension>$ = $<r.params_dimension>1;
+		$<r.params_dimension>$->push($<r.array_dimension>3);
+  }
   ;
+
+
 formal_parameter_default_list
   : formal_parameter_default									  
-      {   l.a("formal_parameter_default_list",1);
-          $<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
-		      $<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>1 ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)),$<r.known_type>1));
-      }
+  {   
+		l.a("formal_parameter_default_list",1);
+		$<r.types_ids>$ = new queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(); 
+		$<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>1 ,*$<r.identifier>1),make_pair($<r.line_no>1,$<r.col_no>1)),$<r.known_type>1));
+		$<r.params_dimension>$ = new queue<int>();
+		$<r.params_dimension>$->push($<r.array_dimension>1);
+  }
   | formal_parameter_default_list COMMA formal_parameter_default  
-       {  l.a("formal_parameter_default_list",2);
-          $<r.types_ids>$ = $<r.types_ids>1;
-		      $<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>3 ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3)),$<r.known_type>3)); 
-       }
+  {  
+		l.a("formal_parameter_default_list",2);
+		$<r.types_ids>$ = $<r.types_ids>1;
+		$<r.types_ids>$->push(make_pair(make_pair(make_pair(*$<r.base>3 ,*$<r.identifier>3),make_pair($<r.line_no>3,$<r.col_no>3)),$<r.known_type>3)); 
+		$<r.params_dimension>$ = $<r.params_dimension>1;
+		$<r.params_dimension>$->push($<r.array_dimension>3);
+  }
   ;
 formal_parameter
   : fixed_parameter		
@@ -1392,16 +1458,20 @@ formal_parameter
         $<r.line_no>$ = $<r.line_no>1;
         $<r.col_no>$ = $<r.col_no>1;
         $<r.known_type>$ = $<r.known_type>1;
+		$<r.array_dimension>$ = 0;
       }
   | parameter_array		
-      { l.a("formal_parameter",1);
-        $<r.base>$ = $<r.base>1;
-        $<r.identifier>$ = $<r.identifier>1;
-        $<r.line_no>$ = $<r.line_no>1;
-        $<r.col_no>$ = $<r.col_no>1;
-        $<r.known_type>$ = $<r.known_type>1;
-      }
+  {
+		l.a("formal_parameter",1);
+		$<r.base>$ = $<r.base>1;
+		$<r.identifier>$ = $<r.identifier>1;
+		$<r.line_no>$ = $<r.line_no>1;
+		$<r.col_no>$ = $<r.col_no>1;
+		$<r.known_type>$ = $<r.known_type>1;
+		$<r.array_dimension>$ = $<r.array_dimension>1;
+  }
   ;
+
 fixed_parameter
   : attributes_opt parameter_modifier_opt type IDENTIFIER	
       { l.a("fixed_parameter",3);
@@ -1421,6 +1491,7 @@ formal_parameter_default
         $<r.line_no>$ = $<r.line_no>1;
         $<r.col_no>$ = $<r.col_no>1;
         $<r.known_type>$ = $<r.known_type>1;
+		$<r.array_dimension>$ = 0;
       }
   | parameter_array EQUAL variable_initializer   
       { l.a("formal_parameter_default",2);
@@ -1429,6 +1500,7 @@ formal_parameter_default
         $<r.line_no>$ = $<r.line_no>1;
         $<r.col_no>$ = $<r.col_no>1;
         $<r.known_type>$ = $<r.known_type>1;
+		$<r.array_dimension>$ = $<r.array_dimension>1;
       }
   ;
 
@@ -1439,13 +1511,15 @@ parameter_modifier_opt
   ;
 parameter_array
   : attributes_opt PARAMS type IDENTIFIER					
-      { l.a("parameter_array",2);
-        $<r.base>$ = $<r.base>3;
-        $<r.identifier>$ = new string ($<r.str>4);
-        $<r.line_no>$ = $<r.line_no>4;
-        $<r.col_no>$ = $<r.col_no>4;
-        $<r.known_type>$ = $<r.known_type>3;
-      }
+  {
+		l.a("parameter_array",2);
+		$<r.base>$ = $<r.base>3;
+		$<r.identifier>$ = new string ($<r.str>4);
+		$<r.line_no>$ = $<r.line_no>4;
+		$<r.col_no>$ = $<r.col_no>4;
+		$<r.known_type>$ = $<r.known_type>3;
+		$<r.array_dimension>$ = $<r.array_dimension>3;
+  }
   ;
   
 property_declaration
@@ -1562,7 +1636,7 @@ conversion_operator_declarator
 constructor_declaration
   : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE 
   {
-  SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,$<r.line_no>3,$<r.col_no>3,1,1);
+		SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,*$<r.params_dimension>5,$<r.line_no>3,$<r.col_no>3,1,1);
   }
   constructor_initializer_opt constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
   ;
@@ -1686,13 +1760,13 @@ interface_method_declaration
   : attributes_opt new_opt type IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
     {
      l.a("interface_method_declaration",5);
-	 SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string($<r.str>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
+	 SPL->addMethod(*$<r.modifiers>2,*$<r.base>3,string($<r.str>4),*$<r.types_ids>6,*$<r.params_dimension>6,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3,0);
 	 SPL->endScope();
     }
   | attributes_opt new_opt VOID IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE interface_empty_body		
     {
 	  l.a("interface_method_declaration",4);
-	  SPL->addMethod(*$<r.modifiers>2,"VOID",string($<r.str>4),*$<r.types_ids>6,$<r.line_no>4,$<r.col_no>4,1,0);
+	  SPL->addMethod(*$<r.modifiers>2,"VOID",string($<r.str>4),*$<r.types_ids>6,*$<r.params_dimension>6,$<r.line_no>4,$<r.col_no>4,1,0);
 	  SPL->endScope();
     }
   ;

@@ -1,11 +1,12 @@
 #include "Field.h"
 
-Field::Field(queue<string>&modifiers , string type_variable, string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
+Field::Field(queue<string>&modifiers , string type_variable, string name, int dimension, int line_no, int col_no) : Symbol(name, line_no, col_no)
 {
 	attribute = new Attribute(this->getType(),line_no ,col_no);
 	this->type_variable = type_variable; 
 	this->type_ref = nullptr;
 	this->is_private = true;
+	this->dimension = dimension;
 	add_attributes(modifiers);
 }
 

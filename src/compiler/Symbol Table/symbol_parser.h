@@ -29,10 +29,10 @@ public:
 	Symbol* addNamespace(string name, int line_no, int col_no);
 	Symbol* addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no);
 	Symbol* addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no);
-	vector<Symbol*> addField(queue<string>modifiers , string typeIdentifier, queue<string>identifier , int line_no, int col_no, bool known_type );
-	vector<Symbol*> addFieldConst(queue<string>modifiers,string modifier_const,string typeIdentifier, queue<string>identifier, int line_no, int col_no, bool known_type);
-	vector<Symbol*> addLocalVariable(string typeIdentifier, queue<string>identifier, queue<Node*>exps, bool known_type,bool constant, int line_no, int col_no);
-	Symbol* addMethod(queue<string>modifiers  , string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, int line_no, int col_no, bool known_type,bool is_body);
+	vector<Symbol*> addField(int dimension, queue<string>modifiers, string typeIdentifier, queue<string>identifier, int line_no, int col_no, bool known_type);
+	vector<Symbol*> addFieldConst(int dimension, queue<string>modifiers,string modifier_const,string typeIdentifier, queue<string>identifier, int line_no, int col_no, bool known_type);
+	vector<Symbol*> addLocalVariable(int dimension, string typeIdentifier, queue<string>identifier, queue<Node*>exps, bool known_type, bool constant, int line_no, int col_no);
+	Symbol* addMethod(queue<string>modifiers  , string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, queue<int>params_dimension, int line_no, int col_no, bool known_type,bool is_body);
 	void add_scope();
 	void add_using(string s,int line_no,int col_no);
 	void send_using_to_st();

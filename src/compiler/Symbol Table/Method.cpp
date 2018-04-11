@@ -92,10 +92,14 @@ vector<LocalVariable*>& Method::get_parameters()
 
 
 
-void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters)
+void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension)
 {
 	while (!parameters.empty())
-		types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, true, false, parameters.front().first.second.first, parameters.front().first.second.second)), parameters.pop();
+	{
+		types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second,params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second));
+		parameters.pop();
+		params_dimension.pop();
+	}
 }
 
 int Method::get_parametars_count()

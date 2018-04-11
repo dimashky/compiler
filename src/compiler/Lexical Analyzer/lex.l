@@ -45,6 +45,7 @@
 		Operator op;
 		Node* node;
 		int array_dimension;
+		queue<int>* params_dimension;
 
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
@@ -304,7 +305,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "?"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(QUESTION_MARK); }
 "="   { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQUAL); }
 
-{rank_specifier}     { add(NULL,NULL,NULL,NULL,yytext); t.push(RANK_SPECIFIER); }
+{rank_specifier}     { add(NULL,NULL,NULL,yytext,yytext); t.push(RANK_SPECIFIER); }
 
                       /*** Multi-Character Operators ***/
 "+="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUSEQ); }
