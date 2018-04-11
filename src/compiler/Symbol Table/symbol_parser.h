@@ -45,10 +45,6 @@ public:
 		given_usings.clear();
 	}
 
-	Symbol* find(string s) {
-		return symboltable->findIdentifier(s);
-	}
-
 	void addStatement(Node* st) {
 
 		if (Node::current->getType() == "block") {

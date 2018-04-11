@@ -920,3 +920,112 @@ int symbolTable::print(int nodeID)
 FILE* symbolTable::nodeFile;
 
 FILE* symbolTable::edgeFile;
+
+
+//maybe 'this' pass to here and cause a bug Notify !!
+
+Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope) {
+
+	//check if id contains 'this' or no !!
+	bool _this = true;
+	string s = symbol->getName();
+	
+	if (s.length() < 4)
+		_this = false;
+	else {
+		if (s.substr(0, 4) == "this")
+			symbol = new Symbol(s.substr(5, s.length() - 5), symbol->getLineNo(), symbol->getColNo());
+		else _this = false;
+	}
+
+
+
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+
+	if (!_this) {
+
+		//check if this id defined in same scope !!
+
+		it = currentScope->symbolMap.find(symbol);
+
+		if (it != currentScope->symbolMap.end()) {
+			if (it->first->getLineNo() > symbol->getLineNo()) {
+				symbol->setColNo(-15);
+				return symbol;
+			}
+			return it->first;
+		}
+
+		//check if this id defined as local variable in parent scopes !!
+
+		else {
+
+			currentScope = currentScope->get_parent();
+
+			while (currentScope != nullptr) {
+				it = currentScope->symbolMap.find(symbol);
+
+				if (it != currentScope->symbolMap.end()) {
+					if (it->first->getLineNo() > symbol->getLineNo()) {
+						symbol->setColNo(-15);
+						return symbol;
+					}
+					return it->first;
+				}
+
+				currentScope = currentScope->get_parent();
+
+				if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+					break;
+
+			}
+		}
+	}
+	else
+		while (currentScope != nullptr)
+		{
+			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+				break;
+			currentScope = currentScope->get_parent();
+		}
+	
+
+	//check if this id defined as field in same class !!	
+
+	it = currentScope->symbolMap.find(symbol);
+
+	if (it != currentScope->symbolMap.end()) {
+
+		if (it->first->getType() == "field")
+			return it->first;
+
+		symbol->setColNo(-15);
+
+		return symbol;
+	}
+	else
+		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+
+	//check if this id defined as field in base class
+
+	while (currentScope != nullptr) {
+
+		it = currentScope->symbolMap.find(symbol);
+
+		if (it != currentScope->symbolMap.end()) {
+
+			if (it->first->getType() == "field" && !((Field*)it->first)->get_is_private())
+				return it->first;
+
+			symbol->setColNo(-15);
+
+			return symbol;
+		}
+
+		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+	}
+
+	symbol->setColNo(-15);
+
+	return symbol;
+}
