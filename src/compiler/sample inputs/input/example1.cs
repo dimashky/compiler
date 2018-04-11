@@ -4,7 +4,9 @@ class cc
     public cc()
     {
         xx = 33;
-
+        int dqw;
+        int dqw12= 32423;
+        aasxasxas = decimadd + dqwqwdw;
     }
 
     public cc(string s) : this()

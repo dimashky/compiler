@@ -279,7 +279,7 @@ member_access
   {
 		l.a("member_access",1);
 		if($<r.node>1->getType() == "identifier") {
-			$<r.node>$ = new Identifier(new Symbol(((Identifier*)$<r.node>1)->getSymbol()->getName() + '.' + string($<r.str>3),-1,-1));
+			$<r.node>$ = new Identifier(new Symbol(((Identifier*)$<r.node>1)->getSymbol()->getName() + '.' + string($<r.str>3),$<r.line_no>3,-13));
 		}
   }
   | primitive_type DOT IDENTIFIER		{l.a("member_access",1);}
@@ -323,14 +323,14 @@ this_access
   : THIS	
   {
 		l.a("this_access",0);
-		$<r.node>$ = new Identifier(new Symbol("this",-1,-1));
+		$<r.node>$ = new Identifier(new Symbol("this",$<r.line_no>1,-13));
   }
   ;
 base_access
   : BASE DOT IDENTIFIER									
   {
 		l.a("base_access",0);
-		$<r.node>$ = new Identifier(new Symbol("base." + string($<r.str>3),-1,-1));
+		$<r.node>$ = new Identifier(new Symbol("base." + string($<r.str>3),$<r.line_no>1,-13));
   }
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",1);}//expression_list return expression , expression ... etc
   ;
@@ -381,7 +381,7 @@ sizeof_expression
   ;
 postfix_expression
   : primary_expression			{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
-  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(SPL->find(*$<r.base>1));}//this return a.b.c in "base string"
+  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(new Symbol(*$<r.base>1,$<r.line_no>1,-13));}//this return a.b.c in "base string"
   | post_increment_expression  	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | post_decrement_expression	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | pointer_member_access		{l.a("postfix_expression",1);}
@@ -1043,10 +1043,12 @@ qualified_identifier
   : IDENTIFIER				
 		  {		l.a("qualified_identifier",0);
 				$<r.base>$ = new string($<r.str>1);
+				$<r.line_no>$ = $<r.line_no>1;
 		  }
   | qualifier IDENTIFIER	
 		{	l.a("qualified_identifier",1);
 			$<r.base>$ = new string(string(*$<r.base>1) + string($<r.str>2));
+			$<r.line_no>$ = $<r.line_no>2;
 		}
   ;
 
