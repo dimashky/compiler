@@ -1,5 +1,7 @@
 #pragma once
 #include<bits/stdc++.h>
+#include "../Type Checker/TypeExpression.h"
+
 using namespace std; 
 class Node
 {
@@ -28,7 +30,10 @@ public:
 	virtual string getType() = 0;
 	
 	virtual int print(int) = 0;
-	
+
+	TypeExpression* nodeType;
+	virtual bool typeChecking();
+
 	~Node();
 };
 

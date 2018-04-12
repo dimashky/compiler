@@ -94,6 +94,8 @@ int main()
 	AST->print(0);
 	Node::closeFiles();
 
+	AST->typeChecking();
+
  	system("pause");
 	return 0;
 }

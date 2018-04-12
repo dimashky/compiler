@@ -52,6 +52,9 @@
     <Filter Include="Source Files\logs\Tools">
       <UniqueIdentifier>{084973da-9cb3-425b-a6f4-229f38b2bbc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Type Checker">
+      <UniqueIdentifier>{1a50f97d-c84b-4c76-a273-a34176033751}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\example1.cs">
@@ -210,6 +213,27 @@
     <ClCompile Include="AST\Statement\Foreach.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
+    <ClCompile Include="Type Checker\TypeBoolean.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeError.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeExpression.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeFloat.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeInteger.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeString.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeVoid.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -325,6 +349,27 @@
     </ClInclude>
     <ClInclude Include="AST\Statement\Foreach.h">
       <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeBoolean.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeError.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeExpression.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeFloat.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeInteger.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeString.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeVoid.h">
+      <Filter>Source Files\Type Checker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

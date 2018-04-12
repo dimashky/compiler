@@ -73,6 +73,13 @@
     <ClCompile Include="Symbol Table\Symbol.cpp" />
     <ClCompile Include="Symbol Table\symbolTable.cpp" />
     <ClCompile Include="Symbol Table\symbol_parser.cpp" />
+    <ClCompile Include="Type Checker\TypeBoolean.cpp" />
+    <ClCompile Include="Type Checker\TypeError.cpp" />
+    <ClCompile Include="Type Checker\TypeExpression.cpp" />
+    <ClCompile Include="Type Checker\TypeFloat.cpp" />
+    <ClCompile Include="Type Checker\TypeInteger.cpp" />
+    <ClCompile Include="Type Checker\TypeString.cpp" />
+    <ClCompile Include="Type Checker\TypeVoid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AST\Expression\AutoConst.h" />
@@ -113,6 +120,13 @@
     <ClInclude Include="Symbol Table\symbol_parser.h" />
     <ClInclude Include="tools\dirent.h" />
     <ClInclude Include="tools\tools.h" />
+    <ClInclude Include="Type Checker\TypeBoolean.h" />
+    <ClInclude Include="Type Checker\TypeError.h" />
+    <ClInclude Include="Type Checker\TypeExpression.h" />
+    <ClInclude Include="Type Checker\TypeFloat.h" />
+    <ClInclude Include="Type Checker\TypeInteger.h" />
+    <ClInclude Include="Type Checker\TypeString.h" />
+    <ClInclude Include="Type Checker\TypeVoid.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y">

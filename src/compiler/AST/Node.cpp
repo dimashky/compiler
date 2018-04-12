@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "../Symbol Table/symbolTable.h"
+#include "../Type Checker/TypeError.h"
 Node* Node::current = nullptr;
 FILE* Node::nodesFile = nullptr;
 FILE* Node::edgesFile = nullptr;
@@ -41,6 +42,11 @@ void Node::closeFiles() {
 void Node::Up() {
 	if (Node::current != nullptr)
 		Node::current = Node::current->parent;
+}
+
+bool Node::typeChecking() {
+	this->nodeType = new TypeError("Init Error");
+	return false;
 }
 
 Node::~Node()

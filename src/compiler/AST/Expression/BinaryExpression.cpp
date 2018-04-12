@@ -1,5 +1,5 @@
 #include "BinaryExpression.h"
-
+#include "../../Type Checker/TypeError.h"
 #include "AutoConst.h"
 
 BinaryExpression::BinaryExpression(Node *left, Operator op1, Node *right,Node* parent):Expression(parent)
@@ -30,4 +30,17 @@ int BinaryExpression::print(int nodeCnt) {
 
 BinaryExpression::~BinaryExpression()
 {
+}
+
+bool BinaryExpression::typeChecking() {
+	bool checkLeft = this->left->typeChecking();
+	bool checkRight = this->right->typeChecking();
+
+	if (this->op == Operator::Plus) {
+		this->nodeType = this->left->nodeType->opPlus(this->right->nodeType->getTypeId());
+		cout << nodeType->getTypeId() << endl;
+		return true;
+	}
+	this->nodeType = new TypeError("Given operator is Undefind");
+	return false;
 }
