@@ -262,7 +262,7 @@ void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 	return;
 }
 
-void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, bool known_type, bool is_body)
+void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init, bool known_type, bool is_body)
 {
 
 	symbolTable *parent = NULL;
@@ -273,7 +273,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	else parent = openBrackets.top();
 	
 
-	((Method*)symbol)->add_parametars(parameters, params_dimension);
+	((Method*)symbol)->add_parametars(parameters, params_dimension,var_init);
 	
 	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType(), is_body);
 
@@ -813,7 +813,7 @@ bool symbolTable::closeScope()
 		{
 			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor())
 			{
-				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(), true ,true  );
+				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();

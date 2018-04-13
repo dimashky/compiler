@@ -9,6 +9,12 @@ Variable::Variable(Symbol* symbol, Expression *equal, Node* parent) :Object(symb
 int Variable::print(int nodeCnt)
 {
 	int currentId = nodeCnt;
+	if (this->equal != nullptr) {
+		cout << "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww " << " " << symbol->getName() << endl;
+	}
+	else {
+		cout << "pppppppppppppppppppppppppppppppppppppppppppp" << " " << symbol->getName() << endl;
+	}
 	if (this->symbol != nullptr) {
 		if (this->equal != nullptr) {
 			fprintf(nodesFile, "{ id:%d, label:'%s =', shape: 'box', color:'#76fc67'},", nodeCnt, this->symbol->getName().c_str());

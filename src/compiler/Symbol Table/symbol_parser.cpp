@@ -53,7 +53,7 @@ void symbolParser::add_object()
 	
 	Method* method = new Method(mod, "string", "ToString", 0, 0);
 
-	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), queue<int>(), 1, 1);
+	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), queue<int>(),queue<Node*>() ,1, 1);
 
 
 
@@ -165,10 +165,13 @@ vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifier
 	return arr;
 }
 
-Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, queue<int>params_dimension, int line_no, int col_no, bool known_type, bool is_body)
+Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, queue<int>params_dimension, queue<Node*>var_init, int line_no, int col_no, bool known_type, bool is_body)
 {
+	/*
+	* Note : 
+		parameters added to AST from addParameters method in LocalVariable Class !!
+	*/
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
-	symboltable->addMethod(newMethod, modifiers, types_ids_parameters,params_dimension, known_type, is_body);
 
 	Procedure* ns = new Procedure(newMethod, Node::current);
 
@@ -181,6 +184,8 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	((Procedure*)ns)->setBlock(b);
 
 	Node::setCurrent(b);
+
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, params_dimension,var_init, known_type, is_body);
 
 	return newMethod;
 }
@@ -228,8 +233,7 @@ vector<Symbol*> symbolParser::addLocalVariable(int dimension, string typeIdentif
 			((Procedure*)Node::current)->add(field);
 		else if(Node::current->getType() == "for") 
 			((For*)Node::current)->addInitializer(field);
-		else
-		{
+		else {
 			((Block*)Node::current)->add(field);
 		}
 		

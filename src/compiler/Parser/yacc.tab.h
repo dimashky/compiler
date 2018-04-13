@@ -209,23 +209,23 @@ typedef union YYSTYPE
 
 		string *identifier;
 		queue<string> *identifiers ;
-		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
-		queue<int>* params_dimension;
 
-		vector<pair<Node*,int> >*args;
+		queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >* types_ids;
+		
+		queue<int>* params_dimension;
+		int array_dimension;
+
+		vector<pair<Node*,int> >*args;		
 		pair<Node*,int>* arg;
 
 
-		queue<Node*>*nodes,*exps;
-
-		Procedure* proc;
-		Symbol* symbol;
-		Expression *exp;
-		Statement* st;
-		Operator op;
+		queue<Node*>*nodes;
 		Node* node;
-		int array_dimension;
 
+		Symbol* symbol;
+					
+		Operator op;
+	
 		bool known_type;
         
 		}r;

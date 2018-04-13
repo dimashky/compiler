@@ -36,29 +36,21 @@
 		int col_no;
 		string *modifier,*base;
 		queue<string> *modifiers,*bases;
-		queue<Node*>*nodes,*exps;
-
-		Procedure* proc;
-		Symbol* symbol;
-		Expression* exp;
-		Statement* st;
-		Operator op;
-		Node* node;
-		int array_dimension;
+		
 		queue<int>* params_dimension;
+		int array_dimension;
 
+		queue<Node*>*nodes;
+		Node* node;
+		
+		Symbol* symbol;
+		Operator op;
+		
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
 			this->f = f;
 			this->c = c;
-			modifier = new string();
-			base = new string();
-			modifiers = new queue<string>();
-			bases = new queue<string>();
 			
-			proc = new Procedure(nullptr,nullptr);
-			symbol = new Symbol("",0,0);
-
 			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);

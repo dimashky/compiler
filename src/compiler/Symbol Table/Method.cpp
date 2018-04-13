@@ -1,5 +1,7 @@
 #include "Method.h"
 #include "../Error Handler/error_handler.h"
+#include "../AST/Object/Variable.h"
+#include "../AST/Statement/Block.h"
 
 extern errorHandler error_handler;
 
@@ -92,13 +94,23 @@ vector<LocalVariable*>& Method::get_parameters()
 
 
 
-void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension)
+void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init)
 {
 	while (!parameters.empty())
 	{
-		types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second,params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second));
+		LocalVariable *newLocalVariable = new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second);
+		
+		Variable* field = new Variable(newLocalVariable, (Expression*)var_init.front(), Node::current);
+
+		((Block*)Node::current)->add(field);
+
+		types_ids_parameter.push_back(newLocalVariable);
+		
 		parameters.pop();
+
 		params_dimension.pop();
+		
+		var_init.pop();
 	}
 }
 
