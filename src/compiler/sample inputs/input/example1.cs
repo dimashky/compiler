@@ -1,7 +1,11 @@
 class a
 {
-    void f(int cc,int x = 21,int yy = 12312)
+
+    int x = 1;
+    void f()
     {
-        a2.b.cx1(1).x2(10).x[10].a.v.c.b(123).xx = 12;
+        int x = (x = x + 1);
+
+        int[] a = { 1, 3, 4 };
     }
 }

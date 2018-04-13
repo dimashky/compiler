@@ -194,7 +194,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 50 "yacc.y"
+#line 53 "yacc.y"
 
 	struct R{
 		int i;

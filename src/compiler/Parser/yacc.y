@@ -26,10 +26,13 @@
 	#include "../AST/Expression/UnaryExpression.h"
 	#include "../AST/Statement/Statement.h"
 	#include "../AST/Statement/Assignment.h"
+
+
 	#include "../AST/Statement/While.h"
 	#include "../AST/Statement/For.h"
 	#include "../AST/Statement/Foreach.h"
 	#include "../AST/Statement/Call.h"
+	#include "../AST/Object/ArrayInitializer.h"
 
 	extern symbolParser* SPL;
 
@@ -1318,12 +1321,12 @@ constant_declaration
   : attributes_opt modifiers_opt CONST type constant_declarators SEMICOLON	
   {		
 		l.a("constant_declaration",4);
-		SPL->addFieldConst($<r.array_dimension>4,*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
+		SPL->addFieldConst($<r.array_dimension>4,*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,*$<r.nodes>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
   }
   | attributes_opt modifiers_opt CONST type constant_declarators error		
   {
 		l.a("constant_declaration",4,1);
-		SPL->addFieldConst($<r.array_dimension>4,*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
+		SPL->addFieldConst($<r.array_dimension>4,*$<r.modifiers>2,string("CONST"),*$<r.base>4,*$<r.identifiers>5,*$<r.nodes>5,$<r.line_no>5,$<r.col_no>5,$<r.known_type>4);
   }
   ;
 
@@ -1331,13 +1334,13 @@ constant_declaration
 field_declaration
   : attributes_opt modifiers_opt type variable_declarators SEMICOLON
   {
-		SPL->addField($<r.array_dimension>3,*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+		SPL->addField($<r.array_dimension>3,*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,*$<r.nodes>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
   		l.a("field_declaration",4);
   }
   | attributes_opt modifiers_opt type variable_declarators error			
   {
 		l.a("field_declaration",4,1);
-	    SPL->addField($<r.array_dimension>3,*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
+	    SPL->addField($<r.array_dimension>3,*$<r.modifiers>2,*$<r.base>3,*$<r.identifiers>4,*$<r.nodes>4,$<r.line_no>4,$<r.col_no>4,$<r.known_type>3);
   }
   ;
 
@@ -1587,7 +1590,7 @@ formal_parameter_default
 		
 		$<r.array_dimension>$ = $<r.array_dimension>1;
 
-		//$<r.exp>$ = $<r.exp>3;
+		$<r.node>$ = $<r.node>3;
   }
   ;
 
@@ -1803,16 +1806,38 @@ struct_member_declaration
 
 /***** C.2.8 Arrays *****/
 array_initializer
-  : LEFT_BRACKET_GROUP variable_initializer_list_opt RIGHT_BRACKET_GROUP		{l.a("array_initializer",1);}
-  | LEFT_BRACKET_GROUP variable_initializer_list COMMA RIGHT_BRACKET_GROUP		{l.a("array_initializer",1);}
+  : LEFT_BRACKET_GROUP variable_initializer_list_opt RIGHT_BRACKET_GROUP		
+  {
+		l.a("array_initializer",1);
+		
+		$<r.node>$ = $<r.node>2;
+  }
+  | LEFT_BRACKET_GROUP variable_initializer_list COMMA RIGHT_BRACKET_GROUP		
+  {
+		l.a("array_initializer",1);
+
+		$<r.node>$ = $<r.node>2;  
+  }
   ;
 variable_initializer_list_opt
   : /* Nothing */             {l.a("variable_initializer_list_opt",0);}
   | variable_initializer_list	{l.a("variable_initializer_list_opt",1);}
   ;
 variable_initializer_list
-  : variable_initializer									{l.a("variable_initializer_list",1);}
-  | variable_initializer_list COMMA variable_initializer	{l.a("variable_initializer_list",2);}
+  : variable_initializer									
+  {
+		l.a("variable_initializer_list",1);
+		$<r.node>$ = new ArrayInitializer();
+		((ArrayInitializer*)$<r.node>$)->addElement($<r.node>1);
+  }
+  | variable_initializer_list COMMA variable_initializer	
+  {
+		l.a("variable_initializer_list",2);
+
+		$<r.node>$ = $<r.node>1;
+
+		((ArrayInitializer*)$<r.node>$)->addElement($<r.node>3);  
+  }
   ;
 
 /***** C.2.9 Interfaces *****/

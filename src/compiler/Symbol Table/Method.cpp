@@ -2,7 +2,7 @@
 #include "../Error Handler/error_handler.h"
 #include "../AST/Object/Variable.h"
 #include "../AST/Statement/Block.h"
-
+#include "../AST/Object/ArrayInitializer.h"
 extern errorHandler error_handler;
 
 Method::Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no): Symbol(name, line_no, col_no)
@@ -109,7 +109,7 @@ void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, in
 		parameters.pop();
 
 		params_dimension.pop();
-		
+
 		var_init.pop();
 	}
 }

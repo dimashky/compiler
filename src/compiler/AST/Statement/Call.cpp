@@ -18,10 +18,6 @@ int Call::print(int nodeCnt) {
 
 	int currentId = nodeCnt;
 
-	cout << "------------st function call--------------" << endl;
-	call->print(nodeCnt);
-	cout << "------------en function call--------------" << endl;
-
 	return nodeCnt;
 }
 

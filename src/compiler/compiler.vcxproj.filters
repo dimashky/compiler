@@ -210,6 +210,9 @@
     <ClCompile Include="AST\Statement\Foreach.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
+    <ClCompile Include="AST\Object\ArrayInitializer.cpp">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="AST\Statement\Foreach.h">
       <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Object\ArrayInitializer.h">
+      <Filter>Source Files\AST\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

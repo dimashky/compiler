@@ -119,48 +119,51 @@ Symbol* symbolParser::addInterface(queue<string>modifiers, string interfaceName,
 
 	return newInterface;
 }
-vector<Symbol*> symbolParser::addField(int dimension, queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+vector<Symbol*> symbolParser::addField(int dimension, queue<string>modifiers, string typeIdentifier, queue<string>identifiers,queue<Node*>init, int line_no, int col_no, bool known_type)
 {
 	vector<Symbol*> arr;
 
 	while (!identifiers.empty())
 	{
 		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), dimension, line_no, col_no);
+		
 		symboltable->addField(newField, known_type);
-		identifiers.pop();
 
-		Variable* field = new Variable(newField,nullptr, Node::current);
+		Variable* field = new Variable(newField,init.front(), Node::current);
 
 		((Procedure*)Node::current)->add(field);
 
 		arr.push_back(newField);
+		
+		identifiers.pop();
+
+		init.pop();
 	}
-
-
-
-
 
 	return arr;
 
 }
-vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, queue<Node*>init, int line_no, int col_no, bool known_type)
 {
 	vector<Symbol*> arr;
 
-
 	modifiers.push(modifier_const);
+
 	while (!identifiers.empty())
 	{
 		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(),dimension, line_no, col_no);
+		
 		symboltable->addField(newField, known_type);
-		identifiers.pop();
-
-
-		Variable* field = new Variable(newField,nullptr, Node::current);
+		
+		Variable* field = new Variable(newField, init.front(), Node::current);
 
 		((Procedure*)Node::current)->add(field);
 
 		arr.push_back(newField);
+
+		init.pop();
+
+		identifiers.pop();
 	}
 	return arr;
 }
@@ -227,7 +230,7 @@ vector<Symbol*> symbolParser::addLocalVariable(int dimension, string typeIdentif
 		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), dimension, false, constant, line_no, col_no);
 		symboltable->addLocalVariable(newLocalVariable, known_type);
 		
-		Variable* field = new Variable(newLocalVariable, (Expression*)exps.front(), Node::current);
+		Variable* field = new Variable(newLocalVariable, exps.front(), Node::current);
 
 		if (Node::current->getType() == "procedure")
 			((Procedure*)Node::current)->add(field);
