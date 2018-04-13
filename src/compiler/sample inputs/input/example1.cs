@@ -1,8 +1,7 @@
 class a
 {
-    int[,,,,,,] x;
-    void f(int[,,]qw,int x = 35)
+    void f()
     {
-        qw[10,3,4,5,6,7].x = 12;
+        qw[10].x = 12;
     }
 }
