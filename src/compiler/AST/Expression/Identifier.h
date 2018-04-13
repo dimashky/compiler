@@ -8,25 +8,25 @@ using namespace::std;
 class Identifier : public Expression
 {
 private:
+	/*
+	*	maybe there is no dot so at least preDot or postDot not equal to nullptr	
+	*/
+	Node* preDot;
 
-	Symbol *symbol;
-	
+	Symbol* postDot;
+
 	bool is_array;
 
 	vector<Node*>dimensions;
 
 public:
 
-	Identifier(Symbol *symbol, bool is_array = false);
+	Identifier(Node* preDot, Symbol* postDot, bool is_array = false);
 
 	int print(int);
 
 	string getType();
-
-	Symbol* getSymbol();
 	
-	void setSymbol(Symbol *symbol);
-
 	void setArrayDimensions(queue<Node*>dimensions);
 
 	~Identifier();

@@ -6,7 +6,7 @@ class Call :public Statement
 
 private:
 
-	Symbol *symbol;
+	Node *call;
 
 	/*
 	*	pair.second hold one of these values :
@@ -21,7 +21,7 @@ private:
 
 public:
 
-	Call(Symbol *symbol, Node* parent, bool new_expression = false, bool known_type = false);
+	Call(Node *call, Node* parent, bool new_expression = false, bool known_type = false);
 
 	int print(int nodeCnt);
 

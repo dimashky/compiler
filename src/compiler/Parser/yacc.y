@@ -316,44 +316,62 @@ member_access
   : primary_expression DOT IDENTIFIER	
   {
 		l.a("member_access",1);
-		if($<r.node>1->getType() == "identifier") {
-			$<r.node>$ = new Identifier(new Symbol(((Identifier*)$<r.node>1)->getSymbol()->getName() + '.' + string($<r.str>3),$<r.line_no>3,-13));
-		}
+			
+		$<r.node>$ = new Identifier($<r.node>1, new Symbol(string($<r.str>3), $<r.line_no>3, -13));
+			
   }
   | primitive_type DOT IDENTIFIER		{l.a("member_access",1);}
   | class_type DOT IDENTIFIER			{l.a("member_access",1);}
   ;
+
 invocation_expression
   : primary_expression_no_parenthesis LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE			 
   {
 		l.a("invocation_expression",2);
 
-		if($<r.node>1->getType()=="identifier") {
-			$<r.node>$ = new Call(((Identifier*)$<r.node>1)->getSymbol(),Node::current);
-			((Call*)$<r.node>$)->setParams(*$<r.args>3);
-		}
-  
+		$<r.node>$ = new Call($<r.node>1,Node::current);
+		
+		((Call*)$<r.node>$)->setParams(*$<r.args>3);
   }
   | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE							 
   {
 		l.a("invocation_expression",2);
-		$<r.node>$ = new Call(new Symbol(*$<r.base>1,-1,-1),Node::current);
+
+		$<r.node>$ = new Call(new Identifier(nullptr, new Symbol(*$<r.base>1, $<r.line_no>1, -13)), Node::current);
+		
 		((Call*)$<r.node>$)->setParams(*$<r.args>3);
   }
   ;
+
 argument_list_opt
   : /* Nothing */		{l.a("argument_list_opt",0);$<r.args>$ = new vector<pair<Node*,int> >();}
   | argument_list		{l.a("argument_list_opt",1);$<r.args>$ = $<r.args>1;}
   ;
+
 element_access
   : primary_expression LEFT_BRACKET expression_list RIGHT_BRACKET		
   {
+		if($<r.node>1->getType() == "identifier") {
+			
+			((Identifier*)$<r.node>1)->setArrayDimensions(*$<r.exps>3);
+			
+			$<r.node>$ = $<r.node>1;
+		} 
+		else {
+			
+			$<r.node>$ = new Identifier($<r.node>1, nullptr, true);
+
+			((Identifier*)$<r.node>$)->setArrayDimensions(*$<r.exps>3);
+		}
+		
 		l.a("element_access",2);
   }
   | qualified_identifier LEFT_BRACKET expression_list RIGHT_BRACKET		
   {
 		l.a("element_access",2);
-		$<r.node>$ = new Identifier(new Symbol(*$<r.base>1,$<r.line_no>2,-13),true);
+		
+		$<r.node>$ = new Identifier(nullptr,new Symbol(*$<r.base>1,$<r.line_no>2,-13),true);
+		
 		((Identifier*)$<r.node>$)->setArrayDimensions(*$<r.exps>3);
   }
   ;
@@ -389,14 +407,15 @@ this_access
   : THIS	
   {
 		l.a("this_access",0);
-		$<r.node>$ = new Identifier(new Symbol("this",$<r.line_no>1,-13));
+
+		$<r.node>$ = new Identifier(nullptr, new Symbol("this",$<r.line_no>1,-13));
   }
   ;
 base_access
   : BASE DOT IDENTIFIER									
   {
 		l.a("base_access",0);
-		$<r.node>$ = new Identifier(new Symbol("base." + string($<r.str>3),$<r.line_no>1,-13));
+		$<r.node>$ = new Identifier(nullptr, new Symbol("base." + string($<r.str>3),$<r.line_no>1,-13));
   }
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",1);}//expression_list return expression , expression ... etc
   ;
@@ -413,7 +432,7 @@ object_creation_expression
   : NEW type LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		
   {
 		l.a("object_creation_expression",2);
-		$<r.node>$ = new Call(new Symbol(*$<r.base>2,-1,-1),Node::current,true,$<r.known_type>2);
+		$<r.node>$ = new Call(new Identifier(nullptr, new Symbol(*$<r.base>2,$<r.line_no>1,-13)),Node::current,true,$<r.known_type>2);
 		((Call*)$<r.node>$)->setParams(*$<r.args>4);
 
   }
@@ -447,7 +466,7 @@ sizeof_expression
   ;
 postfix_expression
   : primary_expression			{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
-  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(new Symbol(*$<r.base>1,$<r.line_no>1,-13));}//this return a.b.c in "base string"
+  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(nullptr, new Symbol(*$<r.base>1,$<r.line_no>1,-13));}//this return a.b.c in "base string"
   | post_increment_expression  	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | post_decrement_expression	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | pointer_member_access		{l.a("postfix_expression",1);}
