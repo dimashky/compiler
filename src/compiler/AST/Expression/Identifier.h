@@ -28,7 +28,7 @@ public:
 	string getType();
 	
 	void setArrayDimensions(queue<Node*>dimensions);
-
+	bool typeChecking() { return false; }
 	~Identifier();
 };
 

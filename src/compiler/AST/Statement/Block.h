@@ -16,6 +16,8 @@ public:
 
 	string getType();
 	
+	bool typeChecking();
+
 	~Block();
 };
 

@@ -28,7 +28,7 @@ public:
 	void setIterators(queue<Node*>iterators);
 
 	string getType();
-
+	bool typeChecking() { return false; }
 	~For();
 };
 

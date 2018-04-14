@@ -30,7 +30,7 @@ public:
 	string getType();
 
 	void setParams(vector<pair<Node*, int> > params);
-
+	bool typeChecking() { return false; }
 	~Call();
 
 };

@@ -10,7 +10,9 @@ public:
 	virtual int print(int) = 0;
 
 	virtual string getType() = 0;
-		
+	
+	virtual bool typeChecking() = 0;
+
 	~Statement();
 };
 

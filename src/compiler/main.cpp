@@ -89,12 +89,11 @@ int main()
 
 	for (int i = 0;i < symbolTable::deleted.size();i++)
 		delete symbolTable::deleted[i];
-	
-	
+	AST->typeChecking();
 	AST->print(0);
 	Node::closeFiles();
 
-	AST->typeChecking();
+
 
  	system("pause");
 	return 0;

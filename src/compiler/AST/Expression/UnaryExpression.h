@@ -16,7 +16,7 @@ public:
 	int print(int);
 
 	string getType();
-
+	bool typeChecking() { return false; }
 	~UnaryExpression();
 };
 

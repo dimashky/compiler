@@ -20,6 +20,8 @@ public:
 
 	string getType();
 
+	bool typeChecking() { return false; }
+
 	~Assignment();
 };
 

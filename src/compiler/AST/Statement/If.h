@@ -16,7 +16,7 @@ public:
 	void setIfStatement(Node* statement);
 
 	void setElseStatement(Node* statement);
-
+	bool typeChecking() { return false; }
 	~If();
 
 	

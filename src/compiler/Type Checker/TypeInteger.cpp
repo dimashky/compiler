@@ -1,9 +1,8 @@
-#include "TypeExpression.h"
-#include "TypeInteger.h"
-#include "TypeError.h"
+#include "all.h"
 
 TypeInteger::TypeInteger() {
-	this->typeId = TYPE::TYPE_INTEGER;
+	this->typeId = TYPE_INTEGER;
+	this->size = 4;
 }
 
 TypeExpression* TypeInteger::opPlus(int secondTypeId) {

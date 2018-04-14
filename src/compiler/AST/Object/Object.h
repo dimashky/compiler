@@ -24,6 +24,8 @@ public:
 	
 	void setSymbol(Symbol *symbol);
 
+	virtual bool typeChecking() = 0;
+
 	~Object();
 };
 

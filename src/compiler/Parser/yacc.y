@@ -152,7 +152,7 @@ literal
   : boolean_literal		{l.a("boolean_literal",1);	  $<r.node>$ = $<r.node>1;}
   | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.node>$ = new AutoConst("INT",new int($<r.i>1),Node::current);}
   | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.node>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current);}
-  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current);}
+  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0); cout<<$<r.c>1<<endl;  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current);}
   | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.node>$ = new AutoConst("STRING",new string($<r.str>1),Node::current);}
   | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.node>$ = new AutoConst("NULL",nullptr,Node::current);}
   ;

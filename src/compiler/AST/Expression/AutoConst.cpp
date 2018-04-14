@@ -1,9 +1,25 @@
 #include "AutoConst.h"
-
+#include "../../Type Checker/all.h"
 AutoConst::AutoConst(string type, void* value, Node* parent):Expression(parent)
 {
 	this->type = type;
 	this->value = value; 
+
+	if (type == "INT") {
+		this->nodeType = new TypeInteger();
+	}
+	else if (type == "STRING") {
+		this->nodeType = new TypeString();
+	}
+	else if (type == "FLOAT") {
+		this->nodeType = new TypeInteger();
+	}
+	else if (type == "CHAR"){
+		this->nodeType = new TypeInteger();
+	}
+	else if (type == "BOOL") {
+		this->nodeType = new TypeInteger();
+	}
 }
 
 string AutoConst::getType() 
@@ -24,6 +40,9 @@ int AutoConst::print(int nodeCnt)
 	}
 	else if (type == "CHAR") {
 		fprintf(nodesFile, "{ id:%d, label:\"%c\", shape: 'box', color:'#47fcfc'},", nodeCnt, *((char*)value));
+	}
+	else if (type == "BOOL") {
+		fprintf(nodesFile, "{ id:%d, label:\"%c\", shape: 'box', color:'#47fcfc'},", nodeCnt, *((bool*)value));
 	}
 	return nodeCnt;
 

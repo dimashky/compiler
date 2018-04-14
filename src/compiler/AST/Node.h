@@ -32,7 +32,8 @@ public:
 	virtual int print(int) = 0;
 
 	TypeExpression* nodeType;
-	virtual bool typeChecking();
+
+	virtual bool typeChecking() = 0;
 
 	~Node();
 };

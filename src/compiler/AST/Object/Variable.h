@@ -11,7 +11,13 @@ public:
 	int print(int);
 
 	string getType();
-
+	bool typeChecking() 
+	{
+		if (equal) {
+			return equal->typeChecking();
+		}
+		return false;
+	}
 	~Variable();
 };
 

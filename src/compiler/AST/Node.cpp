@@ -44,11 +44,6 @@ void Node::Up() {
 		Node::current = Node::current->parent;
 }
 
-bool Node::typeChecking() {
-	this->nodeType = new TypeError("Init Error");
-	return false;
-}
-
 Node::~Node()
 {
 }

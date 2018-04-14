@@ -23,7 +23,7 @@ public:
 	void setType(string type);
 	
 	void setValue(void* value);
-
+	bool typeChecking() { return false; }
 	~AutoConst();
 };
 

@@ -1,9 +1,8 @@
-#include "TypeExpression.h"
-#include "TypeError.h"
+#include "all.h"
 #include <string>
 
 TypeError::TypeError(std::string msg) {
-	this->typeId = TYPE::TYPE_ERROR;
+	this->typeId = TYPE_ERROR;
 	this->msg = msg;
 }
 
