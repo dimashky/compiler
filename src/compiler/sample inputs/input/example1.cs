@@ -1,21 +1,11 @@
-class c
+class a
 {
-}
 
-class cc:c
-{
-    int q;
-    void qwe()
+    int x = 1;
+    void f()
     {
+        int x = (x = x + 1);
 
-        {
-
-            {
-                this.q = 1;
-
-            }
-            int q;
-        }
-
+        int[] a = { 1, 3, 4 };
     }
 }

@@ -1,6 +1,8 @@
 #include "Method.h"
 #include "../Error Handler/error_handler.h"
-
+#include "../AST/Object/Variable.h"
+#include "../AST/Statement/Block.h"
+#include "../AST/Object/ArrayInitializer.h"
 extern errorHandler error_handler;
 
 Method::Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no): Symbol(name, line_no, col_no)
@@ -92,10 +94,24 @@ vector<LocalVariable*>& Method::get_parameters()
 
 
 
-void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters)
+void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init)
 {
 	while (!parameters.empty())
-		types_ids_parameter.push_back(new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, true, false, parameters.front().first.second.first, parameters.front().first.second.second)), parameters.pop();
+	{
+		LocalVariable *newLocalVariable = new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second);
+		
+		Variable* field = new Variable(newLocalVariable, (Expression*)var_init.front(), Node::current);
+
+		((Block*)Node::current)->add(field);
+
+		types_ids_parameter.push_back(newLocalVariable);
+		
+		parameters.pop();
+
+		params_dimension.pop();
+
+		var_init.pop();
+	}
 }
 
 int Method::get_parametars_count()

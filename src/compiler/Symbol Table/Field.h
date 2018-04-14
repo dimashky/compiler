@@ -13,9 +13,10 @@ private:
 	string type_variable;
 	Symbol* type_ref;
 	bool is_private;
+	int dimension;
 public:
 
-	Field(queue<string>&modifiers , string type_variable,string name, int line_no, int col_no);
+	Field(queue<string>&modifiers , string type_variable,string name,int dimension, int line_no, int col_no);
     string getType();
 	string get_type_name();
 	void set_type(Symbol* type_ref);

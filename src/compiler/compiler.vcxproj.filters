@@ -233,6 +233,8 @@
     </ClCompile>
     <ClCompile Include="Type Checker\TypeVoid.cpp">
       <Filter>Source Files\Type Checker</Filter>
+    <ClCompile Include="AST\Object\ArrayInitializer.cpp">
+      <Filter>Source Files\AST\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +352,7 @@
     <ClInclude Include="AST\Statement\Foreach.h">
       <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Type Checker\TypeBoolean.h">
       <Filter>Source Files\Type Checker</Filter>
     </ClInclude>
@@ -370,6 +373,10 @@
     </ClInclude>
     <ClInclude Include="Type Checker\TypeVoid.h">
       <Filter>Source Files\Type Checker</Filter>
+=======
+    <ClInclude Include="AST\Object\ArrayInitializer.h">
+      <Filter>Source Files\AST\Object</Filter>
+>>>>>>> AST
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

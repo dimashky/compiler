@@ -46,6 +46,7 @@
     <ClCompile Include="AST\Expression\Identifier.cpp" />
     <ClCompile Include="AST\Expression\UnaryExpression.cpp" />
     <ClCompile Include="AST\Node.cpp" />
+    <ClCompile Include="AST\Object\ArrayInitializer.cpp" />
     <ClCompile Include="AST\Object\Object.cpp" />
     <ClCompile Include="AST\Object\Procedure.cpp" />
     <ClCompile Include="AST\Object\Variable.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="AST\Expression\Identifier.h" />
     <ClInclude Include="AST\Expression\UnaryExpression.h" />
     <ClInclude Include="AST\Node.h" />
+    <ClInclude Include="AST\Object\ArrayInitializer.h" />
     <ClInclude Include="AST\Object\Object.h" />
     <ClInclude Include="AST\Object\Procedure.h" />
     <ClInclude Include="AST\Object\Variable.h" />

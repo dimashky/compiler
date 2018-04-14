@@ -7,19 +7,27 @@ using namespace::std;
 
 class Identifier : public Expression
 {
-	Symbol *symbol;
+private:
+	/*
+	*	maybe there is no dot so at least preDot or postDot not equal to nullptr	
+	*/
+	Node* preDot;
+
+	Symbol* postDot;
+
+	bool is_array;
+
+	vector<Node*>dimensions;
 
 public:
 
-	Identifier(Symbol *symbol);
+	Identifier(Node* preDot, Symbol* postDot, bool is_array = false);
 
 	int print(int);
 
 	string getType();
-
-	Symbol* getSymbol();
 	
-	void setSymbol(Symbol *symbol);
+	void setArrayDimensions(queue<Node*>dimensions);
 
 	~Identifier();
 };

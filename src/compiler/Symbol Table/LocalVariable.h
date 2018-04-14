@@ -11,9 +11,17 @@ class LocalVariable : public Symbol
 private:
 	string type_variable;
 	Symbol* type_ref;
+	
+	/*
+	*	0		   => variable
+	*	1 and more => array
+	*/
+	int dimension;
+
+
 	bool isFinal,isParameter,is_const;
 public:
-	LocalVariable(string type_variable, string name, bool isParameter, bool is_const, int line_no, int col_no);
+	LocalVariable(string type_variable, string name, int dimension, bool isParameter, bool is_const, int line_no, int col_no);
 	
 	void set_type(Symbol* type_ref);
 
