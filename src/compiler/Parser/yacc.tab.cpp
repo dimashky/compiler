@@ -2776,7 +2776,7 @@ yyreduce:
 
   case 5:
 #line 155 "yacc.y" /* yacc.c:1646  */
-    {l.a("CHARACTER_LITERAL",0);  (yyval.r.node) = new AutoConst("CHAR",new char((yyvsp[0].r.c)),Node::current);}
+    {l.a("CHARACTER_LITERAL",0); cout<<(yyvsp[0].r.c)<<endl;  (yyval.r.node) = new AutoConst("CHAR",new char((yyvsp[0].r.c)),Node::current);}
 #line 2781 "yacc.tab.cpp" /* yacc.c:1646  */
     break;
 

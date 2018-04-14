@@ -17,19 +17,19 @@ TypeBoolean* TypeBoolean::getInstance() {
 
 TypeExpression* TypeBoolean::opAnd(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
-		return TypeBoolean::getInstance()->getTypeId(TYPE_BOOL);
-	return new TypeError(TypeSystemHelper::getTypeName(secondTypeId) + "  Type doesn't support aggregate operation");
+		return TypeBoolean::getInstance();
+	return new TypeError(this->typeId + "  Type doesn't support aggregate operation");
 }
 
 TypeExpression* TypeBoolean::opOr(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
-		return TypesTable::getInstance()->getType(BOOLEAN_TYPE_ID);
-	return new TypeError(TypeSystemHelper::getTypeName(secondTypeId) + "  Type doesn't support aggregate operation");
+		return TypeBoolean::getInstance();
+	return new TypeError(this->typeId + "  Type doesn't support aggregate operation");
 }
 
 
 int TypeBoolean::equivelantTo(int secondTypeId) {
-	if (secondTypeId == INTEGER_TYPE_ID || secondTypeId == BOOLEAN_TYPE_ID)
-		return BOOLEAN_TYPE_ID;
-	return ERROR_TYPE_ID;
+	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_BOOL)
+		return TYPE_BOOL;
+	return TYPE_ERROR;
 }
