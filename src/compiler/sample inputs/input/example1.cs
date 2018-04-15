@@ -4,8 +4,9 @@ class a
     int x = 1;
     void f()
     {
-        int x = (x = x + 1);
+        if(x >= true)
+        {
 
-        int[] a = { 1, 3, 4 };
+        }
     }
 }

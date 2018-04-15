@@ -6,19 +6,19 @@ AutoConst::AutoConst(string type, void* value, Node* parent):Expression(parent)
 	this->value = value; 
 
 	if (type == "INT") {
-		this->nodeType = new TypeInteger();
+		this->nodeType = TypeInteger::getInstance();
 	}
 	else if (type == "STRING") {
 		this->nodeType = new TypeString();
 	}
 	else if (type == "FLOAT") {
-		this->nodeType = new TypeInteger();
+//		this->nodeType = new TypeInteger();
 	}
 	else if (type == "CHAR"){
-		this->nodeType = new TypeInteger();
+//		this->nodeType = new TypeInteger();
 	}
 	else if (type == "BOOL") {
-		this->nodeType = new TypeInteger();
+//		this->nodeType = new TypeInteger();
 	}
 }
 
