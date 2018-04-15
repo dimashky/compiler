@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef ALL_TYPE_EXP
+#define ALL_TYPE_EXP
 #include "TypeExpression.h"
 // simple type
 #define TYPE_ERROR 0
@@ -25,3 +26,8 @@
 #include "TypeArray.h"
 #include "TypeFunction.h"
 #include "TypeClass.h"
+
+
+// Helpers and Aux
+#include "TypeCheckingHelper.h"
+#endif

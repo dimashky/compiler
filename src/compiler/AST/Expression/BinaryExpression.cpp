@@ -34,7 +34,7 @@ BinaryExpression::~BinaryExpression()
 bool BinaryExpression::typeChecking() {
 	bool checkLeft = this->left->typeChecking();
 	bool checkRight = this->right->typeChecking();
-
+	
 	if (this->op == Operator::Plus) {
 		this->nodeType = this->left->nodeType->opPlus(this->right->nodeType->getTypeId());
 	}

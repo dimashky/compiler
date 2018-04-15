@@ -1,13 +1,13 @@
 #include "all.h"
+#include <iostream>
+#include <string>
 
 TypeString::TypeString() {
 	this->typeId = TYPE_STRING;
-	this->size = 0;
+	this->size = 255;
 }
 
-//static definition
 TypeString* TypeString::instance = nullptr;
-
 
 TypeString* TypeString::getInstance() {
 	if (TypeString::instance == nullptr) {
@@ -19,13 +19,13 @@ TypeString* TypeString::getInstance() {
 TypeExpression* TypeString::opPlus(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeString::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(secondTypeId) + " Type doesn't support aggregate operation");
 }
 
 TypeExpression* TypeString::opEqual(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeString::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(secondTypeId) + "  Type doesn't support aggregate operation");
 }
 
 int TypeString::getTypeId() {
@@ -33,9 +33,7 @@ int TypeString::getTypeId() {
 }
 
 int TypeString::equivelantTo(int secondTypeId) {
-	if (secondTypeId == TYPE_STRING)
-		return TYPE_STRING;
-	if (secondTypeId == TYPE_INTEGER)
+	if (secondTypeId == TYPE_STRING || secondTypeId == TYPE_CHAR)
 		return TYPE_STRING;
 	return TYPE_ERROR;
 }

@@ -63,54 +63,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample inputs\example1.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example2.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example3.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example4.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example5.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example6.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example8.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example9.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example10.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example11.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example12.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example13.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example14.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example15.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example7.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example16.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
     <None Include="sample inputs\input\example1.cs">
       <Filter>Source Files\I/O\input</Filter>
     </None>
@@ -251,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="Type Checker\TypeFunction.cpp">
       <Filter>Source Files\Type Checker\complex</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeCheckingHelper.cpp">
+      <Filter>Source Files\Type Checker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -402,6 +357,9 @@
       <Filter>Source Files\Type Checker\complex</Filter>
     </ClInclude>
     <ClInclude Include="Type Checker\all.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeCheckingHelper.h">
       <Filter>Source Files\Type Checker</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,13 +18,13 @@ TypeBoolean* TypeBoolean::getInstance() {
 TypeExpression* TypeBoolean::opAnd(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeBoolean::getInstance();
-	return new TypeError(this->typeId + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support && operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 TypeExpression* TypeBoolean::opOr(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeBoolean::getInstance();
-	return new TypeError(this->typeId + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support || operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 

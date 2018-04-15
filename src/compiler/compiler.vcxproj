@@ -20,22 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Parser\yacc.output" />
-    <None Include="sample inputs\example1.cs" />
-    <None Include="sample inputs\example10.cs" />
-    <None Include="sample inputs\example11.cs" />
-    <None Include="sample inputs\example12.cs" />
-    <None Include="sample inputs\example13.cs" />
-    <None Include="sample inputs\example14.cs" />
-    <None Include="sample inputs\example15.cs" />
-    <None Include="sample inputs\example2.cs" />
-    <None Include="sample inputs\example3.cs" />
-    <None Include="sample inputs\example4.cs" />
-    <None Include="sample inputs\example5.cs" />
-    <None Include="sample inputs\example6.cs" />
-    <None Include="sample inputs\example7.cs" />
-    <None Include="sample inputs\example8.cs" />
-    <None Include="sample inputs\example9.cs" />
-    <None Include="sample inputs\example16.cs" />
     <None Include="sample inputs\input\example1.cs" />
     <None Include="sample inputs\input\example2.cs" />
   </ItemGroup>
@@ -76,6 +60,7 @@
     <ClCompile Include="Symbol Table\symbol_parser.cpp" />
     <ClCompile Include="Type Checker\TypeArray.cpp" />
     <ClCompile Include="Type Checker\TypeBoolean.cpp" />
+    <ClCompile Include="Type Checker\TypeCheckingHelper.cpp" />
     <ClCompile Include="Type Checker\TypeClass.cpp" />
     <ClCompile Include="Type Checker\TypeError.cpp" />
     <ClCompile Include="Type Checker\TypeExpression.cpp" />
@@ -128,6 +113,7 @@
     <ClInclude Include="Type Checker\all.h" />
     <ClInclude Include="Type Checker\TypeArray.h" />
     <ClInclude Include="Type Checker\TypeBoolean.h" />
+    <ClInclude Include="Type Checker\TypeCheckingHelper.h" />
     <ClInclude Include="Type Checker\TypeClass.h" />
     <ClInclude Include="Type Checker\TypeError.h" />
     <ClInclude Include="Type Checker\TypeExpression.h" />

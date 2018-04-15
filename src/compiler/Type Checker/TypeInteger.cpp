@@ -75,13 +75,13 @@ TypeExpression* TypeInteger::opGreaterOrEq(int secondTypeId) {
 TypeExpression* TypeInteger::opLessOrEq(int secondTypeId) {
 	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
 		return TypeBoolean::getInstance();
-	return new TypeError(this->typeId + "  Type doesn't support <= operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support <= operation");
 }
 
 TypeExpression* TypeInteger::opEqual(int secondTypeId) {
 	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
 		return TypeBoolean::getInstance();
-	return new TypeError(this->typeId + " Type doesn't support == operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + " Type doesn't support == operation");
 }
 
 int TypeInteger::equivelantTo(int secondTypeId) {
@@ -89,8 +89,6 @@ int TypeInteger::equivelantTo(int secondTypeId) {
 		return TYPE_INTEGER;
 	if (secondTypeId == TYPE_FLOAT)
 		return TYPE_FLOAT;
-	if (secondTypeId == TYPE_STRING)
-		return TYPE_STRING;
 	return TYPE_ERROR;
 }
 

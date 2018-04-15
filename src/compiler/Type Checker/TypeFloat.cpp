@@ -17,31 +17,31 @@ TypeFloat* TypeFloat::getInstance() {
 TypeExpression* TypeFloat::opPlus(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeFloat::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support + operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 TypeExpression* TypeFloat::opMinus(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeFloat::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support - operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 TypeExpression* TypeFloat::opMult(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeFloat::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support x operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 TypeExpression* TypeFloat::opDiv(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeFloat::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support / operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 TypeExpression* TypeFloat::opMod(int secondTypeId) {
 	if (this->equivelantTo(secondTypeId))
 		return TypeFloat::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support aggregate operation");
+	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support % operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
 TypeExpression* TypeFloat::opGreaterThan(int secondTypeId) {
