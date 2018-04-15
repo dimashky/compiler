@@ -1,5 +1,5 @@
-var compile_start = '0:10:23:190:420:500'; var lex_end = '0:10:23:191:110:0';var lex_elapsed = '0.000690';
-var compile_start = '0:10:23:190:420:500'; var lex_end = '0:10:23:200:914:700';var lex_elapsed = '0.010494';
+var compile_start = '1:10:30:212:680:100'; var lex_end = '1:10:30:213:634:700';var lex_elapsed = '0.000955';
+var compile_start = '1:10:30:212:680:100'; var lex_end = '1:10:30:226:455:900';var lex_elapsed = '0.013775';
 var error_recoverd = true;
 var error_num = 1;
 var errors = [];

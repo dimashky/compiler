@@ -11,8 +11,6 @@ public:
 	// setters
 	void setSize(int);
 
-
-
 	// operations
 	/// TODO: opDot 
 
