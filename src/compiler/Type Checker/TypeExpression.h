@@ -19,6 +19,7 @@ public:
 	virtual TypeExpression* opMult(int);
 	virtual TypeExpression* opDiv(int);
 	virtual TypeExpression* opMod(int);
+	virtual TypeExpression* opExp(int);
 
 	virtual TypeExpression* opGreaterThan(int);
 	virtual TypeExpression* opLessThan(int);

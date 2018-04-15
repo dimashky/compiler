@@ -37,6 +37,10 @@ TypeExpression* TypeExpression::opMod(int secondTypeId) {
 	return new TypeError(this->typeId + " Type doesn't support % operator.");
 }
 
+TypeExpression* TypeExpression::opExp(int secondTypeId) {
+	return new TypeError(this->typeId + " Type doesn't support ^ operator.");
+}
+
 TypeExpression* TypeExpression::opGreaterThan(int secondTypeId) {
 	return new TypeError(this->typeId + "  Type doesn't support > operation");
 }

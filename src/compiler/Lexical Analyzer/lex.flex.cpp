@@ -1272,7 +1272,7 @@ case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
 #line 223 "lex.l"
-{ add(NULL,NULL,yytext[0],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
+{ add(NULL,NULL,yytext[1],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */

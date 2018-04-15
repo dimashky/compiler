@@ -2,13 +2,12 @@
 #include "../../Type Checker/TypeError.h"
 #include "AutoConst.h"
 
-BinaryExpression::BinaryExpression(Node *left, Operator op1, Node *right,Node* parent):Expression(parent)
+BinaryExpression::BinaryExpression(Node *left, Operator op, Node *right,Node* parent):Expression(parent)
 {
 	this->left = left; 
 	this->right = right; 
-	op = op1;
+	this->op = op;
 }
-
 
 string BinaryExpression::getType() {
 	return "bexpression";
@@ -38,9 +37,25 @@ bool BinaryExpression::typeChecking() {
 
 	if (this->op == Operator::Plus) {
 		this->nodeType = this->left->nodeType->opPlus(this->right->nodeType->getTypeId());
-		cout << nodeType->getTypeId() << endl;
-		return true;
 	}
-	this->nodeType = new TypeError("Given operator is Undefind");
-	return false;
+	else if (this->op == Operator::Minus) {
+		this->nodeType = this->left->nodeType->opMinus(this->right->nodeType->getTypeId());
+	}
+	else if (this->op == Operator::star) {
+		this->nodeType = this->left->nodeType->opMult(this->right->nodeType->getTypeId());
+	}
+	else if (this->op == Operator::slash) {
+		this->nodeType = this->left->nodeType->opDiv(this->right->nodeType->getTypeId());
+	}
+	else if (this->op == Operator::percent) {
+		this->nodeType = this->left->nodeType->opMod(this->right->nodeType->getTypeId());
+	}
+	else if (this->op == Operator::power) {
+		this->nodeType = this->left->nodeType->opExp(this->right->nodeType->getTypeId());
+	}
+	else {
+		this->nodeType = new TypeError("Given operator is Undefind");
+		return false;
+	}
+	return true;
 }

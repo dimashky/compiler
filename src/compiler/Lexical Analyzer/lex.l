@@ -219,7 +219,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
                       /***** Literals *****/
 {integer_literal}     { add(atoi(yytext),NULL,NULL,NULL,yytext); t.push(INTEGER_LITERAL); }
 {real_literal}        { add(NULL,atof(yytext),NULL,NULL,yytext); t.push(REAL_LITERAL); }
-{character_literal}   { add(NULL,NULL,yytext[0],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
+{character_literal}   { add(NULL,NULL,yytext[1],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
 {string_literal}      { add(NULL,NULL,NULL,yytext,yytext);		 t.push(STRING_LITERAL); }
 
 

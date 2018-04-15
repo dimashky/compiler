@@ -45,6 +45,12 @@ TypeExpression* TypeInteger::opMod(int secondTypeId) {
 	return new TypeError(this->typeId + "  Type doesn't support Mod operation");
 }
 
+TypeExpression* TypeInteger::opExp(int secondTypeId) {
+	if (this->equivelantTo(secondTypeId))
+		return TypeInteger::getInstance();
+	return new TypeError(this->typeId + "  Type doesn't support Exp operation");
+}
+
 TypeExpression* TypeInteger::opGreaterThan(int secondTypeId) {
 	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
 		return TypeBoolean::getInstance();

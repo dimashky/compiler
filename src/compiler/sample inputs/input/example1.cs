@@ -4,9 +4,6 @@ class a
     int x = 1;
     void f()
     {
-        if(x >= true)
-        {
-
-        }
+        int x = "5" + '1';
     }
 }
