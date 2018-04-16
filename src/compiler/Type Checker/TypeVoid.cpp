@@ -2,5 +2,5 @@
 
 TypeVoid::TypeVoid() {
 	this->typeId = TYPE_VOID;
-	this->size = 0;
+	this->bytes = 0;
 }

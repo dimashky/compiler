@@ -4,7 +4,7 @@
 
 TypeString::TypeString() {
 	this->typeId = TYPE_STRING;
-	this->size = 255;
+	this->bytes = 255;
 }
 
 TypeString* TypeString::instance = nullptr;

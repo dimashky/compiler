@@ -8,6 +8,7 @@ extern errorHandler error_handler;
 TypeError::TypeError(std::string msg) {
 	this->typeId = TYPE_ERROR;
 	this->msg = msg;
+	this->bytes = 0;
 	error_handler.add(error(-15,-15,msg));
 }
 

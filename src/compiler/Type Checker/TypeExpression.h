@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class TypeExpression {
 public:
@@ -6,11 +7,14 @@ public:
 	
 	// getters
 	int getTypeId();
-	int getSize();
+	int getBytes();
 
 	// setters
-	void setSize(int);
+	void setBytes(int);
 
+	// return string representing the type expression of the type modeled, eg:"(int,float)->void"
+	std::string typeExpression();
+	
 	// operations
 	/// TODO: opDot 
 
@@ -30,12 +34,14 @@ public:
 	virtual TypeExpression* opOr(int);
 	virtual TypeExpression* opEqual(int);
 
-	virtual TypeExpression* opSqrBrackets(int);
+	virtual TypeExpression* opSqrBrackets(TypeExpression*); // []
+
+	virtual TypeExpression* opBrackets(TypeExpression**);	// () 
 
 	//Type Equivelance
 	virtual int equivelantTo(int);
 	
 protected:
-	int size;
+	int bytes;
 	int typeId;
 };

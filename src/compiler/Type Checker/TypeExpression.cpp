@@ -2,19 +2,23 @@
 
 TypeExpression::TypeExpression() {
 	this->typeId = 0;
-	this->size = 0;
+	this->bytes = 0;
 }
 
 int TypeExpression::getTypeId() {
 	return this->typeId;
 }
 
-int TypeExpression::getSize() {
-	return this->size;
+int TypeExpression::getBytes() {
+	return this->bytes;
 }
 
-void TypeExpression::setSize(int size) {
-	this->size = size;
+void TypeExpression::setBytes(int bytes) {
+	this->bytes = bytes;
+}
+
+string TypeExpression::typeExpression() {
+	return "Error"; // default
 }
 
 TypeExpression* TypeExpression::opPlus(int secondTypeId) {
@@ -69,10 +73,14 @@ TypeExpression* TypeExpression::opEqual(int secondTypeId) {
 	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support == operation "+ TypeCheckingHelper::getTypeName(secondTypeId));
 }
 
-TypeExpression* TypeExpression::opSqrBrackets(int secondTypeId) {
-	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support [] operation "+ TypeCheckingHelper::getTypeName(secondTypeId));
+TypeExpression* TypeExpression::opSqrBrackets(TypeExpression* elementType) {
+	return new TypeError(this->typeExpression() + " doesn't support ["+ elementType->typeExpression() + "] operation.");
+}
+
+TypeExpression* TypeExpression::opBrackets(TypeExpression** parameters) {
+	return new TypeError(this->typeExpression() + " doesn't support () operation.");
 }
 
 int TypeExpression::equivelantTo(int secondTypeId) {
-	return TYPE_ERROR;
+	return TYPE_ERROR; // default
 }

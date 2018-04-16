@@ -4,7 +4,7 @@ TypeInteger* TypeInteger::instance = nullptr;
 
 TypeInteger::TypeInteger() {
 	this->typeId = TYPE_INTEGER;
-	this->size = 4;
+	this->bytes = 4;
 }
 TypeInteger* TypeInteger::getInstance() {
 	if (!TypeInteger::instance) {

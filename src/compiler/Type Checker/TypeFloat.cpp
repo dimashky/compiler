@@ -4,7 +4,7 @@ TypeFloat* TypeFloat::instance = nullptr;
 
 TypeFloat::TypeFloat() {
 	this->typeId = TYPE_FLOAT;
-	this->size = 4;
+	this->bytes = 4;
 }
 
 TypeFloat* TypeFloat::getInstance() {

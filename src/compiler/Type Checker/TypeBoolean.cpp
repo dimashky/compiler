@@ -2,7 +2,7 @@
 
 TypeBoolean::TypeBoolean() {
 	this->typeId = TYPE_BOOL;
-	this->size = 1;
+	this->bytes = 1;
 }
 
 //static defifintion
