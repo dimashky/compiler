@@ -921,28 +921,52 @@ FILE* symbolTable::nodeFile;
 
 FILE* symbolTable::edgeFile;
 
-
+void symbolTable::setAsInvalid() {
+	valid = false;
+}
 //maybe 'this' pass to here and cause a bug Notify !!
 
-Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope) {
+Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope, Symbol* lastSymbol) {
 
-	//check if id contains 'this' or no !!
-	bool _this = true;
-	string s = symbol->getName();
+	symbolTable* currentScope;
+
+	//check if id equal 'this' or no !!
 	
-	if (s.length() < 4)
-		_this = false;
-	else {
-		if (s.substr(0, 4) == "this")
-			symbol = new Symbol(s.substr(5, s.length() - 5), symbol->getLineNo(), symbol->getColNo());
-		else _this = false;
+	if (symbol->getName() == "this" || symbol->getName() == "base") {
+
+		if (lastSymbol != nullptr)
+			return nullptr;
+
+		currentScope = identifierScope;
+
+		while (currentScope != nullptr) {
+
+			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+				break;
+
+			currentScope = currentScope->get_parent();
+		}
+
+		// return same class
+		if (symbol->getName() == "this")
+			return currentScope->get_owner();
+
+		//return base class
+		return ((Class*)currentScope->get_owner())->get_extended_class().second->get_owner();
 	}
 
+	if (lastSymbol)
 
+		currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
+	
+	else 
+		
+		currentScope = identifierScope;
 
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
 
-	if (!_this) {
+	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class") {
+		
 
 		//check if this id defined in same scope !!
 
@@ -963,40 +987,39 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope) {
 			currentScope = currentScope->get_parent();
 
 			while (currentScope != nullptr) {
+				
+				if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+				
+					break;
+
 				it = currentScope->symbolMap.find(symbol);
 
 				if (it != currentScope->symbolMap.end()) {
+
 					if (it->first->getLineNo() > symbol->getLineNo()) {
+					
 						symbol->setColNo(-15);
+						
 						return symbol;
 					}
+
 					return it->first;
 				}
 
 				currentScope = currentScope->get_parent();
 
-				if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
-					break;
-
 			}
 		}
-	}
-	else
-		while (currentScope != nullptr)
-		{
-			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
-				break;
-			currentScope = currentScope->get_parent();
-		}
-	
 
-	//check if this id defined as field in same class !!	
+	}
+
+	//check if this id defined as field in same class !!
 
 	it = currentScope->symbolMap.find(symbol);
 
 	if (it != currentScope->symbolMap.end()) {
 
-		if (it->first->getType() == "field")
+		if (it->first->getType() != "class")
 			return it->first;
 
 		symbol->setColNo(-15);
@@ -1014,8 +1037,11 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope) {
 
 		if (it != currentScope->symbolMap.end()) {
 
-			if (it->first->getType() == "field" && !((Field*)it->first)->get_is_private())
-				return it->first;
+			if (it->first->getType() != "class")
+			
+				if(it->first->getType() != "field" && !((Field*)it->first)->get_is_private() || it->first->getType() != "method" && !((Method*)it->first)->get_is_private())
+			
+					return it->first;
 
 			symbol->setColNo(-15);
 
@@ -1028,4 +1054,17 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope) {
 	symbol->setColNo(-15);
 
 	return symbol;
+}
+
+string symbolTable::getFullPath() {
+	
+	string parent, current;
+	
+	if (this->get_owner() != nullptr)
+		current = this->get_owner()->getName();
+	
+	if (this->get_parent() != nullptr)
+		parent = this->get_parent()->getFullPath() + '.';
+	
+	return parent + current;
 }
