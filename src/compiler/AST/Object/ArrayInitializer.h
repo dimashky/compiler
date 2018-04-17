@@ -18,7 +18,7 @@ public:
 
 	void addElement(Node* element);
 
-	bool typeChecking() { return false; }
+	bool typeChecking();
 
 	~ArrayInitializer();
 };

@@ -26,15 +26,7 @@ public:
 
 	void setBlock(Block* block);
 
-	bool typeChecking() {
-		for (int i = 0; i < locals.size(); i++) {
-			locals[i]->typeChecking();
-		}
-		if (block) {
-			block->typeChecking();
-		}
-		return true;
-	}
+	bool typeChecking();
 
 	~Procedure();
 };

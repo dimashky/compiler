@@ -13,11 +13,8 @@ public:
 	TypeExpression* opExp(int);
 
 	TypeExpression* opGreaterThan(int);
-
 	TypeExpression* opLessThan(int);
-
 	TypeExpression* opGreaterOrEq(int);
-
 	TypeExpression* opLessOrEq(int);
 
 	TypeExpression* opEqual(int);

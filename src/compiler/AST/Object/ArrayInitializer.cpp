@@ -1,4 +1,5 @@
 #include "ArrayInitializer.h"
+#include "../../Type Checker/all.h"
 
 ArrayInitializer::ArrayInitializer() :Object(nullptr, nullptr) {}
 
@@ -32,8 +33,19 @@ void ArrayInitializer::addElement(Node* element) {
 	return;
 }
 
+bool ArrayInitializer::typeChecking() {
+	return true;	// TEMP we return back 
 
-ArrayInitializer::~ArrayInitializer()
-{
+	bool checkStatus = true;
+	for (auto el : elements) {
+		checkStatus |= el->typeChecking();
+		if (((TypeArray*)this->nodeType)->getOf() != el->nodeType) {
+			this->nodeType = new TypeError("Array of "+ ((TypeArray*)this->nodeType)->getOf()->typeExpression() + " must not have element with type "+ el->nodeType->typeExpression());
+			break;
+		}
+	}
+	return checkStatus;
+}
 
+ArrayInitializer::~ArrayInitializer(){
 }

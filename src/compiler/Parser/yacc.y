@@ -1807,37 +1807,33 @@ struct_member_declaration
 /***** C.2.8 Arrays *****/
 array_initializer
   : LEFT_BRACKET_GROUP variable_initializer_list_opt RIGHT_BRACKET_GROUP		
-  {
-		l.a("array_initializer",1);
-		
-		$<r.node>$ = $<r.node>2;
-  }
+		{
+			l.a("array_initializer",1);
+			$<r.node>$ = $<r.node>2;
+		}
   | LEFT_BRACKET_GROUP variable_initializer_list COMMA RIGHT_BRACKET_GROUP		
-  {
-		l.a("array_initializer",1);
-
-		$<r.node>$ = $<r.node>2;  
-  }
+		{
+			l.a("array_initializer",1);
+			$<r.node>$ = $<r.node>2;  
+		}
   ;
 variable_initializer_list_opt
-  : /* Nothing */             {l.a("variable_initializer_list_opt",0);}
-  | variable_initializer_list	{l.a("variable_initializer_list_opt",1);}
+  : /* Nothing */					{l.a("variable_initializer_list_opt",0);}
+  | variable_initializer_list		{l.a("variable_initializer_list_opt",1);}
   ;
 variable_initializer_list
   : variable_initializer									
-  {
-		l.a("variable_initializer_list",1);
-		$<r.node>$ = new ArrayInitializer();
-		((ArrayInitializer*)$<r.node>$)->addElement($<r.node>1);
-  }
+		{
+			l.a("variable_initializer_list",1);
+			$<r.node>$ = new ArrayInitializer();
+			((ArrayInitializer*)$<r.node>$)->addElement($<r.node>1);
+		}
   | variable_initializer_list COMMA variable_initializer	
-  {
-		l.a("variable_initializer_list",2);
-
-		$<r.node>$ = $<r.node>1;
-
-		((ArrayInitializer*)$<r.node>$)->addElement($<r.node>3);  
-  }
+		{
+			l.a("variable_initializer_list",2);
+			$<r.node>$ = $<r.node>1;
+			((ArrayInitializer*)$<r.node>$)->addElement($<r.node>3);  
+		}
   ;
 
 /***** C.2.9 Interfaces *****/

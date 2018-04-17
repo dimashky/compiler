@@ -3,6 +3,9 @@
 Procedure::Procedure(Symbol* symbol, Node* parent):Object(symbol, parent)
 {
 	this->block = nullptr;
+	/*
+	 *	TODO: init nodeType with symbol table.
+	 */
 }
 
 void Procedure::add(Object* object)
@@ -44,6 +47,17 @@ void Procedure::setBlock(Block* block)
 string Procedure::getType()
 {
 	return "procedure";
+}
+
+bool Procedure::typeChecking() {
+	bool check = true;
+	for (int i = 0; i < locals.size(); i++) {
+		check |= locals[i]->typeChecking();
+	}
+	if (block) {
+		check |= block->typeChecking();
+	}
+	return check;
 }
 
 Procedure::~Procedure()

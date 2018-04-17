@@ -29,6 +29,13 @@ string Variable::getType()
 	return "variable";
 }
 
+bool Variable::typeChecking() {
+	if (equal) {
+		return equal->typeChecking();
+	}
+	return true;
+}
+
 Variable::~Variable()
 {
 
