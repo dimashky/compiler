@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 class TypeExpression {
 public:
@@ -36,7 +37,7 @@ public:
 
 	virtual TypeExpression* opSqrBrackets(TypeExpression*); // []
 
-	virtual TypeExpression* opBrackets(TypeExpression**);	// () 
+	virtual TypeExpression* opBrackets(std::vector<TypeExpression*>&);	// () 
 
 	//Type Equivelance
 	virtual int equivelantTo(int);

@@ -77,7 +77,7 @@ TypeExpression* TypeExpression::opSqrBrackets(TypeExpression* elementType) {
 	return new TypeError(this->typeExpression() + " doesn't support ["+ elementType->typeExpression() + "] operation.");
 }
 
-TypeExpression* TypeExpression::opBrackets(TypeExpression** parameters) {
+TypeExpression* TypeExpression::opBrackets(std::vector<TypeExpression*>& paramsType) {
 	return new TypeError(this->typeExpression() + " doesn't support () operation.");
 }
 
