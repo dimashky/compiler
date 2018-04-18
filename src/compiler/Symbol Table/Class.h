@@ -35,6 +35,7 @@ public:
 	bool get_is_abstract();
 	bool get_is_public();
 	bool get_have_constructor();
+	string getFullPath();
 	node* get_type_graph_position();
 	pair<string, symbolTable*> get_extended_class();
 

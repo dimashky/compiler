@@ -19,29 +19,29 @@ class symbolTable
 { 
 
 private:
+
 	bool valid;
 	Symbol* owner;
 	symbolTable *parent;
 	vector<symbolTable*>childs;
-	void add_scope(Symbol* symbol);
-	void add_symbol_without_open_brackets(Symbol* symbol);
+	static FILE *nodeFile, *edgeFile;
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > symbolMap;
 
-	static FILE *nodeFile, *edgeFile;
+	void add_scope(Symbol* symbol);
+	void add_symbol_without_open_brackets(Symbol* symbol);
 
 public:
-	static symbolTable* object_ref;
+	
 	static int is_main;
 	static vector<node*>parents;
-	static vector<pair<node*,pair<pair<int, int>, pair<int, int> > > >using_namespaces;
+	static symbolTable* object_ref;
+	static vector<symbolTable*> deleted;
 	static class_tree *type_defination_tree;
 	static stack<symbolTable*> openBrackets;
 	static queue<pair<Symbol*, symbolTable*>> later_defination_override;
 	static queue<pair<Symbol*, symbolTable*>> extended_abstract_classes;
-
+	static vector<pair<node*, pair<pair<int, int>, pair<int, int> > > >using_namespaces;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
-	static vector<symbolTable*> deleted;
-
 
 	symbolTable(symbolTable* parent,Symbol* owner);
 	
@@ -53,24 +53,26 @@ public:
 	void addClass(Symbol* symbol, queue<string>&bases, queue<string>&modifiers);
 	void addInterface(Symbol* symbol, queue<string>bases, queue<string>&modifiers);
 	void addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init, bool known_type, bool is_body);
-	void setAsInvalid() {
-		valid = false;
-	}
 
-	void check_method(symbolTable* curr, map<string, bool>check_map);
-       
-	int print(int);
-	static bool initPrintFiles();
-	static void closePrintFiles();
-
-	bool closeScope();
 	Symbol* get_owner();
+	string getFullPath();
 	string get_owner_name();
 	symbolTable * get_parent();
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>& get_symbolMap();
 
-	static Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope);
+	int print(int);
 
+	bool closeScope();
+
+	void setAsInvalid();
+
+	static bool initPrintFiles();
+
+	static void closePrintFiles();
+
+	void check_method(symbolTable* curr, map<string, bool>check_map);   
+
+	static Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope, Symbol* lastSymbol = nullptr);
 	
 	~symbolTable();
 };
