@@ -1,6 +1,5 @@
 #include "Symbol.h"
 
-#include <vector>
 
 Symbol::Symbol(string name, int line_no, int col_no)
 {
@@ -24,7 +23,7 @@ vector<Symbol*> Symbol::divideName() {
 	vector<Symbol*> res;
 	string s = this->name;
 	string subStr;
-	for (int i = 0;i < s.length;i++) {
+	for (int i = 0;i < s.length();i++) {
 		if (s[i] == '.') {
 			res.push_back(new Symbol(subStr, this->line_no, -13));
 			subStr = "";
