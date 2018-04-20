@@ -204,6 +204,9 @@
     <ClCompile Include="Parser\yacc.tab.cpp">
       <Filter>Source Files\Parser</Filter>
     </ClCompile>
+    <ClCompile Include="Type Checker\TypesTable.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="Parser\yacc.tab.h">
       <Filter>Source Files\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypesTable.h">
+      <Filter>Source Files\Type Checker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

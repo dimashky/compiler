@@ -30,4 +30,6 @@
 
 // Helpers and Aux
 #include "TypeCheckingHelper.h"
+#include "TypesTable.h"
+
 #endif

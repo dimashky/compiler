@@ -66,6 +66,7 @@
     <ClCompile Include="Type Checker\TypeFloat.cpp" />
     <ClCompile Include="Type Checker\TypeFunction.cpp" />
     <ClCompile Include="Type Checker\TypeInteger.cpp" />
+    <ClCompile Include="Type Checker\TypesTable.cpp" />
     <ClCompile Include="Type Checker\TypeString.cpp" />
     <ClCompile Include="Type Checker\TypeVoid.cpp" />
   </ItemGroup>
@@ -119,6 +120,7 @@
     <ClInclude Include="Type Checker\TypeFloat.h" />
     <ClInclude Include="Type Checker\TypeFunction.h" />
     <ClInclude Include="Type Checker\TypeInteger.h" />
+    <ClInclude Include="Type Checker\TypesTable.h" />
     <ClInclude Include="Type Checker\TypeString.h" />
     <ClInclude Include="Type Checker\TypeVoid.h" />
   </ItemGroup>

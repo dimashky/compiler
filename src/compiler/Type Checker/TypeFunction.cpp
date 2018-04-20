@@ -41,3 +41,12 @@ TypeExpression* TypeFunction::opBrackets(std::vector<TypeExpression*>& paramsTyp
 	}
 	return this->returnType;
 }
+
+TypeExpression* TypeFunction::getReturnType() {
+	return this->returnType;
+}
+
+std::vector<TypeExpression*> TypeFunction::getParamsType() {
+	return this->paramsType;
+}
+

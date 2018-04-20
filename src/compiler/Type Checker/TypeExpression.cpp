@@ -81,6 +81,10 @@ TypeExpression* TypeExpression::opBrackets(std::vector<TypeExpression*>& paramsT
 	return new TypeError(this->typeExpression() + " doesn't support () operation.");
 }
 
+TypeExpression* TypeExpression::opDot(std::string c) {
+	return new TypeError(this->typeExpression() + " doesn't support DOT operation.");
+}
+
 int TypeExpression::equivelantTo(int secondTypeId) {
 	return TYPE_ERROR; // default
 }

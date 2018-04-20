@@ -39,6 +39,7 @@ public:
 
 	virtual TypeExpression* opBrackets(std::vector<TypeExpression*>&);	// () 
 
+	virtual TypeExpression* opDot(std::string c);
 	//Type Equivelance
 	virtual int equivelantTo(int);
 	
