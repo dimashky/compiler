@@ -190,6 +190,8 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, params_dimension,var_init, known_type, is_body);
 
+	Node::Up();
+
 	return newMethod;
 }
 
@@ -212,6 +214,9 @@ void symbolParser::add_scope()
 		((For*)Node::current)->setStatement(b);
 	else if (Node::current->getType() == "foreach") {
 		((Foreach*)Node::current)->setStatement(b);
+	}
+	else if (Node::current->getType() == "procedure") {
+		((Procedure*)Node::current)->setBlock(b);
 	}
 
 
