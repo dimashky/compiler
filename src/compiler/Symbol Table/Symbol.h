@@ -15,6 +15,7 @@ public:
 	string getName();
 	int getLineNo();
 	int getColNo();
+	vector<Symbol*> divideName();
 	virtual string getType();
 
 	void setColNo(int col_no) {
