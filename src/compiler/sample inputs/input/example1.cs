@@ -1,26 +1,13 @@
-namespace x
+class a
 {
-    class a
-    {
-
-    }
-}
-namespace b
-{
-    class a
-    {
-
-    }
-}
-class c
-{
-    void ff(b.a car)
-    {
-
-    }
-    void ff(x.a car)
+    int b;
+    void z(int a)
     {
 
     }
 
+    void ffff()
+    {
+        z(5 + 1);
+    }
 }

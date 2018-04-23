@@ -1,4 +1,5 @@
 #include "Call.h"
+#include "../../Symbol Table/Class.h"
 
 Call::Call(Node *call, Node *parent, bool new_expression, bool known_type) :Statement(parent)
 {
@@ -49,13 +50,17 @@ bool Call::typeChecking() {
 
 	if (method->getColNo() == -15) {
 		//raise error
-		new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
+		this->nodeType = new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
 	}
 	else {
 		cout << "call function in " << to_string(method->getLineNo()) << endl;
-		
+		if (method->isComplex()) {
+			this->nodeType = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath());
+		}
+		else {
+			this->nodeType = TypesTable::getType(method->get_return_type());
+		}
 	}
-
 	return true;
 }
 

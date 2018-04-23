@@ -3,5 +3,8 @@
 
 class TypeVoid : public TypeExpression {
 public:
+	static TypeVoid* getInstance();
+private:
+	static TypeVoid* instance;
 	TypeVoid();
 };

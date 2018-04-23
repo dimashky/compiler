@@ -7,11 +7,13 @@ using namespace std;
 
 class TypesTable {
 public:
-	TypesTable();
-	
-	TypeExpression* getType(string);
-	bool setType(string, TypeExpression*);
+
+	static void init();
+	static TypeExpression* findOrCreate(string);
+	static TypeExpression* getType(string);
+	static bool setType(string, TypeExpression*);
 	
 private:
-	map<string, TypeExpression*> table;
+	TypesTable();
+	static map<string, TypeExpression*> table;
 };

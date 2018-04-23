@@ -1,4 +1,7 @@
-*.js
+*edges.js
+*nodes.js
+*info.js
+
 **/Parser/*
 
 # Created by https://www.gitignore.io/api/c,c++,csharp,windows,visualstudio

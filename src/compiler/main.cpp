@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <ctime>
 #include"AST\Object\Procedure.h"
+#include "Type Checker\TypesTable.h"
+
 using namespace std;
 
 // Extern from YACC 
@@ -65,6 +67,7 @@ int main()
 	symbolTable::type_defination_tree->print_defination_tree(symbolTable::type_defination_tree->get_root());
 	// print yacc logger
 	l.print();
+	TypesTable::init();
 	AST->typeChecking();
 	// errors
 	error_handler.print();

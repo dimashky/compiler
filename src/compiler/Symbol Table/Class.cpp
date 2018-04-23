@@ -123,6 +123,8 @@ bool Class::get_is_abstract()
 }
 
 string Class::getFullPath() {
+	cout << this << endl;
+	system("pause");
 	return ((symbolTable*)this->type_graph_position->stPTR)->getFullPath();
 }
 
