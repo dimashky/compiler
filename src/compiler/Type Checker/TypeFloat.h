@@ -5,6 +5,10 @@ class TypeFloat : public TypeExpression {
 public:
 	static TypeFloat* getInstance();
 
+	std::string typeExpression() {
+		return "FLOAT";
+	}
+
 	TypeExpression* opPlus(int secondTypeId);
 
 	TypeExpression* opMinus(int secondTypeId);

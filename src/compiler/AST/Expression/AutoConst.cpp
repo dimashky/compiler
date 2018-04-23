@@ -6,7 +6,7 @@ AutoConst::AutoConst(string type, void* value, Node* parent):Expression(parent)
 	this->value = value; 
 
 	if (type == "INT") {
-		this->nodeType = TypeInteger::getInstance();
+ 		this->nodeType = TypeInteger::getInstance();
 	}
 	else if (type == "STRING" || type == "CHAR") {
 		this->nodeType = TypeString::getInstance();

@@ -1,6 +1,10 @@
 #pragma once
 #include "Statement.h"
 #include "../Object/Object.h"
+#include "../../Symbol Table/Method.h"
+#include "../Expression/Identifier.h"
+#include "../../Type Checker/all.h"
+
 class Call :public Statement
 {
 
@@ -25,12 +29,14 @@ public:
 
 	int print(int nodeCnt);
 
-	Symbol* getSymbol();
+	//Symbol* getSymbol();
 
 	string getType();
 
 	void setParams(vector<pair<Node*, int> > params);
-	bool typeChecking() { return false; }
+	
+	bool typeChecking();
+
 	~Call();
 
 };

@@ -14,7 +14,7 @@ public:
 	void setBytes(int);
 
 	// return string representing the type expression of the type modeled, eg:"(int,float)->void"
-	std::string typeExpression();
+	virtual std::string typeExpression();
 	
 	// operations
 	/// TODO: opDot 

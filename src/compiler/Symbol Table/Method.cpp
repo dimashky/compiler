@@ -5,6 +5,8 @@
 #include "../AST/Object/ArrayInitializer.h"
 extern errorHandler error_handler;
 
+bool Method::compare_status = true;
+
 Method::Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no): Symbol(name, line_no, col_no)
 {
 	attribute = new Attribute(this->getType(),return_type,line_no,col_no);
@@ -20,6 +22,7 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->is_internal = false;
 	this->is_extern = false;
 	this->must_ovrride = false; 
+	this->default_counter = 0;
 	this->types_ids_parameter = types_ids_parameter; 
 	
 
@@ -85,7 +88,10 @@ bool Method::is_final()
 	return isFinal;
 }
 
-
+void Method::setParameters(vector <LocalVariable*> params) {
+	this->types_ids_parameter = params;
+	return;
+}
 
 vector<LocalVariable*>& Method::get_parameters()
 {
@@ -103,9 +109,12 @@ void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, in
 		Variable* field = new Variable(newLocalVariable, (Expression*)var_init.front(), Node::current);
 
 		((Block*)Node::current)->add(field);
-
+		
 		types_ids_parameter.push_back(newLocalVariable);
 		
+		if (var_init.front() != nullptr)
+			this->default_counter++;
+
 		parameters.pop();
 
 		params_dimension.pop();
@@ -123,15 +132,25 @@ bool Method::compare(Symbol* comp)
 {
 	if (getName() == comp->getName() && comp->getType() == "method")
 	{
-		if (get_parametars_count() != ((Method*)comp)->get_parametars_count())
-			return get_parametars_count() > ((Method*)comp)->get_parametars_count();
+		int params_cnt = get_parametars_count();
+		int sec_params_cnt = ((Method*)comp)->get_parametars_count();
+		
+		if (params_cnt != sec_params_cnt && Method::compare_status) {
+			return params_cnt > sec_params_cnt;
+		}
+		else if(! Method::compare_status){
+			if (!(params_cnt - default_counter <= sec_params_cnt && sec_params_cnt <= params_cnt)) {
+				return  params_cnt > sec_params_cnt;
+			}
+		}
 
 		vector<LocalVariable*> &p1 = get_parameters();
 		vector<LocalVariable*> &p2 = ((Method*)comp)->get_parameters();
-		for (int i = 0;i < p1.size();i++)
+		for (int i = 0;i < p2.size();i++)
+		{
 			if (p1[i]->get_type_name() != p2[i]->get_type_name())
 				return p1[i]->get_type_name() > p2[i]->get_type_name();
-
+		}
 		return false;
 	}
 	return getName() > comp->getName();

@@ -23,7 +23,7 @@ int Procedure::print(int nodeCnt)
 		fprintf(nodesFile, "{ id:%d, label:'Global Namespace', shape: 'box', color:'#74bffc'},", nodeCnt);
 
 	for (int i = 0; i < locals.size(); i++) {
-		fprintf(edgesFile, "{from:%d, to:%d, dashes:true, label: 'asd'},", currentId, nodeCnt + 1);
+		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
 		nodeCnt = locals[i]->print(nodeCnt + 1);
 	}
 	if (block) {

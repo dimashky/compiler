@@ -16,12 +16,17 @@ private:
 	bool isFinal,is_static,is_abstract,is_override , is_virtual, is_extern;
 	bool is_public, is_private , is_protected , is_internal; 
 	bool must_ovrride; 
+	int default_counter;
 	vector<LocalVariable*> types_ids_parameter;
 public:
+
+	//true for default case of compare "same number of params" ... false for compare to handle default params case
+	static bool compare_status;
+
 	Method(queue<string>&modifiers, string return_type, string name, int line_no, int col_no);
 	void add_attributes(queue<string>&attributes,string name_parent, bool is_body);
 	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init);
-
+	void setParameters(vector <LocalVariable*> params);
 	void set_return_type(Symbol* ref);
 
 	bool compare(Symbol* comp);
@@ -38,6 +43,11 @@ public:
 	bool get_is_protected();
 	bool get_is_internal();
 	bool get_is_must_ovrride();
+
+
+	bool isComplex() {
+		return return_type_ref != nullptr;
+	}
 
 	void set_must_ovrride(bool must_override);
 	string get_return_type();

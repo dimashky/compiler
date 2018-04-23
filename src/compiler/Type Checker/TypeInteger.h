@@ -1,9 +1,14 @@
 #pragma once
 #include "TypeExpression.h"
-
+#include <string>
+#include <iostream>
 class TypeInteger : public TypeExpression {
 public:
 	static TypeInteger* getInstance();
+	
+	std::string typeExpression() {
+		return "INT";
+	}
 
 	TypeExpression* opPlus(int);
 	TypeExpression* opMinus(int);

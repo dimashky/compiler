@@ -31,6 +31,10 @@ void LocalVariable::set_type(Symbol* type_ref)
 	this->type_ref = type_ref;
 }
 
+Symbol* LocalVariable::getTypeRef() {
+	return this->type_ref;
+}
+
 LocalVariable::~LocalVariable()
 {
 }

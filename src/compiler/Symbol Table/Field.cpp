@@ -30,6 +30,10 @@ string Field::getType()
 	return "field";
 }
 
+bool Field::get_is_private() {
+	return this->is_private;
+}
+
 string Field::get_type_name()
 {
 	return type_variable;
@@ -38,6 +42,10 @@ string Field::get_type_name()
 void Field::set_type(Symbol* type_ref)
 {
 	this->type_ref = type_ref;
+}
+
+Symbol* Field::getTypeRef() {
+	return this->type_ref;
 }
 
 Field::~Field()

@@ -928,10 +928,12 @@ void symbolTable::setAsInvalid() {
 
 Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope, Symbol* lastSymbol) {
 
+	bool sameClass = true;
+
 	symbolTable* currentScope;
 
 	//check if id equal 'this' or no !!
-	
+
 	if (symbol->getName() == "this" || symbol->getName() == "base") {
 
 		if (lastSymbol != nullptr)
@@ -955,10 +957,15 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		return ((Class*)currentScope->get_owner())->get_extended_class().second->get_owner();
 	}
 
-	if (lastSymbol)
+	if (lastSymbol) {
 
 		currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
-	
+		
+		if (currentScope != identifierScope) {
+			sameClass = false;
+		}
+	}
+
 	else 
 		
 		currentScope = identifierScope;
@@ -969,9 +976,8 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		
 
 		//check if this id defined in same scope !!
-
 		it = currentScope->symbolMap.find(symbol);
-
+		
 		if (it != currentScope->symbolMap.end()) {
 			if (it->first->getLineNo() > symbol->getLineNo()) {
 				symbol->setColNo(-15);
@@ -991,7 +997,7 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 				if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
 				
 					break;
-
+				
 				it = currentScope->symbolMap.find(symbol);
 
 				if (it != currentScope->symbolMap.end()) {
@@ -1013,23 +1019,49 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 	}
 
-	//check if this id defined as field in same class !!
+	//check if this id defined in same class !!
 
 	it = currentScope->symbolMap.find(symbol);
 
 	if (it != currentScope->symbolMap.end()) {
 
-		if (it->first->getType() != "class")
+		bool isPrivate;
+		if (it->first->getType() == "field") {
+			isPrivate = ((Field*)it->first)->get_is_private();
+		}
+		else if (it->first->getType() == "method") {
+			isPrivate = ((Method*)it->first)->get_is_private();
+		}
+
+		if ((it->first->getType() != "class" && (it->first->getType() != "method" || symbol->getType() == "method")) && (sameClass || !isPrivate))
 			return it->first;
 
 		symbol->setColNo(-15);
 
 		return symbol;
 	}
-	else
-		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+	else {
 
-	//check if this id defined as field in base class
+		if (symbol->getType() == "method") {
+
+			Method::compare_status = false;
+
+			it = currentScope->symbolMap.find(symbol);
+
+			if (it != currentScope->symbolMap.end()) {
+
+				Method::compare_status = true;
+
+				return it->first;
+			}
+
+			Method::compare_status = true;
+		}
+		
+		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+	}
+
+	//check if this id defined in base class
 
 	while (currentScope != nullptr) {
 
@@ -1037,15 +1069,35 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 		if (it != currentScope->symbolMap.end()) {
 
-			if (it->first->getType() != "class")
-			
-				if(it->first->getType() != "field" && !((Field*)it->first)->get_is_private() || it->first->getType() != "method" && !((Method*)it->first)->get_is_private())
-			
+			if (it->first->getType() != "class" && (it->first->getType() != "method" || symbol->getType() == "method")) {
+
+				if (it->first->getType() == "field" && !((Field*)it->first)->get_is_private() || it->first->getType() == "method" && !((Method*)it->first)->get_is_private()) {
+				
 					return it->first;
+				
+				}
+
+			}	
 
 			symbol->setColNo(-15);
 
 			return symbol;
+		}
+		else if (symbol->getType() == "method") {
+
+			Method::compare_status = false;
+
+			it = currentScope->symbolMap.find(symbol);
+
+			if (it != currentScope->symbolMap.end()) {
+
+				Method::compare_status = true;
+
+				return it->first;
+			}
+
+			Method::compare_status = true;
+
 		}
 
 		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;

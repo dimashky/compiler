@@ -17,13 +17,18 @@ private:
 public:
 
 	Field(queue<string>&modifiers , string type_variable,string name,int dimension, int line_no, int col_no);
-    string getType();
-	string get_type_name();
-	void set_type(Symbol* type_ref);
+    
 	void add_attributes(queue<string>&attributes);
 
-	bool get_is_private() {
-		return this->is_private;
+	void set_type(Symbol* type_ref);
+	
+	string getType();
+	bool get_is_private();
+	string get_type_name();
+	Symbol* getTypeRef();
+
+	bool isComplex() {
+		return type_ref != nullptr;
 	}
 	~Field();
 

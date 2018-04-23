@@ -20,9 +20,17 @@ public:
 	vector<Symbol*> divideName();
 	virtual string getType();
 
+	virtual Symbol* getTypeRef() {
+		return nullptr;
+	}
+
 	void setColNo(int col_no) {
 		this->col_no = col_no;
 		return;
+	}
+
+	virtual bool isComplex() {
+		return false;
 	}
 
 	~Symbol();

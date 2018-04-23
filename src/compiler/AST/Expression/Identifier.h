@@ -27,6 +27,11 @@ public:
 
 	string getType();
 	
+	Symbol* getPostDot() {
+		return this->postDot;
+	}
+
+
 	void setArrayDimensions(queue<Node*>dimensions);
 	bool typeChecking() { return false; }
 	~Identifier();

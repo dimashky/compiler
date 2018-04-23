@@ -18,8 +18,8 @@ private:
 	*/
 	int dimension;
 
-
 	bool isFinal,isParameter,is_const;
+
 public:
 	LocalVariable(string type_variable, string name, int dimension, bool isParameter, bool is_const, int line_no, int col_no);
 	
@@ -27,9 +27,15 @@ public:
 
 	string getType();
 	string get_type_name();
-	
+	Symbol* getTypeRef();
+
 	bool is_final();
 	bool is_parameter();
+
+	bool isComplex() {
+		/// TODO: add if
+		return type_ref != nullptr;
+	}
 
 	~LocalVariable();
 
