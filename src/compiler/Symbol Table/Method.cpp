@@ -25,8 +25,6 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->default_counter = 0;
 	this->types_ids_parameter = types_ids_parameter; 
 	this->return_type_ref = nullptr;
-
-
 }
 
 void Method::add_attributes(queue<string>&attributes , string name_parent,bool is_body)

@@ -2,6 +2,7 @@
 #include "all.h"
 #include <string>
 #include <map>
+#include "../Symbol Table/Symbol.h"
 
 using namespace std;
 
@@ -9,11 +10,10 @@ class TypesTable {
 public:
 
 	static void init();
-	static TypeExpression* findOrCreate(string);
-	static TypeExpression* getType(string);
-	static bool setType(string, TypeExpression*);
+	static TypeExpression* findOrCreate(string, Symbol*);
+	static pair<TypeExpression*, Symbol*> getType(string);
 	
 private:
 	TypesTable();
-	static map<string, TypeExpression*> table;
+	static map<string, pair<TypeExpression*, Symbol*>> table;
 };

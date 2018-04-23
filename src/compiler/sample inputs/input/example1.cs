@@ -1,13 +1,18 @@
+class b
+{
+     public int x;
+}
 class a
 {
     int b;
-    void z(int a)
+    b z(int a,int tt = 12)
     {
 
     }
 
     void ffff()
     {
-        z(5 + 1);
+        float x;
+        x = z(5 + 1).x + 1;
     }
 }

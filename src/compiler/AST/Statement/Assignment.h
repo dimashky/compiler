@@ -20,7 +20,21 @@ public:
 
 	string getType();
 
-	bool typeChecking() { return false; }
+	bool typeChecking() { 
+		if (left) {
+			left->typeChecking();
+		}
+		if (right) {
+			right->typeChecking();
+		}
+		if (left && right && left->nodeType == right->nodeType) {
+			return true;
+		}
+		
+		this->nodeType = new TypeError("invalid assignment operation");
+
+		return false;
+	}
 
 	~Assignment();
 };

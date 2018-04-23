@@ -1,45 +1,37 @@
 #include "all.h"
 #include <map>
-
+#include "../Symbol Table/symbolTable.h"
 TypesTable::TypesTable() {
 
 }
 
-map<string, TypeExpression*> TypesTable::table = map<string, TypeExpression*>();
+map<string, pair<TypeExpression*, Symbol*>> TypesTable::table = map<string, pair<TypeExpression*, Symbol*>>();
 
-TypeExpression* TypesTable::findOrCreate(string type) {
+TypeExpression* TypesTable::findOrCreate(string type, Symbol* symbol) {
 	auto result = TypesTable::table.find(type);
 	if (result != TypesTable::table.end()) {
-		return result->second;
+		return result->second.first;
 	}
 	else {
-		return TypesTable::table[type] = new TypeClass(type);
+		return (TypesTable::table[type] = make_pair(new TypeClass(type), symbol)).first;
 	}
 }
 
 void TypesTable::init() {
-	TypesTable::table["INT"] = TypeInteger::getInstance();
-	TypesTable::table["STRING"] = TypeString::getInstance();
-	TypesTable::table["CHAR"] = TypeString::getInstance();
-	TypesTable::table["FLOAT"] = TypeFloat::getInstance();
-	TypesTable::table["BOOL"] = TypeBoolean::getInstance();
-	TypesTable::table["VOID"] = TypeVoid::getInstance();
-	TypesTable::table["Object"] = new TypeClass("Object");
+	TypesTable::table["INT"] = make_pair(TypeInteger::getInstance(), nullptr);
+	TypesTable::table["STRING"] = make_pair(TypeString::getInstance(), nullptr);
+	TypesTable::table["CHAR"] = make_pair(TypeString::getInstance(), nullptr);
+	TypesTable::table["FLOAT"] = make_pair(TypeFloat::getInstance(), nullptr);
+	TypesTable::table["BOOL"] = make_pair(TypeBoolean::getInstance(), nullptr);
+	TypesTable::table["VOID"] = make_pair(TypeVoid::getInstance(), nullptr);
+	TypesTable::table["Object"] = make_pair(new TypeClass("Object"), symbolTable::object_ref->get_owner());
 }
 
-TypeExpression* TypesTable::getType(string type) {
+pair<TypeExpression*,Symbol*> TypesTable::getType(string type) {
 	auto result = TypesTable::table.find(type);
 	if (result != TypesTable::table.end()) {
 		return result->second;
 	}
-	return nullptr;
+	return make_pair(nullptr, nullptr);
 }
 
-bool TypesTable::setType(string type, TypeExpression* typeExpression) {
-	auto result = TypesTable::table.find(type);
-	if (result != TypesTable::table.end()) {
-		return false;
-	}
-	TypesTable::table[type] = typeExpression;
-	return true;
-}

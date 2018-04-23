@@ -16,14 +16,7 @@ string Identifier::getType()
 
 int Identifier::print(int nodeCnt)
 {
-	Symbol* s = symbolTable::findIdentifier(((Identifier*)this->preDot)->postDot, (symbolTable*)((Identifier*)this->preDot)->symboltable, nullptr);
-	if (s == nullptr) {
-		cout << "xx" << endl;
-	}
-	else {
-		s = symbolTable::findIdentifier(this->postDot, (symbolTable*)this->symboltable, s);
-		cout << s->getLineNo() << endl;
-	}
+	
 	return nodeCnt;
 }
 

@@ -53,12 +53,14 @@ bool Call::typeChecking() {
 		this->nodeType = new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
 	}
 	else {
+
 		cout << "call function in " << to_string(method->getLineNo()) << endl;
+
 		if (method->isComplex()) {
-			this->nodeType = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath());
+			this->nodeType = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath(), method->getTypeRef());
 		}
 		else {
-			this->nodeType = TypesTable::getType(method->get_return_type());
+			this->nodeType = TypesTable::getType(method->get_return_type()).first;
 		}
 	}
 	return true;

@@ -52,6 +52,9 @@ public:
 	void set_must_ovrride(bool must_override);
 	string get_return_type();
 	string getType();
+	Symbol* getTypeRef() {
+		return return_type_ref;
+	}
 
 	~Method();
 

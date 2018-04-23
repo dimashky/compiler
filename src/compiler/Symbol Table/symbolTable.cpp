@@ -369,7 +369,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
 
 		if (ref.first != nullptr)
-			((Method*)symbol)->set_return_type(((symbolTable*)ref.first)->owner);
+			((Method*)symbol)->set_return_type(((symbolTable*)ref.first)->get_owner());
 
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error,  the type name '" + ((Method*)symbol)->get_return_type() + "' couldn't be found"));
