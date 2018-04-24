@@ -882,7 +882,7 @@ constant_declarator
 
   expression_statement
   : invocation_expression			SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
-  | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);}
+  | object_creation_expression		SEMICOLON							  {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   | assignment						SEMICOLON							  {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   | post_increment_expression  		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
   | post_decrement_expression		SEMICOLON                             {l.a("expression_statement",1);SPL->addStatement($<r.node>1);}
@@ -899,7 +899,7 @@ constant_declarator
   ;
 statement_expression
   : invocation_expression	 										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
-  | object_creation_expression	 						    		{l.a("statement_expression",1);}
+  | object_creation_expression	 						    		{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
   | assignment		          										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
   | post_increment_expression										{l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
   | post_decrement_expression									    {l.a("statement_expression",1);$<r.node>$ = $<r.node>1;}
