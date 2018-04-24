@@ -961,6 +961,14 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 		currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
 		
+		while (identifierScope != nullptr) {
+
+			identifierScope = identifierScope->get_parent();
+
+			if (identifierScope->get_owner() != nullptr && identifierScope->get_owner()->getType() == "class")
+				break;
+		}
+
 		if (currentScope != identifierScope) {
 			sameClass = false;
 		}
