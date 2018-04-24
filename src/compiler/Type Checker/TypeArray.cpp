@@ -17,12 +17,3 @@ int TypeArray::getSize() {
 string TypeArray::typeExpression() {
 	return "[" + this->elementType->typeExpression() + "]";
 }
-
-TypeExpression* TypeArray::opSqrBrackets(TypeExpression* elementType) {
-	if (this->elementType == elementType) {
-		return this->elementType;
-	}
-	else {
-		return TypeExpression::opSqrBrackets(elementType);
-	}
-}

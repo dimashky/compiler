@@ -33,6 +33,7 @@
     <ClCompile Include="AST\Object\Object.cpp" />
     <ClCompile Include="AST\Object\Procedure.cpp" />
     <ClCompile Include="AST\Object\Variable.cpp" />
+    <ClCompile Include="AST\Operator.cpp" />
     <ClCompile Include="AST\Statement\Assignment.cpp" />
     <ClCompile Include="AST\Statement\Block.cpp" />
     <ClCompile Include="AST\Statement\Call.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="AST\Object\Object.h" />
     <ClInclude Include="AST\Object\Procedure.h" />
     <ClInclude Include="AST\Object\Variable.h" />
+    <ClInclude Include="AST\Operator.h" />
     <ClInclude Include="AST\Statement\Assignment.h" />
     <ClInclude Include="AST\Statement\Block.h" />
     <ClInclude Include="AST\Statement\Call.h" />

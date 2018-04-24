@@ -13,3 +13,7 @@ TypeVoid* TypeVoid::getInstance() {
 	}
 	return instance;
 }
+
+std::string TypeVoid::typeExpression() {
+	return "VOID";
+}

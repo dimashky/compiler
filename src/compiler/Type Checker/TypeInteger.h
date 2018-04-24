@@ -6,26 +6,11 @@ class TypeInteger : public TypeExpression {
 public:
 	static TypeInteger* getInstance();
 	
-	std::string typeExpression() {
-		return "INT";
-	}
+	std::string typeExpression();
 
-	TypeExpression* opPlus(int);
-	TypeExpression* opMinus(int);
-	TypeExpression* opMult(int);
-	TypeExpression* opDiv(int);
-	TypeExpression* opMod(int);
-	TypeExpression* opExp(int);
+	TypeExpression* operation(Operator op, TypeExpression* secondOperand = nullptr);
 
-	TypeExpression* opGreaterThan(int);
-	TypeExpression* opLessThan(int);
-	TypeExpression* opGreaterOrEq(int);
-	TypeExpression* opLessOrEq(int);
-
-	TypeExpression* opEqual(int);
-
-	int equivelantTo(int);
-
+	int equivelantTo(TypeExpression* secondOperand);
 private:
 	static TypeInteger* instance;
 	TypeInteger();

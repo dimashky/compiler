@@ -1,16 +1,17 @@
 #pragma once
 #include "TypeExpression.h"
+#include "../AST/Operator.h"
 
 class TypeBoolean : public TypeExpression {
 public:
 	static TypeBoolean* getInstance();
 
-	//Operations
-	TypeExpression* opAnd(int secondTypeId);
+	std::string typeExpression();
 
-	TypeExpression* opOr(int secondTypeId);
+	TypeExpression* operation(Operator op, TypeExpression* secondOperand = nullptr);
 
-	int equivelantTo(int secondTypeId);
+	int equivelantTo(TypeExpression* secondOperand);
+
 private:
 	static TypeBoolean* instance;
 	TypeBoolean();

@@ -27,12 +27,12 @@ public:
 		if (right) {
 			right->typeChecking();
 		}
-		if (left && right && left->nodeType == right->nodeType) {
+		if (left && right) {
+		//	this->nodeType = left->nodeType->operation(Operator::Equal, right->nodeType);
 			return true;
 		}
 		
 		this->nodeType = new TypeError("invalid assignment operation");
-
 		return false;
 	}
 

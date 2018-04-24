@@ -17,7 +17,7 @@ int BinaryExpression::print(int nodeCnt) {
 
 	int currentId = nodeCnt;
 
-	fprintf(nodesFile, "{ id:%d, label:'%d', shape: 'box', color:'#fce2be'},", currentId, op);
+	fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#fce2be'},", currentId, OperatorName[op].c_str());
 
 	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
 	nodeCnt = left->print(nodeCnt + 1);
@@ -32,30 +32,12 @@ BinaryExpression::~BinaryExpression()
 }
 
 bool BinaryExpression::typeChecking() {
-	bool checkLeft = this->left->typeChecking();
-	bool checkRight = this->right->typeChecking();
-	if (this->op == Operator::Plus) {
-		this->nodeType = this->left->nodeType->opPlus(this->right->nodeType->getTypeId());
-		
+	bool check = true;
+	this->left->typeChecking();
+	this->right->typeChecking();
+
+	if (left && right) {
+		this->nodeType = this->left->nodeType->operation(op, this->right->nodeType);
 	}
-	else if (this->op == Operator::Minus) {
-		this->nodeType = this->left->nodeType->opMinus(this->right->nodeType->getTypeId());
-	}
-	else if (this->op == Operator::star) {
-		this->nodeType = this->left->nodeType->opMult(this->right->nodeType->getTypeId());
-	}
-	else if (this->op == Operator::slash) {
-		this->nodeType = this->left->nodeType->opDiv(this->right->nodeType->getTypeId());
-	}
-	else if (this->op == Operator::percent) {
-		this->nodeType = this->left->nodeType->opMod(this->right->nodeType->getTypeId());
-	}
-	else if (this->op == Operator::power) {
-		this->nodeType = this->left->nodeType->opExp(this->right->nodeType->getTypeId());
-	}
-	else {
-		this->nodeType = new TypeError("Given operator is Undefind");
-		return false;
-	}
-	return true;
+	return check;
 }

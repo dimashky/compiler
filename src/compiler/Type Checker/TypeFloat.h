@@ -5,31 +5,11 @@ class TypeFloat : public TypeExpression {
 public:
 	static TypeFloat* getInstance();
 
-	std::string typeExpression() {
-		return "FLOAT";
-	}
+	std::string typeExpression();
 
-	TypeExpression* opPlus(int secondTypeId);
+	TypeExpression* operation(Operator op, TypeExpression* secondOperand = nullptr);
 
-	TypeExpression* opMinus(int secondTypeId);
-
-	TypeExpression* opMult(int secondTypeId);
-
-	TypeExpression* opDiv(int secondTypeId);
-
-	TypeExpression* opMod(int secondTypeId);
-
-	TypeExpression* opGreaterThan(int secondTypeId);
-
-	TypeExpression* opLessThan(int secondTypeId);
-
-	TypeExpression* opGreaterOrEq(int secondTypeId);
-
-	TypeExpression* opLessOrEq(int secondTypeId);
-
-	TypeExpression* opEqual(int secondTypeId);
-
-	int equivelantTo(int secondTypeId);
+	int equivelantTo(TypeExpression* secondOperand);
 
 private:
 	static TypeFloat* instance;

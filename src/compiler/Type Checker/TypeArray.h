@@ -9,8 +9,6 @@ public:
 	int getSize();
 	TypeExpression* getOf();
 
-	TypeExpression* opSqrBrackets(TypeExpression*);
-
 private:
 	// number of elements
 	int size;

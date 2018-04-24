@@ -16,24 +16,38 @@ TypeString* TypeString::getInstance() {
 	return TypeString::instance;
 }
 
-TypeExpression* TypeString::opPlus(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeString::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(secondTypeId) + " Type doesn't support aggregate operation");
+std::string TypeString::typeExpression() {
+	return "STRING";
 }
 
-TypeExpression* TypeString::opEqual(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeString::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(secondTypeId) + "  Type doesn't support aggregate operation");
+TypeExpression* TypeString::operation(Operator op, TypeExpression* secondOperand) {
+	int equivelant = TYPE_STRING;
+
+	if (secondOperand != nullptr) {
+		equivelant = this->equivelantTo(secondOperand);
+	}
+
+	if (equivelant == TYPE_ERROR) {
+		return new TypeError(this->typeExpression() + " is not equivelant to " + secondOperand->typeExpression());
+	}
+	else {
+		switch (op)
+		{
+		case Plus:
+			return  TypeString::getInstance();
+			break;
+		case Equal:
+			return  TypeString::getInstance();
+			break;
+		default:
+			return new TypeError(this->typeExpression() + " has no predefined " + OperatorName[op] + " operation");
+			break;
+		}
+	}
 }
 
-int TypeString::getTypeId() {
-	return TYPE_STRING;
-}
-
-int TypeString::equivelantTo(int secondTypeId) {
-	if (secondTypeId == TYPE_STRING || secondTypeId == TYPE_CHAR)
+int TypeString::equivelantTo(TypeExpression* secondOperand) {
+	if (secondOperand->getTypeId() == TYPE_STRING || secondOperand->getTypeId() == TYPE_CHAR)
 		return TYPE_STRING;
 	return TYPE_ERROR;
 }

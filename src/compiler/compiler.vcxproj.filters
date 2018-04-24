@@ -207,6 +207,9 @@
     <ClCompile Include="Type Checker\TypesTable.cpp">
       <Filter>Source Files\Type Checker</Filter>
     </ClCompile>
+    <ClCompile Include="AST\Operator.cpp">
+      <Filter>Source Files\AST</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="Type Checker\TypesTable.h">
       <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Operator.h">
+      <Filter>Source Files\AST</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

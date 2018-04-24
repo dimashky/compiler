@@ -5,12 +5,11 @@ class TypeString : public TypeExpression {
 public:
 	static TypeString* getInstance();
 
-	TypeExpression* opPlus(int secondTypeId);
-	TypeExpression* opEqual(int secondTypeId);
+	std::string TypeString::typeExpression();
 
-	int equivelantTo(int secondTypeId);
+	TypeExpression* operation(Operator op, TypeExpression* secondOperand = nullptr);
 
-	int getTypeId();
+	int equivelantTo(TypeExpression* secondOperand);
 
 private:
 	static TypeString* instance;

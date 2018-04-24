@@ -13,7 +13,7 @@ string UnaryExpression::getType()
 }
 int UnaryExpression::print(int nodeCnt)
 {
-	fprintf(nodesFile, "{ id:%d, label:'%d', shape: 'box', color:'#74bffc'},", nodeCnt, op);
+	fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#74bffc'},", nodeCnt, OperatorName[op].c_str());
 
 	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", nodeCnt, nodeCnt + 1);
 
@@ -22,6 +22,12 @@ int UnaryExpression::print(int nodeCnt)
 	return nodeCnt;
 }
 
+bool UnaryExpression::typeChecking() {
+	if (this->expression->typeChecking()) {
+		this->nodeType = this->expression->nodeType->operation(this->op);
+	}
+	return true;
+}
 
 UnaryExpression::~UnaryExpression()
 {

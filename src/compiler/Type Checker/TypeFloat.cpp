@@ -13,72 +13,116 @@ TypeFloat* TypeFloat::getInstance() {
 	return instance;
 }
 
-// + - * /
-TypeExpression* TypeFloat::opPlus(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeFloat::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support + operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
+std::string TypeFloat::typeExpression() {
+	return "FLOAT";
 }
 
-TypeExpression* TypeFloat::opMinus(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeFloat::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support - operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
+TypeExpression* TypeFloat::operation(Operator op, TypeExpression* secondOperand) {
+	int equivelant = TYPE_FLOAT;
+
+	if (secondOperand != nullptr) {
+		equivelant = this->equivelantTo(secondOperand);
+	}
+
+	if (equivelant == TYPE_ERROR) {
+		return new TypeError(this->typeExpression() + " is not equivelant to " + secondOperand->typeExpression());
+	}
+	else {
+		switch (op)
+		{
+		case Plus:
+			return TypeFloat::getInstance();
+			break;
+		case Minus:
+			return TypeFloat::getInstance();
+			break;
+		case tilde:
+			break;
+		case post_plusplus:
+			return TypeFloat::getInstance();
+			break;
+		case pre_plusplus:
+			return TypeFloat::getInstance();
+			break;
+		case pre_minusminus:
+			return TypeFloat::getInstance();
+			break;
+		case post_minusminus:
+			return TypeFloat::getInstance();
+			break;
+		case star:
+			return TypeFloat::getInstance();
+			break;
+		case slash:
+			return TypeFloat::getInstance();
+			break;
+		case percent:
+			return TypeFloat::getInstance();
+			break;
+		case power:
+			return TypeFloat::getInstance();
+			break;
+		case ltlt:
+			return TypeFloat::getInstance();
+			break;
+		case gtgt:
+			return TypeFloat::getInstance();
+			break;
+		case Greater:
+			return TypeBoolean::getInstance();
+			break;
+		case smaller:
+			return TypeBoolean::getInstance();
+			break;
+		case geq:
+			return TypeBoolean::getInstance();
+			break;
+		case leq:
+			return TypeBoolean::getInstance();
+			break;
+		case noteq:
+			return TypeBoolean::getInstance();
+			break;
+		case eqeq:
+			return TypeBoolean::getInstance();
+			break;
+		case Equal:
+			return TypeFloat::getInstance();
+			break;
+		case pluseq:
+			return TypeFloat::getInstance();
+			break;
+		case minuseq:
+			return TypeFloat::getInstance();
+			break;
+		case stareq:
+			return TypeFloat::getInstance();
+			break;
+		case diveq:
+			return TypeFloat::getInstance();
+			break;
+		case modeq:
+			return TypeFloat::getInstance();
+			break;
+		case xoreq:
+			return TypeFloat::getInstance();
+			break;
+		case andeq:
+			return TypeFloat::getInstance();
+			break;
+		case oreq:
+			return TypeFloat::getInstance();
+			break;
+		default:
+			return new TypeError(this->typeExpression() + " has no predefined " + OperatorName[op] + " operation");
+			break;
+		}
+	}
 }
 
-TypeExpression* TypeFloat::opMult(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeFloat::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support x operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
-}
 
-TypeExpression* TypeFloat::opDiv(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeFloat::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support / operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
-}
-
-TypeExpression* TypeFloat::opMod(int secondTypeId) {
-	if (this->equivelantTo(secondTypeId))
-		return TypeFloat::getInstance();
-	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + "  Type doesn't support % operation with " + TypeCheckingHelper::getTypeName(secondTypeId));
-}
-
-TypeExpression* TypeFloat::opGreaterThan(int secondTypeId) {
-	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
-		return TypeBoolean::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support > operation");
-}
-
-// <
-TypeExpression* TypeFloat::opLessThan(int secondTypeId) {
-	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
-		return TypeBoolean::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support < operation");
-}
-
-// >=
-TypeExpression* TypeFloat::opGreaterOrEq(int secondTypeId) {
-	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
-		return TypeBoolean::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support >= operation");
-}
-
-// <=
-TypeExpression* TypeFloat::opLessOrEq(int secondTypeId) {
-	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
-		return TypeBoolean::getInstance();
-	return new TypeError((secondTypeId) + "  Type doesn't support <= operation");
-}
-
-TypeExpression* TypeFloat::opEqual(int secondTypeId) {
-	if (secondTypeId == TYPE_INTEGER || secondTypeId == TYPE_FLOAT)
-		return TypeBoolean::getInstance();
-	return new TypeError((secondTypeId) + " Type doesn't support == operation");
-}
-
-int TypeFloat::equivelantTo(int secondTypeId) {
-	if (secondTypeId == TYPE_FLOAT || secondTypeId == TYPE_INTEGER)
+int TypeFloat::equivelantTo(TypeExpression* secondOperand) {
+	if (secondOperand->getTypeId() == TYPE_INTEGER || secondOperand->getTypeId() == TYPE_FLOAT)
 		return TYPE_FLOAT;
 	return TYPE_ERROR;
 }
