@@ -34,6 +34,7 @@ pair<TypeExpression*,Symbol*> TypesTable::getType(string type) {
 	if (result != TypesTable::table.end()) {
 		return result->second;
 	}
+	
 	return make_pair(nullptr, nullptr);
 }
 

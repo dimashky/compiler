@@ -31,6 +31,7 @@ bool Block::typeChecking() {
 	for (auto statement : statements) {
 		res |= statement->typeChecking();
 	}
+
 	return res;
 }
 

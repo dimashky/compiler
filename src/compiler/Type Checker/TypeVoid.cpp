@@ -8,7 +8,7 @@ TypeVoid::TypeVoid() {
 TypeVoid* TypeVoid::instance = nullptr;
 
 TypeVoid* TypeVoid::getInstance() {
-	if (instance != nullptr) {
+	if (instance == nullptr) {
 		instance = new TypeVoid();
 	}
 	return instance;

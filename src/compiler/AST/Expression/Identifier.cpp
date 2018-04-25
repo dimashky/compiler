@@ -41,10 +41,18 @@ bool Identifier::typeChecking() {
 	if (this->preDot != nullptr) {
 		this->preDot->typeChecking();
 		prev = TypesTable::getType(this->preDot->nodeType->typeExpression()).second;
-		if (prev->getColNo() == -15) {
+		
+		// preDot in this case return primitive type
+		if (prev == nullptr) {
+			this->nodeType = new TypeError("invalid Dot Operator");
+			return false;
+		}
+		else if (prev->getColNo() == -15) {
 			this->nodeType = new TypeError("Invalid Dot operator in line " + to_string(prev->getLineNo()));
 			return false;
 		}
+		
+
 	}
 
 	vector<Symbol*>divs = postDot->divideName();
@@ -54,6 +62,10 @@ bool Identifier::typeChecking() {
 		if (prev->getColNo() == -15) {
 			this->nodeType = new TypeError("Invalid Dot operator in line " + to_string(prev->getLineNo()));
 			return false;
+		}
+		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
+			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
+			return true;
 		}
 		if (i != divs.size() - 1)
 			prev = prev->getTypeRef();

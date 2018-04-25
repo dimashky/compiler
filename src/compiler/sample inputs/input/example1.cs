@@ -1,15 +1,8 @@
 class b
 {
-
-}
-class a
-{
-    b aa;
-    int fun()
+    int x;
+    public int b1(int a)
     {
-        a ff;
-        b cv;
-        ff = cv;
-
+       b1(1).x = a;
     }
 }

@@ -60,7 +60,9 @@ bool Call::typeChecking() {
 			this->nodeType = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath(), method->getTypeRef());
 		}
 		else {
+			
 			this->nodeType = TypesTable::getType(method->get_return_type()).first;
+			cout << nodeType->getTypeId() << endl;
 		}
 	}
 	return true;
