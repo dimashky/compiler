@@ -1,4 +1,8 @@
 #include "Variable.h"
+#include "../../Type Checker/all.h"
+#include "../../Symbol Table/Field.h"
+#include "../../Symbol Table/LocalVariable.h"
+#include "../../Symbol Table/Class.h"
 
 Variable::Variable(Symbol* symbol, Node *equal, Node* parent) :Object(symbol, parent)
 {
@@ -30,8 +34,33 @@ string Variable::getType()
 }
 
 bool Variable::typeChecking() {
+	
+	if (symbol->getType() == "field") {
+		if (((Field*)symbol)->isComplex()) {
+			this->nodeType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), this->symbol);
+		}
+		else {
+			this->nodeType = TypesTable::getType(((Field*)symbol)->get_type_name()).first;
+		}
+	}
+	else {
+		if (((LocalVariable*)symbol)->isComplex()) {
+			this->nodeType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), this->symbol);
+		}
+		else {
+			this->nodeType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;
+		}
+	}
+
 	if (equal) {
-		return equal->typeChecking();
+		
+		equal->typeChecking();
+		
+		this->nodeType = this->nodeType->operation(Operator::Equal, equal->nodeType);
+
+		if (this->nodeType->getTypeId() == TYPE_ERROR) {
+			return false;
+		}
 	}
 	return true;
 }

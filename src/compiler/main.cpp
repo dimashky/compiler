@@ -68,7 +68,12 @@ int main()
 	symbolTable::type_defination_tree->print_defination_tree(symbolTable::type_defination_tree->get_root());
 	// print yacc logger
 	l.print();
-	
+
+	// Init again 
+	TypesTable::init();
+
+	if (error_handler.errorsNum() == 0)
+		AST->typeChecking();
 	// errors
 	error_handler.print();
 	
@@ -94,8 +99,8 @@ int main()
 	for (int i = 0;i < symbolTable::deleted.size();i++)
 		delete symbolTable::deleted[i];
 
-	// CAUSE ERRO !!!! TypesTable::findOrCreate("Object", symbolTable::object_ref->get_owner());
-	AST->typeChecking();
+
+
 	AST->print(0);
 	Node::closeFiles();
 

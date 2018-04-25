@@ -1,5 +1,6 @@
 #pragma once
 #include "Statement.h"
+#include "../../Type Checker/all.h"
 #include"../Expression/Expression.h"
 #include"../Statement/Statement.h"
 #include "../../Symbol Table/Symbol.h"
@@ -22,7 +23,17 @@ public:
 	string getType();
 
 	void setStatement(Node* statement);
-	bool typeChecking() { return false; }
+	bool typeChecking() { 
+		
+		// TODO : after handeling array in yacc handle left symbol with right one !!
+		symbolLeft->typeChecking();
+		
+		symbolRight->typeChecking();
+		
+		statement->typeChecking();
+		
+		return true;
+	}
 	~Foreach();
 };
 

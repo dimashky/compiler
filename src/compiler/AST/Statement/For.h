@@ -28,7 +28,28 @@ public:
 	void setIterators(queue<Node*>iterators);
 
 	string getType();
-	bool typeChecking() { return false; }
+	bool typeChecking() { 
+	
+		auto cpy = this->initializers;
+		
+		while (!cpy.empty()) {
+			cpy.front()->typeChecking();
+			cpy.pop();
+		}
+
+		cpy = iterators;
+
+		while (!cpy.empty()) {
+			cpy.front()->typeChecking();
+			cpy.pop();
+		}
+
+		condition->typeChecking();
+
+		statement->typeChecking();
+
+		return true;
+	}
 	~For();
 };
 

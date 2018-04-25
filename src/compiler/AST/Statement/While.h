@@ -18,7 +18,13 @@ public:
 	string getType();
 
 	void setStatement(Node* statement);
-	bool typeChecking() { return false; }
+	bool typeChecking() {
+
+		condition->typeChecking();
+		statement->typeChecking();
+
+		return true;
+	}
 	~While();
 };
 

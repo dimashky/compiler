@@ -38,6 +38,9 @@ TypeExpression* TypeBoolean::operation(Operator op, TypeExpression* secondOperan
 		case oror:
 			return TypeBoolean::getInstance();
 			break;
+		case exclamation_point:
+			return TypeBoolean::getInstance();
+			break;
 		case Equal:
 			if (this->getTypeId() == secondOperand->getTypeId()) {
 				return TypeBoolean::getInstance();

@@ -19,7 +19,14 @@ public:
 	void setStatement(Node* statement);
 
 	void setCondition(Node* condition);
-	bool typeChecking() { return false; }
+	bool typeChecking() { 
+		
+		condition->typeChecking();
+
+		statement->typeChecking();
+		
+		return true;
+	}
 	~DoWhile();
 };
 

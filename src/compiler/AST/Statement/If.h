@@ -16,7 +16,17 @@ public:
 	void setIfStatement(Node* statement);
 
 	void setElseStatement(Node* statement);
-	bool typeChecking() { return false; }
+	bool typeChecking() 
+	{ 
+		this->ifStatement->typeChecking();
+		this->codnition->typeChecking();
+		
+		if (elseStatement) {
+			this->elseStatement->typeChecking();
+		}
+
+		return true;
+	}
 	~If();
 
 	

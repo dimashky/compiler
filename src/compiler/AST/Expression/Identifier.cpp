@@ -59,7 +59,7 @@ bool Identifier::typeChecking() {
 			prev = prev->getTypeRef();
 	}
 
-	cout << "valid identifier in " << prev->getLineNo() << endl;
+	cout << "valid identifier in " << prev->getName() << " " << prev->getLineNo() << endl;
 
 	if (prev->isComplex()) {
 
@@ -69,7 +69,7 @@ bool Identifier::typeChecking() {
 		if (prev->getType() == "field") {
 			this->nodeType = TypesTable::getType(((Field*)prev)->get_type_name()).first;
 		}
-		else if (prev->getType() == "variable") {
+		else if (prev->getType() == "localvariable") {
 			this->nodeType = TypesTable::getType(((LocalVariable*)prev)->get_type_name()).first;
 		}
 	}

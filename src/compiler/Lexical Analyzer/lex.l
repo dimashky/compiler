@@ -175,7 +175,6 @@ letter_char            [A-Za-z]
 ident_char             {dec_digit}|{letter_char}|"_"|"@"
 identifier             ({letter_char}|"_"){ident_char}*
 at_identifier          \@{identifier}
-bad_identifier			[&^%$#@!~{}"?|\/{}0-9]*{identifier}
 
 rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
@@ -329,8 +328,6 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 .					  {	lexical_error("invalid token", yytext);	}
-
-{bad_identifier}      {lexical_error("Bad IDENTIFIER", yytext);  add(NULL,NULL,NULL,yytext,yytext); t.push(IDENTIFIER);}
 
 <<EOF>> {
 	auto end = std::chrono::system_clock::now();
