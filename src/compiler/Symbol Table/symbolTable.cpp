@@ -813,7 +813,9 @@ bool symbolTable::closeScope()
 		{
 			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor())
 			{
-				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
+				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
+				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
+				defaultConstructer->setPublic();
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();
@@ -1039,7 +1041,6 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		}
 		else if (it->first->getType() == "method" && symbol->getType() == "method") {
 			isPrivate = ((Method*)it->first)->get_is_private();
-			cout << isPrivate << endl;
 		}
 		else {
 			symbol->setColNo(-15);

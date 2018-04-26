@@ -73,6 +73,8 @@ bool Identifier::typeChecking() {
 				new TypeError("Warning for using unassigned variable", divs[0]->getLineNo());
 			}
 		}
+
+
 		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
 			return true;

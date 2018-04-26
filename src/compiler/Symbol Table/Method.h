@@ -28,6 +28,10 @@ public:
 	void add_parametars(queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init);
 	void setParameters(vector <LocalVariable*> params);
 	void set_return_type(Symbol* ref);
+	void setPublic() {
+		this->is_public = true;
+		this->is_private = this->is_protected = this->is_internal = false;
+	}
 
 	bool compare(Symbol* comp);
 	bool is_final();
