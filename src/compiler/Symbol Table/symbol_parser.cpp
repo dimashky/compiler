@@ -119,6 +119,7 @@ Symbol* symbolParser::addInterface(queue<string>modifiers, string interfaceName,
 
 	return newInterface;
 }
+
 vector<Symbol*> symbolParser::addField(int dimension, queue<string>modifiers, string typeIdentifier, queue<string>identifiers,queue<Node*>init, int line_no, int col_no, bool known_type)
 {
 	vector<Symbol*> arr;
@@ -143,6 +144,7 @@ vector<Symbol*> symbolParser::addField(int dimension, queue<string>modifiers, st
 	return arr;
 
 }
+
 vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, queue<Node*>init, int line_no, int col_no, bool known_type)
 {
 	vector<Symbol*> arr;
@@ -434,8 +436,6 @@ void symbolParser::check_later_defination()
 	}
 }
 
-
-
 void check_later_def_var()
 {
 	int cnt = -1;
@@ -505,7 +505,6 @@ void symbolParser::check_function()
 	
 	symboltable->check_method(symbolTable::openBrackets.top(), map<string, bool>());
 }
-
 
 void check_later_def_override()
 {
@@ -605,6 +604,7 @@ void symbolParser::send_using_to_st()
 				error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
 	}
 }
+
 void symbolParser::check_is_methods_not_override()
 {
 	while (!symbolTable::extended_abstract_classes.empty())
@@ -637,9 +637,6 @@ void symbolParser::check_is_methods_not_override()
 
 }
 
-
-
-
 void symbolParser::check()
 {
 	check_later_defination();
@@ -648,8 +645,8 @@ void symbolParser::check()
 		symbolTable::type_defination_tree->check_cycle(symboltable->parents[i], symboltable->parents[i], vector<node*>());
 
 	check_later_def_var();
-	check_later_def_override();
 
+	check_later_def_override();
 
 	check_is_methods_not_override();
 	

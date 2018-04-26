@@ -2,6 +2,9 @@
 #include "../../Symbol Table/symbolTable.h"
 #include "AutoConst.h"
 
+
+
+
 Identifier::Identifier(Node* preDot, Symbol* postDot, bool is_array) : Expression(Node::current)
 {
 	this->preDot = preDot;
@@ -36,6 +39,7 @@ void Identifier::setArrayDimensions(queue<Node*>dimensions) {
 }
 
 bool Identifier::typeChecking() {
+
 	Symbol* prev = nullptr;
 
 	if (this->preDot != nullptr) {
@@ -48,20 +52,26 @@ bool Identifier::typeChecking() {
 			return false;
 		}
 		else if (prev->getColNo() == -15) {
-			this->nodeType = new TypeError("Invalid Dot operator in line " + to_string(prev->getLineNo()));
+			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
 			return false;
 		}
-		
-
 	}
+
+
 
 	vector<Symbol*>divs = postDot->divideName();
 
 	for (int i = 0;i < divs.size();i++) {
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
-		if (prev->getColNo() == -15) {
-			this->nodeType = new TypeError("Invalid Dot operator in line " + to_string(prev->getLineNo()));
+		if (prev->getColNo() == -15) { 
+			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
 			return false;
+		}
+		if(preDot == nullptr && i == 0) {
+			// using unassigned variable
+			if (prev->getType() == "localvariable" && ! ((LocalVariable*)prev)->isInitialized()) {
+				new TypeError("Warning for using unassigned variable", divs[0]->getLineNo());
+			}
 		}
 		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);

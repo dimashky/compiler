@@ -5,11 +5,11 @@
 
 extern errorHandler error_handler;
 
-TypeError::TypeError(std::string msg) {
+TypeError::TypeError(std::string msg, int lineNum) {
 	this->typeId = TYPE_ERROR;
 	this->msg = msg;
 	this->bytes = 0;
-	error_handler.add(error(-15,-15,msg));
+	error_handler.add(error(lineNum, -1, msg));
 }
 
 std::string TypeError::getMsg() {

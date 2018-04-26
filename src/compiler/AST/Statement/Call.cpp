@@ -29,23 +29,38 @@ bool Call::typeChecking() {
 
 	Class* newClassRef = nullptr;
 
-	if (((Identifier*)call)->getPreDot() != nullptr) {
-		Node* preNode = ((Identifier*)call)->getPreDot();
-		preNode->typeChecking();
+	Node* preNode = ((Identifier*)call)->getPreDot();
 
-		if (preNode->nodeType->getTypeId() != TYPE_ERROR) {
-			prev = TypesTable::getType(((Identifier*)call)->getPreDot()->nodeType->typeExpression()).second;
+	vector<Symbol*>divs = ((Identifier*)call)->getPostDot()->divideName();
+
+	if (preNode != nullptr) {
+		preNode->typeChecking();
+		
+		auto res = TypesTable::getType(preNode->nodeType->typeExpression());
+		prev = res.second;
+
+		// preDot in this case return primitive type
+		if (prev == nullptr || res.first->getTypeId() != TYPE_ERROR) {
+			this->nodeType = new TypeError("invalid Dot Operator", divs[0]->getLineNo());
+			return false;
 		}
-		else {
-			this->nodeType = preNode->nodeType;
+		else if (prev->getColNo() == -15) {
+			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
 			return false;
 		}
 	}
 
-	vector<Symbol*>divs = ((Identifier*)call)->getPostDot()->divideName();
 
 	for (int i = 0;i < divs.size() - 1;i++) {
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
+		
+		if (preNode == nullptr && i == 0) {
+			// using unassigned variable
+			if (prev->getType() == "localvariable" && !((LocalVariable*)prev)->isInitialized()) {
+				new TypeError("Warning for using unassigned variable", divs[0]->getLineNo());
+			}
+		}
+		
 		prev = prev->getTypeRef();
 	}
 
@@ -60,6 +75,7 @@ bool Call::typeChecking() {
 		}
 
 		prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
+		
 		newClassRef = (Class*)prev;
 	}
 
@@ -74,16 +90,13 @@ bool Call::typeChecking() {
 
 	method->setParameters(curParams);
 
-
-	method = (Method*)symbolTable::findIdentifier(method, (symbolTable*)this->symboltable, prev);
+  	method = (Method*)symbolTable::findIdentifier(method, (symbolTable*)this->symboltable, prev);
 
 	if (method->getColNo() == -15) {
 		//raise error
 		this->nodeType = new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
 	}
 	else {
-
-		cout << "call function in " << to_string(method->getLineNo()) << endl;
 
 		if (new_expression) {
 			this->nodeType = TypesTable::findOrCreate(newClassRef->getFullPath(), newClassRef);
@@ -94,7 +107,6 @@ bool Call::typeChecking() {
 		else {
 			
 			this->nodeType = TypesTable::getType(method->get_return_type()).first;
-			cout << nodeType->getTypeId() << endl;
 		}
 	}
 	return true;

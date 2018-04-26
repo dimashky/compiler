@@ -35,7 +35,9 @@ string Variable::getType()
 
 bool Variable::typeChecking() {
 	
-	if (symbol->getType() == "field") {
+	bool field = symbol->getType() == "field";
+
+	if (field) {
 		if (((Field*)symbol)->isComplex()) {
 			this->nodeType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), this->symbol);
 		}
@@ -61,6 +63,13 @@ bool Variable::typeChecking() {
 		if (this->nodeType->getTypeId() == TYPE_ERROR) {
 			return false;
 		}
+		if (field) {
+			((Field*)symbol)->setInitializedStatus();
+		}
+		else {
+			((LocalVariable*)symbol)->setInitializedStatus();
+		}
+		
 	}
 	return true;
 }

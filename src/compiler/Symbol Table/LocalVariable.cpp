@@ -8,6 +8,7 @@ LocalVariable::LocalVariable(string type_variable, string name, int dimension, b
 	this->type_ref = nullptr;
 	this->is_const = is_const;
 	this->dimension = dimension;
+	this->initialized = false;
 }
 string LocalVariable::getType()
 {

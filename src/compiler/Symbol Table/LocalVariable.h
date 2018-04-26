@@ -19,11 +19,14 @@ private:
 	int dimension;
 
 	bool isFinal,isParameter,is_const;
-
+	bool initialized;
 public:
 	LocalVariable(string type_variable, string name, int dimension, bool isParameter, bool is_const, int line_no, int col_no);
 	
 	void set_type(Symbol* type_ref);
+	void setInitializedStatus(bool initialized = true) {
+		this->initialized = initialized;
+	}
 
 	string getType();
 	string get_type_name();
@@ -31,6 +34,9 @@ public:
 
 	bool is_final();
 	bool is_parameter();
+	bool isInitialized() {
+		return this->initialized;
+	}
 
 	bool isComplex() {
 		/// TODO: add if

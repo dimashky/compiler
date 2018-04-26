@@ -1,22 +1,13 @@
-class a
+class b
 {
-    int x;
-    a(int x)
+
+    public int b1(int a)
     {
-        (new b(45)).b1(34);
-        this.x = x;
+        a x = new a();
     }
 }
 
-class b
+class a
 {
-    int x;
-    public b(int x)
-    {
-        this.x = x;
-    }
-    public int b1(int a)
-    {
 
-    }
 }

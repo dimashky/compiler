@@ -8,6 +8,7 @@ Field::Field(queue<string>&modifiers , string type_variable, string name, int di
 	this->is_private = true;
 	this->dimension = dimension;
 	add_attributes(modifiers);
+	this->initialized = false;
 }
 
 void Field::add_attributes(queue<string>&attributes)

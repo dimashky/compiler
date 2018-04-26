@@ -14,6 +14,7 @@ private:
 	Symbol* type_ref;
 	bool is_private;
 	int dimension;
+	bool initialized;
 public:
 
 	Field(queue<string>&modifiers , string type_variable,string name,int dimension, int line_no, int col_no);
@@ -21,11 +22,17 @@ public:
 	void add_attributes(queue<string>&attributes);
 
 	void set_type(Symbol* type_ref);
-	
+	void setInitializedStatus(bool initialized = true) {
+		this->initialized = initialized;
+	}
+
 	string getType();
 	bool get_is_private();
 	string get_type_name();
 	Symbol* getTypeRef();
+	bool isInitialized() {
+		return this->initialized;
+	}
 
 	bool isComplex() {
 		return type_ref != nullptr;

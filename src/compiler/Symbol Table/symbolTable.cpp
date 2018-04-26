@@ -1039,6 +1039,7 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		}
 		else if (it->first->getType() == "method" && symbol->getType() == "method") {
 			isPrivate = ((Method*)it->first)->get_is_private();
+			cout << isPrivate << endl;
 		}
 		else {
 			symbol->setColNo(-15);

@@ -6,7 +6,7 @@ using std::string;
 
 class TypeError : public TypeExpression {
 public:
-	TypeError(string);
+	TypeError(string, int = -1);
 	string getMsg();
 
 private:

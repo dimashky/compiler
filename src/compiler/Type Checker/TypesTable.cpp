@@ -35,6 +35,6 @@ pair<TypeExpression*,Symbol*> TypesTable::getType(string type) {
 		return result->second;
 	}
 	
-	return make_pair(nullptr, nullptr);
+	return make_pair(new TypeError(type + " is not found in TypesTable"), nullptr);
 }
 
