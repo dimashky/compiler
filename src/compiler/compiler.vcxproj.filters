@@ -236,9 +236,6 @@
     <ClInclude Include="Symbol Table\Symbol.h">
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
-    <ClInclude Include="Symbol Table\symbolTable.h">
-      <Filter>Source Files\Symbol Table</Filter>
-    </ClInclude>
     <ClInclude Include="Symbol Table\Interface.h">
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
@@ -370,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="AST\Operator.h">
       <Filter>Source Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\symbolTable.h">
+      <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

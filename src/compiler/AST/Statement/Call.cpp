@@ -27,11 +27,40 @@ bool Call::typeChecking() {
 
 	Symbol *prev = nullptr;
 
+	Class* newClassRef = nullptr;
+
+	if (((Identifier*)call)->getPreDot() != nullptr) {
+		Node* preNode = ((Identifier*)call)->getPreDot();
+		preNode->typeChecking();
+
+		if (preNode->nodeType->getTypeId() != TYPE_ERROR) {
+			prev = TypesTable::getType(((Identifier*)call)->getPreDot()->nodeType->typeExpression()).second;
+		}
+		else {
+			this->nodeType = preNode->nodeType;
+			return false;
+		}
+	}
+
 	vector<Symbol*>divs = ((Identifier*)call)->getPostDot()->divideName();
 
 	for (int i = 0;i < divs.size() - 1;i++) {
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
 		prev = prev->getTypeRef();
+	}
+
+	if(new_expression) {
+
+		symbolTable* parentRef = (symbolTable*)this->symboltable;
+
+		while (parentRef != nullptr) {
+			if (parentRef->get_owner() != nullptr && parentRef->get_owner()->getType() == "class")
+				break;
+			parentRef = parentRef->get_parent();
+		}
+
+		prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
+		newClassRef = (Class*)prev;
 	}
 
 	Method* method = new Method(queue<string>(), "", divs[divs.size() - 1]->getName(), divs[divs.size() - 1]->getLineNo(), -13);
@@ -56,7 +85,10 @@ bool Call::typeChecking() {
 
 		cout << "call function in " << to_string(method->getLineNo()) << endl;
 
-		if (method->isComplex()) {
+		if (new_expression) {
+			this->nodeType = TypesTable::findOrCreate(newClassRef->getFullPath(), newClassRef);
+		}
+		else if (method->isComplex()) {
 			this->nodeType = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath(), method->getTypeRef());
 		}
 		else {

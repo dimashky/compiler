@@ -31,6 +31,10 @@ public:
 
 	string getType();
 	
+	Node* getPreDot() {
+		return preDot;
+	}
+
 	Symbol* getPostDot();
 
 	void setArrayDimensions(queue<Node*>dimensions);

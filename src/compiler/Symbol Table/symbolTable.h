@@ -72,7 +72,17 @@ public:
 
 	void check_method(symbolTable* curr, map<string, bool>check_map);   
 
-	static Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* currentScope, Symbol* lastSymbol = nullptr);
+	static Symbol* findIdentifier(Symbol* symbol, symbolTable* currentScope, Symbol* lastSymbol = nullptr);
+
+	static Symbol* findType(node* parentRef, string name) {
+		queue<string>divs;
+		divs.push(name);
+		auto res = symbolTable::type_defination_tree->find(parentRef, divs);
+		if (res.first != nullptr && res.second) {
+			return ((symbolTable*)res.first)->get_owner();
+		}
+		cout << "fuck you" << endl;
+	}
 	
 	~symbolTable();
 };
