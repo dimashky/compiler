@@ -35,6 +35,10 @@ public:
 
 	virtual bool typeChecking() = 0;
 
+	Node* getParent() {
+		return this->parent;
+	}
+
 	~Node();
 };
 

@@ -210,6 +210,9 @@
     <ClCompile Include="AST\Operator.cpp">
       <Filter>Source Files\AST</Filter>
     </ClCompile>
+    <ClCompile Include="AST\Statement\Jump.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -370,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="Symbol Table\symbolTable.h">
       <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Jump.h">
+      <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

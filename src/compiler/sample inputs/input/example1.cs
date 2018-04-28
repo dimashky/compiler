@@ -1,9 +1,14 @@
 class b
 {
 
-    public int b1(int a)
+    public b b1(int a)
     {
         a x = new a();
+        return new b();
+    }
+    public void bb()
+    {
+        return 1;
     }
 }
 

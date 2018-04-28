@@ -55,10 +55,9 @@ void symbolParser::add_object()
 
 	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), queue<int>(),queue<Node*>() ,1, 1);
 
-
-
-
 	ns = new Procedure(method, Node::current);
+
+	ns->setHasReturn(1);
 
 	((Procedure*)Node::current)->add(ns);
 

@@ -26,6 +26,7 @@
 	#include "../AST/Expression/UnaryExpression.h"
 	#include "../AST/Statement/Statement.h"
 	#include "../AST/Statement/Assignment.h"
+	#include "../AST/Statement/Jump.h"
 
 
 	#include "../AST/Statement/While.h"
@@ -1028,19 +1029,35 @@ foreach_statement
   ;
 
 jump_statement
-  : break_statement		{l.a("jump_statement",1);}
-  | continue_statement	{l.a("jump_statement",1);}
+  : break_statement		{l.a("jump_statement",1);SPL->addStatement($<r.node>1);}
+  | continue_statement	{l.a("jump_statement",1);SPL->addStatement($<r.node>1);}
   | goto_statement		{l.a("jump_statement",1);}
-  | return_statement	{l.a("jump_statement",1);}
-  | throw_statement		{l.a("jump_statement",1);}
+  | return_statement	{l.a("jump_statement",1);SPL->addStatement($<r.node>1);}
+  | throw_statement		{l.a("jump_statement",1);SPL->addStatement($<r.node>1);}
   ;
 break_statement
-  : BREAK SEMICOLON	{l.a("break_statement",0);}
-  | BREAK error		{l.a("break_statement",0,1);}
+  : BREAK SEMICOLON	
+  {
+		l.a("break_statement",0);
+		$<r.node>$ = new Jump(nullptr,JumpStatement::Break,Node::current,$<r.line_no>1);    
+  }
+  | BREAK error		
+  {
+		l.a("break_statement",0,1);
+		$<r.node>$ = new Jump(nullptr,JumpStatement::Break,Node::current,$<r.line_no>1);    
+  }
   ;
 continue_statement
-  : CONTINUE SEMICOLON	{l.a("continue_statement",0);}
-  | CONTINUE error		{l.a("continue_statement",0,1);}
+  : CONTINUE SEMICOLON	
+  {
+		l.a("continue_statement",0);
+		$<r.node>$ = new Jump(nullptr,JumpStatement::Continue,Node::current,$<r.line_no>1);  
+  }
+  | CONTINUE error		
+  {
+		l.a("continue_statement",0,1);
+		$<r.node>$ = new Jump(nullptr,JumpStatement::Continue,Node::current,$<r.line_no>1);    
+  }
   ;
 goto_statement
   : GOTO IDENTIFIER SEMICOLON					{l.a("goto_statement",0);}
@@ -1051,16 +1068,40 @@ goto_statement
   | GOTO DEFAULT error							{l.a("goto_statement",0,1);}
   ;
 return_statement
-  : RETURN expression_opt SEMICOLON	{l.a("return_statement",1);}
-  | RETURN expression_opt error		{l.a("return_statement",1,1);}
+  : RETURN expression_opt SEMICOLON	
+  {
+		l.a("return_statement",1);
+		$<r.node>$ = new Jump($<r.node>2,JumpStatement::Return,Node::current,$<r.line_no>1);
+  }
+  | RETURN expression_opt error
+  {
+		l.a("return_statement",1);
+		$<r.node>$ = new Jump($<r.node>2,JumpStatement::Return,Node::current,$<r.line_no>1);
+  }
   ;
 expression_opt
-  : /* Nothing */ {l.a("expression_opt",0);}
-  | expression	  {l.a("expression_opt",1);}
+  : /* Nothing */ 
+  {
+		l.a("expression_opt",0);
+		$<r.node>$ = nullptr;
+  }
+  | expression	  
+  {
+		l.a("expression_opt",1);
+		$<r.node>$ = $<r.node>1;
+  }
   ;
 throw_statement
-  : THROW expression_opt SEMICOLON	  {l.a("throw_statement",1);}
-  | THROW expression_opt error		  {l.a("throw_statement",1);}
+  : THROW expression_opt SEMICOLON	  
+  {
+		l.a("throw_statement",1);
+		$<r.node>$ = new Jump($<r.node>2,JumpStatement::Throw,Node::current,$<r.line_no>1);  
+  }
+  | THROW expression_opt error		  
+  {
+		l.a("throw_statement",1);
+		$<r.node>$ = new Jump($<r.node>2,JumpStatement::Throw,Node::current,$<r.line_no>1);
+  }
   ;
 try_statement
   : TRY block catch_clauses					        {l.a("try_statement",2);}

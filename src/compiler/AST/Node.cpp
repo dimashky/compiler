@@ -1,6 +1,10 @@
 #include "Node.h"
 #include "../Symbol Table/symbolTable.h"
+#include "Object\Procedure.h"
 #include "../Type Checker/TypeError.h"
+#include "../Error Handler/error_handler.h"
+extern errorHandler error_handler;
+
 Node* Node::current = nullptr;
 FILE* Node::nodesFile = nullptr;
 FILE* Node::edgesFile = nullptr;
@@ -40,6 +44,15 @@ void Node::closeFiles() {
 
 
 void Node::Up() {
+
+	if (Node::current->getType() == "procedure") {
+		if (((Procedure*)Node::current)->getSymbol()->getType() == "method") {
+			if (!((Procedure*)Node::current)->getHasReturn()) {
+				error_handler.add(error(((Procedure*)Node::current)->getSymbol()->getLineNo(), ((Procedure*)Node::current)->getSymbol()->getColNo(), "there is no return statement in function " + ((Procedure*)Node::current)->getSymbol()->getName()));
+			}
+		}
+	}
+
 	if (Node::current != nullptr)
 		Node::current = Node::current->parent;
 }

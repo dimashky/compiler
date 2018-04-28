@@ -3,6 +3,7 @@
 Procedure::Procedure(Symbol* symbol, Node* parent):Object(symbol, parent)
 {
 	this->block = nullptr;
+	this->hasReturnStatement = false;
 	/*
 	 *	TODO: init nodeType with symbol table.
 	 */
