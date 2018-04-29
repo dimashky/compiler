@@ -5,10 +5,10 @@ abstract class a
 
 class b
 {
-    public void xx()
+    int x;
+    public static void xx()
     {
-        a test;
-        test = new a();
+        this.x = 12;
         return;
     }
 }

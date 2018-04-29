@@ -1,6 +1,8 @@
 #include "Identifier.h"
 #include "../../Symbol Table/symbolTable.h"
+#include "../../Symbol Table/Method.h"
 #include "AutoConst.h"
+#include "../Object/Procedure.h"
 
 bool Identifier::leftAssignment = false;
 
@@ -79,6 +81,18 @@ bool Identifier::typeChecking() {
 						new TypeError("Warning for using Dot operator in unassigned variable", divs[i]->getLineNo());
 					}
 					Identifier::isAssigned = false;
+				}
+			}
+			if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
+				Node* currentNode = parent;
+
+				while (currentNode->getType() != "procedure")
+					currentNode = currentNode->getParent();
+				if (((Procedure*)currentNode)->getSymbol()->getType() == "method") {
+					if (((Method*)((Procedure*)currentNode)->getSymbol())->get_is_static()) {
+						this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
+						return false;
+					}
 				}
 			}
 		}
