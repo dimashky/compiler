@@ -76,6 +76,11 @@ bool Call::typeChecking() {
 
 		prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
 		
+		if(prev->getType() == "interface") {
+			this->nodeType = new TypeError("cannot initialize object from interface type named '" + prev->getName() + "'", divs[divs.size() - 1]->getLineNo());
+			return false;
+		}
+
 		newClassRef = (Class*)prev;
 
 		if (((Class*)prev)->get_is_abstract()) {

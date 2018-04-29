@@ -43,6 +43,10 @@ bool Variable::typeChecking() {
 		else {
 			this->nodeType = TypesTable::getType(((Field*)symbol)->get_type_name()).first;
 		}
+
+		if (((Field*)symbol)->getIsConst() && !this->equal) {
+			new TypeError("a const field requires a value to be provided", symbol->getLineNo());
+		}
 	}
 	else {
 		if (((LocalVariable*)symbol)->isComplex()) {
@@ -51,6 +55,10 @@ bool Variable::typeChecking() {
 		}
 		else {
 			this->nodeType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;
+		}
+
+		if (((LocalVariable*)symbol)->getIsConst() && !this->equal) {
+			new TypeError("a const field requires a value to be provided", symbol->getLineNo());
 		}
 	}
 

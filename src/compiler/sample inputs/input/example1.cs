@@ -1,15 +1,12 @@
-abstract class a
+interface vv
 {
 
 }
 
-class b
+class xx
 {
-    int x;
-    public static void xx()
+    public void xx11()
     {
-        const int cc = 12;
-        cc = 21;
-        
+        vv a = new vv();
     }
 }
