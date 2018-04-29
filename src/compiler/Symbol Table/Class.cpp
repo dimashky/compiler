@@ -14,6 +14,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 	type_graph_position = nullptr;
 	baseClassImpInterfaces.push_back(make_pair("", nullptr));
 	have_constructor = false;
+	this->is_static = false;
 }
 
 void Class::add_attributes(queue<string>&attributes)
@@ -22,6 +23,8 @@ void Class::add_attributes(queue<string>&attributes)
 	{
 		if (attributes.front() == "SEALED")
 			isFinal = true;
+		if (attributes.front() == "STATIC")
+			is_static = true;
 		if (attributes.front() == "ABSTRACT")
 			is_abstract = true ;
 

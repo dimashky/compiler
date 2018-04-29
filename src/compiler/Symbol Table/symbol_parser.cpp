@@ -180,8 +180,13 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 
 	Procedure* ns = new Procedure(newMethod, Node::current, callBase);
 
-	((Procedure*)Node::current)->add(ns);
-
+	//if we add constructer to static class i will not add it to AST Full Tree but i will add it as separate tree to check errors on it but it will not be available in AST tree
+	if (((Method*)newMethod)->get_is_constructer() && ((Class*)symbolTable::openBrackets.top()->get_owner())->get_is_static()) {
+		error_handler.add(error(newMethod->getLineNo(), newMethod->getColNo(), "static classes cannot have constructers on it"));
+	}
+	else {
+		((Procedure*)Node::current)->add(ns);
+	}
 	Node::setCurrent(ns);
 
 	Block* b = new Block(Node::current);
@@ -191,6 +196,7 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	Node::setCurrent(b);
 
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, params_dimension,var_init, known_type, is_body);
+
 
 	Node::Up();
 

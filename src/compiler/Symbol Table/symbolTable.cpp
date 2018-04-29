@@ -811,7 +811,7 @@ bool symbolTable::closeScope()
 	{
 		if (openBrackets.top()->owner != nullptr && (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace"))
 		{
-			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor())
+			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor() && !((Class*)openBrackets.top()->owner)->get_is_static())
 			{
 				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
 				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );

@@ -501,14 +501,29 @@ unary_expression
  * The paremtnesised expression in the first three cases below should be 
  * semantically restricted to an identifier, optionally follwed by qualifiers
  */
+
 cast_expression
   : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								{l.a("cast_expression",2);}
   | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",2);}
-  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	{l.a("cast_expression",4);}	
-  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							{l.a("cast_expression",3);}
-  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								{l.a("cast_expression",3);}
-  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									{l.a("cast_expression",2);}
-  ;	
+  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	
+  {
+		l.a("cast_expression",4);
+  
+  }	
+  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							
+  {
+		l.a("cast_expression",3);
+  }
+  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								
+  {
+		l.a("cast_expression",3);
+  }
+  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									
+  {
+		l.a("cast_expression",2);
+  }
+  ;
+  	
 type_quals_opt
   : /* Nothing */ {l.a("type_quals_opt",0);}
   | type_quals	{l.a("type_quals_opt",1);}

@@ -1,23 +1,11 @@
-interface vv
+static class a
 {
 
 }
-class a
+class b
 {
-    public a(int d)
+    public void aa()
     {
-
-    }
-    public a()
-    {
-
-    }
-}
-class xx : a
-{
-    
-    xx():this()
-    {
-        
+        a nn = new a();
     }
 }
