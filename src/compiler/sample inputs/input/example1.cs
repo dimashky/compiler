@@ -16,7 +16,7 @@ class a
 class xx : a
 {
     
-    xx()
+    xx():this()
     {
         
     }

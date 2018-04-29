@@ -955,8 +955,18 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 		// return same class
 		if (symbol->getName() == "this")
+		{
+			if (symbol->getType() == "method") {
+				symbol->setName(currentScope->get_owner_name());
+				it = currentScope->symbolMap.find(symbol);
+				if (it != currentScope->symbolMap.end()) {
+					return it->first;
+				}
+				symbol->setColNo(-15);
+				return symbol;
+			}
 			return currentScope->get_owner();
-
+		}
 		//return base class
 		if (symbol->getType() == "method") {
 			currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
