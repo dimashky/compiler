@@ -2,6 +2,7 @@
 #include "Statement.h"
 #include"../Expression/Expression.h"
 #include"../Statement/Statement.h"
+#include "../../Type Checker/all.h"
 class If :public Statement
 {
 	Node *codnition;
@@ -20,7 +21,9 @@ public:
 	{ 
 		this->ifStatement->typeChecking();
 		this->codnition->typeChecking();
-		
+		if (this->codnition->nodeType->getTypeId() != TYPE_BOOL) {
+			new TypeError("IF condition must be boolean type");
+		}
 		if (elseStatement) {
 			this->elseStatement->typeChecking();
 		}

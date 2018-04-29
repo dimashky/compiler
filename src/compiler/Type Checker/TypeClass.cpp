@@ -17,7 +17,7 @@ string TypeClass::typeExpression() {
 TypeExpression* TypeClass::operation(Operator op, TypeExpression* secondOperand = nullptr) {
 	int equivelant = TYPE_CLASS;
 
-	if (secondOperand != nullptr) {
+	if (secondOperand != nullptr && op != Operator::Is) {
 		equivelant = this->equivelantTo(secondOperand);
 	}
 
@@ -29,6 +29,9 @@ TypeExpression* TypeClass::operation(Operator op, TypeExpression* secondOperand 
 		{
 		case Equal:
 			return this;
+			break;
+		case Is:
+			return TypeBoolean::getInstance();
 			break;
 		default:
 			return new TypeError(this->typeExpression() + " has no predefined " + OperatorName[op] + " operation");

@@ -605,7 +605,7 @@ relational_expression
   | relational_expression IS type										
   {
 		l.a("relational_expression",2);
-		$<r.node>$ = new BinaryExpression($<r.node>1,Is,$<r.node>3,Node::current);  
+		$<r.node>$ = new BinaryExpression($<r.node>1,Is,new Identifier(nullptr,new Symbol(*$<r.base>3,$<r.line_no>2,-13),$<r.array_dimension>3),Node::current);  
   }
   | relational_expression AS type										
   {

@@ -77,6 +77,10 @@ bool Call::typeChecking() {
 		prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
 		
 		newClassRef = (Class*)prev;
+
+		if (((Class*)prev)->get_is_abstract()) {
+			this->nodeType = new TypeError("cannot initialize object from abstract class named '" + prev->getName() + "'", divs[divs.size() - 1]->getLineNo());
+		}
 	}
 
 	Method* method = new Method(queue<string>(), "", divs[divs.size() - 1]->getName(), divs[divs.size() - 1]->getLineNo(), -13);

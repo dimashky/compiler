@@ -1,14 +1,14 @@
-class a
+abstract class a
 {
 
 }
 
-class b : a
+class b
 {
     public void xx()
     {
-        object test = new b();
-
+        a test;
+        test = new a();
         return;
     }
 }

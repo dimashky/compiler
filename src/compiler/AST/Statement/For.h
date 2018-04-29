@@ -2,6 +2,8 @@
 #include "Statement.h"
 #include"../Expression/Expression.h"
 #include"../Statement/Statement.h"
+#include"../../Type Checker/all.h"
+
 class For :public Statement
 {
 
@@ -45,6 +47,10 @@ public:
 		}
 
 		condition->typeChecking();
+		
+		if (condition->nodeType->getTypeId() != TYPE_BOOL) {
+			new TypeError("While condition must be boolean type");
+		}
 
 		statement->typeChecking();
 

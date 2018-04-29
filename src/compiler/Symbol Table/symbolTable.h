@@ -82,7 +82,7 @@ public:
 		if (res.first != nullptr && res.second) {
 			return ((symbolTable*)res.first)->get_owner();
 		}
-		cout << "notify you didnt find a type appropriate with constructer '" << name << "'" << endl;
+		return nullptr;
 	}
 
 	static bool isParent(Symbol* child, Symbol* parent);
