@@ -29,7 +29,7 @@ public:
 	Symbol* addNamespace(string name, int line_no, int col_no);
 	Symbol* addClass(queue<string>&modifiers, string className, queue<string> &bases, int line_no, int col_no);
 	Symbol* addInterface(queue<string>modifiers, string interfaceName, queue<string> bases, int line_no, int col_no);
-	Symbol* addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, queue<int>params_dimension, queue<Node*>var_init, int line_no, int col_no, bool known_type, bool is_body);
+	Symbol* addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >types_ids_parameters, queue<int>params_dimension, queue<Node*>var_init, int line_no, int col_no, bool known_type, bool is_body, Node* callBase = nullptr);
 
 	vector<Symbol*> addField(int dimension, queue<string>modifiers, string typeIdentifier, queue<string>identifier, queue<Node*>init, int line_no, int col_no, bool known_type);
 	vector<Symbol*> addFieldConst(int dimension, queue<string>modifiers,string modifier_const,string typeIdentifier, queue<string>identifier, queue<Node*>init, int line_no, int col_no, bool known_type);

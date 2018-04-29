@@ -1,9 +1,11 @@
 #include"Procedure.h"
-
-Procedure::Procedure(Symbol* symbol, Node* parent):Object(symbol, parent)
+#include "../../Type Checker/all.h"
+#include "../Statement/Call.h"
+Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol, parent)
 {
 	this->block = nullptr;
 	this->hasReturnStatement = false;
+	this->baseCall = baseCall;
 	/*
 	 *	TODO: init nodeType with symbol table.
 	 */
@@ -50,7 +52,22 @@ string Procedure::getType()
 	return "procedure";
 }
 
+
 bool Procedure::typeChecking() {
+	if (baseCall) {
+		baseCall->typeChecking();
+		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
+			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
+		}
+	}
+	else if(symbol != nullptr && symbol->getType() == "method" && ((Method*)symbol)->get_is_constructer()) {
+		baseCall = new Call(new Identifier(nullptr, new Symbol("base", symbol->getLineNo(), -13)), this->parent, false, false, true);
+		((Call*)baseCall)->setSymbolTable(this->symboltable);
+		baseCall->typeChecking();
+		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
+			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
+		}
+	}
 	bool check = true;
 	for (int i = 0; i < locals.size(); i++) {
 		check |= locals[i]->typeChecking();

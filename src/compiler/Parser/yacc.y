@@ -1771,19 +1771,33 @@ conversion_operator_declarator
   | EXPLICIT OPERATOR type LEFT_BRACKET_CIRCLE type IDENTIFIER RIGHT_BRACKET_CIRCLE		{l.a("conversion_operator_declarator",2);}
   ;
 constructor_declaration
-  : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE 
+  : attributes_opt modifiers_opt IDENTIFIER LEFT_BRACKET_CIRCLE formal_parameter_list_opt RIGHT_BRACKET_CIRCLE constructor_initializer_opt
   {
-		SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,*$<r.params_dimension>5,*$<r.nodes>5,$<r.line_no>3,$<r.col_no>3,1,1);
+		SPL->addMethod(*$<r.modifiers>2,"",string($<r.str>3),*$<r.types_ids>5,*$<r.params_dimension>5,*$<r.nodes>5,$<r.line_no>3,$<r.col_no>3,1,1,$<r.node>7);
   }
-  constructor_initializer_opt constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
+  constructor_body		{l.a("constructor_declaration",4);SPL->endScope();}
   ;
 constructor_initializer_opt
-  : /* Nothing */				{l.a("constructor_initializer_opt",0);}
-  | constructor_initializer		{l.a("constructor_initializer_opt",1);}
+  : /* Nothing */				{l.a("constructor_initializer_opt",0);$<r.node>$ = nullptr;}
+  | constructor_initializer		
+  {
+		l.a("constructor_initializer_opt",1);
+		$<r.node>$ = $<r.node>1;
+  }
   ;
 constructor_initializer
-  : COLON BASE LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		{l.a("constructor_initializer",1);}
-  | COLON THIS LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		{l.a("constructor_initializer",1);}
+  : COLON BASE LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		
+  {
+		l.a("constructor_initializer",1);
+		$<r.node>$ = new Call(new Identifier(nullptr,new Symbol("base",$<r.line_no>1,-13)),Node::current,false,false,true);
+		((Call*)$<r.node>$)->setParams(*$<r.args>4);
+  }
+  | COLON THIS LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE		
+  {
+		l.a("constructor_initializer",1);
+		$<r.node>$ = new Call(new Identifier(nullptr,new Symbol("this",$<r.line_no>1,-13)),Node::current,false,false,true);
+  		((Call*)$<r.node>$)->setParams(*$<r.args>4);
+  }
   ;
 /* Widen from unsafe_opt STATIC to modifiers_opt */
 /* This is now subsumed by constructor_declaration - delete

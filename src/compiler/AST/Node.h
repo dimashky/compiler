@@ -14,7 +14,11 @@ public:
 
 	static void openFiles();
 	static void closeFiles();
-
+	
+	void setSymbolTable(void* symbolTable) {
+		this->symboltable = symbolTable;
+		return;
+	}
 
 	static Node* current;
 

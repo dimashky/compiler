@@ -21,11 +21,11 @@ private:
 	
 	vector<pair<Node*,int> >params;
 
-	bool new_expression, known_type;
+	bool new_expression, known_type, base_call;
 
 public:
 
-	Call(Node *call, Node* parent, bool new_expression = false, bool known_type = false);
+	Call(Node *call, Node* parent, bool new_expression = false, bool known_type = false,bool base_call = false);
 
 	int print(int nodeCnt);
 

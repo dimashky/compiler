@@ -934,6 +934,8 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 	symbolTable* currentScope;
 
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+
 	//check if id equal 'this' or no !!
 
 	if (symbol->getName() == "this" || symbol->getName() == "base") {
@@ -956,6 +958,16 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 			return currentScope->get_owner();
 
 		//return base class
+		if (symbol->getType() == "method") {
+			currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+			symbol->setName(currentScope->get_owner_name());
+			it = currentScope->symbolMap.find(symbol);
+			if (it != currentScope->symbolMap.end()) {
+				return it->first;
+			}
+			symbol->setColNo(-15);
+			return symbol;
+		}
 		return ((Class*)currentScope->get_owner())->get_extended_class().second->get_owner();
 	}
 
@@ -981,7 +993,6 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		
 		currentScope = identifierScope;
 
-	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
 
 	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class") {
 		

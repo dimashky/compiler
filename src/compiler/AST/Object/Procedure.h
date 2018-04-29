@@ -12,13 +12,15 @@ private:
 
 	vector<Object*> locals;
 
+	Node* baseCall;
+
 
 	//this for methods only and it will be checked in Node up function
 	bool hasReturnStatement;
 
 public:
 
-	Procedure(Symbol* symbol,Node*parent);
+	Procedure(Symbol* symbol, Node*parent, Node* baseCall = nullptr);
 
 	void add(Object* object);
 

@@ -2,11 +2,22 @@ interface vv
 {
 
 }
-
-class xx
+class a
 {
-    public void xx11()
+    public a(int d)
     {
-        vv a = new vv();
+
+    }
+    public a()
+    {
+
+    }
+}
+class xx : a
+{
+    
+    xx()
+    {
+        
     }
 }

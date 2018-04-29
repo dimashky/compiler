@@ -15,6 +15,7 @@ symbolParser::symbolParser()
 {
 	symboltable = new symbolTable(NULL, NULL);
 }
+
 void symbolParser::print(queue<string> &s1, char* s2)
 {
 	while (!s1.empty()) {
@@ -169,7 +170,7 @@ vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifier
 	return arr;
 }
 
-Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, queue<int>params_dimension, queue<Node*>var_init, int line_no, int col_no, bool known_type, bool is_body)
+Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, queue<int>params_dimension, queue<Node*>var_init, int line_no, int col_no, bool known_type, bool is_body, Node* callBase)
 {
 	/*
 	* Note : 
@@ -177,7 +178,7 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	*/
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
 
-	Procedure* ns = new Procedure(newMethod, Node::current);
+	Procedure* ns = new Procedure(newMethod, Node::current, callBase);
 
 	((Procedure*)Node::current)->add(ns);
 

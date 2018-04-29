@@ -17,6 +17,9 @@ public:
 	string getName();
 	int getLineNo();
 	int getColNo();
+	void setName(string name) {
+		this->name = name;
+	}
 	vector<Symbol*> divideName();
 	virtual string getType();
 

@@ -1,11 +1,13 @@
 #include "Call.h"
 #include "../../Symbol Table/Class.h"
 
-Call::Call(Node *call, Node *parent, bool new_expression, bool known_type) :Statement(parent)
+Call::Call(Node *call, Node *parent, bool new_expression, bool known_type, bool baseCall) :Statement(parent)
 {
 	this->call = call;
 	this->new_expression = new_expression;
 	this->known_type = known_type;
+	this->base_call = baseCall;
+	
 }
 
 void Call::setParams(vector<pair<Node*, int> > params) {
@@ -64,6 +66,11 @@ bool Call::typeChecking() {
 		prev = prev->getTypeRef();
 	}
 
+	if (divs.size() == 1 && divs[0]->getName() == "base" && !base_call) {
+		this->nodeType = new TypeError("invalid use for '" + divs[0]->getName() + "' keyword", divs[0]->getLineNo());;
+		return false;
+	}
+
 	if(new_expression) {
 
 		symbolTable* parentRef = (symbolTable*)this->symboltable;
@@ -114,8 +121,12 @@ bool Call::typeChecking() {
 			this->nodeType = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath(), method->getTypeRef());
 		}
 		else {
-			
-			this->nodeType = TypesTable::getType(method->get_return_type()).first;
+			if (base_call) {
+				this->nodeType = TypesTable::getType("VOID").first;
+			}
+			else {
+				this->nodeType = TypesTable::getType(method->get_return_type()).first;
+			}
 		}
 	}
 	return true;

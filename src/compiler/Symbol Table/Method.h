@@ -15,7 +15,8 @@ private:
 	Symbol* return_type_ref;
 	bool isFinal,is_static,is_abstract,is_override , is_virtual, is_extern;
 	bool is_public, is_private , is_protected , is_internal; 
-	bool must_ovrride; 
+	bool must_ovrride;
+	bool is_constructer;
 	int default_counter;
 	vector<LocalVariable*> types_ids_parameter;
 public:
@@ -47,7 +48,9 @@ public:
 	bool get_is_protected();
 	bool get_is_internal();
 	bool get_is_must_ovrride();
-
+	bool get_is_constructer() {
+		return is_constructer;
+	}
 
 	bool isComplex() {
 		return return_type_ref != nullptr;
