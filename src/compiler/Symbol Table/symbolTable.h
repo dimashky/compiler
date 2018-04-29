@@ -4,6 +4,7 @@
 #include "Attribute.h"
 #include "class_tree.h"
 #include "../AST/Node.h"
+
 using namespace std;
 
 
@@ -81,8 +82,10 @@ public:
 		if (res.first != nullptr && res.second) {
 			return ((symbolTable*)res.first)->get_owner();
 		}
-		cout << "fuck you" << endl;
+		cout << "notify you didnt find a type appropriate with constructer '" << name << "'" << endl;
 	}
+
+	static bool isParent(Symbol* child, Symbol* parent);
 	
 	~symbolTable();
 };

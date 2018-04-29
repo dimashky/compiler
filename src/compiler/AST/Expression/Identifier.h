@@ -25,6 +25,8 @@ private:
 
 public:
 
+	static bool leftAssignment,isAssigned;
+
 	Identifier(Node* preDot, Symbol* postDot, bool is_array = false);
 
 	int print(int);

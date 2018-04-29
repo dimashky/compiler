@@ -7,7 +7,6 @@
 Variable::Variable(Symbol* symbol, Node *equal, Node* parent) :Object(symbol, parent)
 {
 	this->equal = equal;
-	
 }
 
 int Variable::print(int nodeCnt)
@@ -39,7 +38,7 @@ bool Variable::typeChecking() {
 
 	if (field) {
 		if (((Field*)symbol)->isComplex()) {
-			this->nodeType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), this->symbol);
+			this->nodeType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), ((Class*)((Field*)symbol))->getTypeRef());
 		}
 		else {
 			this->nodeType = TypesTable::getType(((Field*)symbol)->get_type_name()).first;
@@ -47,7 +46,8 @@ bool Variable::typeChecking() {
 	}
 	else {
 		if (((LocalVariable*)symbol)->isComplex()) {
-			this->nodeType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), this->symbol);
+
+			this->nodeType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), ((Class*)((LocalVariable*)symbol))->getTypeRef());
 		}
 		else {
 			this->nodeType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;

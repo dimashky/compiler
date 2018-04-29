@@ -2,8 +2,9 @@
 #include "../../Symbol Table/symbolTable.h"
 #include "AutoConst.h"
 
+bool Identifier::leftAssignment = false;
 
-
+bool Identifier::isAssigned = true;
 
 Identifier::Identifier(Node* preDot, Symbol* postDot, bool is_array) : Expression(Node::current)
 {
@@ -69,8 +70,16 @@ bool Identifier::typeChecking() {
 		}
 		if(preDot == nullptr && i == 0) {
 			// using unassigned variable
-			if (prev->getType() == "localvariable" && ! ((LocalVariable*)prev)->isInitialized()) {
-				new TypeError("Warning for using unassigned variable", divs[0]->getLineNo());
+			if (prev->getType() == "localvariable" && !((LocalVariable*)prev)->isInitialized()) {
+				if (!Identifier::leftAssignment) {
+					new TypeError("Warning for using unassigned variable", divs[0]->getLineNo());
+				}
+				else {
+					if (divs.size() > 1) {
+						new TypeError("Warning for using Dot operator in unassigned variable", divs[i]->getLineNo());
+					}
+					Identifier::isAssigned = false;
+				}
 			}
 		}
 

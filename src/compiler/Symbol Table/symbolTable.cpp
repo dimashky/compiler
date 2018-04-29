@@ -1137,3 +1137,16 @@ string symbolTable::getFullPath() {
 	}
 	return parent + current;
 }
+
+bool symbolTable::isParent(Symbol* child, Symbol* parent) {
+	
+	if (child == parent)
+		return true;
+	while (((Class*)child)->get_extended_class().second != nullptr) {
+		child = ((Class*)child)->get_extended_class().second->get_owner();
+		if (child == parent) {
+			return true;
+		}
+	}
+	return false;
+}

@@ -22,7 +22,19 @@ public:
 
 	bool typeChecking() { 
 		if (left) {
+
+			Identifier::leftAssignment = true;
+			Identifier::isAssigned = true;
 			left->typeChecking();
+			
+			if (left->getType() == "identifier") {
+				if (((Identifier*)left)->getPreDot() != nullptr) {
+					new TypeError("Warning for using Dot operator in unassigned variable");
+				}
+			}
+
+			Identifier::leftAssignment = false;
+
 		}
 		if (right) {
 			right->typeChecking();

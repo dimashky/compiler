@@ -1,5 +1,7 @@
 #include "all.h"
 #include <string>
+#include "../Symbol Table/symbolTable.h"
+#include "../Symbol Table/Class.h"
 
 using namespace std;
 
@@ -37,7 +39,10 @@ TypeExpression* TypeClass::operation(Operator op, TypeExpression* secondOperand 
 
 int TypeClass::equivelantTo(TypeExpression* secondOperand) {
 	// check if second operand is class type and same name
-	if (secondOperand->getTypeId() == TYPE_CLASS && this->typeExpression() == secondOperand->typeExpression()) {
+	auto currSymbol = TypesTable::getType(this->name).second;
+	auto secondSymbol = TypesTable::getType(secondOperand->typeExpression()).second;
+	
+	if (secondOperand->getTypeId() == TYPE_CLASS && (this->typeExpression() == secondOperand->typeExpression() || (currSymbol && secondSymbol && symbolTable::isParent((Class*)secondSymbol, (Class*)currSymbol)))) {
 		return TYPE_CLASS;
 	}
 	return TYPE_ERROR;
