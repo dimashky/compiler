@@ -43,6 +43,10 @@ public:
 		return type_ref != nullptr;
 	}
 
+	bool getIsConst() {
+		return this->is_const;
+	}
+
 	~LocalVariable();
 
 };

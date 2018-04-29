@@ -152,7 +152,7 @@ vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifier
 
 	while (!identifiers.empty())
 	{
-		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(),dimension, line_no, col_no);
+		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), dimension, line_no, col_no, true);
 		
 		symboltable->addField(newField, known_type);
 		

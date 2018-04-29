@@ -29,8 +29,12 @@ public:
 			
 			if (left->getType() == "identifier") {
 				if (((Identifier*)left)->getPreDot() != nullptr) {
-					new TypeError("Warning for using Dot operator in unassigned variable");
+					new TypeError("Warning for using Dot operator in unassigned variable", ((Identifier*)left)->getPostDot()->getLineNo());
 				}
+				if (((Identifier*)left)->getIsConst()) {
+					this->left->nodeType = new TypeError("cannot assign to const variable", ((Identifier*)left)->getPostDot()->getLineNo());
+				}
+
 			}
 
 			Identifier::leftAssignment = false;
@@ -44,8 +48,7 @@ public:
 			if (this->nodeType->getTypeId() != TYPE_ERROR)
 				return true;
 		}
-		
-		this->nodeType = new TypeError("invalid assignment operation");
+		this->nodeType = new TypeError("invalid assignment operation", ((Identifier*)left)->getPostDot()->getLineNo());
 		return false;
 	}
 

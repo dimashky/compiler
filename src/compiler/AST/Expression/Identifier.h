@@ -19,7 +19,7 @@ private:
 
 	Symbol* postDot;
 
-	bool is_array;
+	bool isArray, isConst;
 
 	vector<Node*>dimensions;
 
@@ -27,7 +27,7 @@ public:
 
 	static bool leftAssignment,isAssigned;
 
-	Identifier(Node* preDot, Symbol* postDot, bool is_array = false);
+	Identifier(Node* preDot, Symbol* postDot, bool isArray = false);
 
 	int print(int);
 
@@ -38,6 +38,10 @@ public:
 	}
 
 	Symbol* getPostDot();
+
+	bool getIsConst() {
+		return this->isConst;
+	}
 
 	void setArrayDimensions(queue<Node*>dimensions);
 	

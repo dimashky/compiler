@@ -12,12 +12,11 @@ private:
 	Attribute* attribute;
 	string type_variable;
 	Symbol* type_ref;
-	bool is_private;
+	bool is_private, initialized,isConst;
 	int dimension;
-	bool initialized;
 public:
 
-	Field(queue<string>&modifiers , string type_variable,string name,int dimension, int line_no, int col_no);
+	Field(queue<string>&modifiers, string type_variable, string name, int dimension, int line_no, int col_no, bool isConst = false);
     
 	void add_attributes(queue<string>&attributes);
 
@@ -33,7 +32,9 @@ public:
 	bool isInitialized() {
 		return this->initialized;
 	}
-
+	bool getIsConst() {
+		return this->isConst;
+	}
 	bool isComplex() {
 		return type_ref != nullptr;
 	}

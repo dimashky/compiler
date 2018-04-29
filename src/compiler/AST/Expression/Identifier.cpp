@@ -8,11 +8,12 @@ bool Identifier::leftAssignment = false;
 
 bool Identifier::isAssigned = true;
 
-Identifier::Identifier(Node* preDot, Symbol* postDot, bool is_array) : Expression(Node::current)
+Identifier::Identifier(Node* preDot, Symbol* postDot, bool isArray) : Expression(Node::current)
 {
 	this->preDot = preDot;
 	this->postDot = postDot;
-	this->is_array = is_array;
+	this->isArray = isArray;
+	this->isConst = false;
 }
 
 string Identifier::getType()
@@ -34,7 +35,7 @@ int Identifier::print(int nodeCnt)
 
 void Identifier::setArrayDimensions(queue<Node*>dimensions) {
 	
-	this->is_array = true;
+	this->isArray = true;
 
 	while (!dimensions.empty())
 		this->dimensions.push_back(dimensions.front()), dimensions.pop();
@@ -66,6 +67,18 @@ bool Identifier::typeChecking() {
 
 	for (int i = 0;i < divs.size();i++) {
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
+
+		if (i == divs.size() - 1) {
+			if (prev->getType() == "field") {
+				if (((Field*)prev)->getIsConst())
+					this->isConst = true;
+			}
+			else if(prev->getType() == "localvariable") {
+				if (((LocalVariable*)prev)->getIsConst())
+					this->isConst = true;
+			}
+		}
+
 		if (prev->getColNo() == -15) { 
 			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
 			return false;

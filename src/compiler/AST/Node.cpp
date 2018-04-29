@@ -3,6 +3,7 @@
 #include "Object\Procedure.h"
 #include "../Type Checker/TypeError.h"
 #include "../Error Handler/error_handler.h"
+#include "../Symbol Table/Method.h"
 extern errorHandler error_handler;
 
 Node* Node::current = nullptr;
@@ -48,7 +49,10 @@ void Node::Up() {
 	if (Node::current->getType() == "procedure") {
 		if (((Procedure*)Node::current)->getSymbol()->getType() == "method") {
 			if (!((Procedure*)Node::current)->getHasReturn()) {
-				error_handler.add(error(((Procedure*)Node::current)->getSymbol()->getLineNo(), ((Procedure*)Node::current)->getSymbol()->getColNo(), "there is no return statement in function " + ((Procedure*)Node::current)->getSymbol()->getName()));
+				//check if this method is not has void return type
+				if (((Method*)((Procedure*)Node::current)->getSymbol())->get_return_type() != "VOID" || ((Method*)((Procedure*)Node::current)->getSymbol())->getTypeRef() != nullptr) {
+					error_handler.add(error(((Procedure*)Node::current)->getSymbol()->getLineNo(), ((Procedure*)Node::current)->getSymbol()->getColNo(), "there is no return statement in function " + ((Procedure*)Node::current)->getSymbol()->getName()));
+				}
 			}
 		}
 	}
