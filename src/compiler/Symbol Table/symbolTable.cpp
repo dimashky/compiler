@@ -563,7 +563,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 		symbolTable* find_base = (symbolTable*)find_res.first;
 
-
 		if (cnt != 1) {
 			if (find_base != nullptr) {
 
@@ -587,6 +586,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			{
 				if (find_base->owner->getType() == "class")
 				{
+				
 					if (((Class*)find_base->owner)->is_final())
 					{
 						((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));

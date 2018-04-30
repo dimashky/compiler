@@ -72,7 +72,6 @@ void class_tree::down_specific_child(string name)
 
 pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current_class)
 {
-
 	if (list.size() == 0 || curr == nullptr)
 		return make_pair(nullptr, false);
 	
@@ -91,7 +90,11 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 	if (find_top != nullptr)
 	{
 		bool can_access = true, branch = false;
-
+		
+		//this if added in 5/1/2018 notify !!
+		if (path.top()->name != list.front()) {
+			branch = true;
+		}
 		path.pop();
 		list.pop();
 

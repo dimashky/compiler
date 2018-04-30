@@ -67,7 +67,7 @@ bool Identifier::typeChecking() {
 
 	for (int i = 0;i < divs.size();i++) {
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
-
+		
 		if (i == divs.size() - 1) {
 			if (prev->getType() == "field") {
 				if (((Field*)prev)->getIsConst())
@@ -79,10 +79,27 @@ bool Identifier::typeChecking() {
 			}
 		}
 
-		if (prev->getColNo() == -15) { 
-			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
+		if (prev->getColNo() == -15) {
+			//try to find it as static field in class !!
+			if (i == 0 && preDot == nullptr && divs.size() > 1) {
+				symbolTable* parentRef = (symbolTable*)this->symboltable;
+
+				while (parentRef != nullptr) {
+					if (parentRef->get_owner() != nullptr && parentRef->get_owner()->getType() == "class")
+						break;
+					parentRef = parentRef->get_parent();
+				}
+
+				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
+				if (prev != nullptr) {
+					continue;
+				}
+			}
+			
+			this->nodeType = new TypeError("undeclared identifier " + divs[i]->getName(), divs[i]->getLineNo());
 			return false;
 		}
+		
 		if(preDot == nullptr && i == 0) {
 			// using unassigned variable
 			if (prev->getType() == "localvariable" && !((LocalVariable*)prev)->isInitialized()) {
@@ -110,13 +127,29 @@ bool Identifier::typeChecking() {
 			}
 		}
 
-
 		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
 			return true;
 		}
-		if (i != divs.size() - 1)
+
+		if (i != divs.size() - 1) {
+
+			if (prev->getTypeRef() == nullptr) {
+				if (prev->getType() == "field") {
+					if (TypesTable::getType(((Field*)prev)->get_type_name()).second == nullptr) {
+						this->nodeType = new TypeError("Dot operator isn't allowed on primitive type", divs[i]->getLineNo());
+						return false;
+					}
+				}
+				else if (prev->getType() == "localvariable") {
+					if (TypesTable::getType(((LocalVariable*)prev)->get_type_name()).second == nullptr) {
+						this->nodeType = new TypeError("Dot operator isn't allowed on primitive type", divs[i]->getLineNo());
+						return false;
+					}
+				}
+			}
 			prev = prev->getTypeRef();
+		}
 	}
 
 	cout << "valid identifier in " << prev->getName() << " " << prev->getLineNo() << endl;
