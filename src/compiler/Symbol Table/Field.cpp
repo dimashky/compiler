@@ -7,6 +7,7 @@ Field::Field(queue<string>&modifiers , string type_variable, string name, int di
 	this->type_ref = nullptr;
 	this->is_private = true;
 	this->initialized = false;
+	this->isStatic = false;
 	this->dimension = dimension;
 	this->isConst = isConst;
 	add_attributes(modifiers);
@@ -19,6 +20,9 @@ void Field::add_attributes(queue<string>&attributes)
 		if (is_private) {
 			if (attributes.front() == "PUBLIC" || attributes.front() == "PROTECTED") {
 				is_private = false;
+			}
+			if (!isStatic && attributes.front() == "STATIC") {
+				isStatic = true;
 			}
 		}
 		attribute->add(attributes.front() , attributes.size() );

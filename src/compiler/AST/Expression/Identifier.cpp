@@ -61,7 +61,7 @@ bool Identifier::typeChecking() {
 		}
 	}
 
-
+	bool type = false;
 
 	vector<Symbol*>divs = postDot->divideName();
 
@@ -81,7 +81,8 @@ bool Identifier::typeChecking() {
 
 		if (prev->getColNo() == -15) {
 			//try to find it as static field in class !!
-			if (i == 0 && preDot == nullptr && divs.size() > 1) {
+			if ((i == 0 || type) && preDot == nullptr && divs.size() > 1) {
+				type = true;
 				symbolTable* parentRef = (symbolTable*)this->symboltable;
 
 				while (parentRef != nullptr) {
@@ -99,7 +100,7 @@ bool Identifier::typeChecking() {
 			this->nodeType = new TypeError("undeclared identifier " + divs[i]->getName(), divs[i]->getLineNo());
 			return false;
 		}
-		
+
 		if(preDot == nullptr && i == 0) {
 			// using unassigned variable
 			if (prev->getType() == "localvariable" && !((LocalVariable*)prev)->isInitialized()) {
@@ -132,6 +133,15 @@ bool Identifier::typeChecking() {
 			return true;
 		}
 
+
+		if (prev->getType() == "field") {
+			if (((Field*)prev)->getIsStatic() && (preDot != nullptr || i != 0 && !type)) {
+				this->nodeType = new TypeError("cannot access to static field from 'this' keyword or objects", divs[i]->getLineNo());
+				return false;
+			}
+				
+		}
+
 		if (i != divs.size() - 1) {
 
 			if (prev->getTypeRef() == nullptr) {
@@ -150,6 +160,8 @@ bool Identifier::typeChecking() {
 			}
 			prev = prev->getTypeRef();
 		}
+		//if code reach to here prev don't hold type on it
+		type = false;
 	}
 
 	cout << "valid identifier in " << prev->getName() << " " << prev->getLineNo() << endl;

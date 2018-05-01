@@ -2,13 +2,14 @@ namespace xX
 {
     class qcwc{
 
-        public class fefe
+        static int x;
+        int vv;
+        public void sss()
         {
-
+            qcwc asf = new qcwc();
+            asf.x = 12;
         }
     }
-    class frefw : qcwc.fefe
-    {
-    }
+    
     
 }

@@ -12,7 +12,7 @@ private:
 	Attribute* attribute;
 	string type_variable;
 	Symbol* type_ref;
-	bool is_private, initialized,isConst;
+	bool is_private, initialized,isConst,isStatic;
 	int dimension;
 public:
 
@@ -37,6 +37,9 @@ public:
 	}
 	bool isComplex() {
 		return type_ref != nullptr;
+	}
+	bool getIsStatic() {
+		return isStatic;
 	}
 	~Field();
 

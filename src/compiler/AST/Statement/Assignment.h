@@ -28,7 +28,8 @@ public:
 			left->typeChecking();
 			
 			if (left->getType() == "identifier") {
-				if (((Identifier*)left)->getPreDot() != nullptr) {
+				//i dont know why this if is here
+				if (((Identifier*)left)->getPreDot() != nullptr && !((Identifier*)left)->isAssigned) {
 					new TypeError("Warning for using Dot operator in unassigned variable", ((Identifier*)left)->getPostDot()->getLineNo());
 				}
 				if (((Identifier*)left)->getIsConst()) {
