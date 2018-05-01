@@ -30,6 +30,11 @@ public:
 
 		return true;
 	}
+
+	void generateCode() {
+		
+	};
+
 	~While();
 };
 

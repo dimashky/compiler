@@ -84,6 +84,16 @@ bool Procedure::typeChecking() {
 	return check;
 }
 
+void Procedure::generateCode() {
+	/// TODO: handle declar new class or function
+	for (int i = 0; i < locals.size(); i++) {
+		locals[i]->generateCode();
+	}
+	if (block) {
+		block->generateCode();
+	}
+}
+
 Procedure::~Procedure()
 {
 

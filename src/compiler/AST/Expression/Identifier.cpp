@@ -190,6 +190,10 @@ bool Identifier::typeChecking() {
 	return true;
 }
 
+void Identifier::generateCode() {
+	// handle it
+}
+
 Identifier::~Identifier()
 {
 }

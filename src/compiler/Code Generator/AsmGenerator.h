@@ -19,9 +19,9 @@ public:
 
 	static void writeAsmFile();
 
-	static void li(string reg, int value);
+	static void li(string reg, int value, bool isChar = false);
 
-	static void binaryOperation(string dest_reg, string reg1, string reg2, Operator operation);
+	static void operation(Operator operation, string const &dest_reg, string const &reg1, string const &reg2 = false);
 
 	static void addLabel(string label_name);
 

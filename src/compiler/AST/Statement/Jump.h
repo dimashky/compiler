@@ -74,6 +74,10 @@ public:
 		return true;
 	}
 
+	void generateCode() {
+
+	};
+
 	~Jump();
 };
 

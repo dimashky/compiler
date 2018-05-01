@@ -56,6 +56,11 @@ public:
 
 		return true;
 	}
+
+	void generateCode() {
+
+	}
+
 	~For();
 };
 

@@ -18,7 +18,8 @@ public:
 	string getType();
 	
 	bool typeChecking();
-	
+	void generateCode();
+
 	~UnaryExpression();
 };
 

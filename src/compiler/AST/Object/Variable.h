@@ -12,11 +12,8 @@ public:
 
 	string getType();
 	bool typeChecking();
-	void generateCode(){
-		if(equal){
-			equal->generateCode();
-		} 
-	}
+	void generateCode();
+
 	~Variable();
 };
 

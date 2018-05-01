@@ -35,6 +35,12 @@ bool Block::typeChecking() {
 	return res;
 }
 
+void Block::generateCode() {
+	for (auto statement : statements) {
+		statement->generateCode();
+	}
+}
+
 Block::~Block()
 {
 }

@@ -46,6 +46,7 @@ public:
 	void setArrayDimensions(queue<Node*>dimensions);
 	
 	bool typeChecking();
+	void generateCode();
 
 	~Identifier();
 };

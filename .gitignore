@@ -2,6 +2,8 @@
 *nodes.js
 *info.js
 
+*.asm
+
 **/Parser/*
 
 # Created by https://www.gitignore.io/api/c,c++,csharp,windows,visualstudio

@@ -34,6 +34,11 @@ public:
 		
 		return true;
 	}
+
+	void generateCode() {
+
+	};
+
 	~Foreach();
 };
 

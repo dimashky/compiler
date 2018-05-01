@@ -37,6 +37,10 @@ public:
 	
 	bool typeChecking();
 
+	void generateCode() {
+
+	}
+
 	~Call();
 
 };

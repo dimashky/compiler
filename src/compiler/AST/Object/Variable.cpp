@@ -82,6 +82,14 @@ bool Variable::typeChecking() {
 	return true;
 }
 
+void Variable::generateCode() {
+	/// TODO: handle declaration new variable
+	if (equal) {
+		equal->generateCode();
+		/// TODO: handle assigment to this variable
+	}
+}
+
 Variable::~Variable()
 {
 

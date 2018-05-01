@@ -4,7 +4,8 @@ namespace xX
         
         new public void sascas()
         {
-
+            string x;
+            x = 'B' + 'A';
         }
     }
     

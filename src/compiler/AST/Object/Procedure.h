@@ -43,14 +43,8 @@ public:
 
 	bool typeChecking();
 
-	void generateCode() {
-		for (int i = 0; i < locals.size(); i++) {
-			locals[i]->generateCode();
-		}
-		if (block) {
-			block->generateCode();
-		}
-	}
+	void generateCode();
+
 	~Procedure();
 };
 

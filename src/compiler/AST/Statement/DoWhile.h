@@ -27,6 +27,11 @@ public:
 		
 		return true;
 	}
+
+	void generateCode() {
+
+	}
+
 	~DoWhile();
 };
 

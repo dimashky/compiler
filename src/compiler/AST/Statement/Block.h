@@ -17,11 +17,8 @@ public:
 	string getType();
 	
 	bool typeChecking();
-	void generateCode() {
-		for (auto statement : statements) {
-			statement->generateCode();
-		}
-	}
+	void generateCode();
+
 	~Block();
 };
 

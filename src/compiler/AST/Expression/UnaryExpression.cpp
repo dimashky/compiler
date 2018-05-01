@@ -42,6 +42,14 @@ bool UnaryExpression::typeChecking() {
 	return false;
 }
 
+void UnaryExpression::generateCode() {
+	this->expression->generateCode();
+
+	AsmGenerator::pop("t0");
+	AsmGenerator::operation(op, "t0", "t0");
+	AsmGenerator::push("t0");
+}
+
 UnaryExpression::~UnaryExpression()
 {
 }

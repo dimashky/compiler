@@ -72,15 +72,14 @@ bool BinaryExpression::typeChecking() {
 }
 
 void BinaryExpression::generateCode() {
-	string t0 = "t0", t1 = "t1";
-
 	this->left->generateCode();
 	this->right->generateCode();
 	
+	string t0 = "t0", t1 = "t1", t2 = "t2";
 	AsmGenerator::pop(t0);
 	AsmGenerator::pop(t1);
 
-	AsmGenerator::binaryOperation(t0, t0, t1, op);
-	
-	AsmGenerator::push(t0);
+	AsmGenerator::operation(op, t2, t0, t1);
+
+	AsmGenerator::push(t2);
 }

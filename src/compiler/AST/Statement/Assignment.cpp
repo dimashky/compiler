@@ -24,6 +24,17 @@ int Assignment::print(int nodeCnt) {
 
 	return nodeCnt;
 }
+
+void Assignment::generateCode() {
+	if (left) {
+		left->generateCode();
+	}
+	if (right) {
+		right->generateCode();
+	}
+	/// TODO: assign left to right in assembly
+}
+
 Assignment::~Assignment()
 {
 }

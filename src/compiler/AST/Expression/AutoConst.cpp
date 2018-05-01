@@ -56,6 +56,9 @@ void AutoConst::generateCode() {
 	else if (this->type == "BOOL") {
 		AsmGenerator::li("t0", *((bool*)this->value));
 	}
+	else if (this->type == "CHAR") {
+		AsmGenerator::li("t0", *((char*)this->value), true);
+	}
 	AsmGenerator::push("t0");
 }
 

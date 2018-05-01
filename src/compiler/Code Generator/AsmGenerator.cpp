@@ -17,50 +17,40 @@ void AsmGenerator::writeAsmFile()
 	assembly_code_file.close();
 }
 
-void AsmGenerator::li(string reg, int value)
-{
-	string c = "li $";
-	c += reg;
-	c += ",";
-	c += to_string(value);
-	AsmGenerator::addInstruction(c);
+void AsmGenerator::li(string reg, int value, bool isChar)
+{		
+	AsmGenerator::addInstruction("li $" + reg + ", " + to_string(value));
 }
 
-void AsmGenerator::binaryOperation(string dest_reg, string reg1, string reg2, Operator operation)
+void AsmGenerator::operation(Operator op, string const &dest_reg, string const &reg1, string const &reg2)
 {
-	string c = "";
-
-	switch (operation)
+	switch (op)
 	{
 	case Plus:
-		c += "add $";
+		AsmGenerator::addInstruction("add $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Minus:
-		c += "sub $";
+		AsmGenerator::addInstruction("sub $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case star:
-		c += "mul $";
+		AsmGenerator::addInstruction("mul $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case slash:
-		c += "div $";
+		AsmGenerator::addInstruction("div $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case percent:
-		c += "rem $";
+		AsmGenerator::addInstruction("rem $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case andand:
-		c += "and $";
+		AsmGenerator::addInstruction("and $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case oror:
-		c += "or $";
+		AsmGenerator::addInstruction("or $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	default:
 		cout << "operation NOT Support!" << endl;
 		return;
 	}
-
-	c += dest_reg + ", $" + reg1 + ", $" + reg2;
-
-	AsmGenerator::addInstruction(c);
 }
 
 void AsmGenerator::addLabel (string label_name)
