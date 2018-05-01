@@ -54,6 +54,11 @@ string Procedure::getType()
 
 
 bool Procedure::typeChecking() {
+	
+	if (symbol && symbol->getType() == "method") {
+		Identifier::isStaticMethod = ((Method*)symbol)->get_is_static();
+	}
+
 	if (baseCall) {
 		baseCall->typeChecking();
 		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
@@ -75,6 +80,7 @@ bool Procedure::typeChecking() {
 	if (block) {
 		check |= block->typeChecking();
 	}
+	Identifier::isStaticMethod = false;
 	return check;
 }
 

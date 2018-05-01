@@ -4,10 +4,14 @@ namespace xX
 
         static int x;
         int vv;
-        public void sss()
+        public void asd()
         {
-            qcwc asf = new qcwc();
-            asf.x = 12;
+
+        }
+        public static void xxasx()
+        {
+            vv = 12;
+            asd();
         }
     }
     

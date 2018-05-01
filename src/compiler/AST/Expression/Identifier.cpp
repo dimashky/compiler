@@ -8,6 +8,8 @@ bool Identifier::leftAssignment = false;
 
 bool Identifier::isAssigned = true;
 
+bool Identifier::isStaticMethod = true;
+
 Identifier::Identifier(Node* preDot, Symbol* postDot, bool isArray) : Expression(Node::current)
 {
 	this->preDot = preDot;
@@ -61,30 +63,26 @@ bool Identifier::typeChecking() {
 		}
 	}
 
+
+	//to check if last div is a type or normal variable
 	bool type = false;
 
 	vector<Symbol*>divs = postDot->divideName();
 
 	for (int i = 0;i < divs.size();i++) {
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
-		
-		if (i == divs.size() - 1) {
-			if (prev->getType() == "field") {
-				if (((Field*)prev)->getIsConst())
-					this->isConst = true;
-			}
-			else if(prev->getType() == "localvariable") {
-				if (((LocalVariable*)prev)->getIsConst())
-					this->isConst = true;
-			}
-		}
 
+		//we didnt find identifier
 		if (prev->getColNo() == -15) {
+			
 			//try to find it as static field in class !!
 			if ((i == 0 || type) && preDot == nullptr && divs.size() > 1) {
+				
 				type = true;
+				
 				symbolTable* parentRef = (symbolTable*)this->symboltable;
 
+				//up to parent class
 				while (parentRef != nullptr) {
 					if (parentRef->get_owner() != nullptr && parentRef->get_owner()->getType() == "class")
 						break;
@@ -92,15 +90,35 @@ bool Identifier::typeChecking() {
 				}
 
 				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
+				
 				if (prev != nullptr) {
 					continue;
 				}
+
 			}
 			
 			this->nodeType = new TypeError("undeclared identifier " + divs[i]->getName(), divs[i]->getLineNo());
 			return false;
 		}
 
+		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
+			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
+			return true;
+		}
+
+		//this if for check if this Identifier is const or not
+		if (i == divs.size() - 1) {
+			if (prev->getType() == "field") {
+				if (((Field*)prev)->getIsConst())
+					this->isConst = true;
+			}
+			else if (prev->getType() == "localvariable") {
+				if (((LocalVariable*)prev)->getIsConst())
+					this->isConst = true;
+			}
+		}
+
+		//this for check un assigned variable
 		if(preDot == nullptr && i == 0) {
 			// using unassigned variable
 			if (prev->getType() == "localvariable" && !((LocalVariable*)prev)->isInitialized()) {
@@ -114,36 +132,29 @@ bool Identifier::typeChecking() {
 					Identifier::isAssigned = false;
 				}
 			}
-			if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
-				Node* currentNode = parent;
 
-				while (currentNode->getType() != "procedure")
-					currentNode = currentNode->getParent();
-				if (((Procedure*)currentNode)->getSymbol()->getType() == "method") {
-					if (((Method*)((Procedure*)currentNode)->getSymbol())->get_is_static()) {
-						this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
-						return false;
-					}
+			if (Identifier::isStaticMethod) {
+				if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
+					this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
+					return false;
+				}
+				if (i == 0 && preDot == nullptr && prev->getType() == "field" && !((Field*)prev)->getIsStatic()) {
+					this->nodeType = new TypeError("cannot use non static fields on static method", divs[i]->getLineNo());
+					return false;
 				}
 			}
 		}
 
-		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
-			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
-			return true;
-		}
-
-
+		//throw error when access to static field from this keyword
 		if (prev->getType() == "field") {
 			if (((Field*)prev)->getIsStatic() && (preDot != nullptr || i != 0 && !type)) {
 				this->nodeType = new TypeError("cannot access to static field from 'this' keyword or objects", divs[i]->getLineNo());
 				return false;
-			}
-				
+			}	
 		}
 
 		if (i != divs.size() - 1) {
-
+			//throw error if we want to use dot op on primitive var
 			if (prev->getTypeRef() == nullptr) {
 				if (prev->getType() == "field") {
 					if (TypesTable::getType(((Field*)prev)->get_type_name()).second == nullptr) {
@@ -164,10 +175,8 @@ bool Identifier::typeChecking() {
 		type = false;
 	}
 
-	cout << "valid identifier in " << prev->getName() << " " << prev->getLineNo() << endl;
 
 	if (prev->isComplex()) {
-
 		this->nodeType = TypesTable::findOrCreate(((Class*)prev->getTypeRef())->getFullPath(), prev->getTypeRef());
 	}
 	else {

@@ -25,7 +25,7 @@ private:
 
 public:
 
-	static bool leftAssignment,isAssigned;
+	static bool leftAssignment, isAssigned, isStaticMethod;
 
 	Identifier(Node* preDot, Symbol* postDot, bool isArray = false);
 
