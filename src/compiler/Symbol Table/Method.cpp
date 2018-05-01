@@ -23,6 +23,7 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->is_extern = false;
 	this->must_ovrride = false; 
 	this->default_counter = 0;
+	this->is_new = false;
 	this->types_ids_parameter = types_ids_parameter; 
 	this->return_type_ref = nullptr;
 	this->is_constructer = return_type == "";
@@ -42,19 +43,21 @@ void Method::add_attributes(queue<string>&attributes , string name_parent,bool i
 				continue; 
 		   }
 		}
-		if (attributes.front() == "SEALED")
+		if (!is_new && attributes.front() == "NEW")
+			is_new = true;
+		if (!isFinal && attributes.front() == "SEALED")
 			isFinal = true;
-		if (attributes.front() == "STATIC")
+		if (!is_static && attributes.front() == "STATIC")
 			is_static = true;
-		if (attributes.front() == "ABSTRACT")
+		if (!is_abstract && attributes.front() == "ABSTRACT")
 			is_abstract = true;
-		if (attributes.front() == "OVERRIDE")
+		if (!is_override && attributes.front() == "OVERRIDE")
 			is_override = true;
-		if (attributes.front() == "VIRTUAL")
+		if (!is_virtual && attributes.front() == "VIRTUAL")
 			is_virtual = true ;
-		if (attributes.front() == "EXTERN")
+		if (!is_extern && attributes.front() == "EXTERN")
 		     is_extern = true;
-		if (attributes.front() == "PUBLIC")
+		if (!is_public && attributes.front() == "PUBLIC")
 			is_public = true, is_protected = is_private = is_internal = false;
 		if (!is_public && attributes.front() == "PROTECTED")
 			is_protected = true, is_private = false;
