@@ -25,7 +25,8 @@ public:
 	void setValue(void* value);
 
 	bool typeChecking() { return true; }
-	
+	void generateCode();
+
 	~AutoConst();
 };
 

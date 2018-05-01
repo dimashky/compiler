@@ -14,6 +14,7 @@ public:
 	virtual string getType();
 
 	virtual bool typeChecking() = 0;
+	virtual void generateCode() {};
 
 	~Expression();
 };

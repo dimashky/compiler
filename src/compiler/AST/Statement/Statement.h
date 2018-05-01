@@ -12,6 +12,7 @@ public:
 	virtual string getType() = 0;
 	
 	virtual bool typeChecking() = 0;
+	virtual void generateCode() {};
 
 	~Statement();
 };

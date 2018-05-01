@@ -49,6 +49,16 @@ void AutoConst::setValue(void* value)
 	this->value=value; 
 }
 
+void AutoConst::generateCode() {
+	if (this->type == "INT") {
+		AsmGenerator::li("t0", *((int*)this->value));
+	}
+	else if (this->type == "BOOL") {
+		AsmGenerator::li("t0", *((bool*)this->value));
+	}
+	AsmGenerator::push("t0");
+}
+
 AutoConst::~AutoConst()
 {
 }

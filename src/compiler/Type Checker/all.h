@@ -32,4 +32,7 @@
 #include "TypeCheckingHelper.h"
 #include "TypesTable.h"
 
+// Code Generator helper class
+#include "../Code Generator/AsmGenerator.h"
+
 #endif

@@ -52,7 +52,15 @@ public:
 		this->nodeType = new TypeError("invalid assignment operation", ((Identifier*)left)->getPostDot()->getLineNo());
 		return false;
 	}
-
+	void generateCode() {
+		if (left) {
+			left->generateCode();
+		}
+		if (right) {
+			AsmGenerator::comment("enter right");
+			right->generateCode();
+		}
+	}
 	~Assignment();
 };
 

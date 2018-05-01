@@ -70,3 +70,17 @@ bool BinaryExpression::typeChecking() {
 	}
 	return check;
 }
+
+void BinaryExpression::generateCode() {
+	string t0 = "t0", t1 = "t1";
+
+	this->left->generateCode();
+	this->right->generateCode();
+	
+	AsmGenerator::pop(t0);
+	AsmGenerator::pop(t1);
+
+	AsmGenerator::binaryOperation(t0, t0, t1, op);
+	
+	AsmGenerator::push(t0);
+}

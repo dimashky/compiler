@@ -17,6 +17,7 @@ public:
 	int print(int);
 
 	bool typeChecking();
+	void generateCode();
 
 	~BinaryExpression();
 };

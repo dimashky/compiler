@@ -25,6 +25,7 @@ public:
 	void setSymbol(Symbol *symbol);
 
 	virtual bool typeChecking() = 0;
+	virtual void generateCode() {};
 
 	~Object();
 };

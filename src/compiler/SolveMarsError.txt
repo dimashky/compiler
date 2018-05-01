@@ -1,0 +1,4 @@
+1- Go into your Start Menu and type regedit into the search field.
+2- Navigate to path HKEY_LOCAL_MACHINE\Software\JavaSoft (Windows 10 seems to now have this here: HKEY_LOCAL_MACHINE\Software\WOW6432Node\JavaSoft)
+3- Right click on the JavaSoft folder and click on New -> Key
+4- Name the new Key Prefs and everything should work.

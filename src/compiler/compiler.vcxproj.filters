@@ -61,6 +61,9 @@
     <Filter Include="Source Files\Type Checker\simple">
       <UniqueIdentifier>{a6b82da4-df85-45ee-8f42-e3423d635555}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Code Generator">
+      <UniqueIdentifier>{175788b8-1d66-4dce-accd-4398b3b288e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\input\example1.cs">
@@ -212,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="AST\Statement\Jump.cpp">
       <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="Code Generator\AsmGenerator.cpp">
+      <Filter>Source Files\Code Generator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="AST\Statement\Jump.h">
       <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="Code Generator\AsmGenerator.h">
+      <Filter>Source Files\Code Generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

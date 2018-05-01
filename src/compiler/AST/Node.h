@@ -43,6 +43,8 @@ public:
 		return this->parent;
 	}
 
+	virtual void generateCode() {};
+
 	~Node();
 };
 
