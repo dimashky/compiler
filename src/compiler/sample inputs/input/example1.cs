@@ -1,12 +1,15 @@
-namespace xX
+namespace ascas
 {
-    class qcwc{
-        
-        new public void sascas()
+    class xx : yy.bb
+    {
+
+    }
+
+    class yy
+    {
+        class bb
         {
 
         }
     }
-    
-    
 }

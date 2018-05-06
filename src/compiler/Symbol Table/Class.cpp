@@ -12,6 +12,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 	is_abstract = false;
 	owner_is_namespace = false;
 	type_graph_position = nullptr;
+	is_internal = false;
 	baseClassImpInterfaces.push_back(make_pair("", nullptr));
 	have_constructor = false;
 	this->is_static = false;
@@ -33,6 +34,10 @@ void Class::add_attributes(queue<string>&attributes)
 			if (attributes.front() == "PROTECTED" || attributes.front() == "PRIVATE") {
 				error_handler.add(error(getLineNo(), -1, "class error, elements defined in namespace cannot be private or protected."));
 			}
+			if (attributes.front() == "INTERNAL") {
+				is_internal = true;
+				is_public = is_protected = is_private = false;
+			}
 		}
 		else
 		{
@@ -42,6 +47,11 @@ void Class::add_attributes(queue<string>&attributes)
 				is_protected = true, is_private = false;
 			if (!is_public && !is_protected && attributes.front() == "PRIVATE")
 				is_private = true;
+			if (attributes.front() == "INTERNAL") {
+				is_internal = true;
+				is_public = is_protected = is_private = false;
+			}
+
 		}
 
 		attribute->add(attributes.front(), attributes.size());
