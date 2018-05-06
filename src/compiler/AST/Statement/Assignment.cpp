@@ -26,13 +26,9 @@ int Assignment::print(int nodeCnt) {
 }
 
 void Assignment::generateCode() {
-	if (left) {
-		left->generateCode();
-	}
-	if (right) {
-		right->generateCode();
-	}
-	/// TODO: assign left to right in assembly
+	right->generateCode();
+	AsmGenerator::pop("t0");
+//	AsmGenerator::sw("t0", "fp", -1 * left->getPostDot()->offset); PROBLEM!
 }
 
 Assignment::~Assignment()

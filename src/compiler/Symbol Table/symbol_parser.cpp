@@ -192,6 +192,7 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, params_dimension,var_init, known_type, is_body);
 	//parametars added to AST
 
+	((Method*)newMethod)->returnAddressOffset = ((Method*)newMethod)->stackFrameSize;
 	((Method*)newMethod)->stackFrameSize += 8;
 
 	return newMethod;

@@ -84,12 +84,20 @@ bool Procedure::typeChecking() {
 void Procedure::generateCode() {
 	// function
 	if (block) {
+		AsmGenerator::comment("\nDeclare Function\n");
 		AsmGenerator::addLabel(this->symbol->getName()); /// Change from get name to get FULL name
 		block->generateCode();
+		if (this->symbol->getName() != "Main") {
+			AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
+			AsmGenerator::addInstruction("jr $ra");
+			AsmGenerator::comment("\nEnd Function\n");
+		}
 	}
 	// class
 	else {
-
+		for (auto local : this->locals) {
+			local->generateCode();
+		}
 	}
 }
 

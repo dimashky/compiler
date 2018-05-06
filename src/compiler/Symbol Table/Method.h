@@ -30,6 +30,7 @@ public:
 	4- Control link	= 4
 	5- local variables	= 4 * #vars
 	*/
+	int returnAddressOffset;
 	//true for default case of compare "same number of params" ... false for compare to handle default params case
 	static bool compare_status;
 

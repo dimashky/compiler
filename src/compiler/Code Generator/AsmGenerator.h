@@ -29,6 +29,10 @@ public:
 
 	static void pop(string destination_register);
 
+	static void lw(string destination_register, string reference, int offset);
+
+	static void sw(string source_register, string reference, int offset);
+
 	static void addInstruction(string instruction);
 	
 	static void comment(string comment_meesage);

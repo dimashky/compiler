@@ -5,8 +5,8 @@ void AsmGenerator::initializeFile()
 {
 	assembly_code_file.open("./AssemblyCode.asm");
 	main_stream << ".text\n"
-		<< ".globl main\n"
-		<< "main:\n\n";
+		<< ".globl Main\n"
+		<< "jal Main";
 }
 
 void AsmGenerator::writeAsmFile()
@@ -140,6 +140,21 @@ void AsmGenerator::f_move(string dest_reg,string source_reg)
 	c+=dest_reg;
 	c+=",$";
 	c+=source_reg;
+	AsmGenerator::addInstruction(c);
+}
+
+void AsmGenerator::lw(string destination_register, string reference, int offset) 
+{
+	string c = "lw $";
+	c += destination_register;
+	c += ", "+ to_string(offset) +"($"+reference+")";
+	AsmGenerator::addInstruction(c);
+}
+
+void AsmGenerator::sw(string source_register, string reference, int offset) {
+	string c = "sw $";
+	c += source_register;
+	c += ", " + to_string(offset) + "($" + reference + ")";
 	AsmGenerator::addInstruction(c);
 }
 
