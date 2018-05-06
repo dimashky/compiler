@@ -1,7 +1,7 @@
 #include "Method.h"
 #include "../Error Handler/error_handler.h"
 #include "../AST/Object/Variable.h"
-#include "../AST/Statement/Block.h"
+#include "../AST/Object/Procedure.h"
 #include "../AST/Object/ArrayInitializer.h"
 extern errorHandler error_handler;
 
@@ -27,6 +27,7 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->types_ids_parameter = types_ids_parameter; 
 	this->return_type_ref = nullptr;
 	this->is_constructer = return_type == "";
+	this->stackFrameSize = 4;
 }
 
 void Method::add_attributes(queue<string>&attributes , string name_parent,bool is_body)
@@ -109,9 +110,12 @@ void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, in
 	{
 		LocalVariable *newLocalVariable = new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second);
 		
+		newLocalVariable->offset = this->stackFrameSize;
+		this->stackFrameSize += 4;
+
 		Variable* field = new Variable(newLocalVariable, (Expression*)var_init.front(), Node::current);
 
-		((Block*)Node::current)->add(field);
+		((Procedure*)Node::current)->add(field);
 		
 		types_ids_parameter.push_back(newLocalVariable);
 		

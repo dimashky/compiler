@@ -1,13 +1,10 @@
 namespace xX
 {
     class qcwc{
-        
-        new public void sascas()
+        int x ( int a , int b , int c )
         {
-            string x;
-            x = 'B' + 'A';
-        }
+            int d;
+            return 5;
+        }  
     }
-    
-    
 }

@@ -20,7 +20,16 @@ private:
 	int default_counter;
 	vector<LocalVariable*> types_ids_parameter;
 public:
-
+	/// TODO: change this size to correct size with TypeExpression class
+	int stackFrameSize;
+	/*
+	Every stackframe has:
+	1- Return Value = 4
+	2- Parameters = 4 * #params
+	3- Return Address = 4
+	4- Control link	= 4
+	5- local variables	= 4 * #vars
+	*/
 	//true for default case of compare "same number of params" ... false for compare to handle default params case
 	static bool compare_status;
 

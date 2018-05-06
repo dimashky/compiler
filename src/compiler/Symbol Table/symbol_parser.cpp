@@ -189,16 +189,10 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	}
 	Node::setCurrent(ns);
 
-	Block* b = new Block(Node::current);
-
-	((Procedure*)ns)->setBlock(b);
-
-	Node::setCurrent(b);
-
 	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, params_dimension,var_init, known_type, is_body);
+	//parametars added to AST
 
-
-	Node::Up();
+	((Method*)newMethod)->stackFrameSize += 8;
 
 	return newMethod;
 }

@@ -10,6 +10,8 @@ private:
 	int line_no, col_no;
 	string name;
 public:
+	int offset; // for codegeneration 
+
 	Symbol(string name, int line_no, int col_no);
 
 	virtual bool compare(Symbol* comp);

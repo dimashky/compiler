@@ -1,12 +1,28 @@
 #include "Block.h"
+#include "../../Symbol Table/Method.h"
+#include "../Object/Procedure.h"
 Block::Block(Node *parent) :Statement(parent)
 {
+	if (parent->getType() == "procedure") {
+		this->parentMethod = (Procedure*)parent;
+	}
+	else {
+		Node* current = parent;
+		while (current->getType() != "procedure") {
+			current = current->getParent();
+		}
+		this->parentMethod = (Procedure*)current;
+	}
 }
 
 void Block::add(Node* statement)
 {
 	this->statements.push_back(statement);
-	return;
+	if (statement->getType() == "variable") {
+		((Variable*)statement)->getSymbol()->offset = ((Method*)((Procedure*)parentMethod)->getSymbol())->stackFrameSize;
+		((Method*)((Procedure*)parentMethod)->getSymbol())->stackFrameSize += 4;
+	}
+ 	return;
 }
 
 string Block::getType() {

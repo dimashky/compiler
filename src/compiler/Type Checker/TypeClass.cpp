@@ -8,6 +8,7 @@ using namespace std;
 TypeClass::TypeClass(string c) {
 	this->name = c;
 	this->typeId = TYPE_CLASS;
+	this->bytes = 4; // by default
 }
 
 string TypeClass::typeExpression() {

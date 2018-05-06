@@ -6,9 +6,6 @@ Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol
 	this->block = nullptr;
 	this->hasReturnStatement = false;
 	this->baseCall = baseCall;
-	/*
-	 *	TODO: init nodeType with symbol table.
-	 */
 }
 
 void Procedure::add(Object* object)
@@ -85,12 +82,14 @@ bool Procedure::typeChecking() {
 }
 
 void Procedure::generateCode() {
-	/// TODO: handle declar new class or function
-	for (int i = 0; i < locals.size(); i++) {
-		locals[i]->generateCode();
-	}
+	// function
 	if (block) {
+		AsmGenerator::addLabel(this->symbol->getName()); /// Change from get name to get FULL name
 		block->generateCode();
+	}
+	// class
+	else {
+
 	}
 }
 
