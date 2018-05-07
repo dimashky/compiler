@@ -1171,3 +1171,19 @@ bool symbolTable::isParent(Symbol* child, Symbol* parent) {
 	}
 	return false;
 }
+
+
+bool symbolTable::checkMethodOverriding(Symbol* method, Symbol* currentClass) {
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+	symbolTable* baseClass = ((Class*)currentClass)->get_extended_class().second;
+	while (baseClass != nullptr) {
+		it = baseClass->symbolMap.find(method);
+		if (it != baseClass->symbolMap.end()) {
+			if (it->first->getType() == "method" && ((Method*)it->first)->get_is_public() && (((Method*)it->first)->get_is_override() || ((Method*)it->first)->get_is_virtual() || ((Method*)it->first)->get_is_abstract())) {
+				return true;
+			}
+		}
+		baseClass = ((Class*)baseClass->get_owner())->get_extended_class().second;
+	}
+	return false;
+}

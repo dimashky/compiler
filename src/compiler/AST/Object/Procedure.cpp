@@ -1,6 +1,9 @@
 #include"Procedure.h"
 #include "../../Type Checker/all.h"
 #include "../Statement/Call.h"
+#include "../../Error Handler/error_handler.h"
+
+extern errorHandler error_handler;
 Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol, parent)
 {
 	this->block = nullptr;
@@ -58,7 +61,12 @@ bool Procedure::typeChecking() {
 	//start handeling warning for override keyword
 
 	if (symbol != nullptr && this->symbol->getType() == "method" && !((Method*)this->symbol)->get_is_override()) {
-
+		if (!((Method*)symbol)->get_is_override()) {
+			if (symbolTable::checkMethodOverriding(symbol, ((Procedure*)this->parent)->symbol)) {
+				error_handler.add(error(symbol->getLineNo(), symbol->getColNo(), "Warning override method without using override keyword"));
+			}
+		}
+		
 	}
 
 	

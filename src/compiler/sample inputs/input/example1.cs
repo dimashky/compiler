@@ -1,8 +1,14 @@
-class asd
+class a
+{
+    public virtual void afsd()
+    {
+    }
+}
+
+class asd:a
 {
     readonly int ascas;
-    void afsd()
+    public void afsd()
     {
-        ascas = 12;
     }
 }

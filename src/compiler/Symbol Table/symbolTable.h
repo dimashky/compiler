@@ -4,7 +4,6 @@
 #include "Attribute.h"
 #include "class_tree.h"
 #include "../AST/Node.h"
-
 using namespace std;
 
 
@@ -86,6 +85,8 @@ public:
 	}
 
 	static bool isParent(Symbol* child, Symbol* parent);
+
+	static bool checkMethodOverriding(Symbol* method, Symbol* currentClass);
 	
 	~symbolTable();
 };
