@@ -111,6 +111,9 @@ bool Identifier::typeChecking() {
 			if (prev->getType() == "field") {
 				if (((Field*)prev)->getIsConst())
 					this->isConst = true;
+				if (((Field*)prev)->getIsReadonly())
+					this->isReadonly = true;
+
 			}
 			else if (prev->getType() == "localvariable") {
 				if (((LocalVariable*)prev)->getIsConst())

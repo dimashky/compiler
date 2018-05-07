@@ -2,6 +2,8 @@
 #include "Statement.h"
 #include "../Expression/Identifier.h"
 #include "../Expression/Expression.h"
+#include "../../Symbol Table/Method.h"
+#include "../Object/Procedure.h"
 class Assignment :public Statement
 {
 
@@ -35,7 +37,15 @@ public:
 				if (((Identifier*)left)->getIsConst()) {
 					this->left->nodeType = new TypeError("cannot assign to const variable", ((Identifier*)left)->getPostDot()->getLineNo());
 				}
-
+				if (((Identifier*)left)->getIsReadonly()) {
+					Node* current = this->parent;
+					while (current->getType() != "procedure") {
+						current = current->getParent();
+					}
+					if (!((Method*)((Procedure*)current)->getSymbol())->get_is_constructer()) {
+						this->left->nodeType = new TypeError("cannot assign to readonly field outside constructer", ((Identifier*)left)->getPostDot()->getLineNo());
+					}
+				}
 			}
 
 			Identifier::leftAssignment = false;

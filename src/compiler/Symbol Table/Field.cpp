@@ -10,6 +10,7 @@ Field::Field(queue<string>&modifiers , string type_variable, string name, int di
 	this->isStatic = false;
 	this->dimension = dimension;
 	this->isConst = isConst;
+	this->readonly = false;
 	add_attributes(modifiers);
 }
 
@@ -24,6 +25,9 @@ void Field::add_attributes(queue<string>&attributes)
 			if (!isStatic && attributes.front() == "STATIC") {
 				isStatic = true;
 			}
+		}
+		if (!readonly && attributes.front() == "READONLY") {
+			readonly = true;
 		}
 		attribute->add(attributes.front() , attributes.size() );
 		attributes.pop();

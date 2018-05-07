@@ -1,15 +1,8 @@
-namespace ascas
+class asd
 {
-    class xx : yy.bb
+    readonly int ascas;
+    void afsd()
     {
-
-    }
-
-    class yy
-    {
-        class bb
-        {
-
-        }
+        ascas = 12;
     }
 }

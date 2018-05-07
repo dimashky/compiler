@@ -54,7 +54,20 @@ string Procedure::getType()
 
 
 bool Procedure::typeChecking() {
+
+	//start handeling warning for override keyword
+
+	if (symbol != nullptr && this->symbol->getType() == "method" && !((Method*)this->symbol)->get_is_override()) {
+
+	}
+
 	
+	
+	
+	
+	//end handeling warning for override keyword
+
+
 	if (symbol && symbol->getType() == "method") {
 		Identifier::isStaticMethod = ((Method*)symbol)->get_is_static();
 	}

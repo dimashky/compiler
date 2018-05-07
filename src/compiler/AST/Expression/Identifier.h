@@ -19,7 +19,7 @@ private:
 
 	Symbol* postDot;
 
-	bool isArray, isConst;
+	bool isArray, isConst, isReadonly;
 
 	vector<Node*>dimensions;
 
@@ -41,6 +41,10 @@ public:
 
 	bool getIsConst() {
 		return this->isConst;
+	}
+
+	bool getIsReadonly() {
+		return this->isReadonly;
 	}
 
 	void setArrayDimensions(queue<Node*>dimensions);

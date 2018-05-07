@@ -12,7 +12,7 @@ private:
 	Attribute* attribute;
 	string type_variable;
 	Symbol* type_ref;
-	bool is_private, initialized,isConst,isStatic;
+	bool is_private, initialized,isConst,isStatic,readonly;
 	int dimension;
 public:
 
@@ -40,6 +40,10 @@ public:
 	}
 	bool getIsStatic() {
 		return isStatic;
+	}
+
+	bool getIsReadonly() {
+		return this->readonly;
 	}
 	~Field();
 
