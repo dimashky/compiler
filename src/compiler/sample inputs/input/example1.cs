@@ -1,14 +1,8 @@
-class a
+class cc
 {
-    public virtual void afsd()
+    void fff()
     {
-    }
-}
-
-class asd:a
-{
-    readonly int ascas;
-    public void afsd()
-    {
+        cc ff;
+        ff = (cc)ff;
     }
 }

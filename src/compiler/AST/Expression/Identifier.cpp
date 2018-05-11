@@ -16,6 +16,7 @@ Identifier::Identifier(Node* preDot, Symbol* postDot, bool isArray) : Expression
 	this->postDot = postDot;
 	this->isArray = isArray;
 	this->isConst = false;
+	this->isReadonly = false;
 }
 
 string Identifier::getType()

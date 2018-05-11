@@ -320,9 +320,9 @@ member_access
   : primary_expression DOT IDENTIFIER	
   {
 		l.a("member_access",1);
-			
-		$<r.node>$ = new Identifier($<r.node>1, new Symbol(string($<r.str>3), $<r.line_no>3, -13));
-			
+
+		$<r.node>$ = new Identifier($<r.node>1, new Symbol(string($<r.str>3), $<r.line_no>3, -13));			
+  
   }
   | primitive_type DOT IDENTIFIER		{l.a("member_access",1);}
   | class_type DOT IDENTIFIER			{l.a("member_access",1);}
@@ -503,25 +503,16 @@ unary_expression
  */
 
 cast_expression
-  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								{l.a("cast_expression",2);}
-  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",2);}
-  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	
-  {
-		l.a("cast_expression",4);
-  
-  }	
-  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							
-  {
-		l.a("cast_expression",3);
-  }
-  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								
-  {
-		l.a("cast_expression",3);
-  }
-  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								
   {
 		l.a("cast_expression",2);
+		$<r.node>$ = new BinaryExpression($<r.node>2,As,$<r.node>4,Node::current);
   }
+  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",2);}
+  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	{l.a("cast_expression",4);}	
+  | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							{l.a("cast_expression",3);}
+  | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								{l.a("cast_expression",3);}
+  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									{l.a("cast_expression",2);}
   ;
   	
 type_quals_opt
