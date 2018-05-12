@@ -12,7 +12,7 @@ public:
 	
 	TypeExpression* operation(Operator op, TypeExpression* secondOperand);
 
-	int equivelantTo(TypeExpression* secondOperand);
+	int equivelantTo(TypeExpression* secondOperand, bool cast = false);
 
 private:
 	std::string name;

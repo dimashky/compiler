@@ -1,7 +1,8 @@
 #include "ArrayInitializer.h"
 #include "../../Type Checker/all.h"
 
-ArrayInitializer::ArrayInitializer() :Object(nullptr, nullptr) {}
+ArrayInitializer::ArrayInitializer() :Object(nullptr, nullptr) {
+}
 
 int ArrayInitializer::print(int nodeCnt)
 {

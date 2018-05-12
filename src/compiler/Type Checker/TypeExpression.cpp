@@ -25,6 +25,6 @@ TypeExpression* TypeExpression::operation(Operator op, TypeExpression* secondOpe
 	return new TypeError(TypeCheckingHelper::getTypeName(this->typeId) + " doesn't support "+ OperatorName[op] +" operator.");
 }
 
-int TypeExpression::equivelantTo(TypeExpression* secondOperand) {
+int TypeExpression::equivelantTo(TypeExpression* secondOperand, bool cast = false) {
 	return TYPE_ERROR; // default
 }

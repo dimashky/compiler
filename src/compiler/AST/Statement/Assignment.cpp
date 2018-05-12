@@ -5,6 +5,8 @@ Assignment::Assignment(Identifier *left, Operator op, Node *right, Node *parent)
 	this->left = left; 
 	this->right = right;
 	this->op = op;
+	cout << right;
+	system("pause");
 }
 
 string Assignment::getType() {

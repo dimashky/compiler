@@ -11,6 +11,7 @@ public:
 
 	static void init();
 	static TypeExpression* findOrCreate(string, Symbol*);
+	static TypeExpression* findOrCreateArray(TypeExpression*, int);
 	static pair<TypeExpression*, Symbol*> getType(string);
 	
 private:

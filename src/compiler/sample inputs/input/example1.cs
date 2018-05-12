@@ -2,7 +2,8 @@ class cc
 {
     void fff()
     {
-        cc ff;
-        ff = (cc)ff;
+        cc ff = new cc();
+        ff = ff as object;
+        
     }
 }

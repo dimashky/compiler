@@ -40,13 +40,20 @@ TypeExpression* TypeClass::operation(Operator op, TypeExpression* secondOperand 
 	}
 }
 
-int TypeClass::equivelantTo(TypeExpression* secondOperand) {
+int TypeClass::equivelantTo(TypeExpression* secondOperand, bool cast) {
 	// check if second operand is class type and same name
 	auto currSymbol = TypesTable::getType(this->name).second;
 	auto secondSymbol = TypesTable::getType(secondOperand->typeExpression()).second;
 	
-	if (secondOperand->getTypeId() == TYPE_CLASS && (this->typeExpression() == secondOperand->typeExpression() || (currSymbol && secondSymbol && symbolTable::isParent((Class*)secondSymbol, (Class*)currSymbol)))) {
+	if (secondOperand->getTypeId() == TYPE_CLASS && (this->typeExpression() == secondOperand->typeExpression() || (currSymbol && secondSymbol && (symbolTable::isParent((Class*)secondSymbol, (Class*)currSymbol) || (cast && symbolTable::isParent((Class*)currSymbol, (Class*)secondSymbol)))))) {
 		return TYPE_CLASS;
 	}
 	return TYPE_ERROR;
 }
+
+/*
+if (secondOperand->getTypeId() == TYPE_CLASS && (this->typeExpression() == secondOperand->typeExpression() || (currSymbol && secondSymbol && (symbolTable::isParent((Class*)secondSymbol, (Class*)currSymbol) || (cast && symbolTable::isParent((Class*)currSymbol, (Class*)secondSymbol)))))) {
+return TYPE_CLASS;
+}y
+
+*/

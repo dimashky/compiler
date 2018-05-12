@@ -121,7 +121,7 @@ TypeExpression* TypeFloat::operation(Operator op, TypeExpression* secondOperand)
 }
 
 
-int TypeFloat::equivelantTo(TypeExpression* secondOperand) {
+int TypeFloat::equivelantTo(TypeExpression* secondOperand, bool cast) {
 	if (secondOperand->getTypeId() == TYPE_INTEGER || secondOperand->getTypeId() == TYPE_FLOAT)
 		return TYPE_FLOAT;
 	return TYPE_ERROR;

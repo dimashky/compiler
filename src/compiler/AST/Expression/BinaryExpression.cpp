@@ -50,9 +50,7 @@ bool BinaryExpression::typeChecking() {
 
 		Symbol* type = ((Procedure*)currentNode)->getSymbol();
 		
-		
 		type = symbolTable::findType(((Class*)type)->get_type_graph_position(), ((Identifier*)right)->getPostDot()->getName());
-
 
 		if (type == nullptr) {
 			this->nodeType = new TypeError("type " + ((Identifier*)right)->getPostDot()->getName() + " is not defined", ((Identifier*)right)->getPostDot()->getLineNo());
@@ -60,6 +58,22 @@ bool BinaryExpression::typeChecking() {
 		else {
 			this->right->nodeType = TypesTable::findOrCreate(((Class*)type)->getFullPath(), type);
 		}
+	}
+	else if (this->op == Operator::As) {
+	/*	
+		vector<Symbol*>divs = ((Identifier*)this->right)->getPostDot()->divideName();
+
+
+
+		if(this->left->nodeType->equivelantTo(this->right->nodeType, true)){
+			this->nodeType = this->right->nodeType;
+		}
+		else {
+			cout << "shit" << endl;
+			this->nodeType = new TypeError("no AS operation suitable");
+		}
+
+		*/
 	}
 	else {
 		this->right->typeChecking();

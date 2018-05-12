@@ -122,7 +122,7 @@ TypeExpression* TypeInteger::operation(Operator op, TypeExpression* secondOperan
 }
 
 
-int TypeInteger::equivelantTo(TypeExpression* secondOperand) {
+int TypeInteger::equivelantTo(TypeExpression* secondOperand, bool cast) {
 	if (secondOperand->getTypeId() == TYPE_INTEGER)
 		return TYPE_INTEGER;
 	if (secondOperand->getTypeId() == TYPE_FLOAT)

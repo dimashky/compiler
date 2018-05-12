@@ -45,6 +45,10 @@ public:
 	bool getIsReadonly() {
 		return this->readonly;
 	}
+
+	int getDimension() {
+		return this->dimension;
+	}
 	~Field();
 
 };
