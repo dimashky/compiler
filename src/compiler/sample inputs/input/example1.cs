@@ -1,9 +1,20 @@
 class cc
 {
-    void fff()
+    int fff()
     {
         cc ff = new cc();
-        ff = ff as object;
-        
+        object ff3 = (tt)ff;
+
+        return 2;
+
     }
+}
+
+class tt : cc
+{
+
+}
+class wt
+{
+
 }

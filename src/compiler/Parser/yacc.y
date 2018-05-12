@@ -506,7 +506,7 @@ cast_expression
   : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								
   {
 		l.a("cast_expression",2);
-		$<r.node>$ = new BinaryExpression($<r.node>2,As,$<r.node>4,Node::current);
+		$<r.node>$ = new BinaryExpression($<r.node>4,As,$<r.node>2,Node::current);
   }
   | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",2);}
   | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	{l.a("cast_expression",4);}	

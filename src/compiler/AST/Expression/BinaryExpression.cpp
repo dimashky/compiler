@@ -37,8 +37,9 @@ BinaryExpression::~BinaryExpression()
 
 bool BinaryExpression::typeChecking() {
 	bool check = true;
+	int line_no = -1;
 	this->left->typeChecking();
-	if (this->op == Operator::Is) {
+	if (this->op == Operator::Is || this->op == Operator::As) {
 		Node* currentNode = this->parent;
 
 		//up to parent method
@@ -49,6 +50,7 @@ bool BinaryExpression::typeChecking() {
 		currentNode = currentNode->getParent();
 
 		Symbol* type = ((Procedure*)currentNode)->getSymbol();
+		line_no = ((Procedure*)currentNode)->getSymbol()->getLineNo();
 		
 		type = symbolTable::findType(((Class*)type)->get_type_graph_position(), ((Identifier*)right)->getPostDot()->getName());
 
@@ -59,28 +61,22 @@ bool BinaryExpression::typeChecking() {
 			this->right->nodeType = TypesTable::findOrCreate(((Class*)type)->getFullPath(), type);
 		}
 	}
-	else if (this->op == Operator::As) {
-	/*	
-		vector<Symbol*>divs = ((Identifier*)this->right)->getPostDot()->divideName();
-
-
-
-		if(this->left->nodeType->equivelantTo(this->right->nodeType, true)){
-			this->nodeType = this->right->nodeType;
-		}
-		else {
-			cout << "shit" << endl;
-			this->nodeType = new TypeError("no AS operation suitable");
-		}
-
-		*/
-	}
 	else {
 		this->right->typeChecking();
 	}
 
 	if (left && right) {
-		this->nodeType = this->left->nodeType->operation(op, this->right->nodeType);
+		if (this->op == Operator::As) {
+			if (this->left->nodeType->equivelantTo(this->right->nodeType, true)) {
+				this->nodeType = this->right->nodeType;
+			}
+			else {
+				this->nodeType = new TypeError("casting error", line_no);
+			}
+		}
+		else {
+			this->nodeType = this->left->nodeType->operation(op, this->right->nodeType);
+		}
 	}
 	return check;
 }

@@ -75,8 +75,17 @@ public:
 	static Symbol* findIdentifier(Symbol* symbol, symbolTable* currentScope, Symbol* lastSymbol = nullptr);
 
 	static Symbol* findType(node* parentRef, string name) {
+		if (name == "OBJECT") {
+			return symbolTable::object_ref->get_owner();
+		}
 		queue<string>divs;
-		divs.push(name);
+		string current = "";
+		for (int i = 0;i < name.size();i++) {
+			if (name[i] != '.')
+				current += name[i];
+			else divs.push(current), current = "";
+		}
+		divs.push(current);
 		auto res = symbolTable::type_defination_tree->find(parentRef, divs);
 		if (res.first != nullptr && res.second) {
 			return ((symbolTable*)res.first)->get_owner();

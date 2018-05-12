@@ -541,8 +541,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 	}
 
 	int cnt = 0;
-	if (bases.size() == 0 && symbol->getName() != "Object")
-		((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+	if (bases.size() == 0 && symbol->getName() != "object")
+		((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 
 	while (!bases.empty())
 	{
@@ -589,7 +589,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				
 					if (((Class*)find_base->owner)->is_final())
 					{
-						((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+						((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 
 						error_handler.add(error(symbol->getLineNo(), -1, "error, cannot derive from sealed type '" + find_base->owner->getName() + "'."));
 					}
@@ -612,25 +612,25 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				}
 				else if (find_base->owner->getType() == "namespace")
 				{
-					((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + find_base->owner->getName() + "' is a namespace."));
 				}
 				else if (find_base->owner->getType() == "interface")
 				{
-					((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					((Class*)symbol)->add_base(bases.front(), find_base);
 				}
 
 				else
 				{
-					((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
 				}
 			}
 
 			else if (find_res.second)
 			{
-				((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+				((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 				error_handler.add(error(symbol->getLineNo(), -1, "error,  inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
 			}
 			else
