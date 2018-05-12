@@ -4,6 +4,7 @@ TypeArray::TypeArray(TypeExpression* elementType, int dimension = 1) {
 	this->bytes = dimension * elementType->getBytes();
 	this->elementType = elementType;
 	this->dimension = dimension;
+	this->typeId = TYPE_ARRAY;
 }
 
 TypeExpression* TypeArray::getOf() {

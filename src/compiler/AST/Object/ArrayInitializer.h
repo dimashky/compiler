@@ -4,9 +4,11 @@
 #include "../Expression/Expression.h"
 class ArrayInitializer :public Object
 {
-	vector<Node*>elements;
+	vector<Node*>elements, dimensions;
+	Symbol* type;
+	bool complexType;
 public:
-	ArrayInitializer();
+	ArrayInitializer(Symbol* type = nullptr, bool complexType = false);
 
 	int print(int);
 
@@ -15,6 +17,12 @@ public:
 	vector<Node*> getElements();
 	
 	void setElements(queue<Node*>elements);
+	void setDimensions(queue<Node*>elements) {
+		while (!elements.empty()) {
+			this->dimensions.push_back(elements.front());
+			elements.pop();
+		}
+	}
 
 	void addElement(Node* element);
 

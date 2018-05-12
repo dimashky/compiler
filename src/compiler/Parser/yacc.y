@@ -442,7 +442,12 @@ object_creation_expression
   }
   ;
 array_creation_expression
-  : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		{l.a("array_creation_expression",4);}
+  : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		
+  {
+		l.a("array_creation_expression",4);
+		$<r.node>$ = new ArrayInitializer(new Symbol(*$<r.base>2,$<r.line_no>1,-13),$<r.known_type>2);
+		((ArrayInitializer*)$<r.node>$)->setDimensions(*$<r.nodes>4);		
+  }
   | NEW array_type array_initializer																			{l.a("array_creation_expression",2);}
   ;
 array_initializer_opt
@@ -843,7 +848,12 @@ variable_initializer
 	
 		$<r.node>$ = $<r.node>1;
   }
-  | array_initializer		                                       {l.a("variable_initializer",1);}// needed!!
+  | array_initializer		                                       
+  {
+		l.a("variable_initializer",1);
+  
+  		$<r.node>$ = $<r.node>1;
+  }
   | stackalloc_initializer	                                       {l.a("variable_initializer",1);}
   ;
 

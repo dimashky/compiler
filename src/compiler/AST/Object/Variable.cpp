@@ -38,6 +38,7 @@ bool Variable::typeChecking() {
 
 	if (field) {
 		TypeExpression* elementType;
+
 		if (((Field*)symbol)->isComplex()) {
 			elementType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), ((Class*)((Field*)symbol))->getTypeRef());
 		}
@@ -55,16 +56,21 @@ bool Variable::typeChecking() {
 		if (((Field*)symbol)->getIsConst() && !this->equal) {
 			new TypeError("a const field requires a value to be provided", symbol->getLineNo());
 		}
-
-		
 	}
 	else {
+		TypeExpression* elementType;
 		if (((LocalVariable*)symbol)->isComplex()) {
-
-			this->nodeType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), ((Class*)((LocalVariable*)symbol))->getTypeRef());
+			elementType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), ((Class*)((LocalVariable*)symbol))->getTypeRef());
 		}
 		else {
-			this->nodeType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;
+			elementType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;
+		}
+		
+		if (((LocalVariable*)symbol)->getDimension() > 0) {
+			this->nodeType = TypesTable::findOrCreateArray(elementType, ((LocalVariable*)symbol)->getDimension());
+		}
+		else {
+			this->nodeType = elementType;
 		}
 
 		if (((LocalVariable*)symbol)->getIsConst() && !this->equal) {
@@ -73,7 +79,6 @@ bool Variable::typeChecking() {
 	}
 
 	if (equal) {
-		
 		equal->typeChecking();
 		
 		this->nodeType = this->nodeType->operation(Operator::Equal, equal->nodeType);

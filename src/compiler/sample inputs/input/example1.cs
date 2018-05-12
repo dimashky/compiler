@@ -1,20 +1,7 @@
-class cc
+class cqc
 {
-    int fff()
+    void test()
     {
-        cc ff = new cc();
-        object ff3 = (tt)ff;
-
-        return 2;
-
+        int[] a = new int[4];
     }
-}
-
-class tt : cc
-{
-
-}
-class wt
-{
-
 }
