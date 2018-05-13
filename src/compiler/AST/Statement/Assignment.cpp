@@ -15,7 +15,7 @@ int Assignment::print(int nodeCnt) {
 
 	int currentId = nodeCnt;
 
-	fprintf(nodesFile, "{ id:%d, label:'%d', shape: 'box', color:'#74bffc'},", currentId, op);
+	fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#74bffc'},", currentId, OperatorName[op].c_str());
 
 	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
 	nodeCnt = left->print(nodeCnt + 1);

@@ -26,6 +26,15 @@ int Block::print(int nodeCnt) {
 	return nodeCnt;
 }
 
+bool Block::typeChecking() {
+	bool res = true;
+	for (auto statement : statements) {
+		res |= statement->typeChecking();
+	}
+
+	return res;
+}
+
 Block::~Block()
 {
 }

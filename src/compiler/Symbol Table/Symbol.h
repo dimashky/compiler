@@ -1,6 +1,8 @@
 #pragma once
 #include<iostream>
 #include<string>
+#include <vector>
+
 using namespace::std;
 class Symbol
 {
@@ -15,7 +17,24 @@ public:
 	string getName();
 	int getLineNo();
 	int getColNo();
+	void setName(string name) {
+		this->name = name;
+	}
+	vector<Symbol*> divideName();
 	virtual string getType();
+
+	virtual Symbol* getTypeRef() {
+		return nullptr;
+	}
+
+	void setColNo(int col_no) {
+		this->col_no = col_no;
+		return;
+	}
+
+	virtual bool isComplex() {
+		return false;
+	}
 
 	~Symbol();
 

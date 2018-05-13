@@ -24,6 +24,11 @@ int Foreach::print(int nodeCnt){
 	return nodeCnt;
 }
 
+void Foreach::setStatement(Node* statement) {
+	this->statement = statement;
+}
+
+
 string Foreach::getType() {
 	return "foreach";
 }

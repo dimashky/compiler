@@ -19,23 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Parser\yacc.output" />
-    <None Include="sample inputs\example1.cs" />
-    <None Include="sample inputs\example10.cs" />
-    <None Include="sample inputs\example11.cs" />
-    <None Include="sample inputs\example12.cs" />
-    <None Include="sample inputs\example13.cs" />
-    <None Include="sample inputs\example14.cs" />
-    <None Include="sample inputs\example15.cs" />
-    <None Include="sample inputs\example2.cs" />
-    <None Include="sample inputs\example3.cs" />
-    <None Include="sample inputs\example4.cs" />
-    <None Include="sample inputs\example5.cs" />
-    <None Include="sample inputs\example6.cs" />
-    <None Include="sample inputs\example7.cs" />
-    <None Include="sample inputs\example8.cs" />
-    <None Include="sample inputs\example9.cs" />
-    <None Include="sample inputs\example16.cs" />
     <None Include="sample inputs\input\example1.cs" />
     <None Include="sample inputs\input\example2.cs" />
   </ItemGroup>
@@ -46,9 +29,11 @@
     <ClCompile Include="AST\Expression\Identifier.cpp" />
     <ClCompile Include="AST\Expression\UnaryExpression.cpp" />
     <ClCompile Include="AST\Node.cpp" />
+    <ClCompile Include="AST\Object\ArrayInitializer.cpp" />
     <ClCompile Include="AST\Object\Object.cpp" />
     <ClCompile Include="AST\Object\Procedure.cpp" />
     <ClCompile Include="AST\Object\Variable.cpp" />
+    <ClCompile Include="AST\Operator.cpp" />
     <ClCompile Include="AST\Statement\Assignment.cpp" />
     <ClCompile Include="AST\Statement\Block.cpp" />
     <ClCompile Include="AST\Statement\Call.cpp" />
@@ -56,6 +41,7 @@
     <ClCompile Include="AST\Statement\For.cpp" />
     <ClCompile Include="AST\Statement\Foreach.cpp" />
     <ClCompile Include="AST\Statement\If.cpp" />
+    <ClCompile Include="AST\Statement\Jump.cpp" />
     <ClCompile Include="AST\Statement\Statement.cpp" />
     <ClCompile Include="AST\Statement\While.cpp" />
     <ClCompile Include="Lexical Analyzer\lex.flex.cpp" />
@@ -73,6 +59,18 @@
     <ClCompile Include="Symbol Table\Symbol.cpp" />
     <ClCompile Include="Symbol Table\symbolTable.cpp" />
     <ClCompile Include="Symbol Table\symbol_parser.cpp" />
+    <ClCompile Include="Type Checker\TypeArray.cpp" />
+    <ClCompile Include="Type Checker\TypeBoolean.cpp" />
+    <ClCompile Include="Type Checker\TypeCheckingHelper.cpp" />
+    <ClCompile Include="Type Checker\TypeClass.cpp" />
+    <ClCompile Include="Type Checker\TypeError.cpp" />
+    <ClCompile Include="Type Checker\TypeExpression.cpp" />
+    <ClCompile Include="Type Checker\TypeFloat.cpp" />
+    <ClCompile Include="Type Checker\TypeFunction.cpp" />
+    <ClCompile Include="Type Checker\TypeInteger.cpp" />
+    <ClCompile Include="Type Checker\TypesTable.cpp" />
+    <ClCompile Include="Type Checker\TypeString.cpp" />
+    <ClCompile Include="Type Checker\TypeVoid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AST\Expression\AutoConst.h" />
@@ -81,9 +79,11 @@
     <ClInclude Include="AST\Expression\Identifier.h" />
     <ClInclude Include="AST\Expression\UnaryExpression.h" />
     <ClInclude Include="AST\Node.h" />
+    <ClInclude Include="AST\Object\ArrayInitializer.h" />
     <ClInclude Include="AST\Object\Object.h" />
     <ClInclude Include="AST\Object\Procedure.h" />
     <ClInclude Include="AST\Object\Variable.h" />
+    <ClInclude Include="AST\Operator.h" />
     <ClInclude Include="AST\Statement\Assignment.h" />
     <ClInclude Include="AST\Statement\Block.h" />
     <ClInclude Include="AST\Statement\Call.h" />
@@ -91,6 +91,7 @@
     <ClInclude Include="AST\Statement\For.h" />
     <ClInclude Include="AST\Statement\Foreach.h" />
     <ClInclude Include="AST\Statement\If.h" />
+    <ClInclude Include="AST\Statement\Jump.h" />
     <ClInclude Include="AST\Statement\Statement.h" />
     <ClInclude Include="AST\Statement\While.h" />
     <ClInclude Include="Error Handler\error_handler.h" />
@@ -113,6 +114,19 @@
     <ClInclude Include="Symbol Table\symbol_parser.h" />
     <ClInclude Include="tools\dirent.h" />
     <ClInclude Include="tools\tools.h" />
+    <ClInclude Include="Type Checker\all.h" />
+    <ClInclude Include="Type Checker\TypeArray.h" />
+    <ClInclude Include="Type Checker\TypeBoolean.h" />
+    <ClInclude Include="Type Checker\TypeCheckingHelper.h" />
+    <ClInclude Include="Type Checker\TypeClass.h" />
+    <ClInclude Include="Type Checker\TypeError.h" />
+    <ClInclude Include="Type Checker\TypeExpression.h" />
+    <ClInclude Include="Type Checker\TypeFloat.h" />
+    <ClInclude Include="Type Checker\TypeFunction.h" />
+    <ClInclude Include="Type Checker\TypeInteger.h" />
+    <ClInclude Include="Type Checker\TypesTable.h" />
+    <ClInclude Include="Type Checker\TypeString.h" />
+    <ClInclude Include="Type Checker\TypeVoid.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="Parser\yacc.y">

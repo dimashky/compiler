@@ -68,11 +68,29 @@ void class_tree::down_specific_child(string name)
 	current = current->childs[name];
 }
 
+bool findFirstNameSpace(node* first,node* second) {
+	if (((symbolTable*)first->stPTR)->get_owner()->getType() == "class" && !((Class*)((symbolTable*)first->stPTR)->get_owner())->get_is_internal()) {
+		return false;
+	}
 
+	while (first != nullptr && first->stPTR != nullptr) {
+		if (((symbolTable*)first->stPTR)->get_owner()->getType() == "namespace") {
+			break;
+		}
+		first = first->parent;
+	}
+
+	while (second != nullptr && second->stPTR != nullptr) {
+		if (((symbolTable*)second->stPTR)->get_owner()->getType() == "namespace") {
+			break;
+		}
+		second = second->parent;
+	}
+	return first == second && first != nullptr && first->stPTR != nullptr;
+}
 
 pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current_class)
 {
-
 	if (list.size() == 0 || curr == nullptr)
 		return make_pair(nullptr, false);
 	
@@ -91,7 +109,11 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 	if (find_top != nullptr)
 	{
 		bool can_access = true, branch = false;
-
+		
+		//this if added in 5/1/2018 notify !!
+		if (path.top()->name != list.front()) {
+			branch = true;
+		}
 		path.pop();
 		list.pop();
 
@@ -101,11 +123,11 @@ pair<void*, bool> class_tree::find(node* curr, queue<string> list, node* current
 			if (it != find_top->childs.end())
 			{
 				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "class")
-					if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
+					if (!((Class*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public() && !findFirstNameSpace(it->second,curr))
 						can_access = false;
 
 				if ((((symbolTable*)it->second->stPTR)->get_owner())->getType() == "interface")
-					if (!((Interface*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public())
+					if (!((Interface*)((symbolTable*)it->second->stPTR)->get_owner())->get_is_public() && !findFirstNameSpace(it->second, curr))
 						can_access = false;
 
 				find_top = it->second, list.pop();

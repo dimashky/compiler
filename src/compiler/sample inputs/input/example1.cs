@@ -1,11 +1,8 @@
-class x
+class cqc
 {
-    void f()
+    void test()
     {
-
-        foreach(int a in dd)
-        {
-            int x = x + 1;
-        }
+        int[,] a;
+        a = new int[4];
     }
 }

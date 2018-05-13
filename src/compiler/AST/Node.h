@@ -1,17 +1,24 @@
 #pragma once
 #include<bits/stdc++.h>
+#include "../Type Checker/TypeExpression.h"
+
 using namespace std; 
 class Node
 {
 protected:
 	Node* parent;
+	void* symboltable;
 
 public:
 	static FILE* edgesFile, *nodesFile;
 
 	static void openFiles();
 	static void closeFiles();
-
+	
+	void setSymbolTable(void* symbolTable) {
+		this->symboltable = symbolTable;
+		return;
+	}
 
 	static Node* current;
 
@@ -27,7 +34,15 @@ public:
 	virtual string getType() = 0;
 	
 	virtual int print(int) = 0;
-	
+
+	TypeExpression* nodeType;
+
+	virtual bool typeChecking() = 0;
+
+	Node* getParent() {
+		return this->parent;
+	}
+
 	~Node();
 };
 

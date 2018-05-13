@@ -43,6 +43,28 @@ string For::getType() {
 	return "for";
 }
 
+
+
+void For::setCondition(Node* condition) {
+	this->condition = condition;
+}
+
+void For::setInitializers(queue<Node*>initializers) {
+	this->initializers = initializers;
+}
+
+void For::addInitializer(Node* initializer) {
+	this->initializers.push(initializer);
+}
+
+void For::setStatement(Node* statement) {
+	this->statement = statement;
+}
+
+void For::setIterators(queue<Node*>iterators) {
+	this->iterators = iterators;
+}
+
 For::~For()
 {
 }

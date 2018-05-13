@@ -1,8 +1,17 @@
 #include"Procedure.h"
+#include "../../Type Checker/all.h"
+#include "../Statement/Call.h"
+#include "../../Error Handler/error_handler.h"
 
-Procedure::Procedure(Symbol* symbol, Node* parent):Object(symbol, parent)
+extern errorHandler error_handler;
+Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol, parent)
 {
 	this->block = nullptr;
+	this->hasReturnStatement = false;
+	this->baseCall = baseCall;
+	/*
+	 *	TODO: init nodeType with symbol table.
+	 */
 }
 
 void Procedure::add(Object* object)
@@ -44,6 +53,56 @@ void Procedure::setBlock(Block* block)
 string Procedure::getType()
 {
 	return "procedure";
+}
+
+
+bool Procedure::typeChecking() {
+
+	//start handeling warning for override keyword
+
+	if (symbol != nullptr && this->symbol->getType() == "method" && !((Method*)this->symbol)->get_is_override()) {
+		if (!((Method*)symbol)->get_is_override()) {
+			if (symbolTable::checkMethodOverriding(symbol, ((Procedure*)this->parent)->symbol)) {
+				error_handler.add(error(symbol->getLineNo(), symbol->getColNo(), "Warning override method without using override keyword"));
+			}
+		}
+		
+	}
+
+	
+	
+	
+	
+	//end handeling warning for override keyword
+
+
+	if (symbol && symbol->getType() == "method") {
+		Identifier::isStaticMethod = ((Method*)symbol)->get_is_static();
+	}
+
+	if (baseCall) {
+		baseCall->typeChecking();
+		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
+			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
+		}
+	}
+	else if(symbol != nullptr && symbol->getType() == "method" && ((Method*)symbol)->get_is_constructer()) {
+		baseCall = new Call(new Identifier(nullptr, new Symbol("base", symbol->getLineNo(), -13)), this->parent, false, false, true);
+		((Call*)baseCall)->setSymbolTable(this->symboltable);
+		baseCall->typeChecking();
+		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
+			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
+		}
+	}
+	bool check = true;
+	for (int i = 0; i < locals.size(); i++) {
+		check |= locals[i]->typeChecking();
+	}
+	if (block) {
+		check |= block->typeChecking();
+	}
+	Identifier::isStaticMethod = false;
+	return check;
 }
 
 Procedure::~Procedure()

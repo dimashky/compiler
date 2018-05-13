@@ -262,7 +262,7 @@ void symbolTable::check_method(symbolTable* curr, map<string, bool>check_map)
 	return;
 }
 
-void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, bool known_type, bool is_body)
+void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > parameters, queue<int>params_dimension, queue<Node*>var_init, bool known_type, bool is_body)
 {
 
 	symbolTable *parent = NULL;
@@ -273,7 +273,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	else parent = openBrackets.top();
 	
 
-	((Method*)symbol)->add_parametars(parameters);
+	((Method*)symbol)->add_parametars(parameters, params_dimension,var_init);
 	
 	((Method*)symbol)->add_attributes(modifiers, parent->owner->getType(), is_body);
 
@@ -369,7 +369,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
 
 		if (ref.first != nullptr)
-			((Method*)symbol)->set_return_type(((symbolTable*)ref.first)->owner);
+			((Method*)symbol)->set_return_type(((symbolTable*)ref.first)->get_owner());
 
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error,  the type name '" + ((Method*)symbol)->get_return_type() + "' couldn't be found"));
@@ -563,7 +563,6 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 		symbolTable* find_base = (symbolTable*)find_res.first;
 
-
 		if (cnt != 1) {
 			if (find_base != nullptr) {
 
@@ -587,6 +586,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			{
 				if (find_base->owner->getType() == "class")
 				{
+				
 					if (((Class*)find_base->owner)->is_final())
 					{
 						((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
@@ -811,9 +811,11 @@ bool symbolTable::closeScope()
 	{
 		if (openBrackets.top()->owner != nullptr && (openBrackets.top()->owner->getType() == "class" || openBrackets.top()->owner->getType() == "interface" || openBrackets.top()->owner->getType() == "namespace"))
 		{
-			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor())
+			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor() && !((Class*)openBrackets.top()->owner)->get_is_static())
 			{
-				addMethod(new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0), queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), true ,true  );
+				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
+				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
+				defaultConstructer->setPublic();
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();
@@ -920,3 +922,268 @@ int symbolTable::print(int nodeID)
 FILE* symbolTable::nodeFile;
 
 FILE* symbolTable::edgeFile;
+
+void symbolTable::setAsInvalid() {
+	valid = false;
+}
+//maybe 'this' pass to here and cause a bug Notify !!
+
+Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope, Symbol* lastSymbol) {
+
+	bool sameClass = true;
+
+	symbolTable* currentScope;
+
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+
+	//check if id equal 'this' or no !!
+
+	if (symbol->getName() == "this" || symbol->getName() == "base") {
+
+		if (lastSymbol != nullptr)
+			return nullptr;
+
+		currentScope = identifierScope;
+
+		while (currentScope != nullptr) {
+
+			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+				break;
+
+			currentScope = currentScope->get_parent();
+		}
+
+		// return same class
+		if (symbol->getName() == "this")
+		{
+			if (symbol->getType() == "method") {
+				symbol->setName(currentScope->get_owner_name());
+				it = currentScope->symbolMap.find(symbol);
+				if (it != currentScope->symbolMap.end()) {
+					return it->first;
+				}
+				symbol->setColNo(-15);
+				return symbol;
+			}
+			return currentScope->get_owner();
+		}
+		//return base class
+		if (symbol->getType() == "method") {
+			currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+			symbol->setName(currentScope->get_owner_name());
+			it = currentScope->symbolMap.find(symbol);
+			if (it != currentScope->symbolMap.end()) {
+				return it->first;
+			}
+			symbol->setColNo(-15);
+			return symbol;
+		}
+		return ((Class*)currentScope->get_owner())->get_extended_class().second->get_owner();
+	}
+
+	if (lastSymbol) {
+
+		currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
+		
+		while (identifierScope != nullptr) {
+
+			identifierScope = identifierScope->get_parent();
+
+			if (identifierScope->get_owner() != nullptr && identifierScope->get_owner()->getType() == "class")
+				break;
+		}
+
+
+		if (currentScope != identifierScope) {
+			sameClass = false;
+		}
+	}
+
+	else 
+		
+		currentScope = identifierScope;
+
+
+	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class") {
+		
+
+		//check if this id defined in same scope !!
+		it = currentScope->symbolMap.find(symbol);
+		
+		if (it != currentScope->symbolMap.end()) {
+			if (it->first->getLineNo() > symbol->getLineNo()) {
+				symbol->setColNo(-15);
+				return symbol;
+			}
+			return it->first;
+		}
+
+		//check if this id defined as local variable in parent scopes !!
+
+		else {
+
+			currentScope = currentScope->get_parent();
+
+			while (currentScope != nullptr) {
+				
+				if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+				
+					break;
+				
+				it = currentScope->symbolMap.find(symbol);
+
+				if (it != currentScope->symbolMap.end()) {
+
+					if (it->first->getLineNo() > symbol->getLineNo()) {
+					
+						symbol->setColNo(-15);
+						
+						return symbol;
+					}
+
+					return it->first;
+				}
+
+				currentScope = currentScope->get_parent();
+
+			}
+		}
+
+	}
+	
+	//check if this id defined in same class !!
+
+	it = currentScope->symbolMap.find(symbol);
+
+	if (it != currentScope->symbolMap.end()) {
+		bool isPrivate;
+		if (it->first->getType() == "field") {
+			isPrivate = ((Field*)it->first)->get_is_private();
+		}
+		else if (it->first->getType() == "method" && symbol->getType() == "method") {
+			isPrivate = ((Method*)it->first)->get_is_private();
+		}
+		else {
+			symbol->setColNo(-15);
+			return symbol;
+		}
+		
+		if (sameClass || !isPrivate)
+			return it->first;
+
+		symbol->setColNo(-15);
+
+		return symbol;
+	}
+	else {
+
+		if (symbol->getType() == "method") {
+
+			Method::compare_status = false;
+
+			it = currentScope->symbolMap.find(symbol);
+
+			if (it != currentScope->symbolMap.end()) {
+
+				Method::compare_status = true;
+
+				return it->first;
+			}
+
+			Method::compare_status = true;
+		}
+		
+		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+	}
+
+	//check if this id defined in base class
+
+	while (currentScope != nullptr) {
+
+		it = currentScope->symbolMap.find(symbol);
+
+		if (it != currentScope->symbolMap.end()) {
+
+			if (it->first->getType() != "class" && (symbol->getType() != "method" || symbol->getType() == it->first->getType())) {
+
+				if (it->first->getType() == "field" && !((Field*)it->first)->get_is_private() || it->first->getType() == "method" && !((Method*)it->first)->get_is_private()) {
+				
+					return it->first;
+				
+				}
+
+			}	
+
+			symbol->setColNo(-15);
+
+			return symbol;
+		}
+		else if (symbol->getType() == "method") {
+
+			Method::compare_status = false;
+
+			it = currentScope->symbolMap.find(symbol);
+
+			if (it != currentScope->symbolMap.end()) {
+
+				Method::compare_status = true;
+
+				return it->first;
+			}
+
+			Method::compare_status = true;
+
+		}
+
+		currentScope = ((Class*)currentScope->get_owner())->get_extended_class().second;
+	}
+
+	symbol->setColNo(-15);
+
+	return symbol;
+}
+
+string symbolTable::getFullPath() {
+	
+	string parent, current;
+	
+	if (this->get_owner() != nullptr)
+		current = this->get_owner()->getName();
+	
+	if (this->get_parent() != nullptr)
+	{
+		parent = this->get_parent()->getFullPath();
+		if (parent != "")
+			parent += '.';
+	}
+	return parent + current;
+}
+
+bool symbolTable::isParent(Symbol* child, Symbol* parent) {
+	
+	if (child == parent)
+		return true;
+	while (((Class*)child)->get_extended_class().second != nullptr) {
+		child = ((Class*)child)->get_extended_class().second->get_owner();
+		if (child == parent) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool symbolTable::checkMethodOverriding(Symbol* method, Symbol* currentClass) {
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+	symbolTable* baseClass = ((Class*)currentClass)->get_extended_class().second;
+	while (baseClass != nullptr) {
+		it = baseClass->symbolMap.find(method);
+		if (it != baseClass->symbolMap.end()) {
+			if (it->first->getType() == "method" && ((Method*)it->first)->get_is_public() && (((Method*)it->first)->get_is_override() || ((Method*)it->first)->get_is_virtual() || ((Method*)it->first)->get_is_abstract())) {
+				return true;
+			}
+		}
+		baseClass = ((Class*)baseClass->get_owner())->get_extended_class().second;
+	}
+	return false;
+}

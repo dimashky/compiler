@@ -1,7 +1,6 @@
 #include "Symbol.h"
 
 
-
 Symbol::Symbol(string name, int line_no, int col_no)
 {
 	this->name = name;
@@ -18,6 +17,22 @@ Symbol::~Symbol()
 string Symbol::getType()
 {
 	return "symbol";
+}
+
+vector<Symbol*> Symbol::divideName() {
+	vector<Symbol*> res;
+	string s = this->name;
+	string subStr;
+	for (int i = 0;i < s.length();i++) {
+		if (s[i] == '.') {
+			res.push_back(new Symbol(subStr, this->line_no, -13));
+			subStr = "";
+		}
+		else
+			subStr += s[i];
+	}
+	res.push_back(new Symbol(subStr, this->line_no, -13));
+	return res;
 }
 
 string Symbol::getName()

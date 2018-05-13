@@ -4,6 +4,8 @@
 class DoWhile :public Statement
 {
 
+private:
+
 	Node *condition, *statement;
 
 public:
@@ -14,15 +16,17 @@ public:
 
 	string getType();
 
-	void setStatement(Node* statement) {
-		this->statement = statement;
+	void setStatement(Node* statement);
+
+	void setCondition(Node* condition);
+	bool typeChecking() { 
+		
+		condition->typeChecking();
+
+		statement->typeChecking();
+		
+		return true;
 	}
-
-	void setCondition(Node* condition) {
-		this->condition = condition;
-	}
-
-
 	~DoWhile();
 };
 

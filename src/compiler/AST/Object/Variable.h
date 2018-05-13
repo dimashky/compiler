@@ -4,13 +4,14 @@
 #include "../Expression/Expression.h"
 class Variable :public Object
 {
-	Expression* equal;
+	Node* equal;
 public:
-	Variable(Symbol* symbol,Expression *equal, Node* parent);
-
-	string getType();
+	Variable(Symbol* symbol, Node *equal, Node* parent);
 
 	int print(int);
+
+	string getType();
+	bool typeChecking();
 
 	~Variable();
 };

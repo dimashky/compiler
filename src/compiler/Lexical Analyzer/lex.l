@@ -36,28 +36,21 @@
 		int col_no;
 		string *modifier,*base;
 		queue<string> *modifiers,*bases;
-		queue<Node*>*nodes,*exps;
+		
+		queue<int>* params_dimension;
+		int array_dimension;
 
-		Procedure* proc;
-		Symbol* symbol;
-		Expression* exp;
-		Statement* st;
-		Operator op;
+		queue<Node*>*nodes;
 		Node* node;
-
-
+		
+		Symbol* symbol;
+		Operator op;
+		
 		r(int i, float f, char c, char* s, int line_no, int col_no){
 			this->i = i;
 			this->f = f;
 			this->c = c;
-			modifier = new string();
-			base = new string();
-			modifiers = new queue<string>();
-			bases = new queue<string>();
 			
-			proc = new Procedure(nullptr,nullptr);
-			symbol = new Symbol("",0,0);
-
 			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);
@@ -182,7 +175,6 @@ letter_char            [A-Za-z]
 ident_char             {dec_digit}|{letter_char}|"_"|"@"
 identifier             ({letter_char}|"_"){ident_char}*
 at_identifier          \@{identifier}
-bad_identifier			[&^%$#@!~{}"?|\/{}0-9]*{identifier}
 
 rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
@@ -226,7 +218,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
                       /***** Literals *****/
 {integer_literal}     { add(atoi(yytext),NULL,NULL,NULL,yytext); t.push(INTEGER_LITERAL); }
 {real_literal}        { add(NULL,atof(yytext),NULL,NULL,yytext); t.push(REAL_LITERAL); }
-{character_literal}   { add(NULL,NULL,yytext[0],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
+{character_literal}   { add(NULL,NULL,yytext[1],NULL,yytext);	 t.push(CHARACTER_LITERAL); }
 {string_literal}      { add(NULL,NULL,NULL,yytext,yytext);		 t.push(STRING_LITERAL); }
 
 
@@ -304,7 +296,7 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 "?"   { add(NULL,NULL,NULL,NULL,yytext);  t.push(QUESTION_MARK); }
 "="   { add(NULL,NULL,NULL,NULL,yytext);  t.push(EQUAL); }
 
-{rank_specifier}     { add(NULL,NULL,NULL,NULL,yytext); t.push(RANK_SPECIFIER); }
+{rank_specifier}     { add(NULL,NULL,NULL,yytext,yytext); t.push(RANK_SPECIFIER); }
 
                       /*** Multi-Character Operators ***/
 "+="  { add(NULL,NULL,NULL,NULL,yytext);  t.push(PLUSEQ); }
@@ -336,8 +328,6 @@ rank_specifier         "["{white_space}*(","{white_space}*)*"]"
 
 
 .					  {	lexical_error("invalid token", yytext);	}
-
-{bad_identifier}      {lexical_error("Bad IDENTIFIER", yytext);  add(NULL,NULL,NULL,yytext,yytext); t.push(IDENTIFIER);}
 
 <<EOF>> {
 	auto end = std::chrono::system_clock::now();

@@ -5,20 +5,43 @@
 #include "Variable.h"
 class Procedure :public Object
 {
+
+private:
+
 	Block* block;
+
 	vector<Object*> locals;
+
+	Node* baseCall;
+
+
+	//this for methods only and it will be checked in Node up function
+	bool hasReturnStatement;
 
 public:
 
-	Procedure(Symbol* symbol,Node*parent);
+	Procedure(Symbol* symbol, Node*parent, Node* baseCall = nullptr);
+
 	void add(Object* object);
 
-	void setBlock(Block* block);
+	int print(int);
+
 	Block* getBlock();
+
+	bool getHasReturn() {
+		return hasReturnStatement;
+	}
+
+	void setHasReturn(bool hasReturnStatement) {
+		this->hasReturnStatement = hasReturnStatement;
+		return;
+	}
 
 	string getType();
 
-	int print(int);
+	void setBlock(Block* block);
+
+	bool typeChecking();
 
 	~Procedure();
 };

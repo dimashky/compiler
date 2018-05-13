@@ -52,64 +52,22 @@
     <Filter Include="Source Files\logs\Tools">
       <UniqueIdentifier>{084973da-9cb3-425b-a6f4-229f38b2bbc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Type Checker">
+      <UniqueIdentifier>{1a50f97d-c84b-4c76-a273-a34176033751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Type Checker\complex">
+      <UniqueIdentifier>{58d4daf1-f84f-49dd-bf39-6aeacbd91b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Type Checker\simple">
+      <UniqueIdentifier>{a6b82da4-df85-45ee-8f42-e3423d635555}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample inputs\example1.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example2.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example3.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example4.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example5.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example6.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example8.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example9.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example10.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example11.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example12.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example13.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example14.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example15.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example7.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
-    <None Include="sample inputs\example16.cs">
-      <Filter>Source Files\I/O</Filter>
-    </None>
     <None Include="sample inputs\input\example1.cs">
       <Filter>Source Files\I/O\input</Filter>
     </None>
     <None Include="sample inputs\input\example2.cs">
       <Filter>Source Files\I/O\input</Filter>
-    </None>
-    <None Include="Parser\yacc.output">
-      <Filter>Source Files\Parser</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -151,9 +109,6 @@
     </ClCompile>
     <ClCompile Include="Symbol Table\Method.cpp">
       <Filter>Source Files\Symbol Table</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser\yacc.tab.cpp">
-      <Filter>Source Files\Parser</Filter>
     </ClCompile>
     <ClCompile Include="AST\Node.cpp">
       <Filter>Source Files\AST</Filter>
@@ -210,6 +165,54 @@
     <ClCompile Include="AST\Statement\Foreach.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
+    <ClCompile Include="AST\Object\ArrayInitializer.cpp">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeBoolean.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeError.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeFloat.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeInteger.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeString.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeVoid.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeExpression.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeArray.cpp">
+      <Filter>Source Files\Type Checker\complex</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeClass.cpp">
+      <Filter>Source Files\Type Checker\complex</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeFunction.cpp">
+      <Filter>Source Files\Type Checker\complex</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypeCheckingHelper.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\yacc.tab.cpp">
+      <Filter>Source Files\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Type Checker\TypesTable.cpp">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Operator.cpp">
+      <Filter>Source Files\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="AST\Statement\Jump.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -234,9 +237,6 @@
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
     <ClInclude Include="Symbol Table\Symbol.h">
-      <Filter>Source Files\Symbol Table</Filter>
-    </ClInclude>
-    <ClInclude Include="Symbol Table\symbolTable.h">
       <Filter>Source Files\Symbol Table</Filter>
     </ClInclude>
     <ClInclude Include="Symbol Table\Interface.h">
@@ -265,9 +265,6 @@
     </ClInclude>
     <ClInclude Include="tools\dirent.h">
       <Filter>Source Files\logs\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Parser\yacc.tab.h">
-      <Filter>Source Files\Parser</Filter>
     </ClInclude>
     <ClInclude Include="tools\tools.h">
       <Filter>Source Files\logs\Tools</Filter>
@@ -324,6 +321,60 @@
       <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
     <ClInclude Include="AST\Statement\Foreach.h">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Object\ArrayInitializer.h">
+      <Filter>Source Files\AST\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeBoolean.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeError.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeFloat.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeInteger.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeString.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeVoid.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeExpression.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeArray.h">
+      <Filter>Source Files\Type Checker\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeClass.h">
+      <Filter>Source Files\Type Checker\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeFunction.h">
+      <Filter>Source Files\Type Checker\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\all.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeCheckingHelper.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\yacc.tab.h">
+      <Filter>Source Files\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypesTable.h">
+      <Filter>Source Files\Type Checker</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Operator.h">
+      <Filter>Source Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbol Table\symbolTable.h">
+      <Filter>Source Files\Symbol Table</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Jump.h">
       <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
   </ItemGroup>

@@ -33,8 +33,6 @@ struct error
 	bool operator > (const error& e) {
 		return (line_no > e.line_no);
 	}
-
-
 };
 
 

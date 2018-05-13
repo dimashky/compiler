@@ -2,23 +2,55 @@
 #include "Expression.h"
 #include "../Object/Object.h"
 #include "../../Symbol Table/Symbol.h"
+#include "../../Symbol Table/Class.h"
+#include "../../Type Checker/all.h"
+#include "../../Symbol Table/Field.h"
+#include "../../Symbol Table/LocalVariable.h"
 
 using namespace::std;
 
 class Identifier : public Expression
 {
-	Symbol *symbol;
+private:
+	/*
+	*	maybe there is no dot so at least preDot or postDot not equal to nullptr	
+	*/
+	Node* preDot;
+
+	Symbol* postDot;
+
+	bool isArray, isConst, isReadonly;
+
+	vector<Node*>dimensions;
 
 public:
 
-	Identifier(Symbol *symbol);
+	static bool leftAssignment, isAssigned, isStaticMethod;
 
-	string getType();
-
-	Symbol* getSymbol();
-	void setSymbol(Symbol *symbol);
+	Identifier(Node* preDot, Symbol* postDot, bool isArray = false);
 
 	int print(int);
+
+	string getType();
+	
+	Node* getPreDot() {
+		return preDot;
+	}
+
+	Symbol* getPostDot();
+
+	bool getIsConst() {
+		return this->isConst;
+	}
+
+	bool getIsReadonly() {
+		return this->isReadonly;
+	}
+
+	void setArrayDimensions(queue<Node*>dimensions);
+	
+	bool typeChecking();
+
 	~Identifier();
 };
 

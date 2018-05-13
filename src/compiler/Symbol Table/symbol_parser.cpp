@@ -15,6 +15,7 @@ symbolParser::symbolParser()
 {
 	symboltable = new symbolTable(NULL, NULL);
 }
+
 void symbolParser::print(queue<string> &s1, char* s2)
 {
 	while (!s1.empty()) {
@@ -53,12 +54,11 @@ void symbolParser::add_object()
 	
 	Method* method = new Method(mod, "string", "ToString", 0, 0);
 
-	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), 1, 1);
-
-
-
+	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), queue<int>(),queue<Node*>() ,1, 1);
 
 	ns = new Procedure(method, Node::current);
+
+	ns->setHasReturn(1);
 
 	((Procedure*)Node::current)->add(ns);
 
@@ -119,61 +119,74 @@ Symbol* symbolParser::addInterface(queue<string>modifiers, string interfaceName,
 
 	return newInterface;
 }
-vector<Symbol*> symbolParser::addField(queue<string>modifiers, string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+
+vector<Symbol*> symbolParser::addField(int dimension, queue<string>modifiers, string typeIdentifier, queue<string>identifiers,queue<Node*>init, int line_no, int col_no, bool known_type)
 {
 	vector<Symbol*> arr;
 
 	while (!identifiers.empty())
 	{
-		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), line_no, col_no);
+		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), dimension, line_no, col_no);
+		
 		symboltable->addField(newField, known_type);
-		identifiers.pop();
 
-		Variable* field = new Variable(newField,nullptr, Node::current);
+		Variable* field = new Variable(newField,init.front(), Node::current);
 
 		((Procedure*)Node::current)->add(field);
 
 		arr.push_back(newField);
+		
+		identifiers.pop();
+
+		init.pop();
 	}
-
-
-
-
 
 	return arr;
 
 }
-vector<Symbol*> symbolParser::addFieldConst(queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, int line_no, int col_no, bool known_type)
+
+vector<Symbol*> symbolParser::addFieldConst(int dimension, queue<string>modifiers,string  modifier_const,string typeIdentifier, queue<string>identifiers, queue<Node*>init, int line_no, int col_no, bool known_type)
 {
 	vector<Symbol*> arr;
-
 
 	modifiers.push(modifier_const);
+
 	while (!identifiers.empty())
 	{
-		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), line_no, col_no);
+		Symbol* newField = new Field(modifiers, typeIdentifier, identifiers.front(), dimension, line_no, col_no, true);
+		
 		symboltable->addField(newField, known_type);
-		identifiers.pop();
-
-
-		Variable* field = new Variable(newField,nullptr, Node::current);
+		
+		Variable* field = new Variable(newField, init.front(), Node::current);
 
 		((Procedure*)Node::current)->add(field);
 
 		arr.push_back(newField);
+
+		init.pop();
+
+		identifiers.pop();
 	}
 	return arr;
 }
 
-Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, int line_no, int col_no, bool known_type , bool is_body)
+Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, string identifier, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > > types_ids_parameters, queue<int>params_dimension, queue<Node*>var_init, int line_no, int col_no, bool known_type, bool is_body, Node* callBase)
 {
+	/*
+	* Note : 
+		parameters added to AST from addParameters method in LocalVariable Class !!
+	*/
 	Symbol* newMethod = new Method(modifiers, typeIdentifier, identifier, line_no, col_no);
-	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, known_type, is_body);
 
-	Procedure* ns = new Procedure(newMethod, Node::current);
+	Procedure* ns = new Procedure(newMethod, Node::current, callBase);
 
-	((Procedure*)Node::current)->add(ns);
-
+	//if we add constructer to static class i will not add it to AST Full Tree but i will add it as separate tree to check errors on it but it will not be available in AST tree
+	if (((Method*)newMethod)->get_is_constructer() && ((Class*)symbolTable::openBrackets.top()->get_owner())->get_is_static()) {
+		error_handler.add(error(newMethod->getLineNo(), newMethod->getColNo(), "static classes cannot have constructers on it"));
+	}
+	else {
+		((Procedure*)Node::current)->add(ns);
+	}
 	Node::setCurrent(ns);
 
 	Block* b = new Block(Node::current);
@@ -181,6 +194,11 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 	((Procedure*)ns)->setBlock(b);
 
 	Node::setCurrent(b);
+
+	symboltable->addMethod(newMethod, modifiers, types_ids_parameters, params_dimension,var_init, known_type, is_body);
+
+
+	Node::Up();
 
 	return newMethod;
 }
@@ -205,6 +223,9 @@ void symbolParser::add_scope()
 	else if (Node::current->getType() == "foreach") {
 		((Foreach*)Node::current)->setStatement(b);
 	}
+	else if (Node::current->getType() == "procedure") {
+		((Procedure*)Node::current)->setBlock(b);
+	}
 
 
 	Node::setCurrent(b);
@@ -213,23 +234,22 @@ void symbolParser::add_scope()
 	symboltable->add_scope();
 }
 
-vector<Symbol*> symbolParser::addLocalVariable(string typeIdentifier, queue<string>identifiers, queue<Node*>exps, bool known_type, bool constant, int line_no, int col_no)
+vector<Symbol*> symbolParser::addLocalVariable(int dimension, string typeIdentifier, queue<string>identifiers, queue<Node*>exps, bool known_type, bool constant, int line_no, int col_no)
 {
 	vector<Symbol*> arr;
 
 	while (!identifiers.empty())
 	{
-		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), false, constant, line_no, col_no);
+		Symbol* newLocalVariable = new LocalVariable(typeIdentifier, identifiers.front(), dimension, false, constant, line_no, col_no);
 		symboltable->addLocalVariable(newLocalVariable, known_type);
 		
-		Variable* field = new Variable(newLocalVariable, (Expression*)exps.front(), Node::current);
+		Variable* field = new Variable(newLocalVariable, exps.front(), Node::current);
 
 		if (Node::current->getType() == "procedure")
 			((Procedure*)Node::current)->add(field);
 		else if(Node::current->getType() == "for") 
 			((For*)Node::current)->addInitializer(field);
-		else
-		{
+		else {
 			((Block*)Node::current)->add(field);
 		}
 		
@@ -422,8 +442,6 @@ void symbolParser::check_later_defination()
 	}
 }
 
-
-
 void check_later_def_var()
 {
 	int cnt = -1;
@@ -493,7 +511,6 @@ void symbolParser::check_function()
 	
 	symboltable->check_method(symbolTable::openBrackets.top(), map<string, bool>());
 }
-
 
 void check_later_def_override()
 {
@@ -593,6 +610,7 @@ void symbolParser::send_using_to_st()
 				error_handler.add(error(given_usings[i].second.first, given_usings[i].second.second, "using directory is unnecessery or couldn't be found."));
 	}
 }
+
 void symbolParser::check_is_methods_not_override()
 {
 	while (!symbolTable::extended_abstract_classes.empty())
@@ -633,8 +651,8 @@ void symbolParser::check()
 		symbolTable::type_defination_tree->check_cycle(symboltable->parents[i], symboltable->parents[i], vector<node*>());
 
 	check_later_def_var();
-	check_later_def_override();
 
+	check_later_def_override();
 
 	check_is_methods_not_override();
 	

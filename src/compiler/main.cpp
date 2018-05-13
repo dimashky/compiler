@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <ctime>
 #include"AST\Object\Procedure.h"
+#include "Type Checker\TypesTable.h"
+
 using namespace std;
 
 // Extern from YACC 
@@ -33,6 +35,7 @@ extern int col_no;
 int main()
 {
 	Node::current = AST;
+	TypesTable::init();
 	Node::openFiles();
 	//fprintf(info, "var input = 'sample inputs/input';");
 	auto start = std::chrono::system_clock::now();
@@ -65,6 +68,12 @@ int main()
 	symbolTable::type_defination_tree->print_defination_tree(symbolTable::type_defination_tree->get_root());
 	// print yacc logger
 	l.print();
+
+	// Init again 
+	TypesTable::init();
+
+	//if (error_handler.errorsNum() == 0)
+		AST->typeChecking();
 	// errors
 	error_handler.print();
 	
@@ -89,10 +98,13 @@ int main()
 
 	for (int i = 0;i < symbolTable::deleted.size();i++)
 		delete symbolTable::deleted[i];
-	
-	
+
+
+
 	AST->print(0);
 	Node::closeFiles();
+
+
 
  	system("pause");
 	return 0;
