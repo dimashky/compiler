@@ -68,11 +68,6 @@ bool Procedure::typeChecking() {
 		}
 		
 	}
-
-	
-	
-	
-	
 	//end handeling warning for override keyword
 
 
