@@ -116,6 +116,7 @@ bool Identifier::typeChecking() {
 				if (((LocalVariable*)prev)->getIsConst())
 					this->isConst = true;
 			}
+			postDot->offset = prev->offset;
 		}
 
 		//this for check un assigned variable
@@ -192,6 +193,8 @@ bool Identifier::typeChecking() {
 
 void Identifier::generateCode() {
 	// handle it
+	AsmGenerator::lw("t1", "fp", -1 * postDot->offset);
+	AsmGenerator::push("t1");
 }
 
 Identifier::~Identifier()

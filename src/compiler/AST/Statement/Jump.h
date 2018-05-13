@@ -75,7 +75,11 @@ public:
 	}
 
 	void generateCode() {
-
+		if (jumpStatement == JumpStatement::Return && statement) {
+			statement->generateCode();
+			AsmGenerator::pop("t0");
+			AsmGenerator::sw("t0", "fp", 0);
+		}
 	};
 
 	~Jump();

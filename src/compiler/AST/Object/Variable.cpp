@@ -87,6 +87,8 @@ void Variable::generateCode() {
 	if (equal) {
 		equal->generateCode();
 		/// TODO: handle assigment to this variable
+		AsmGenerator::pop("t0");
+		AsmGenerator::sw("t0", "fp", -1 * symbol->offset);
 	}
 }
 

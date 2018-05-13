@@ -1,12 +1,18 @@
 #include "AsmGenerator.h"
 #include <string> 
+#include "../Symbol Table/symbolTable.h"
+#include "../Symbol Table/Method.h"
 
 void AsmGenerator::initializeFile()
 {
 	assembly_code_file.open("./AssemblyCode.asm");
 	main_stream << ".text\n"
 		<< ".globl Main\n"
-		<< "jal Main";
+		<< "add $fp, $sp, 0\n"
+		<< "add $sp, $sp,"
+		<< -1 * ((Method*)symbolTable::mainRef)->stackFrameSize
+		<< "\n"
+		<< "jal Main\n";
 }
 
 void AsmGenerator::writeAsmFile()

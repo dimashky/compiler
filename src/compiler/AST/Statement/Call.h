@@ -20,7 +20,7 @@ private:
 	*/
 	
 	vector<pair<Node*,int> >params;
-
+	Method* calledMethod;
 	bool new_expression, known_type, base_call;
 
 public:
@@ -37,9 +37,7 @@ public:
 	
 	bool typeChecking();
 
-	void generateCode() {
-
-	}
+	void generateCode();
 
 	~Call();
 

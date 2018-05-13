@@ -37,7 +37,7 @@ int main()
 	Node::current = AST;
 	TypesTable::init();
 	Node::openFiles();
-	AsmGenerator::initializeFile();
+
 	//fprintf(info, "var input = 'sample inputs/input';");
 	auto start = std::chrono::system_clock::now();
 	//printf("-------------------------\nC# Compiler\n-------------------------\n");
@@ -104,8 +104,9 @@ int main()
 
 	AST->print(0);
 	Node::closeFiles();
-
+	AsmGenerator::initializeFile();
 	AST->generateCode();
+
 	AsmGenerator::writeAsmFile();
 //	if (error_handler.errorsNum() == 0) {
 		system("java -jar Mars.jar AssemblyCode.asm");

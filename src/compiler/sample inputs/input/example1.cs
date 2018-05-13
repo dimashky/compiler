@@ -1,10 +1,6 @@
-namespace xX
+namespace namesp
 {
-    class qcwc{
-        int x ( int a , int b , int c )
-        {
-            int d;
-            return 5;
-        }  
+    class cls{
+
     }
 }

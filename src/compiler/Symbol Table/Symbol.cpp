@@ -6,6 +6,7 @@ Symbol::Symbol(string name, int line_no, int col_no)
 	this->name = name;
 	this->line_no = line_no;
 	this->col_no = col_no;
+	this->offset = 0;
 }
 
 

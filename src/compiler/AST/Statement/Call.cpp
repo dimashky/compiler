@@ -7,7 +7,7 @@ Call::Call(Node *call, Node *parent, bool new_expression, bool known_type, bool 
 	this->new_expression = new_expression;
 	this->known_type = known_type;
 	this->base_call = baseCall;
-
+	this->calledMethod = nullptr;
 }
 
 void Call::setParams(vector<pair<Node*, int> > params) {
@@ -28,15 +28,11 @@ string Call::getType() {
 bool Call::typeChecking() {
 
 	Symbol *prev = nullptr;
-
 	Class* newClassRef = nullptr;
-
 	Node* preDot = ((Identifier*)call)->getPreDot();
-
 	vector<Symbol*>divs = ((Identifier*)call)->getPostDot()->divideName();
-
-	
-
+	//to check if last div is a type or normal variable
+	bool type = false;
 
 	if (preDot != nullptr) {
 		preDot->typeChecking();
@@ -53,11 +49,7 @@ bool Call::typeChecking() {
 		}
 	}
 
-
-	//to check if last div is a type or normal variable
-	bool type = false;
-
-	for (int i = 0;i < divs.size() - 1;i++) {
+	for (int i = 0; i < divs.size() - 1; i++) {
 		
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
 
@@ -163,8 +155,6 @@ bool Call::typeChecking() {
 
 		prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
 
-
-
 		if (prev->getType() == "interface") {
 			this->nodeType = new TypeError("cannot initialize object from interface type named '" + prev->getName() + "'", divs[divs.size() - 1]->getLineNo());
 			return false;
@@ -198,6 +188,7 @@ bool Call::typeChecking() {
 		this->nodeType = new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
 	}
 	else {
+		this->calledMethod = method;
 
 		if (!new_expression) {
 			if (Identifier::isStaticMethod && divs.size() == 1) {
@@ -224,6 +215,25 @@ bool Call::typeChecking() {
 		}
 	}
 	return true;
+}
+
+void Call::generateCode() {
+	if (!calledMethod) {
+		return;
+	}
+	AsmGenerator::comment("call function " + calledMethod->getName());
+	// store current $fp in new AR
+	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
+	// move $sp to new $sp
+	AsmGenerator::addInstruction("add $fp, $sp, 0");
+	AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
+	/// TODO: 
+	for (int i = 0; i < params.size(); ++i) {
+		params[i].first->generateCode();
+		AsmGenerator::pop("t0");
+		AsmGenerator::sw("t0", "fp", -1 * ( 4 * i + 4));
+	}
+	AsmGenerator::addInstruction("jal " + calledMethod->getName());
 }
 
 Call::~Call()

@@ -28,7 +28,8 @@ int Assignment::print(int nodeCnt) {
 void Assignment::generateCode() {
 	right->generateCode();
 	AsmGenerator::pop("t0");
-//	AsmGenerator::sw("t0", "fp", -1 * left->getPostDot()->offset); PROBLEM!
+	AsmGenerator::sw("t0", "fp", -1 * left->getPostDot()->offset);
+	AsmGenerator::printReg("t0");
 }
 
 Assignment::~Assignment()

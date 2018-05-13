@@ -18,6 +18,7 @@ queue<pair<Symbol*, symbolTable*>> symbolTable::extended_abstract_classes = queu
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
+Symbol* symbolTable::mainRef = nullptr;
 
 symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
 {
@@ -297,7 +298,9 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 	{
 		if (symbolTable::is_main != 0)
 			error_handler.add(error(symbol->getLineNo(), -1, "error, a program has more Main method ."));
-
+		else {
+			symbolTable::mainRef = symbol;
+		}
 		symbolTable::is_main++;
 	}
 
