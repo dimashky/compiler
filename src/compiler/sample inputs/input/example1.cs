@@ -2,6 +2,7 @@ class cqc
 {
     void test()
     {
-        int[] a = new int[4];
+        int[,] a;
+        a = new int[4];
     }
 }

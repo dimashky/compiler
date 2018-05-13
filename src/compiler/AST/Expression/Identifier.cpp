@@ -191,6 +191,35 @@ bool Identifier::typeChecking() {
 			this->nodeType = TypesTable::getType(((LocalVariable*)prev)->get_type_name()).first;
 		}
 	}
+
+	if (prev->getType() == "field") {
+		if (((Field*)prev)->getDimension() != this->dimensions.size()) {
+			if (((Field*)prev)->getDimension() == 0) {
+				this->nodeType = new TypeError("cannot apply indexing to un array type", prev->getLineNo());
+				return false;
+			}
+			if (this->dimensions.size() != 0) {
+				this->nodeType = new TypeError("wrong number of indices, expected " + ((Field*)prev)->getDimension(), prev->getLineNo());
+				return false;
+			}
+			this->nodeType = new TypeArray(this->nodeType, this->dimensions.size());
+		}
+	}
+	else if (prev->getType() == "localvariable") {
+		if (((LocalVariable*)prev)->getDimension() != this->dimensions.size()) {
+			if (((LocalVariable*)prev)->getDimension() == 0) {
+				this->nodeType = new TypeError("cannot apply indexing to un array type", prev->getLineNo());
+				return false;
+			}
+			if (this->dimensions.size() != 0) {
+				this->nodeType = new TypeError("wrong number of indices, expected " + to_string(((LocalVariable*)prev)->getDimension()), prev->getLineNo());
+				return false;
+			}
+			this->nodeType = new TypeArray(this->nodeType, ((LocalVariable*)prev)->getDimension());
+		}
+	}
+
+
 	return true;
 }
 
