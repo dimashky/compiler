@@ -7,15 +7,27 @@ protected:
 	Node* parent;
 
 public:
+	static FILE* edgesFile, *nodesFile;
+
+	static void openFiles();
+	static void closeFiles();
+
+
 	static Node* current;
+
+	Node(){}
+		
 	Node(Node* parent);
-	static void setCurrent(Node* current) {
-		Node::current = current;
-	}
-	static void Up() {
-		if(Node::current != nullptr)
-		Node::current = Node::current->parent;
-	}
+	
+	static void setCurrent(Node* current);
+
+	static void Up();
+
+	
+	virtual string getType() = 0;
+	
+	virtual int print(int) = 0;
+	
 	~Node();
 };
 

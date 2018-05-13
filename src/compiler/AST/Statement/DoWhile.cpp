@@ -1,15 +1,15 @@
-#include "While.h"
+#include "DoWhile.h"
 
-While::While(Node *condition, Node *statement,Node *parent) :Statement(parent)
+DoWhile::DoWhile(Node *condition, Node *statement,Node *parent) :Statement(parent)
 {
 	this->condition = condition; 
 	this->statement = statement; 
 }
 
-int While::print(int nodeCnt){
+int DoWhile::print(int nodeCnt){
 	int currentId = nodeCnt;
 
-	fprintf(nodesFile, "{ id:%d, label:'While', shape: 'box', color:'#fc4e6b'},", currentId);
+	fprintf(nodesFile, "{ id:%d, label:'DoWhile', shape: 'box', color:'#fc4e6b'},", currentId);
 
 	fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
 	nodeCnt = condition->print(nodeCnt + 1);
@@ -22,10 +22,10 @@ int While::print(int nodeCnt){
 	return nodeCnt;
 }
 
-string While::getType() {
-	return "while";
+string DoWhile::getType() {
+	return "dowhile";
 }
 
-While::~While()
+DoWhile::~DoWhile()
 {
 }

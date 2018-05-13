@@ -1,53 +1,11 @@
-namespace a
+class x
 {
-    class aa
+    void f()
     {
 
-    }
-
-    class aa11
-    {
-
-    }
-
-    class aafewfew
-    {
-
-    }
-
-    class aafwejfbejfkwebfejk
-    {
-        class aafewfew
+        foreach(int a in dd)
         {
-            class dwqdwaafewfew
-            {
-                public void acscascas() { }
-                class aafedddddwfew
-                {
-                    
-
-                }
-            }
+            int x = x + 1;
         }
     }
-}
-namespace dd
-{
-
-}
-
-namespace eefwe
-{
-
-}
-
-class cccP
-{
-    int x;
-    int y;
-    float r, t, y, u;
-}
-interface ascascas
-{
-
 }

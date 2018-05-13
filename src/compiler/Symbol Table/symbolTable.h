@@ -67,6 +67,21 @@ public:
 	string get_owner_name();
 	symbolTable * get_parent();
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1>& get_symbolMap();
+
+	static Symbol* findIdentifier(string s) {
+		Symbol* symbol = new Symbol(s, -10, -10);
+		symbolTable* currentScope = symbolTable::openBrackets.top();
+		while (currentScope != nullptr) {
+			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it = currentScope->symbolMap.find(symbol);
+			if (it != currentScope->symbolMap.end()) {
+				return it->first;
+			}
+			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
+				return symbol;
+			currentScope = currentScope->parent;
+		}
+		return symbol;
+	}
 	
 	~symbolTable();
 };

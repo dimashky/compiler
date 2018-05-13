@@ -6,29 +6,20 @@
 class Procedure :public Object
 {
 	Block* block;
-
-public:
 	vector<Object*> locals;
 
+public:
+
 	Procedure(Symbol* symbol,Node*parent);
-	void add(Object* object) {
-		locals.push_back(object);
-		return;
-	}
-	void print(int lev)
-	{
-		cout << "lev Pr " << lev << endl;
+	void add(Object* object);
 
-		if(this->symbol != nullptr)
-		cout << this->symbol->getName() << endl << endl;
+	void setBlock(Block* block);
+	Block* getBlock();
 
-		for (int i = 0; i < locals.size(); i++) {
-				locals[i]->print(lev + 1);
-		}
-	}
-	void setBlock(Block* block) {
-		this->block = block;
-	}
+	string getType();
+
+	int print(int);
+
 	~Procedure();
 };
 

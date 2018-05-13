@@ -33,6 +33,7 @@ extern int col_no;
 int main()
 {
 	Node::current = AST;
+	Node::openFiles();
 	//fprintf(info, "var input = 'sample inputs/input';");
 	auto start = std::chrono::system_clock::now();
 	//printf("-------------------------\nC# Compiler\n-------------------------\n");
@@ -67,6 +68,7 @@ int main()
 	// errors
 	error_handler.print();
 	
+	
 	int error_cnt = error_handler.errorsNum();
 //	cout << (error_cnt == 0 ? "\nWith NO errors" : ("\n-> With Errors :\t" + to_string(error_cnt))) << "\n";
 
@@ -88,9 +90,9 @@ int main()
 	for (int i = 0;i < symbolTable::deleted.size();i++)
 		delete symbolTable::deleted[i];
 	
-	cout << AST->locals.size() << endl;
-
+	
 	AST->print(0);
+	Node::closeFiles();
 
  	system("pause");
 	return 0;

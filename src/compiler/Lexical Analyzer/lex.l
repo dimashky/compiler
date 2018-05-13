@@ -10,7 +10,9 @@
 	#include "../Error Handler/error_handler.h"
 	#include "../Symbol Table/Symbol.h"
 	#include "../AST/Object/Procedure.h"
+	#include "../AST/Statement/Statement.h"
 	#include "../AST/Node.h"
+	#include "../AST/Expression/Expression.h"
 
 	extern FILE* lexLogger;
 	using namespace std;
@@ -34,9 +36,14 @@
 		int col_no;
 		string *modifier,*base;
 		queue<string> *modifiers,*bases;
-		
+		queue<Node*>*nodes,*exps;
+
 		Procedure* proc;
 		Symbol* symbol;
+		Expression* exp;
+		Statement* st;
+		Operator op;
+		Node* node;
 
 
 		r(int i, float f, char c, char* s, int line_no, int col_no){
@@ -50,6 +57,7 @@
 			
 			proc = new Procedure(nullptr,nullptr);
 			symbol = new Symbol("",0,0);
+
 			this->str = new char[255];	this->str[0] = '\0';
 			if(s != NULL){
 				strcpy(this->str, s);

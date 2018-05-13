@@ -8,12 +8,15 @@ using namespace std;
 class Object : public Node
 {
 protected:
-
-public:
 	Symbol* symbol;
+public:
 
 	Object(Symbol *symbol, Node* parent);
-	virtual void print(int lev) = 0;
+	virtual int print(int) = 0;
+	virtual string getType() = 0;
+
+	Symbol* getSymbol();
+	void setSymbol(Symbol *symbol);
 
 	~Object();
 };

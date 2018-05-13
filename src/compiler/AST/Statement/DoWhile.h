@@ -1,15 +1,14 @@
 #pragma once
 #include "Statement.h"
-#include"../Expression/Expression.h"
-#include"../Statement/Statement.h"
-class While :public Statement
+
+class DoWhile :public Statement
 {
 
 	Node *condition, *statement;
 
 public:
 
-	While(Node *condition, Node *statement, Node *parent);
+	DoWhile(Node *condition, Node *statement, Node *parent);
 	
 	int print(int);
 
@@ -19,7 +18,11 @@ public:
 		this->statement = statement;
 	}
 
+	void setCondition(Node* condition) {
+		this->condition = condition;
+	}
 
-	~While();
+
+	~DoWhile();
 };
 

@@ -2,14 +2,17 @@
 #include "Statement.h"
 #include"../Expression/Expression.h"
 #include"../Statement/Statement.h"
-class While :public Statement
+#include "../../Symbol Table/Symbol.h"
+#include "../Object/Variable.h"
+class Foreach :public Statement
 {
 
-	Node *condition, *statement;
+	Variable *symbolLeft;
+	Node *statement, *symbolRight;
 
 public:
 
-	While(Node *condition, Node *statement, Node *parent);
+	Foreach(Symbol *symbolLeft, Node *symbolRight, Node *parent);
 	
 	int print(int);
 
@@ -19,7 +22,6 @@ public:
 		this->statement = statement;
 	}
 
-
-	~While();
+	~Foreach();
 };
 

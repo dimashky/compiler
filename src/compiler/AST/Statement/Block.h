@@ -2,10 +2,16 @@
 #include "Statement.h"
 class Block :public Statement
 {
-	vector<Statement*> statements;
+	vector<Node*> statements;
 public:
 	Block(Node *parent);
-	void add(Statement* statement);
+	
+	void add(Node* statement);
+	
+	string getType();
+	
+	int print(int);
+
 	~Block();
 };
 
