@@ -31,7 +31,7 @@ bool UnaryExpression::typeChecking() {
 			else
 			{
 				this->nodeType = new TypeError("invalid Unary Expression with operator " + OperatorName[op]);
-				return false;
+				return true;
 			}
 		}
 		else {
@@ -39,7 +39,7 @@ bool UnaryExpression::typeChecking() {
 		}
 		return true;
 	}
-	return false;
+	return true;
 }
 
 UnaryExpression::~UnaryExpression()

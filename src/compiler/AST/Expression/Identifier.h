@@ -16,39 +16,29 @@ private:
 	*	maybe there is no dot so at least preDot or postDot not equal to nullptr	
 	*/
 	Node* preDot;
-
 	Symbol* postDot;
-
-	bool isArray, isConst, isReadonly;
-
 	vector<Node*>dimensions;
-
+	bool isArray, isConst, isReadonly;
 public:
 
 	static bool leftAssignment, isAssigned, isStaticMethod;
 
 	Identifier(Node* preDot, Symbol* postDot, bool isArray = false);
 
-	int print(int);
-
 	string getType();
 	
-	Node* getPreDot() {
-		return preDot;
-	}
+	Node* getPreDot();
 
 	Symbol* getPostDot();
 
-	bool getIsConst() {
-		return this->isConst;
-	}
+	bool getIsConst();
 
-	bool getIsReadonly() {
-		return this->isReadonly;
-	}
+	bool getIsReadonly();
 
 	void setArrayDimensions(queue<Node*>dimensions);
-	
+
+	int print(int);
+
 	bool typeChecking();
 
 	~Identifier();

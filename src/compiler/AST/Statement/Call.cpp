@@ -35,9 +35,6 @@ bool Call::typeChecking() {
 
 	vector<Symbol*>divs = ((Identifier*)call)->getPostDot()->divideName();
 
-	
-
-
 	if (preDot != nullptr) {
 		preDot->typeChecking();
 		prev = TypesTable::getType(preDot->nodeType->typeExpression()).second;
@@ -45,11 +42,11 @@ bool Call::typeChecking() {
 		// preDot in this case return primitive type
 		if (prev == nullptr) {
 			this->nodeType = new TypeError("invalid Dot Operator");
-			return false;
+			return true;
 		}
 		else if (prev->getColNo() == -15) {
 			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
-			return false;
+			return true;
 		}
 	}
 
@@ -87,7 +84,7 @@ bool Call::typeChecking() {
 			}
 
 			this->nodeType = new TypeError("undeclared identifier " + divs[i]->getName(), divs[i]->getLineNo());
-			return false;
+			return true;
 		}
 
 		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
@@ -113,11 +110,11 @@ bool Call::typeChecking() {
 			if (Identifier::isStaticMethod) {
 				if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
 					this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
-					return false;
+					return true;
 				}
 				if (i == 0 && preDot == nullptr && prev->getType() == "field" && !((Field*)prev)->getIsStatic()) {
 					this->nodeType = new TypeError("cannot use non static fields or methods on static method", divs[i]->getLineNo());
-					return false;
+					return true;
 				}
 			}
 		}
@@ -126,7 +123,7 @@ bool Call::typeChecking() {
 		if (prev->getType() == "field") {
 			if (((Field*)prev)->getIsStatic() && (preDot != nullptr || i != 0 && !type)) {
 				this->nodeType = new TypeError("cannot access to static field from 'this' keyword or objects", divs[i]->getLineNo());
-				return false;
+				return true;
 			}
 		}
 
@@ -135,13 +132,13 @@ bool Call::typeChecking() {
 			if (prev->getType() == "field") {
 				if (TypesTable::getType(((Field*)prev)->get_type_name()).second == nullptr) {
 					this->nodeType = new TypeError("Dot operator isn't allowed on primitive type", divs[i]->getLineNo());
-					return false;
+					return true;
 				}
 			}
 			else if (prev->getType() == "localvariable") {
 				if (TypesTable::getType(((LocalVariable*)prev)->get_type_name()).second == nullptr) {
 					this->nodeType = new TypeError("Dot operator isn't allowed on primitive type", divs[i]->getLineNo());
-					return false;
+					return true;
 				}
 			}
 		}
@@ -167,7 +164,7 @@ bool Call::typeChecking() {
 
 		if (prev->getType() == "interface") {
 			this->nodeType = new TypeError("cannot initialize object from interface type named '" + prev->getName() + "'", divs[divs.size() - 1]->getLineNo());
-			return false;
+			return true;
 		}
 
 		newClassRef = (Class*)prev;

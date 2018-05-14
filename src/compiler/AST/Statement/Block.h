@@ -10,11 +10,11 @@ private:
 public:
 	Block(Node *parent);
 	
+	string getType();
+
 	void add(Node* statement);
 	
 	int print(int);
-
-	string getType();
 	
 	bool typeChecking();
 

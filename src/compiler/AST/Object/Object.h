@@ -7,11 +7,8 @@ using namespace std;
 
 class Object : public Node
 {
-
 protected:
-
 	Symbol* symbol;
-
 public:
 
 	Object(Symbol *symbol, Node* parent);

@@ -34,6 +34,15 @@ void DoWhile::setCondition(Node* condition) {
 	this->condition = condition;
 }
 
+bool DoWhile::typeChecking() {
+
+	condition->typeChecking();
+
+	statement->typeChecking();
+
+	return true;
+}
+
 DoWhile::~DoWhile()
 {
 }

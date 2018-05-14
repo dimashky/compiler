@@ -49,6 +49,11 @@ void AutoConst::setValue(void* value)
 	this->value=value; 
 }
 
+bool AutoConst::typeChecking()
+{ 
+	return true; 
+}
+
 AutoConst::~AutoConst()
 {
 }

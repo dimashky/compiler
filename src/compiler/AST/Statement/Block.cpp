@@ -32,7 +32,7 @@ bool Block::typeChecking() {
 		res |= statement->typeChecking();
 	}
 
-	return res;
+	return res || true;
 }
 
 Block::~Block()

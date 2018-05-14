@@ -10,21 +10,17 @@ class ArrayInitializer :public Object
 public:
 	ArrayInitializer(Symbol* type = nullptr, bool complexType = false);
 
-	int print(int);
-
 	string getType();
 
 	vector<Node*> getElements();
 	
 	void setElements(queue<Node*>elements);
-	void setDimensions(queue<Node*>elements) {
-		while (!elements.empty()) {
-			this->dimensions.push_back(elements.front());
-			elements.pop();
-		}
-	}
+
+	void setDimensions(queue<Node*>elements);
 
 	void addElement(Node* element);
+
+	int print(int);
 
 	bool typeChecking();
 

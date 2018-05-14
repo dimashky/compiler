@@ -20,6 +20,16 @@ void Procedure::add(Object* object)
 	return;
 }
 
+bool Procedure::getHasReturn() {
+	return hasReturnStatement;
+}
+
+void Procedure::setHasReturn(bool hasReturnStatement) {
+	this->hasReturnStatement = hasReturnStatement;
+	return;
+}
+
+
 int Procedure::print(int nodeCnt)
 {
 	int currentId = nodeCnt;
@@ -97,7 +107,7 @@ bool Procedure::typeChecking() {
 		check |= block->typeChecking();
 	}
 	Identifier::isStaticMethod = false;
-	return check;
+	return check || true;
 }
 
 Procedure::~Procedure()

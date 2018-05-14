@@ -6,30 +6,19 @@
 
 class While :public Statement
 {
-
 private:
-
 	Node *condition, *statement;
-
 public:
-
 	While(Node *condition, Node *statement, Node *parent);
 	
-	int print(int);
-
 	string getType();
 
 	void setStatement(Node* statement);
-	bool typeChecking() {
 
-		condition->typeChecking();
-		if (condition->nodeType->getTypeId() != TYPE_BOOL) {
-			new TypeError("While condition must be boolean type");
-		}
-		statement->typeChecking();
+	int print(int);
 
-		return true;
-	}
+	bool typeChecking();
+
 	~While();
 };
 

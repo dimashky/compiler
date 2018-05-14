@@ -11,6 +11,14 @@ ArrayInitializer::ArrayInitializer(Symbol* type, bool complexType) :Object(nullp
 	this->complexType = !complexType;
 }
 
+
+void ArrayInitializer::setDimensions(queue<Node*>elements) {
+	while (!elements.empty()) {
+		this->dimensions.push_back(elements.front());
+		elements.pop();
+	}
+}
+
 int ArrayInitializer::print(int nodeCnt)
 {
 	return nodeCnt;
@@ -86,7 +94,7 @@ bool ArrayInitializer::typeChecking() {
 		}
 	}
 
-	return checkStatus;
+	return true;
 }
 
 ArrayInitializer::~ArrayInitializer(){

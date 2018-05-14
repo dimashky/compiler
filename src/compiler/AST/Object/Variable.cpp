@@ -84,7 +84,7 @@ bool Variable::typeChecking() {
 		this->nodeType = this->nodeType->operation(Operator::Equal, equal->nodeType);
 
 		if (this->nodeType->getTypeId() == TYPE_ERROR) {
-			return false;
+			return true;
 		}
 		if (field) {
 			((Field*)symbol)->setInitializedStatus();

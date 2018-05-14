@@ -36,6 +36,18 @@ int Identifier::print(int nodeCnt)
 	return nodeCnt;
 }
 
+Node* Identifier::getPreDot() {
+	return preDot;
+}
+
+bool Identifier::getIsConst() {
+	return this->isConst;
+}
+
+bool Identifier::getIsReadonly() {
+	return this->isReadonly;
+}
+
 void Identifier::setArrayDimensions(queue<Node*>dimensions) {
 	
 	this->isArray = true;
@@ -56,11 +68,11 @@ bool Identifier::typeChecking() {
 		// preDot in this case return primitive type
 		if (prev == nullptr) {
 			this->nodeType = new TypeError("invalid Dot Operator");
-			return false;
+			return true;
 		}
 		else if (prev->getColNo() == -15) {
 			this->nodeType = new TypeError("undeclared identifier " + prev->getName(), prev->getLineNo());
-			return false;
+			return true;
 		}
 	}
 
@@ -99,7 +111,7 @@ bool Identifier::typeChecking() {
 			}
 			
 			this->nodeType = new TypeError("undeclared identifier " + divs[i]->getName(), divs[i]->getLineNo());
-			return false;
+			return true;
 		}
 
 		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
@@ -140,11 +152,11 @@ bool Identifier::typeChecking() {
 			if (Identifier::isStaticMethod) {
 				if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
 					this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
-					return false;
+					return true;
 				}
 				if (i == 0 && preDot == nullptr && prev->getType() == "field" && !((Field*)prev)->getIsStatic()) {
 					this->nodeType = new TypeError("cannot use non static fields on static method", divs[i]->getLineNo());
-					return false;
+					return true;
 				}
 			}
 		}
@@ -153,8 +165,8 @@ bool Identifier::typeChecking() {
 		if (prev->getType() == "field") {
 			if (((Field*)prev)->getIsStatic() && (preDot != nullptr || i != 0 && !type)) {
 				this->nodeType = new TypeError("cannot access to static field from 'this' keyword or objects", divs[i]->getLineNo());
-				return false;
-			}	
+				return true;
+			}
 		}
 
 		if (i != divs.size() - 1) {
@@ -163,13 +175,13 @@ bool Identifier::typeChecking() {
 				if (prev->getType() == "field") {
 					if (TypesTable::getType(((Field*)prev)->get_type_name()).second == nullptr) {
 						this->nodeType = new TypeError("Dot operator isn't allowed on primitive type", divs[i]->getLineNo());
-						return false;
+						return true;
 					}
 				}
 				else if (prev->getType() == "localvariable") {
 					if (TypesTable::getType(((LocalVariable*)prev)->get_type_name()).second == nullptr) {
 						this->nodeType = new TypeError("Dot operator isn't allowed on primitive type", divs[i]->getLineNo());
-						return false;
+						return true;
 					}
 				}
 			}
@@ -196,11 +208,11 @@ bool Identifier::typeChecking() {
 		if (((Field*)prev)->getDimension() != this->dimensions.size()) {
 			if (((Field*)prev)->getDimension() == 0) {
 				this->nodeType = new TypeError("cannot apply indexing to un array type", prev->getLineNo());
-				return false;
+				return true;
 			}
 			if (this->dimensions.size() != 0) {
 				this->nodeType = new TypeError("wrong number of indices, expected " + ((Field*)prev)->getDimension(), prev->getLineNo());
-				return false;
+				return true;
 			}
 			this->nodeType = new TypeArray(this->nodeType, this->dimensions.size());
 		}
@@ -209,17 +221,15 @@ bool Identifier::typeChecking() {
 		if (((LocalVariable*)prev)->getDimension() != this->dimensions.size()) {
 			if (((LocalVariable*)prev)->getDimension() == 0) {
 				this->nodeType = new TypeError("cannot apply indexing to un array type", prev->getLineNo());
-				return false;
+				return true;
 			}
 			if (this->dimensions.size() != 0) {
 				this->nodeType = new TypeError("wrong number of indices, expected " + to_string(((LocalVariable*)prev)->getDimension()), prev->getLineNo());
-				return false;
+				return true;
 			}
 			this->nodeType = new TypeArray(this->nodeType, ((LocalVariable*)prev)->getDimension());
 		}
 	}
-
-
 	return true;
 }
 

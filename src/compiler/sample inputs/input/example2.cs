@@ -1,7 +1,7 @@
-/*class ProgramPleaseDontCreateClassInSameName
+class ProgramPleaseDontCreateClassInSameName
 {
     public static void Main()
     {
         return;
     }
-}*/
+}

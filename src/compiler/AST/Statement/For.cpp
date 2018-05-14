@@ -5,6 +5,33 @@ For::For(Node *parent) :Statement(parent) {
 	this->statement = nullptr;
 }
 
+bool For::typeChecking() {
+
+	auto cpy = this->initializers;
+
+	while (!cpy.empty()) {
+		cpy.front()->typeChecking();
+		cpy.pop();
+	}
+
+	cpy = iterators;
+
+	while (!cpy.empty()) {
+		cpy.front()->typeChecking();
+		cpy.pop();
+	}
+
+	condition->typeChecking();
+
+	if (condition->nodeType->getTypeId() != TYPE_BOOL) {
+		new TypeError("While condition must be boolean type");
+	}
+
+	statement->typeChecking();
+
+	return true;
+}
+
 int For::print(int nodeCnt){
 	int currentId = nodeCnt;
 

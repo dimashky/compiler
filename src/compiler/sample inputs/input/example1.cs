@@ -5,7 +5,7 @@ namespace Sports
         public abstract string Rules();
     }
 
-    class FootBall
+    class FootBall : Sport
     {
         public string Rules()
         {
@@ -13,13 +13,13 @@ namespace Sports
         }
     }
 
-    class BasketBall
+    class BasketBall : Sport
     {
         public string Rules()
         {
             return "BasketBall";
         }
-        public static void Main()
+        public void Maddin()
         {
             Sport[] mySports = new Sport[2];
             mySports[0] = new FootBall();
@@ -28,6 +28,3 @@ namespace Sports
         }
     }
 }
-
-/* Main */
-

@@ -8,9 +8,10 @@ class Variable :public Object
 public:
 	Variable(Symbol* symbol, Node *equal, Node* parent);
 
+	string getType();
+
 	int print(int);
 
-	string getType();
 	bool typeChecking();
 
 	~Variable();
