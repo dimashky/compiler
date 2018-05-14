@@ -31,9 +31,7 @@ public:
 		return true;
 	}
 
-	void generateCode() {
-
-	};
+	void generateCode();
 
 	~If();
 

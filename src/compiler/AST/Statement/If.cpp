@@ -44,3 +44,24 @@ void If::setElseStatement(Node* statement) {
 If::~If()
 {
 }
+
+void If::generateCode() {
+	this->codnition->generateCode();
+	AsmGenerator::pop("t0");
+	int exitLabelNumber = ++AsmGenerator::labelCounter;
+	
+	if (!this->elseStatement) {
+		AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabelNumber));
+		this->ifStatement->generateCode();
+		AsmGenerator::addLabel("label" + to_string(exitLabelNumber));
+		return;
+	}
+
+	int elseLabelNumber = ++AsmGenerator::labelCounter;
+	AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(elseLabelNumber));
+	this->ifStatement->generateCode();
+	AsmGenerator::addInstruction("j label" + to_string(exitLabelNumber));
+	AsmGenerator::addLabel("label" + to_string(elseLabelNumber));
+	this->elseStatement->generateCode();
+	AsmGenerator::addLabel("label" + to_string(exitLabelNumber));
+};

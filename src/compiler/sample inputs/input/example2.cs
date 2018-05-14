@@ -2,19 +2,20 @@ class MainClass
 {
     public static void Main(string[] args)
     {
-        int x;
-        x = fns(fn(2));
+        int x = 15;
+        if( x > 10)
+        {
+            x = 2;
+        }
+        else
+        {
+            x = 3;
+        }
+        x = 5;
         return;
     }
 
-    public static int fns( int x)
+    public static int rec(int x)
     {
-        return x + 5;
-    }
-
-    public static int fn(int x)
-    {
-        int y = x * 10;
-        return x + y;
     }
 }

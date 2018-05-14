@@ -3,6 +3,8 @@
 #include "../Symbol Table/symbolTable.h"
 #include "../Symbol Table/Method.h"
 
+int AsmGenerator::labelCounter = 0;
+
 void AsmGenerator::initializeFile()
 {
 	assembly_code_file.open("./AssemblyCode.asm");
@@ -33,25 +35,43 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 	switch (op)
 	{
 	case Plus:
-		AsmGenerator::addInstruction("add $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("add $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case Minus:
-		AsmGenerator::addInstruction("sub $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("sub $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case star:
-		AsmGenerator::addInstruction("mul $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("mul $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case slash:
-		AsmGenerator::addInstruction("div $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("div $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case percent:
-		AsmGenerator::addInstruction("rem $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("rem $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case andand:
-		AsmGenerator::addInstruction("and $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("and $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case oror:
-		AsmGenerator::addInstruction("or $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::addInstruction("or $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		break;
+	case smaller:
+		AsmGenerator::addInstruction("slt $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		break;
+	case Operator::leq:
+		AsmGenerator::addInstruction("sle $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		break;
+	case Operator::Greater:
+		AsmGenerator::addInstruction("sgt $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		break;
+	case Operator::geq:
+		AsmGenerator::addInstruction("sge $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		break;
+	case Operator::eqeq:
+		AsmGenerator::addInstruction("seq $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		break;
+	case Operator::noteq:
+		AsmGenerator::addInstruction("sne $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	default:
 		cout << "operation NOT Support!" << endl;

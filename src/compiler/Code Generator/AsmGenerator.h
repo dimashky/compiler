@@ -12,6 +12,8 @@ using namespace std;
 class AsmGenerator{
 public:
 	static ofstream assembly_code_file;
+	
+	static int labelCounter;
 
 	static stringstream main_stream;
 
