@@ -24,6 +24,8 @@ public:
 
 	void setParams(vector<pair<Node*, int> > params);
 	
+	void updateParamsSymboltableRef(void* newSymboltable);
+
 	int print(int nodeCnt);
 
 	bool typeChecking();

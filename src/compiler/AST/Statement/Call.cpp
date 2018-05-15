@@ -15,6 +15,13 @@ void Call::setParams(vector<pair<Node*, int> > params) {
 	return;
 }
 
+void Call::updateParamsSymboltableRef(void* newSymboltable) {
+	for each (auto param in this->params)
+	{
+		param.first->setSymbolTable(newSymboltable);
+	}
+}
+
 int Call::print(int nodeCnt) {
 	int currentId = nodeCnt;
 	fprintf(nodesFile, "{ id:%d, label:'CALL', shape: 'box', color:'#53ac37'},", nodeCnt);

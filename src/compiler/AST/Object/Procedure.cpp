@@ -9,6 +9,8 @@ Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol
 	this->block = nullptr;
 	this->hasReturnStatement = false;
 	this->baseCall = baseCall;
+	if (baseCall)
+		baseCall->setParent(this);
 	/*
 	 *	TODO: init nodeType with symbol table.
 	 */
@@ -65,7 +67,6 @@ string Procedure::getType()
 	return "procedure";
 }
 
-
 bool Procedure::typeChecking() {
 
 	//start handeling warning for override keyword
@@ -85,7 +86,10 @@ bool Procedure::typeChecking() {
 		Identifier::isStaticMethod = ((Method*)symbol)->get_is_static();
 	}
 
+
+	//start handeling call parent constructer
 	if (baseCall) {
+		((Call*)baseCall)->updateParamsSymboltableRef(this->symboltable);
 		baseCall->typeChecking();
 		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
@@ -99,6 +103,10 @@ bool Procedure::typeChecking() {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
 		}
 	}
+	//end handeling call parent constructer
+
+
+
 	bool check = true;
 	for (int i = 0; i < locals.size(); i++) {
 		check |= locals[i]->typeChecking();
