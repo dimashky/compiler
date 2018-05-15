@@ -109,6 +109,8 @@ void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, in
 	{
 		LocalVariable *newLocalVariable = new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second);
 		
+		newLocalVariable->setInitializedStatus();
+		
 		Variable* field = new Variable(newLocalVariable, (Expression*)var_init.front(), Node::current);
 
 		((Block*)Node::current)->add(field);
