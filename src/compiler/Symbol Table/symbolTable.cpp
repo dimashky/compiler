@@ -987,10 +987,11 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		
 		while (identifierScope != nullptr) {
 
-			identifierScope = identifierScope->get_parent();
-
 			if (identifierScope->get_owner() != nullptr && identifierScope->get_owner()->getType() == "class")
 				break;
+
+			identifierScope = identifierScope->get_parent();
+
 		}
 
 
