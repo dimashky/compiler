@@ -108,6 +108,10 @@ void Procedure::generateCode() {
 	// class
 	else {
 		for (auto local : this->locals) {
+			if (local->getType() == "variable") {
+				((Variable*)local)->getSymbol()->offset = ((Class*)symbol)->bytes;
+				((Class*)symbol)->bytes += 4;
+			}
 			local->generateCode();
 		}
 	}

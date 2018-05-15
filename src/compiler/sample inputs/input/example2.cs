@@ -1,8 +1,13 @@
 class MainClass
 {
+    int x;
     public static void Main(string[] args)
     {
-        rec(5);
+        int i = 5;
+        while( i > 0)
+        {
+            i = i - 1;
+        }
     }
 
     public static int rec(int x)

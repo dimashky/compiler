@@ -20,6 +20,8 @@ private:
 
 
 public:
+	int bytes;
+
 	Class(string name, int line_no, int col_no);
 	string getType();
 

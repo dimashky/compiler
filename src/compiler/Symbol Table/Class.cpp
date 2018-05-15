@@ -15,6 +15,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 	baseClassImpInterfaces.push_back(make_pair("", nullptr));
 	have_constructor = false;
 	this->is_static = false;
+	bytes = 0;
 }
 
 void Class::add_attributes(queue<string>&attributes)

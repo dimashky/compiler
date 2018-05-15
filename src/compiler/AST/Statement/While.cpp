@@ -30,6 +30,24 @@ void While::setStatement(Node* statement) {
 	this->statement = statement;
 }
 
+void While::generateCode() {
+	int whileLabelNumber = ++AsmGenerator::labelCounter;
+	int exitLabelNumber = ++AsmGenerator::labelCounter;
+
+	AsmGenerator::addLabel("label" + to_string(whileLabelNumber));
+
+	this->condition->generateCode();
+	AsmGenerator::pop("t0");
+	// if condition is false goto exit label
+	AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabelNumber));
+	
+	this->statement->generateCode();
+	// go to while condition for test it
+	AsmGenerator::addInstruction("j label" + to_string(whileLabelNumber));
+
+	AsmGenerator::addLabel("label" + to_string(exitLabelNumber));
+};
+
 While::~While()
 {
 }
