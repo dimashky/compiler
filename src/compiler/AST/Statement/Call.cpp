@@ -224,15 +224,16 @@ void Call::generateCode() {
 	AsmGenerator::comment("call function " + calledMethod->getName());
 	// store current $fp in new AR
 	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
-	// move $sp to new $sp
-	AsmGenerator::addInstruction("add $fp, $sp, 0");
-	AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
 	/// TODO: 
 	for (int i = 0; i < params.size(); ++i) {
 		params[i].first->generateCode();
 		AsmGenerator::pop("t0");
-		AsmGenerator::sw("t0", "fp", -1 * ( 4 * i + 4));
+		AsmGenerator::sw("t0", "sp", -1 * ( 4 * i + 4));
 	}
+	// move $sp to new $sp
+	AsmGenerator::addInstruction("add $fp, $sp, 0");
+	AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
+
 	AsmGenerator::addInstruction("jal " + calledMethod->getName());
 }
 

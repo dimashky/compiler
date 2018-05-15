@@ -29,7 +29,7 @@ void Assignment::generateCode() {
 	right->generateCode();
 	AsmGenerator::pop("t0");
 	AsmGenerator::sw("t0", "fp", -1 * left->getPostDot()->offset);
-//	AsmGenerator::printReg("t0");
+	AsmGenerator::printReg("t0");
 }
 
 Assignment::~Assignment()
