@@ -1,15 +1,28 @@
-class aa
+
+namespace ConsoleApplication21
 {
-    public void ff(float cc)
+
+    class shape
     {
 
     }
-}
-
-class vv
-{
-    static void Main()
+    class rect : shape
     {
-        aa f = new aa();
+
+    }
+
+    class Program
+    {
+
+        static void ff(rect r)
+        {
+
+        }
+        static void Main(string[] args)
+        {
+            rect s;
+            ff(s);
+        }
+
     }
 }

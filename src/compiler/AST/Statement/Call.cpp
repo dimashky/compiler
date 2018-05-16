@@ -193,7 +193,10 @@ bool Call::typeChecking() {
 
 	for (int i = 0; i < this->params.size(); ++i) {
 		params[i].first->typeChecking();
-		curParams.push_back(new LocalVariable(params[i].first->nodeType->typeExpression(), "", 0, 1, 0, 0, 0));
+		Symbol* typeRefParam = TypesTable::getType(params[i].first->nodeType->typeExpression()).second;
+		LocalVariable* localVariable = new LocalVariable(typeRefParam->getName(), "", 0, 1, 0, 0, 0);
+		localVariable->set_type(typeRefParam);
+		curParams.push_back(localVariable);
 	}
 
 	method->setParameters(curParams);
