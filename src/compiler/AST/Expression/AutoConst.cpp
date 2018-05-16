@@ -1,11 +1,15 @@
 #include "AutoConst.h"
 #include "../../Type Checker/all.h"
-AutoConst::AutoConst(string type, void* value, Node* parent):Expression(parent)
+AutoConst::AutoConst(string type, void* value, Node* parent, int lineNo):Expression(parent)
 {
 	this->type = type;
 	this->value = value; 
-
+	this->lineNo = lineNo;
 	this->nodeType = TypesTable::getType(type).first;
+}
+
+int AutoConst::getLineNo() {
+	return this->lineNo;
 }
 
 string AutoConst::getType() 

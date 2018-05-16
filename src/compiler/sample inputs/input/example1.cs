@@ -1,13 +1,11 @@
-class x:asc
+class x
 {
-    int y1;
+    readonly int y = 0;
     static void f()
     {
-        this.y = 1;
-    }
-}
+        for (int i = 0; 1 = 1 && 1 == 1; i++)
+        {
 
-class asc
-{
-    public int y;
+        }
+    }
 }

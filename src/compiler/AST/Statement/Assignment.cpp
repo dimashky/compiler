@@ -1,4 +1,5 @@
 #include "Assignment.h"
+#include "../Expression/AutoConst.h"
 
 Assignment::Assignment(Identifier *left, Operator op, Node *right, Node *parent) :Statement(parent)
 {
@@ -62,7 +63,12 @@ bool Assignment::typeChecking() {
 		if (this->nodeType->getTypeId() != TYPE_ERROR)
 			return true;
 	}
-	this->nodeType = new TypeError("invalid assignment operation", ((Identifier*)left)->getPostDot()->getLineNo());
+	if (left->getType() == "identifier") {
+		this->nodeType = new TypeError("invalid assignment operation", ((Identifier*)left)->getPostDot()->getLineNo());
+	}
+	else {
+		this->nodeType = new TypeError("assignment left side must be identifier", ((AutoConst*)left)->getLineNo());
+	}
 	return true;
 }
 

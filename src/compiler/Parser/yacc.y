@@ -151,15 +151,15 @@
 /***** C.1.8 Literals *****/
 literal
   : boolean_literal		{l.a("boolean_literal",1);	  $<r.node>$ = $<r.node>1;}
-  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.node>$ = new AutoConst("INT",new int($<r.i>1),Node::current);}
-  | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.node>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current);}
-  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current);}
-  | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.node>$ = new AutoConst("STRING",new string($<r.str>1),Node::current);}
-  | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.node>$ = new AutoConst("NULL",nullptr,Node::current);}
+  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.node>$ = new AutoConst("INT",new int($<r.i>1),Node::current,$<r.line_no>1);}
+  | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.node>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current,$<r.line_no>1);}
+  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current,$<r.line_no>1);}
+  | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.node>$ = new AutoConst("STRING",new string($<r.str>1),Node::current,$<r.line_no>1);}
+  | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.node>$ = new AutoConst("NULL",nullptr,Node::current,$<r.line_no>1);}
   ;
 boolean_literal
-  : TRUE				{l.a("TRUE",0);$<r.node>$ = new AutoConst("BOOL",new bool(true),Node::current);}
-  | FALSE				{l.a("FALSE",0);$<r.node>$ = new AutoConst("BOOL",new bool(false),Node::current);}
+  : TRUE				{l.a("TRUE",0);$<r.node>$ = new AutoConst("BOOL",new bool(true),Node::current,$<r.line_no>1);}
+  | FALSE				{l.a("FALSE",0);$<r.node>$ = new AutoConst("BOOL",new bool(false),Node::current,$<r.line_no>1);}
   ;
 /********** C.2 Syntactic grammar **********/
 

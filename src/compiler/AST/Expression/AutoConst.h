@@ -8,11 +8,13 @@ private:
 
 	string type;
 
+	int lineNo;
+
 	void* value;
 
 public:
 
-	AutoConst(string type , void* value, Node* parent);
+	AutoConst(string type , void* value, Node* parent, int lineNo);
 	
 	void setType(string type);
 
@@ -21,6 +23,8 @@ public:
 	string getType();
 	
 	void* getValue();
+
+	int getLineNo();
 
 	int print(int);
 
