@@ -419,7 +419,7 @@ base_access
   : BASE DOT IDENTIFIER									
   {
 		l.a("base_access",0);
-		$<r.node>$ = new Identifier(nullptr, new Symbol("base." + string($<r.str>3),$<r.line_no>1,-13));
+		$<r.node>$ = new Identifier(new Identifier(nullptr, new Symbol("base",$<r.line_no>1,-13)), new Symbol(string($<r.str>3),$<r.line_no>1,-13));
   }
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",1);}//expression_list return expression , expression ... etc
   ;

@@ -1,7 +1,7 @@
 class ProgramPleaseDontCreateClassInSameName
 {
-   /* public static void Main()
+    public static void Main()
     {
         return;
-    }*/
+    }
 }

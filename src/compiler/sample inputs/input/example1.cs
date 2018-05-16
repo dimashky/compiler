@@ -1,28 +1,13 @@
-
-namespace ConsoleApplication21
+class x:asc
 {
-
-    class shape
+    int y1;
+    static void f()
     {
-
+        this.y = 1;
     }
-    class rect : shape
-    {
+}
 
-    }
-
-    class Program
-    {
-
-        static void ff(rect r)
-        {
-
-        }
-        static void Main(string[] args)
-        {
-            rect s;
-            ff(s);
-        }
-
-    }
+class asc
+{
+    public int y;
 }

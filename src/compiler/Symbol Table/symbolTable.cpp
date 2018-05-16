@@ -950,6 +950,8 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
 				break;
 
+
+
 			currentScope = currentScope->get_parent();
 		}
 

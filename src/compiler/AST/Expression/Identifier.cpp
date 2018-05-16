@@ -83,7 +83,21 @@ bool Identifier::typeChecking() {
 	vector<Symbol*>divs = postDot->divideName();
 
 	for (int i = 0;i < divs.size();i++) {
+
 		prev = symbolTable::findIdentifier(divs[i], (symbolTable*)this->symboltable, prev);
+
+
+		if (Identifier::isStaticMethod) {
+			if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
+				this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
+				return true;
+			}
+			if (i == 0 && preDot == nullptr && prev->getType() == "field" && !((Field*)prev)->getIsStatic()) {
+				this->nodeType = new TypeError("cannot use non static fields on static method", divs[i]->getLineNo());
+				return true;
+			}
+		}
+
 
 		//we didnt find identifier
 		if (prev->getColNo() == -15) {
@@ -102,7 +116,7 @@ bool Identifier::typeChecking() {
 					parentRef = parentRef->get_parent();
 				}
 
-				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
+				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[i]->getName());
 				
 				if (prev != nullptr) {
 					continue;
@@ -113,6 +127,7 @@ bool Identifier::typeChecking() {
 			this->nodeType = new TypeError("undeclared identifier " + divs[i]->getName(), divs[i]->getLineNo());
 			return true;
 		}
+
 
 		if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
@@ -146,17 +161,6 @@ bool Identifier::typeChecking() {
 						new TypeError("Warning for using Dot operator in unassigned variable", divs[i]->getLineNo());
 					}
 					Identifier::isAssigned = false;
-				}
-			}
-
-			if (Identifier::isStaticMethod) {
-				if (divs[i]->getName() == "this" || divs[i]->getName() == "base") {
-					this->nodeType = new TypeError("use '" + divs[i]->getName() + "' keyword in static method is not allowed", divs[i]->getLineNo());
-					return true;
-				}
-				if (i == 0 && preDot == nullptr && prev->getType() == "field" && !((Field*)prev)->getIsStatic()) {
-					this->nodeType = new TypeError("cannot use non static fields on static method", divs[i]->getLineNo());
-					return true;
 				}
 			}
 		}
