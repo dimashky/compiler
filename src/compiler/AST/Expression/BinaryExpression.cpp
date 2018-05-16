@@ -6,11 +6,12 @@
 #include "../../AST/Expression/Identifier.h"
 #include "../Object/Procedure.h"
 
-BinaryExpression::BinaryExpression(Node *left, Operator op, Node *right,Node* parent):Expression(parent)
+BinaryExpression::BinaryExpression(Node *left, Operator op, Node *right,Node* parent, bool knownTypeAsBinaryExpression):Expression(parent)
 {
 	this->left = left; 
 	this->right = right; 
 	this->op = op;
+	this->knownTypeAsBinaryExpression = knownTypeAsBinaryExpression;
 }
 
 string BinaryExpression::getType() {
@@ -52,14 +53,20 @@ bool BinaryExpression::typeChecking() {
 		Symbol* type = ((Procedure*)currentNode)->getSymbol();
 		line_no = ((Procedure*)currentNode)->getSymbol()->getLineNo();
 		
-		type = symbolTable::findType(((Class*)type)->get_type_graph_position(), ((Identifier*)right)->getPostDot()->getName());
+		if (!knownTypeAsBinaryExpression) {
+			type = symbolTable::findType(((Class*)type)->get_type_graph_position(), ((Identifier*)right)->getPostDot()->getName());
 
-		if (type == nullptr) {
-			this->nodeType = new TypeError("type " + ((Identifier*)right)->getPostDot()->getName() + " is not defined", ((Identifier*)right)->getPostDot()->getLineNo());
+			if (type == nullptr) {
+				this->nodeType = new TypeError("type " + ((Identifier*)right)->getPostDot()->getName() + " is not defined", ((Identifier*)right)->getPostDot()->getLineNo());
+			}
+			else {
+				this->right->nodeType = TypesTable::findOrCreate(((Class*)type)->getFullPath(), type);
+			}
 		}
 		else {
-			this->right->nodeType = TypesTable::findOrCreate(((Class*)type)->getFullPath(), type);
+			this->right->nodeType = TypesTable::getType(((Identifier*)this->right)->getPostDot()->getName()).first;
 		}
+		
 	}
 	else {
 		this->right->typeChecking();
