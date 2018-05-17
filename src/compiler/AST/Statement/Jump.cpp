@@ -42,14 +42,14 @@ bool Jump::typeChecking() {
 
 			if (method->getTypeRef() == nullptr) {
 				TypeExpression* typeExpression = TypesTable::getType(method->get_return_type()).first;
-				if (typeExpression->getTypeId() != this->statement->nodeType->getTypeId()) {
+				if (!typeExpression->equivelantTo(this->statement->nodeType, false)) {
 					this->nodeType = new TypeError("error in return statement no suitable type", this->lineNo);
 					return false;
 				}
 			}
 			else {
 				TypeExpression* typeExpression = TypesTable::findOrCreate(((Class*)method->getTypeRef())->getFullPath(), method->getTypeRef());
-				if (typeExpression->getTypeId() != this->statement->nodeType->getTypeId()) {
+				if (! typeExpression->equivelantTo(this->statement->nodeType, false)) {
 					this->nodeType = new TypeError("error in return statement no suitable type", this->lineNo);
 					return false;
 				}

@@ -217,7 +217,7 @@ bool Call::typeChecking() {
 
 	if (method->getColNo() == -15) {
 		//raise error
-		this->nodeType = new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
+		this->nodeType = new TypeError("Call undeclared function " + method->getName(), method->getLineNo());
 	}
 	else {
 

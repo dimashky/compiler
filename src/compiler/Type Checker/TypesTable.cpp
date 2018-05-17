@@ -37,6 +37,7 @@ void TypesTable::init() {
 	TypesTable::table["STRING"] = make_pair(TypeString::getInstance(), nullptr);
 	TypesTable::table["CHAR"] = make_pair(TypeString::getInstance(), nullptr);
 	TypesTable::table["FLOAT"] = make_pair(TypeFloat::getInstance(), nullptr);
+	TypesTable::table["DOUBLE"] = make_pair(TypeDouble::getInstance(), nullptr);
 	TypesTable::table["BOOL"] = make_pair(TypeBoolean::getInstance(), nullptr);
 	TypesTable::table["VOID"] = make_pair(TypeVoid::getInstance(), nullptr);
 	if (symbolTable::object_ref) {

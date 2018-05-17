@@ -19,15 +19,18 @@ public:
 		this->filename = filename;
 	}
 	void add(error e) {
-		e.id = ++counter;
-		errorList.push_back(e);
+		if (e.msg.find("ERROR_TYPE") == std::string::npos && e.msg.find("Error") == std::string::npos && e.msg.find("TypesTable") == std::string::npos) {
+			e.id = ++counter;
+			errorList.push_back(e);
+		}
 	}
 	void print() {
 		std::sort(errorList.begin(), errorList.end());
+	//	errorList.erase(unique(errorList.begin(), errorList.end()), errorList.end());
 		FILE* f = fopen(filename, "w");
-		fprintf(f, "Total Errors = %d\n", counter);
+		fprintf(f, "Total Errors = %d\n", errorsNum());
 		extern FILE* info;
-		fprintf(info, "var error_num = %d;\n", counter);
+		fprintf(info, "var error_num = %d;\n", errorsNum());
 		if(counter)
 			fprintf(info, "var errors = [];\n");
 		for (error e : errorList) {
