@@ -68,7 +68,8 @@ string Procedure::getType()
 }
 
 bool Procedure::typeChecking() {
-
+	if (symbol != nullptr && symbol->getType() == "class" && symbol->getName() == "object")
+		return true;
 	//start handeling warning for override keyword
 
 	if (symbol != nullptr && this->symbol->getType() == "method" && !((Method*)this->symbol)->get_is_override()) {

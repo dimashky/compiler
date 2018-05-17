@@ -1,25 +1,12 @@
-
-namespace Sport
+class a
 {
-    public abstract class Player
+    public a(int x)
     {
-        public string Name;
-        public int Age;
-        public float Height;
-        public SportClub PlayerClub;
-
-        public int PlayerNumber;
-
-        protected Player() { }
-
-        public Player(SportClub playerClub)
-        {
-            this.PlayerClub = playerClub;
-        }
-
-        public abstract bool CanPlayGame(int sport);
 
     }
+}
 
-  
+class b : a
+{
+
 }

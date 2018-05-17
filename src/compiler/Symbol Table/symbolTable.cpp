@@ -6,6 +6,7 @@
 #include"Method.h"
 #include "../Error Handler/error_handler.h"
 #include "../Symbol Table/Namespace.h"
+#include "../AST/Object/Procedure.h"
 
 extern errorHandler error_handler;
 
@@ -818,6 +819,11 @@ bool symbolTable::closeScope()
 				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
 				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
 				defaultConstructer->setPublic();
+			
+				Procedure* ns = new Procedure(defaultConstructer, Node::current);
+				ns->setSymbolTable(symbolTable::openBrackets.top());
+				((Procedure*)Node::current)->add(ns);
+
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();
