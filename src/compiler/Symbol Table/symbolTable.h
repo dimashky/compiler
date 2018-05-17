@@ -39,10 +39,10 @@ public:
 	static class_tree *type_defination_tree;
 	static stack<symbolTable*> openBrackets;
 	static queue<pair<Symbol*, symbolTable*>> later_defination_override;
-	static queue<pair<Symbol*, symbolTable*>> extended_abstract_classes;
+	static queue<pair<symbolTable*, symbolTable*>> extended_abstract_classes;
 	static vector<pair<node*, pair<pair<int, int>, pair<int, int> > > >using_namespaces;
 	static queue< pair<queue<string>, pair<node*, Symbol* > > >later_defination,later_defination_var;
-
+	static queue<symbolTable*> class_inhertance_abstract; 
 	symbolTable(symbolTable* parent,Symbol* owner);
 	
 	void add_scope();

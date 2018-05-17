@@ -14,10 +14,11 @@ vector<pair<node*, pair<pair<int, int>, pair<int, int> > > > symbolTable::using_
 class_tree* symbolTable::type_defination_tree = new class_tree();
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
-queue<pair<Symbol*, symbolTable*>> symbolTable::extended_abstract_classes = queue<pair<Symbol*, symbolTable*>>();
+queue<pair<symbolTable*, symbolTable*>> symbolTable::extended_abstract_classes = queue<pair<symbolTable*, symbolTable*>>();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
+queue<symbolTable*>  symbolTable::class_inhertance_abstract = queue<symbolTable* > ();
 
 symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
 {
@@ -279,7 +280,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	// is correct abstract method
 	if (!is_body && ((Method*)symbol)->get_is_abstract()  && !((Method*)symbol)->get_is_private() && parent->owner != NULL && parent->owner->getType() == "class" && ((Class*)parent->owner)->get_is_abstract())
-		((Method*)symbol)->set_must_ovrride(true);
+		((Method*)symbol)->set_exist_ovrride(true);
     // name method same name class  
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
@@ -337,8 +338,10 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
 					correctOverride = false;
 				}
-				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_is_must_ovrride())
-					((Method*)itex->first)->set_must_ovrride(false); 
+				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_exist_ovrride())
+				{
+					((Method*)symbol)->set_must_ovrride(false);
+				}
 					break;
 			}
 			else
@@ -578,7 +581,10 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			else if (find_res.second)
 				error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared or inaccessible type '" + bases.front() + "'."));
 
-			else later_defination.push(make_pair(list, make_pair(current, symbol)));
+			else {
+				later_defination.push(make_pair(list, make_pair(current, symbol)));
+				class_inhertance_abstract.push(openBrackets.top());
+			}
 		}
 
 		else {
@@ -604,7 +610,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 							// class is extend from abstruct class
 							if (!(((Class*)symbol)->get_is_abstract()) && (((Class*)find_base->owner)->get_is_abstract()))
-								extended_abstract_classes.push(make_pair(symbol, find_base));
+								extended_abstract_classes.push(make_pair(openBrackets.top(), find_base));
 							
 						}
 						 
@@ -638,6 +644,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				((Class*)symbol)->set_extended_class(make_pair(symbol->getName(), nullptr));
 
 				later_defination.push(make_pair(list, make_pair(current, symbol)));
+				class_inhertance_abstract.push(openBrackets.top());
+
 			}
 		}
 
@@ -790,8 +798,11 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 			error_handler.add(error(symbol->getLineNo(), -1, "error,  Implemented from non declared or inaccessible interface '" + bases.front() + "'."));
 
 		else
+		{
 			later_defination.push(make_pair(list, make_pair(current, symbol)));
+			class_inhertance_abstract.push(openBrackets.top());
 
+		}
 		bases.pop();
 	}
 
