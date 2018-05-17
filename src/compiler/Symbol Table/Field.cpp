@@ -28,7 +28,7 @@ void Field::add_attributes(queue<string>attributes)
 			this->isProtected = true;
 		}
 		
-		if (attributes.front() == "PUBLIC") {
+		if (attributes.front() == "STATIC") {
 			isStatic = true;
 		}
 
