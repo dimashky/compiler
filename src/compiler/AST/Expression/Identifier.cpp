@@ -116,7 +116,14 @@ bool Identifier::typeChecking() {
 					parentRef = parentRef->get_parent();
 				}
 
-				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[i]->getName());
+				string requiredName = "";
+				for (int j = 0;j <= i;j++) {
+					requiredName += divs[j]->getName();
+					if (i != j)
+						requiredName += '.';
+				}
+
+				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), requiredName);
 				
 				if (prev != nullptr) {
 					continue;
