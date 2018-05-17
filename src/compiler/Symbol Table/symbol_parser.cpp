@@ -27,8 +27,8 @@ void symbolParser::print(queue<string> &s1, char* s2)
 
 void symbolParser::endScope()
 {
-	Node::Up();
 	symboltable->closeScope();
+	Node::Up();
 }
 
 void symbolParser::add_object()

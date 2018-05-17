@@ -36,6 +36,9 @@ TypeExpression* TypeString::operation(Operator op, TypeExpression* secondOperand
 		case Plus:
 			return  TypeString::getInstance();
 			break;
+		case eqeq:
+			return  TypeBoolean::getInstance();
+			break;
 		case Equal:
 			return  TypeString::getInstance();
 			break;

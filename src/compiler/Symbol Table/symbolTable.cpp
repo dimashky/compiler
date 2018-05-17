@@ -5,6 +5,9 @@
 #include"Field.h"
 #include"Method.h"
 #include "../Error Handler/error_handler.h"
+#include "../Symbol Table/Namespace.h"
+#include "../AST/Object/Procedure.h"
+
 extern errorHandler error_handler;
 
 int symbolTable::is_main = 0;
@@ -127,7 +130,7 @@ void symbolTable::addNamespace(Symbol* symbol)
 	else
 	{
 		add_scope(symbol);
-		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
+		((Namespace*)symbol)->setTypePositionGraph(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 	}
 	return;
 }
@@ -827,6 +830,11 @@ bool symbolTable::closeScope()
 				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
 				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
 				defaultConstructer->setPublic();
+			
+				Procedure* ns = new Procedure(defaultConstructer, Node::current);
+				ns->setSymbolTable(symbolTable::openBrackets.top());
+				((Procedure*)Node::current)->add(ns);
+
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();
@@ -996,7 +1004,12 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 	if (lastSymbol) {
 
-		currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
+		if (lastSymbol->getType() == "class") {
+			currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
+		}
+		else if (lastSymbol->getType() == "namespace") {
+			currentScope = (symbolTable*)((Namespace*)lastSymbol)->getTypePositionGraph()->stPTR;
+		}
 		
 		while (identifierScope != nullptr) {
 
@@ -1018,7 +1031,7 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		currentScope = identifierScope;
 
 
-	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class") {
+	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class" && currentScope->get_owner()->getType() != "namespace") {
 		
 
 		//check if this id defined in same scope !!

@@ -81,8 +81,13 @@ bool Call::typeChecking() {
 						break;
 					parentRef = parentRef->get_parent();
 				}
-
-				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), divs[0]->getName());
+				string requiredName = "";
+				for (int j = 0;j <= i;j++) {
+					requiredName += divs[j]->getName();
+					if (i != j)
+						requiredName += '.';
+				}
+				prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), requiredName);
 
 				if (prev != nullptr) {
 					continue;
@@ -212,7 +217,7 @@ bool Call::typeChecking() {
 
 	if (method->getColNo() == -15) {
 		//raise error
-		this->nodeType = new TypeError("Call undeclared function in " + to_string(method->getLineNo()));
+		this->nodeType = new TypeError("Call undeclared function " + method->getName(), method->getLineNo());
 	}
 	else {
 

@@ -12,13 +12,13 @@ private:
 	Attribute* attribute;
 	string type_variable;
 	Symbol* type_ref;
-	bool is_private, initialized,isConst,isStatic,readonly;
+	bool is_private, initialized,isConst,isStatic,readonly,isPublic,isProtected;
 	int dimension;
 public:
 
 	Field(queue<string>&modifiers, string type_variable, string name, int dimension, int line_no, int col_no, bool isConst = false);
     
-	void add_attributes(queue<string>&attributes);
+	void add_attributes(queue<string>attributes);
 
 	void set_type(Symbol* type_ref);
 	void setInitializedStatus(bool initialized = true) {

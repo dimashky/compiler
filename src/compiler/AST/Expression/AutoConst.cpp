@@ -28,6 +28,9 @@ int AutoConst::print(int nodeCnt)
 	else if (type == "FLOAT") {
 		fprintf(nodesFile, "{ id:%d, label:'%f', shape: 'box', color:'#47fcfc'},", nodeCnt, *((float*)value));
 	}
+	else if (type == "DOUBLE") {
+		fprintf(nodesFile, "{ id:%d, label:'%f', shape: 'box', color:'#47fc0c'},", nodeCnt, *((double*)value));
+	}
 	else if (type == "CHAR") {
 		fprintf(nodesFile, "{ id:%d, label:\"%c\", shape: 'box', color:'#47fcfc'},", nodeCnt, *((char*)value));
 	}
