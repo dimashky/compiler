@@ -340,8 +340,7 @@ invocation_expression
   | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE							 
   {
 		l.a("invocation_expression",2);
-
-		$<r.node>$ = new Call(new Identifier(nullptr, new Symbol(*$<r.base>1, $<r.line_no>1, -13)), Node::current);
+		$<r.node>$ = new Call((Identifier*)$<r.node>1, Node::current);
 		
 		((Call*)$<r.node>$)->setParams(*$<r.args>3);
   }
@@ -374,7 +373,7 @@ element_access
   {
 		l.a("element_access",2);
 		
-		$<r.node>$ = new Identifier(nullptr,new Symbol(*$<r.base>1,$<r.line_no>2,-13),true);
+		$<r.node>$ = $<r.node>1;
 		
 		((Identifier*)$<r.node>$)->setArrayDimensions(*$<r.nodes>3);
   }
@@ -475,7 +474,7 @@ sizeof_expression
   ;
 postfix_expression
   : primary_expression			{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
-  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(nullptr, new Symbol(*$<r.base>1,$<r.line_no>1,-13));}//this return a.b.c in "base string"
+  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}//this return a.b.c in "base string"
   | post_increment_expression  	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | post_decrement_expression	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | pointer_member_access		{l.a("postfix_expression",1);}
@@ -1206,17 +1205,29 @@ qualified_identifier
 		  {		l.a("qualified_identifier",0);
 				$<r.base>$ = new string($<r.str>1);
 				$<r.line_no>$ = $<r.line_no>1;
+				$<r.node>$ = new Identifier(nullptr,new Symbol(string($<r.str>1),$<r.line_no>1,-13));
 		  }
   | qualifier IDENTIFIER	
 		{	l.a("qualified_identifier",1);
 			$<r.base>$ = new string(string(*$<r.base>1) + string($<r.str>2));
 			$<r.line_no>$ = $<r.line_no>2;
+			$<r.node>$ = new Identifier($<r.node>1,new Symbol(string($<r.str>2),$<r.line_no>2,-13));
 		}
   ;
 
 qualifier
-  : IDENTIFIER DOT				{l.a("qualifier",0);$<r.base>$ = new string(string($<r.str>1) + ".");}
-  | qualifier IDENTIFIER DOT	{l.a("qualifier",1);$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");}
+  : IDENTIFIER DOT				
+  {
+		l.a("qualifier",0);
+		$<r.base>$ = new string(string($<r.str>1) + ".");
+		$<r.node>$ = new Identifier(nullptr,new Symbol(string($<r.str>1),$<r.line_no>1,-13));  
+  }
+  | qualifier IDENTIFIER DOT	
+  {
+		l.a("qualifier",1);
+		$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");
+		$<r.node>$ = new Identifier($<r.node>1,new Symbol(string($<r.str>2),$<r.line_no>2,-13));   
+  }
   ;
 
 namespace_body

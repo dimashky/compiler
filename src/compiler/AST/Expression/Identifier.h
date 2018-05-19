@@ -18,12 +18,14 @@ private:
 	Node* preDot;
 	Symbol* postDot;
 	vector<Node*>dimensions;
-	bool isArray, isConst, isReadonly;
+	bool isArray, isConst, isReadonly, isType;
 public:
 
 	static bool leftAssignment, isAssigned, isStaticMethod;
 
 	Identifier(Node* preDot, Symbol* postDot, bool isArray = false);
+
+	string getPath();
 
 	string getType();
 	

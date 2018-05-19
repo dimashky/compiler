@@ -40,6 +40,7 @@ bool BinaryExpression::typeChecking() {
 	bool check = true;
 	int line_no = -1;
 	this->left->typeChecking();
+
 	if (this->op == Operator::Is || this->op == Operator::As) {
 		Node* currentNode = this->parent;
 

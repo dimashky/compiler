@@ -1,12 +1,26 @@
-class a
+class x
 {
-    public a(int x)
+     int[] xd;
+    public static void Main()
+    {
+
+    }
+    static int ec;
+    void qf()
+    {
+    }
+
+    private void evwf()
     {
 
     }
 }
 
-class b : a
+class cacae
 {
-
+    void dqdqwdqw()
+    {
+        x qfw = new x();
+        qfw.evwf();
+    }
 }
