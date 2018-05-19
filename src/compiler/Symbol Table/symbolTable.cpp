@@ -1203,6 +1203,9 @@ bool symbolTable::isParent(Symbol* child, Symbol* parent) {
 bool symbolTable::checkMethodOverriding(Symbol* method, Symbol* currentClass) {
 	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
 	symbolTable* baseClass = ((Class*)currentClass)->get_extended_class().second;
+	if (((Method*)method)->isNew()) {
+		return false;
+	}
 	while (baseClass != nullptr) {
 		it = baseClass->symbolMap.find(method);
 		if (it != baseClass->symbolMap.end()) {

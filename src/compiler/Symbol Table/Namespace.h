@@ -2,6 +2,8 @@
 #include<iostream>
 #include<string>
 #include "Symbol.h"
+#include "symbolTable.h"
+
 using namespace::std;
 
 class Namespace : public Symbol
@@ -15,7 +17,7 @@ public:
 		this->type_graph_position = type_graph_position;
 		return;
 	}
-	
+	string getFullPath();
 	node* getTypePositionGraph() {
 		return this->type_graph_position;
 	}

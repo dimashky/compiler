@@ -115,7 +115,7 @@ bool Identifier::typeChecking() {
 			prev = symbolTable::findType(((Class*)parentRef->get_owner())->get_type_graph_position(), requiredName);
 				
 			if (prev != nullptr) {
-				this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
+				this->nodeType = TypesTable::findOrCreate(prev->getFullPath(), prev);
 				return true;
 			}
 		}

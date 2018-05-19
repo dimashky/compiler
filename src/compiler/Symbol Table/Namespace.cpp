@@ -9,6 +9,10 @@ Namespace::~Namespace()
 {
 }
 
+string Namespace::getFullPath() {
+	return ((symbolTable*)type_graph_position->stPTR)->getFullPath();
+}
+
 string Namespace::getType()
 {
 	return "namespace";

@@ -21,7 +21,9 @@ private:
 	int default_counter;
 	vector<LocalVariable*> types_ids_parameter;
 public:
-
+	bool isNew() {
+		return this->is_new;
+	}
 	//true for default case of compare "same number of params" ... false for compare to handle default params case
 	static bool compare_status;
 
