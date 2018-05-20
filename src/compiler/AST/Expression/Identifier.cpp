@@ -77,6 +77,16 @@ bool Identifier::typeChecking() {
 			this->nodeType = new TypeError("invalid Dot Operator on primitive type", postDot->getLineNo());
 			return true;
 		}
+		if (res.first->getTypeId() == TYPE_ARRAY) {
+			if (this->postDot->getName() == "Length") {
+				this->nodeType = TypesTable::getType("INT").first;
+				this->isConst = true;
+			}
+			else {
+				this->nodeType = new TypeError("Array Type doesn't contain '" + postDot->getName() + "' identifier.", postDot->getLineNo());
+			}
+			return true;
+		}
 		prev = res.second;
 	}
 

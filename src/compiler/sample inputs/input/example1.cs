@@ -1,3 +1,4 @@
+/*
 
 namespace Sport
 {
@@ -262,5 +263,18 @@ namespace GameRules
             }
             return -1;
         }
+    }
+}
+
+*/
+
+
+class x
+{
+    int t;
+    x[] rr;
+    void ff()
+    {
+        rr.Length = 32;
     }
 }
