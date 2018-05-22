@@ -64,6 +64,7 @@
     <ClCompile Include="Type Checker\TypeBoolean.cpp" />
     <ClCompile Include="Type Checker\TypeCheckingHelper.cpp" />
     <ClCompile Include="Type Checker\TypeClass.cpp" />
+    <ClCompile Include="Type Checker\TypeDouble.cpp" />
     <ClCompile Include="Type Checker\TypeError.cpp" />
     <ClCompile Include="Type Checker\TypeExpression.cpp" />
     <ClCompile Include="Type Checker\TypeFloat.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Type Checker\TypeBoolean.h" />
     <ClInclude Include="Type Checker\TypeCheckingHelper.h" />
     <ClInclude Include="Type Checker\TypeClass.h" />
+    <ClInclude Include="Type Checker\TypeDouble.h" />
     <ClInclude Include="Type Checker\TypeError.h" />
     <ClInclude Include="Type Checker\TypeExpression.h" />
     <ClInclude Include="Type Checker\TypeFloat.h" />

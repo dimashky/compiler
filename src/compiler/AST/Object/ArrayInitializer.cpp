@@ -1,7 +1,23 @@
 #include "ArrayInitializer.h"
 #include "../../Type Checker/all.h"
+#include "../../Symbol Table/symbolTable.h"
+#include "../../Symbol Table/Class.h"
+#include "../../Symbol Table/Field.h"
+#include "../../Symbol Table/LocalVariable.h"
+#include "../Object/Procedure.h"
 
-ArrayInitializer::ArrayInitializer() :Object(nullptr, nullptr) {}
+ArrayInitializer::ArrayInitializer(Symbol* type, bool complexType) :Object(nullptr, Node::current) {
+	this->type = type;
+	this->complexType = !complexType;
+}
+
+
+void ArrayInitializer::setDimensions(queue<Node*>elements) {
+	while (!elements.empty()) {
+		this->dimensions.push_back(elements.front());
+		elements.pop();
+	}
+}
 
 int ArrayInitializer::print(int nodeCnt)
 {
@@ -34,9 +50,42 @@ void ArrayInitializer::addElement(Node* element) {
 }
 
 bool ArrayInitializer::typeChecking() {
-	return true;	// TEMP we return back 
-
 	bool checkStatus = true;
+	if (type) {
+		TypeExpression* elementType;
+		if (this->complexType) {
+			Node* currentNode = this->parent;
+
+			//up to parent method
+			while (currentNode->getType() != "procedure") {
+				currentNode = currentNode->getParent();
+			}
+			//up to parent class
+			currentNode = currentNode->getParent();
+
+			type = symbolTable::findType(((Class*)((Procedure*)currentNode)->getSymbol())->get_type_graph_position(), type->getName());
+
+			if (type == nullptr) {
+				this->nodeType = new TypeError("type " + type->getName() + " is not defined", type->getLineNo());
+			}
+			else {
+				elementType = TypesTable::findOrCreate(((Class*)type)->getFullPath(), type);
+			}
+		}
+		else {
+			elementType = TypesTable::getType(type->getName()).first;
+		}
+		
+		this->nodeType = TypesTable::findOrCreateArray(elementType, dimensions.size());
+	}
+	for (auto dimension : dimensions) {
+		checkStatus |= dimension->typeChecking();
+		if (dimension->nodeType->getTypeId() != TYPE_INTEGER) {
+			this->nodeType = new TypeError("Array Dimesion should be of type integer ", type->getLineNo());
+			break;
+		}
+	}
+
 	for (auto el : elements) {
 		checkStatus |= el->typeChecking();
 		if (((TypeArray*)this->nodeType)->getOf() != el->nodeType) {
@@ -44,7 +93,8 @@ bool ArrayInitializer::typeChecking() {
 			break;
 		}
 	}
-	return checkStatus;
+
+	return true;
 }
 
 ArrayInitializer::~ArrayInitializer(){

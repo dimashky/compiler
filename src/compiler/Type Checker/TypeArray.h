@@ -6,12 +6,15 @@ public:
 	TypeArray(TypeExpression*, int);
 	string typeExpression();
 
-	int getSize();
+	int getDimension();
 	TypeExpression* getOf();
+
+	TypeExpression* operation(Operator op, TypeExpression* secondOperand);
+	int equivelantTo(TypeExpression* secondOperand, bool cast = false);
 
 private:
 	// number of elements
-	int size;
+	int dimension;
 	// Type Expression of its elements
 	TypeExpression* elementType;
 };

@@ -23,7 +23,8 @@ struct error
 	}
 
 	bool operator == (const error& e) {
-		return (line_no == e.line_no && col_no == e.col_no && msg == e.msg);
+		// return (line_no == e.line_no && col_no == e.col_no && msg == e.msg);
+		return (msg == e.msg);
 	}
 
 	bool operator < (const error& e) {

@@ -8,58 +8,26 @@ class For :public Statement
 {
 
 private:
-
 	queue<Node*> initializers, iterators;
-	
 	Node* condition, *statement;
-
 public:
-
 	For(Node *parent);
 	
-	int print(int);
+	string getType();
 
 	void setCondition(Node* condition);
 
 	void setInitializers(queue<Node*>initializers);
 
-	void addInitializer(Node* initializer);
-
 	void setStatement(Node* statement);
 
 	void setIterators(queue<Node*>iterators);
 
-	string getType();
-	bool typeChecking() { 
-	
-		auto cpy = this->initializers;
-		
-		while (!cpy.empty()) {
-			cpy.front()->typeChecking();
-			cpy.pop();
-		}
+	void addInitializer(Node* initializer);
 
-		cpy = iterators;
+	int print(int);
 
-		while (!cpy.empty()) {
-			cpy.front()->typeChecking();
-			cpy.pop();
-		}
-
-		condition->typeChecking();
-		
-		if (condition->nodeType->getTypeId() != TYPE_BOOL) {
-			new TypeError("While condition must be boolean type");
-		}
-
-		statement->typeChecking();
-
-		return true;
-	}
-
-	void generateCode() {
-
-	}
+	bool typeChecking();
 
 	~For();
 };

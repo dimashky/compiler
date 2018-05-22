@@ -47,6 +47,10 @@ public:
 		return this->is_const;
 	}
 
+	int getDimension() {
+		return this->dimension;
+	}
+
 	~LocalVariable();
 
 };

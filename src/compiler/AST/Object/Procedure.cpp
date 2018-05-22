@@ -1,11 +1,19 @@
 #include"Procedure.h"
 #include "../../Type Checker/all.h"
 #include "../Statement/Call.h"
+#include "../../Error Handler/error_handler.h"
+
+extern errorHandler error_handler;
 Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol, parent)
 {
 	this->block = nullptr;
 	this->hasReturnStatement = false;
 	this->baseCall = baseCall;
+	if (baseCall)
+		baseCall->setParent(this);
+	/*
+	 *	TODO: init nodeType with symbol table.
+	 */
 }
 
 void Procedure::add(Object* object)
@@ -13,6 +21,16 @@ void Procedure::add(Object* object)
 	locals.push_back(object);
 	return;
 }
+
+bool Procedure::getHasReturn() {
+	return hasReturnStatement;
+}
+
+void Procedure::setHasReturn(bool hasReturnStatement) {
+	this->hasReturnStatement = hasReturnStatement;
+	return;
+}
+
 
 int Procedure::print(int nodeCnt)
 {
@@ -49,14 +67,30 @@ string Procedure::getType()
 	return "procedure";
 }
 
-
 bool Procedure::typeChecking() {
-	
+	if (symbol != nullptr && symbol->getType() == "class" && symbol->getName() == "object")
+		return true;
+	//start handeling warning for override keyword
+
+	if (symbol != nullptr && this->symbol->getType() == "method" && !((Method*)this->symbol)->get_is_override()) {
+		if (!((Method*)symbol)->get_is_override()) {
+			if (symbolTable::checkMethodOverriding(symbol, ((Procedure*)this->parent)->symbol)) {
+				error_handler.add(error(symbol->getLineNo(), symbol->getColNo(), "Warning override method without using override keyword"));
+			}
+		}
+		
+	}
+	//end handeling warning for override keyword
+
+
 	if (symbol && symbol->getType() == "method") {
 		Identifier::isStaticMethod = ((Method*)symbol)->get_is_static();
 	}
 
+
+	//start handeling call parent constructer
 	if (baseCall) {
+		((Call*)baseCall)->updateParamsSymboltableRef(this->symboltable);
 		baseCall->typeChecking();
 		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
@@ -70,6 +104,10 @@ bool Procedure::typeChecking() {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
 		}
 	}
+	//end handeling call parent constructer
+
+
+
 	bool check = true;
 	for (int i = 0; i < locals.size(); i++) {
 		check |= locals[i]->typeChecking();
@@ -78,7 +116,7 @@ bool Procedure::typeChecking() {
 		check |= block->typeChecking();
 	}
 	Identifier::isStaticMethod = false;
-	return check;
+	return check || true;
 }
 
 void Procedure::generateCode() {

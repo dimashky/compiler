@@ -32,7 +32,7 @@ public:
 	string getType();
 	bool get_is_public();	
 	node* get_type_graph_position();
-
+	string getFullPath();
 	void delete_implemented_interface(symbolTable* ref);//please delete implemented interface
 };
 

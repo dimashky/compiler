@@ -5,6 +5,9 @@
 #include"Field.h"
 #include"Method.h"
 #include "../Error Handler/error_handler.h"
+#include "../Symbol Table/Namespace.h"
+#include "../AST/Object/Procedure.h"
+
 extern errorHandler error_handler;
 
 int symbolTable::is_main = 0;
@@ -14,10 +17,11 @@ vector<pair<node*, pair<pair<int, int>, pair<int, int> > > > symbolTable::using_
 class_tree* symbolTable::type_defination_tree = new class_tree();
 stack<symbolTable*> symbolTable::openBrackets = stack<symbolTable*>();
 queue<pair<Symbol*, symbolTable*>> symbolTable::later_defination_override = queue<pair<Symbol*, symbolTable*>>();
-queue<pair<Symbol*, symbolTable*>> symbolTable::extended_abstract_classes = queue<pair<Symbol*, symbolTable*>>();
+queue<pair<symbolTable*, symbolTable*>> symbolTable::extended_abstract_classes = queue<pair<symbolTable*, symbolTable*>>();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_defination_var = queue< pair<queue<string>, pair<node*, Symbol* > > >();
 vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
+queue<symbolTable*>  symbolTable::class_inhertance_abstract = queue<symbolTable* > ();
 Symbol* symbolTable::mainRef = nullptr;
 
 symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
@@ -127,7 +131,7 @@ void symbolTable::addNamespace(Symbol* symbol)
 	else
 	{
 		add_scope(symbol);
-		type_defination_tree->add_node(symbol->getName(), openBrackets.top());
+		((Namespace*)symbol)->setTypePositionGraph(type_defination_tree->add_node(symbol->getName(), openBrackets.top()));
 	}
 	return;
 }
@@ -280,7 +284,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 
 	// is correct abstract method
 	if (!is_body && ((Method*)symbol)->get_is_abstract()  && !((Method*)symbol)->get_is_private() && parent->owner != NULL && parent->owner->getType() == "class" && ((Class*)parent->owner)->get_is_abstract())
-		((Method*)symbol)->set_must_ovrride(true);
+		((Method*)symbol)->set_exist_ovrride(true);
     // name method same name class  
 	if (((Method*)symbol)->get_return_type() == "" && parent->owner != NULL && parent->owner->getType() == "class" && parent->owner->getName() != symbol->getName())
 		error_handler.add(error(symbol->getLineNo(), -1, "error, Method must have a return type or member names must be the same a class name."));
@@ -340,8 +344,10 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->owner->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->parent->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
 					correctOverride = false;
 				}
-				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_is_must_ovrride())
-					((Method*)itex->first)->set_must_ovrride(false); 
+				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_exist_ovrride())
+				{
+					((Method*)symbol)->set_must_ovrride(false);
+				}
 					break;
 			}
 			else
@@ -544,8 +550,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 	}
 
 	int cnt = 0;
-	if (bases.size() == 0 && symbol->getName() != "Object")
-		((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+	if (bases.size() == 0 && symbol->getName() != "object")
+		((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 
 	while (!bases.empty())
 	{
@@ -581,7 +587,10 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 			else if (find_res.second)
 				error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared or inaccessible type '" + bases.front() + "'."));
 
-			else later_defination.push(make_pair(list, make_pair(current, symbol)));
+			else {
+				later_defination.push(make_pair(list, make_pair(current, symbol)));
+				class_inhertance_abstract.push(openBrackets.top());
+			}
 		}
 
 		else {
@@ -592,7 +601,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				
 					if (((Class*)find_base->owner)->is_final())
 					{
-						((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+						((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 
 						error_handler.add(error(symbol->getLineNo(), -1, "error, cannot derive from sealed type '" + find_base->owner->getName() + "'."));
 					}
@@ -607,7 +616,7 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 
 							// class is extend from abstruct class
 							if (!(((Class*)symbol)->get_is_abstract()) && (((Class*)find_base->owner)->get_is_abstract()))
-								extended_abstract_classes.push(make_pair(symbol, find_base));
+								extended_abstract_classes.push(make_pair(openBrackets.top(), find_base));
 							
 						}
 						 
@@ -615,25 +624,25 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				}
 				else if (find_base->owner->getType() == "namespace")
 				{
-					((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + find_base->owner->getName() + "' is a namespace."));
 				}
 				else if (find_base->owner->getType() == "interface")
 				{
-					((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					((Class*)symbol)->add_base(bases.front(), find_base);
 				}
 
 				else
 				{
-					((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					error_handler.add(error(symbol->getLineNo(), -1, "error, inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
 				}
 			}
 
 			else if (find_res.second)
 			{
-				((Class*)symbol)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+				((Class*)symbol)->set_extended_class(make_pair("object", symbolTable::object_ref));
 				error_handler.add(error(symbol->getLineNo(), -1, "error,  inhertince from non declared , inaccessible type or it's form circular base class depedency '" + bases.front() + "'."));
 			}
 			else
@@ -641,6 +650,8 @@ void symbolTable::addClass(Symbol* symbol, queue<string>&bases, queue<string>&mo
 				((Class*)symbol)->set_extended_class(make_pair(symbol->getName(), nullptr));
 
 				later_defination.push(make_pair(list, make_pair(current, symbol)));
+				class_inhertance_abstract.push(openBrackets.top());
+
 			}
 		}
 
@@ -793,8 +804,11 @@ void symbolTable::addInterface(Symbol* symbol, queue<string>bases, queue<string>
 			error_handler.add(error(symbol->getLineNo(), -1, "error,  Implemented from non declared or inaccessible interface '" + bases.front() + "'."));
 
 		else
+		{
 			later_defination.push(make_pair(list, make_pair(current, symbol)));
+			class_inhertance_abstract.push(openBrackets.top());
 
+		}
 		bases.pop();
 	}
 
@@ -819,6 +833,11 @@ bool symbolTable::closeScope()
 				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
 				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
 				defaultConstructer->setPublic();
+			
+				Procedure* ns = new Procedure(defaultConstructer, Node::current);
+				ns->setSymbolTable(symbolTable::openBrackets.top());
+				((Procedure*)Node::current)->add(ns);
+
 				openBrackets.pop();
 			}
 			type_defination_tree->end_node();
@@ -953,6 +972,8 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 			if (currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() == "class")
 				break;
 
+
+
 			currentScope = currentScope->get_parent();
 		}
 
@@ -986,14 +1007,20 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 
 	if (lastSymbol) {
 
-		currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
+		if (lastSymbol->getType() == "class") {
+			currentScope = (symbolTable*)((Class*)lastSymbol)->get_type_graph_position()->stPTR;
+		}
+		else if (lastSymbol->getType() == "namespace") {
+			currentScope = (symbolTable*)((Namespace*)lastSymbol)->getTypePositionGraph()->stPTR;
+		}
 		
 		while (identifierScope != nullptr) {
 
-			identifierScope = identifierScope->get_parent();
-
 			if (identifierScope->get_owner() != nullptr && identifierScope->get_owner()->getType() == "class")
 				break;
+
+			identifierScope = identifierScope->get_parent();
+
 		}
 
 
@@ -1007,7 +1034,7 @@ Symbol* symbolTable::findIdentifier(Symbol* symbol, symbolTable* identifierScope
 		currentScope = identifierScope;
 
 
-	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class") {
+	if (currentScope->get_owner() == nullptr || currentScope->get_owner() != nullptr && currentScope->get_owner()->getType() != "class" && currentScope->get_owner()->getType() != "namespace") {
 		
 
 		//check if this id defined in same scope !!
@@ -1171,6 +1198,25 @@ bool symbolTable::isParent(Symbol* child, Symbol* parent) {
 		if (child == parent) {
 			return true;
 		}
+	}
+	return false;
+}
+
+
+bool symbolTable::checkMethodOverriding(Symbol* method, Symbol* currentClass) {
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+	symbolTable* baseClass = ((Class*)currentClass)->get_extended_class().second;
+	if (((Method*)method)->isNew()) {
+		return false;
+	}
+	while (baseClass != nullptr) {
+		it = baseClass->symbolMap.find(method);
+		if (it != baseClass->symbolMap.end()) {
+			if (it->first->getType() == "method" && ((Method*)it->first)->get_is_public() && (((Method*)it->first)->get_is_override() || ((Method*)it->first)->get_is_virtual() || ((Method*)it->first)->get_is_abstract())) {
+				return true;
+			}
+		}
+		baseClass = ((Class*)baseClass->get_owner())->get_extended_class().second;
 	}
 	return false;
 }

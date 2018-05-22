@@ -9,9 +9,9 @@ public:
 
 	Expression(Node* parent);
 
-	virtual int print(int) = 0;
-
 	virtual string getType();
+
+	virtual int print(int) = 0;
 
 	virtual bool typeChecking() = 0;
 	virtual void generateCode() {};

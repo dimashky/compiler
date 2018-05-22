@@ -8,20 +8,22 @@
 #define TYPE_BOOL 2
 #define TYPE_INTEGER 3
 #define TYPE_FLOAT 4
-#define TYPE_CHAR 5
-#define TYPE_STRING 6
+#define TYPE_DOUBLE 5
+#define TYPE_CHAR 6
+#define TYPE_STRING 7
 
 #include "TypeBoolean.h"
 #include "TypeFloat.h"
+#include "TypeDouble.h"
 #include "TypeInteger.h"
 #include "TypeVoid.h"
 #include "TypeString.h"
 #include "TypeError.h"
 
 // complex type
-#define TYPE_ARRAY 7
-#define TYPE_FUNCTION 8
-#define TYPE_CLASS 9
+#define TYPE_ARRAY 8
+#define TYPE_FUNCTION 9
+#define TYPE_CLASS 10
 
 #include "TypeArray.h"
 #include "TypeFunction.h"

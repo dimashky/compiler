@@ -8,24 +8,26 @@ private:
 
 	string type;
 
+	int lineNo;
+
 	void* value;
 
 public:
 
-	AutoConst(string type , void* value, Node* parent);
+	AutoConst(string type , void* value, Node* parent, int lineNo);
 	
-	int print(int);
+	void setType(string type);
+
+	void setValue(void* value);
 
 	string getType();
 	
 	void* getValue();
 
-	void setType(string type);
-	
-	void setValue(void* value);
+	int getLineNo();
 
-	bool typeChecking() { return true; }
 	void generateCode();
+	int print(int);
 
 	~AutoConst();
 };

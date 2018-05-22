@@ -1,24 +1,24 @@
 #include "all.h"
 
-TypeFloat* TypeFloat::instance = nullptr;
+TypeDouble* TypeDouble::instance = nullptr;
 
-TypeFloat::TypeFloat() {
-	this->typeId = TYPE_FLOAT;
+TypeDouble::TypeDouble() {
+	this->typeId = TYPE_DOUBLE;
 	this->bytes = 4;
 }
 
-TypeFloat* TypeFloat::getInstance() {
+TypeDouble* TypeDouble::getInstance() {
 	if (instance == nullptr)
-		instance = new TypeFloat();
+		instance = new TypeDouble();
 	return instance;
 }
 
-std::string TypeFloat::typeExpression() {
-	return "FLOAT";
+std::string TypeDouble::typeExpression() {
+	return "DOUBLE";
 }
 
-TypeExpression* TypeFloat::operation(Operator op, TypeExpression* secondOperand) {
-	int equivelant = TYPE_FLOAT;
+TypeExpression* TypeDouble::operation(Operator op, TypeExpression* secondOperand) {
+	int equivelant = TYPE_DOUBLE;
 
 	if (secondOperand != nullptr) {
 		equivelant = this->equivelantTo(secondOperand);
@@ -31,42 +31,42 @@ TypeExpression* TypeFloat::operation(Operator op, TypeExpression* secondOperand)
 		switch (op)
 		{
 		case Plus:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case Minus:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case tilde:
 			break;
 		case post_plusplus:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case pre_plusplus:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case pre_minusminus:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case post_minusminus:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case star:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case slash:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case percent:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case power:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case ltlt:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case gtgt:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case Greater:
 			return TypeBoolean::getInstance();
@@ -87,31 +87,31 @@ TypeExpression* TypeFloat::operation(Operator op, TypeExpression* secondOperand)
 			return TypeBoolean::getInstance();
 			break;
 		case Equal:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case pluseq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case minuseq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case stareq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case diveq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case modeq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case xoreq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case andeq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		case oreq:
-			return TypeFloat::getInstance();
+			return TypeDouble::getInstance();
 			break;
 		default:
 			return new TypeError(this->typeExpression() + " has no predefined " + OperatorName[op] + " operation");
@@ -121,8 +121,8 @@ TypeExpression* TypeFloat::operation(Operator op, TypeExpression* secondOperand)
 }
 
 
-int TypeFloat::equivelantTo(TypeExpression* secondOperand, bool cast) {
-	if (secondOperand->getTypeId() == TYPE_INTEGER || secondOperand->getTypeId() == TYPE_FLOAT)
-		return TYPE_FLOAT;
+int TypeDouble::equivelantTo(TypeExpression* secondOperand, bool cast) {
+	if (secondOperand->getTypeId() == TYPE_INTEGER || secondOperand->getTypeId() == TYPE_DOUBLE || secondOperand->getTypeId() == TYPE_FLOAT)
+		return TYPE_DOUBLE;
 	return TYPE_ERROR;
 }

@@ -12,25 +12,15 @@ public:
 
 	DoWhile(Node *condition, Node *statement, Node *parent);
 	
-	int print(int);
-
 	string getType();
 
 	void setStatement(Node* statement);
 
 	void setCondition(Node* condition);
-	bool typeChecking() { 
-		
-		condition->typeChecking();
 
-		statement->typeChecking();
-		
-		return true;
-	}
+	int print(int);
 
-	void generateCode() {
-
-	}
+	bool typeChecking();
 
 	~DoWhile();
 };

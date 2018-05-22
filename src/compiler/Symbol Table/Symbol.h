@@ -15,6 +15,9 @@ public:
 	Symbol(string name, int line_no, int col_no);
 
 	virtual bool compare(Symbol* comp);
+	virtual string getFullPath() {
+		return "ERRRRRRRRRRRRRRR BECAUSE TRYING TO GET FULL PATH FROM NON TYPE LIKE METHOD ETC>>>>>>";
+	}
 
 	string getName();
 	int getLineNo();

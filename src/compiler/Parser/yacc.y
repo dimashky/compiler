@@ -151,15 +151,15 @@
 /***** C.1.8 Literals *****/
 literal
   : boolean_literal		{l.a("boolean_literal",1);	  $<r.node>$ = $<r.node>1;}
-  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.node>$ = new AutoConst("INT",new int($<r.i>1),Node::current);}
-  | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.node>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current);}
-  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current);}
-  | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.node>$ = new AutoConst("STRING",new string($<r.str>1),Node::current);}
-  | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.node>$ = new AutoConst("NULL",nullptr,Node::current);}
+  | INTEGER_LITERAL		{l.a("INTEGER_LITERAL",0);	  $<r.node>$ = new AutoConst("INT",new int($<r.i>1),Node::current,$<r.line_no>1);}
+  | REAL_LITERAL		{l.a("REAL_LITERAL",0);		  $<r.node>$ = new AutoConst("FLOAT",new float($<r.f>1),Node::current,$<r.line_no>1);}
+  | CHARACTER_LITERAL	{l.a("CHARACTER_LITERAL",0);  $<r.node>$ = new AutoConst("CHAR",new char($<r.c>1),Node::current,$<r.line_no>1);}
+  | STRING_LITERAL		{l.a("STRING_LITERAL",0);     $<r.node>$ = new AutoConst("STRING",new string($<r.str>1),Node::current,$<r.line_no>1);}
+  | NULL_LITERAL		{l.a("NULL_LITERAL",0);       $<r.node>$ = new AutoConst("NULL",nullptr,Node::current,$<r.line_no>1);}
   ;
 boolean_literal
-  : TRUE				{l.a("TRUE",0);$<r.node>$ = new AutoConst("BOOL",new bool(true),Node::current);}
-  | FALSE				{l.a("FALSE",0);$<r.node>$ = new AutoConst("BOOL",new bool(false),Node::current);}
+  : TRUE				{l.a("TRUE",0);$<r.node>$ = new AutoConst("BOOL",new bool(true),Node::current,$<r.line_no>1);}
+  | FALSE				{l.a("FALSE",0);$<r.node>$ = new AutoConst("BOOL",new bool(false),Node::current,$<r.line_no>1);}
   ;
 /********** C.2 Syntactic grammar **********/
 
@@ -320,9 +320,9 @@ member_access
   : primary_expression DOT IDENTIFIER	
   {
 		l.a("member_access",1);
-			
-		$<r.node>$ = new Identifier($<r.node>1, new Symbol(string($<r.str>3), $<r.line_no>3, -13));
-			
+
+		$<r.node>$ = new Identifier($<r.node>1, new Symbol(string($<r.str>3), $<r.line_no>3, -13));			
+  
   }
   | primitive_type DOT IDENTIFIER		{l.a("member_access",1);}
   | class_type DOT IDENTIFIER			{l.a("member_access",1);}
@@ -340,8 +340,7 @@ invocation_expression
   | qualified_identifier LEFT_BRACKET_CIRCLE argument_list_opt RIGHT_BRACKET_CIRCLE							 
   {
 		l.a("invocation_expression",2);
-
-		$<r.node>$ = new Call(new Identifier(nullptr, new Symbol(*$<r.base>1, $<r.line_no>1, -13)), Node::current);
+		$<r.node>$ = new Call((Identifier*)$<r.node>1, Node::current);
 		
 		((Call*)$<r.node>$)->setParams(*$<r.args>3);
   }
@@ -374,7 +373,7 @@ element_access
   {
 		l.a("element_access",2);
 		
-		$<r.node>$ = new Identifier(nullptr,new Symbol(*$<r.base>1,$<r.line_no>2,-13),true);
+		$<r.node>$ = $<r.node>1;
 		
 		((Identifier*)$<r.node>$)->setArrayDimensions(*$<r.nodes>3);
   }
@@ -419,7 +418,7 @@ base_access
   : BASE DOT IDENTIFIER									
   {
 		l.a("base_access",0);
-		$<r.node>$ = new Identifier(nullptr, new Symbol("base." + string($<r.str>3),$<r.line_no>1,-13));
+		$<r.node>$ = new Identifier(new Identifier(nullptr, new Symbol("base",$<r.line_no>1,-13)), new Symbol(string($<r.str>3),$<r.line_no>1,-13));
   }
   | BASE LEFT_BRACKET expression_list RIGHT_BRACKET		{l.a("base_access",1);}//expression_list return expression , expression ... etc
   ;
@@ -442,7 +441,12 @@ object_creation_expression
   }
   ;
 array_creation_expression
-  : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		{l.a("array_creation_expression",4);}
+  : NEW non_array_type LEFT_BRACKET expression_list RIGHT_BRACKET rank_specifiers_opt array_initializer_opt		
+  {
+		l.a("array_creation_expression",4);
+		$<r.node>$ = new ArrayInitializer(new Symbol(*$<r.base>2,$<r.line_no>1,-13),$<r.known_type>2);
+		((ArrayInitializer*)$<r.node>$)->setDimensions(*$<r.nodes>4);		
+  }
   | NEW array_type array_initializer																			{l.a("array_creation_expression",2);}
   ;
 array_initializer_opt
@@ -470,7 +474,7 @@ sizeof_expression
   ;
 postfix_expression
   : primary_expression			{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
-  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = new Identifier(nullptr, new Symbol(*$<r.base>1,$<r.line_no>1,-13));}//this return a.b.c in "base string"
+  | qualified_identifier		{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}//this return a.b.c in "base string"
   | post_increment_expression  	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | post_decrement_expression	{l.a("postfix_expression",1);$<r.node>$ = $<r.node>1;}
   | pointer_member_access		{l.a("postfix_expression",1);}
@@ -503,25 +507,24 @@ unary_expression
  */
 
 cast_expression
-  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								{l.a("cast_expression",2);}
-  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",2);}
-  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	
+  : LEFT_BRACKET_CIRCLE expression RIGHT_BRACKET_CIRCLE unary_expression_not_plusminus								
   {
-		l.a("cast_expression",4);
-  
-  }	
+		l.a("cast_expression",2);
+		$<r.node>$ = new BinaryExpression($<r.node>4,As,$<r.node>2,Node::current);
+  }
+  | LEFT_BRACKET_CIRCLE multiplicative_expression STAR RIGHT_BRACKET_CIRCLE unary_expression						{l.a("cast_expression",2);}
+  | LEFT_BRACKET_CIRCLE qualified_identifier rank_specifier type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression	{l.a("cast_expression",4);}	
   | LEFT_BRACKET_CIRCLE primitive_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression							
   {
 		l.a("cast_expression",3);
+		$<r.node>$ = new BinaryExpression($<r.node>5,As,new Identifier(nullptr,new Symbol(*$<r.base>2,0,0)),Node::current,true);
   }
   | LEFT_BRACKET_CIRCLE class_type type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression								
   {
 		l.a("cast_expression",3);
+		$<r.node>$ = new BinaryExpression($<r.node>5,As,new Identifier(nullptr,new Symbol(*$<r.base>2,0,0)),Node::current,true);
   }
-  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									
-  {
-		l.a("cast_expression",2);
-  }
+  | LEFT_BRACKET_CIRCLE VOID type_quals_opt RIGHT_BRACKET_CIRCLE unary_expression									{l.a("cast_expression",2);}
   ;
   	
 type_quals_opt
@@ -625,7 +628,8 @@ relational_expression
   | relational_expression AS type										
   {
 		l.a("relational_expression",2);
-		$<r.node>$ = new BinaryExpression($<r.node>1,As,$<r.node>3,Node::current);		
+
+		$<r.node>$ = new BinaryExpression($<r.node>1,As,new Identifier(nullptr,new Symbol(*$<r.base>3,$<r.line_no>2,-13),Node::current),Node::current);		
   }
   ;
 
@@ -851,7 +855,12 @@ variable_initializer
 	
 		$<r.node>$ = $<r.node>1;
   }
-  | array_initializer		                                       {l.a("variable_initializer",1);}// needed!!
+  | array_initializer		                                       
+  {
+		l.a("variable_initializer",1);
+  
+  		$<r.node>$ = $<r.node>1;
+  }
   | stackalloc_initializer	                                       {l.a("variable_initializer",1);}
   ;
 
@@ -1196,17 +1205,29 @@ qualified_identifier
 		  {		l.a("qualified_identifier",0);
 				$<r.base>$ = new string($<r.str>1);
 				$<r.line_no>$ = $<r.line_no>1;
+				$<r.node>$ = new Identifier(nullptr,new Symbol(string($<r.str>1),$<r.line_no>1,-13));
 		  }
   | qualifier IDENTIFIER	
 		{	l.a("qualified_identifier",1);
 			$<r.base>$ = new string(string(*$<r.base>1) + string($<r.str>2));
 			$<r.line_no>$ = $<r.line_no>2;
+			$<r.node>$ = new Identifier($<r.node>1,new Symbol(string($<r.str>2),$<r.line_no>2,-13));
 		}
   ;
 
 qualifier
-  : IDENTIFIER DOT				{l.a("qualifier",0);$<r.base>$ = new string(string($<r.str>1) + ".");}
-  | qualifier IDENTIFIER DOT	{l.a("qualifier",1);$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");}
+  : IDENTIFIER DOT				
+  {
+		l.a("qualifier",0);
+		$<r.base>$ = new string(string($<r.str>1) + ".");
+		$<r.node>$ = new Identifier(nullptr,new Symbol(string($<r.str>1),$<r.line_no>1,-13));  
+  }
+  | qualifier IDENTIFIER DOT	
+  {
+		l.a("qualifier",1);
+		$<r.base>$ = new string(*$<r.base>1 + string($<r.str>2) + ".");
+		$<r.node>$ = new Identifier($<r.node>1,new Symbol(string($<r.str>2),$<r.line_no>2,-13));   
+  }
   ;
 
 namespace_body

@@ -54,7 +54,7 @@ TypeExpression* TypeBoolean::operation(Operator op, TypeExpression* secondOperan
 	}
 }
 
-int TypeBoolean::equivelantTo(TypeExpression* secondOperand) {
+int TypeBoolean::equivelantTo(TypeExpression* secondOperand, bool cast) {
 	if (this == secondOperand || secondOperand->getTypeId() == TYPE_INTEGER || secondOperand->getTypeId() == TYPE_BOOL)
 		return TYPE_BOOL;
 	return TYPE_ERROR;

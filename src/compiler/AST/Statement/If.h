@@ -17,21 +17,8 @@ public:
 	void setIfStatement(Node* statement);
 
 	void setElseStatement(Node* statement);
-	bool typeChecking() 
-	{ 
-		this->ifStatement->typeChecking();
-		this->codnition->typeChecking();
-		if (this->codnition->nodeType->getTypeId() != TYPE_BOOL) {
-			new TypeError("IF condition must be boolean type");
-		}
-		if (elseStatement) {
-			this->elseStatement->typeChecking();
-		}
-
-		return true;
-	}
-
-	void generateCode();
+	
+	bool typeChecking();
 
 	~If();
 

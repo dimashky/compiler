@@ -14,7 +14,7 @@ private:
 	vector<pair<string, symbolTable*> > baseClassImpInterfaces;
 
 	Attribute* attribute;
-	bool isFinal,is_public,is_private,is_protected,owner_is_namespace, is_abstract,have_constructor,is_static;
+	bool isFinal,is_public,is_private,is_protected,owner_is_namespace, is_abstract,have_constructor,is_static,is_internal;
 	node* type_graph_position;
 	
 
@@ -39,6 +39,9 @@ public:
 	bool get_have_constructor();
 	bool get_is_static() {
 		return is_static;
+	}
+	bool get_is_internal() {
+		return is_internal;
 	}
 	string getFullPath();
 	node* get_type_graph_position();

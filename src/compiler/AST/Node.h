@@ -43,6 +43,14 @@ public:
 		return this->parent;
 	}
 
+	void setParent(Node* parent) {
+		this->parent = parent;
+	}
+
+	void* getSymboltable() {
+		return this->symboltable;
+	}
+
 	virtual void generateCode() {};
 
 	~Node();

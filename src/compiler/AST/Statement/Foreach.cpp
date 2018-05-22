@@ -6,6 +6,18 @@ Foreach::Foreach(Symbol *symbolLeft, Node *symbolRight, Node *parent) :Statement
 	this->symbolRight = symbolRight;
 }
 
+bool Foreach::typeChecking() {
+
+	// TODO : after handeling array in yacc handle left symbol with right one !!
+	symbolLeft->typeChecking();
+
+	symbolRight->typeChecking();
+
+	statement->typeChecking();
+
+	return true;
+}
+
 int Foreach::print(int nodeCnt){
 	int currentId = nodeCnt;
 

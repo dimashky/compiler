@@ -37,11 +37,20 @@ bool Variable::typeChecking() {
 	bool field = symbol->getType() == "field";
 
 	if (field) {
+		TypeExpression* elementType;
+
 		if (((Field*)symbol)->isComplex()) {
-			this->nodeType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), ((Class*)((Field*)symbol))->getTypeRef());
+			elementType = TypesTable::findOrCreate(((Class*)((Field*)symbol)->getTypeRef())->getFullPath(), ((Class*)((Field*)symbol))->getTypeRef());
 		}
 		else {
-			this->nodeType = TypesTable::getType(((Field*)symbol)->get_type_name()).first;
+			elementType = TypesTable::getType(((Field*)symbol)->get_type_name()).first;
+		}
+
+		if (((Field*)symbol)->getDimension() > 0) {
+			this->nodeType = TypesTable::findOrCreateArray(elementType, ((Field*)symbol)->getDimension());
+		}
+		else {
+			this->nodeType = elementType;
 		}
 
 		if (((Field*)symbol)->getIsConst() && !this->equal) {
@@ -49,12 +58,19 @@ bool Variable::typeChecking() {
 		}
 	}
 	else {
+		TypeExpression* elementType;
 		if (((LocalVariable*)symbol)->isComplex()) {
-
-			this->nodeType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), ((Class*)((LocalVariable*)symbol))->getTypeRef());
+			elementType = TypesTable::findOrCreate(((Class*)((LocalVariable*)symbol)->getTypeRef())->getFullPath(), ((Class*)((LocalVariable*)symbol))->getTypeRef());
 		}
 		else {
-			this->nodeType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;
+			elementType = TypesTable::getType(((LocalVariable*)symbol)->get_type_name()).first;
+		}
+		
+		if (((LocalVariable*)symbol)->getDimension() > 0) {
+			this->nodeType = TypesTable::findOrCreateArray(elementType, ((LocalVariable*)symbol)->getDimension());
+		}
+		else {
+			this->nodeType = elementType;
 		}
 
 		if (((LocalVariable*)symbol)->getIsConst() && !this->equal) {
@@ -63,13 +79,12 @@ bool Variable::typeChecking() {
 	}
 
 	if (equal) {
-		
 		equal->typeChecking();
 		
 		this->nodeType = this->nodeType->operation(Operator::Equal, equal->nodeType);
 
 		if (this->nodeType->getTypeId() == TYPE_ERROR) {
-			return false;
+			return true;
 		}
 		if (field) {
 			((Field*)symbol)->setInitializedStatus();

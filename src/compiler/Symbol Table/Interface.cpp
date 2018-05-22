@@ -17,6 +17,9 @@ Interface::~Interface()
 
 }
 
+string Interface::getFullPath() {
+	return ((symbolTable*)this->type_graph_position->stPTR)->getFullPath();
+}
 
 void Interface::add_base(string name, symbolTable* ref)
 {

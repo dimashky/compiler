@@ -74,7 +74,7 @@ int main()
 	TypesTable::init();
 
 	//if (error_handler.errorsNum() == 0)
-		AST->typeChecking();
+	AST->typeChecking();
 	// errors
 	error_handler.print();
 	

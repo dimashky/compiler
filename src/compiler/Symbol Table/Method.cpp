@@ -27,6 +27,9 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 	this->types_ids_parameter = types_ids_parameter; 
 	this->return_type_ref = nullptr;
 	this->is_constructer = return_type == "";
+
+	this->exist_ovrride = false; 
+	this->must_ovrride = true; 
 	this->stackFrameSize = 4;
 }
 
@@ -113,6 +116,8 @@ void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, in
 		newLocalVariable->offset = this->stackFrameSize;
 		this->stackFrameSize += 4;
 
+		newLocalVariable->setInitializedStatus();
+		
 		Variable* field = new Variable(newLocalVariable, (Expression*)var_init.front(), Node::current);
 
 		((Procedure*)Node::current)->add(field);

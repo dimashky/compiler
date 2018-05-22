@@ -216,6 +216,9 @@
     <ClCompile Include="AST\Statement\Jump.cpp">
       <Filter>Source Files\AST\Statement</Filter>
     </ClCompile>
+    <ClCompile Include="Type Checker\TypeDouble.cpp">
+      <Filter>Source Files\Type Checker\simple</Filter>
+    </ClCompile>
     <ClCompile Include="Code Generator\AsmGenerator.cpp">
       <Filter>Source Files\Code Generator</Filter>
     </ClCompile>
@@ -382,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="AST\Statement\Jump.h">
       <Filter>Source Files\AST\Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="Type Checker\TypeDouble.h">
+      <Filter>Source Files\Type Checker\simple</Filter>
     </ClInclude>
     <ClInclude Include="Code Generator\AsmGenerator.h">
       <Filter>Source Files\Code Generator</Filter>

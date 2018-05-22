@@ -47,11 +47,13 @@ void Node::closeFiles() {
 void Node::Up() {
 
 	if (Node::current->getType() == "procedure") {
-		if (((Procedure*)Node::current)->getSymbol()->getType() == "method") {
-			if (!((Procedure*)Node::current)->getHasReturn() && !((Method*)((Procedure*)Node::current)->getSymbol())->get_is_constructer()) {
+		Symbol* symbol = ((Procedure*)Node::current)->getSymbol();
+		if (symbol->getType() == "method") {
+			if (!((Procedure*)Node::current)->getHasReturn() && !((Method*)symbol)->get_is_constructer()) {
 				//check if this method is not has void return type
-				if (((Method*)((Procedure*)Node::current)->getSymbol())->get_return_type() != "VOID" || ((Method*)((Procedure*)Node::current)->getSymbol())->getTypeRef() != nullptr) {
-					error_handler.add(error(((Procedure*)Node::current)->getSymbol()->getLineNo(), ((Procedure*)Node::current)->getSymbol()->getColNo(), "there is no return statement in function " + ((Procedure*)Node::current)->getSymbol()->getName()));
+				if (((Method*)symbol)->get_return_type() != "VOID" || ((Method*)symbol)->getTypeRef() != nullptr) {
+					if (!((Method*)symbol)->get_is_abstract())
+						error_handler.add(error(symbol->getLineNo(), symbol->getColNo(), "there is no return statement in function " + symbol->getName()));
 				}
 			}
 		}

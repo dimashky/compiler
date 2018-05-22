@@ -27,14 +27,14 @@ void symbolParser::print(queue<string> &s1, char* s2)
 
 void symbolParser::endScope()
 {
-	Node::Up();
 	symboltable->closeScope();
+	Node::Up();
 }
 
 void symbolParser::add_object()
 {
 
-	Symbol* symbol = new Class("Object", 0, 0);
+	Symbol* symbol = new Class("object", 0, 0);
 
 	symboltable->addClass(symbol, queue<string>(), queue<string>());
 	
@@ -194,6 +194,7 @@ Symbol* symbolParser::addMethod(queue<string>modifiers, string typeIdentifier, s
 
 	((Method*)newMethod)->returnAddressOffset = ((Method*)newMethod)->stackFrameSize;
 	((Method*)newMethod)->stackFrameSize += 8;
+	ns->setSymbolTable(symbolTable::openBrackets.top());
 
 	return newMethod;
 }
@@ -293,7 +294,7 @@ void symbolParser::check_later_defination()
 					if (!symbolTable::later_defination.front().first.empty())
 						parent_name += '.';
 				}
-				((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+				((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 
 				error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, "'" + parent_name + "' is ambiguous reference."));
 			}
@@ -319,7 +320,7 @@ void symbolParser::check_later_defination()
 								if (!symbolTable::later_defination.front().first.empty())
 									parent_name += '.';
 							}
-							((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+							((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 							string m = "symbol parser error, cannot derive from sealed type '" + parent_name + "'.";
 							error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 						}
@@ -334,8 +335,11 @@ void symbolParser::check_later_defination()
 								symboltable->type_defination_tree->add_base(((Class*)search->get_owner())->getName(), (((Class*)search->get_owner()))->get_type_graph_position(), ((Class*)symbolTable::later_defination.front().second.second)->get_type_graph_position());
 								symboltable->parents.push_back((((Class*)search->get_owner()))->get_type_graph_position());
 								// class is extend from abstruct class
-								if (!(((Class*)symbolTable::later_defination.front().second.second)->get_is_abstract()) && (((Class*)search->get_owner())->get_is_abstract()))
-									symbolTable::extended_abstract_classes.push(make_pair(symbolTable::later_defination.front().second.second, search));
+								if (!(((Class*)symbolTable::later_defination.front().second.second)->get_is_abstract()) && (((Class*)search->get_owner())->get_is_abstract())) {
+										symbolTable::extended_abstract_classes.push(make_pair(symbolTable::class_inhertance_abstract.front(), search));
+										symbolTable::class_inhertance_abstract.pop();
+
+								}
 							}
 						}
 					}
@@ -343,12 +347,12 @@ void symbolParser::check_later_defination()
 
 				else if (search->get_owner()->getType() == "interface")
 				{
-					((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					((Interface*)symbolTable::later_defination.front().second.second)->add_base(search->get_owner()->getName(), search);
 				}
 				else if (search->get_owner()->getType() == "namespace") 
 				{
-					((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("Object", symbolTable::object_ref));
+					((Class*)symbolTable::later_defination.front().second.second)->set_extended_class(make_pair("object", symbolTable::object_ref));
 					string m = "symmbol parser error, '" + search->get_owner()->getName() + "' is a namespace.";
 					error_handler.add(error(symbolTable::later_defination.front().second.second->getLineNo(), -1, m.c_str()));
 				}
@@ -552,8 +556,8 @@ void check_later_def_override()
 				else 
 					error_handler.add(error(symbol->getLineNo(), -1, "error, '" + parent->get_owner()->getName() + "." + ((Method*)symbol)->getName() + "()': cannot override inherited member '" + itex->second.first->get_parent()->get_owner_name() + "." + ((Method*)symbol)->getName() + "()' because it is sealed"));
 
-				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_is_must_ovrride())
-					((Method*)itex->first)->set_must_ovrride(false);
+				if (correctOverride && ((Method*)itex->first)->get_is_abstract() && ((Method*)itex->first)->get_exist_ovrride())
+					((Method*)symbol)->set_must_ovrride(false);
 				break;
 			}
 			else {
@@ -611,12 +615,11 @@ void symbolParser::check_is_methods_not_override()
 	while (!symbolTable::extended_abstract_classes.empty())
 	{
 
-		Symbol* symbol = symbolTable::extended_abstract_classes.front().first;
+		symbolTable* classTable = symbolTable::extended_abstract_classes.front().first;
 
 		symbolTable* parent = symbolTable::extended_abstract_classes.front().second;
 
 		symbolTable* tempEx = parent; 
-		//symbolTable* tempEx = ((Class *)parent->get_owner())->get_extended_class().second;
 
 		while(tempEx != nullptr && (((Class*)tempEx->get_owner())->get_is_abstract()))
 		{
@@ -624,9 +627,17 @@ void symbolParser::check_is_methods_not_override()
 			map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator itex = tempEx->get_symbolMap().begin();
 			for (itex = tempEx->get_symbolMap().begin(); itex != tempEx->get_symbolMap().end(); itex++)
 			{
-				if (itex->first->getType() == "method" && (((Method*)itex->first)->get_is_must_ovrride()))
+				if (itex->first->getType() == "method" && (((Method*)itex->first)->get_exist_ovrride()))
 				{
-					error_handler.add(error(symbol->getLineNo(), -1, "error, '"+ symbol->getName() +"' does not implement inherited abstract member '" + tempEx->get_owner_name() + "." + itex->first->getName()+"'."));
+
+					map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator itMethodInClass = classTable->get_symbolMap().find(itex->first);
+					if (itMethodInClass != classTable->get_symbolMap().end()) {
+						if(((Method*)itMethodInClass->first)->get_is_must_ovrride())
+							error_handler.add(error(classTable->get_owner()->getLineNo(), -1, "error, '" + classTable->get_owner_name() + "' does not implement inherited abstract member '" + tempEx->get_owner_name() + "." + itex->first->getName() + "'."));
+
+					}
+					else 
+					error_handler.add(error(classTable->get_owner()->getLineNo(), -1, "error, '"+ classTable->get_owner_name() +"' does not implement inherited abstract member '" + tempEx->get_owner_name() + "." + itex->first->getName()+"'."));
 				}
 			}
 			tempEx = ((Class *)tempEx->get_owner())->get_extended_class().second;

@@ -9,7 +9,7 @@ public:
 
 	TypeExpression* operation(Operator op, TypeExpression* secondOperand = nullptr);
 
-	int equivelantTo(TypeExpression* secondOperand);
+	int equivelantTo(TypeExpression* secondOperand, bool cast = false);
 
 private:
 	static TypeString* instance;

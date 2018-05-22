@@ -7,6 +7,20 @@ If::If(Node *codnition , Node *parent) :Statement(parent)
 	this->elseStatement = nullptr;
 }
 
+bool If::typeChecking()
+{
+	this->ifStatement->typeChecking();
+	this->codnition->typeChecking();
+	if (this->codnition->nodeType->getTypeId() != TYPE_BOOL) {
+		new TypeError("IF condition must be boolean type");
+	}
+	if (elseStatement) {
+		this->elseStatement->typeChecking();
+	}
+
+	return true;
+}
+
 string If::getType() {
 	return "if";
 }

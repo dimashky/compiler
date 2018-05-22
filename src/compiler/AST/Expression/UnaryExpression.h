@@ -4,18 +4,14 @@ class UnaryExpression :
 	public Expression
 {
 private:
-
 	Operator op;
-
 	Node *expression;
-
 public:
-	
 	UnaryExpression(Operator op, Node *expression, Node* parent);
 	
-	int print(int);
-
 	string getType();
+
+	int print(int);
 	
 	bool typeChecking();
 	void generateCode();

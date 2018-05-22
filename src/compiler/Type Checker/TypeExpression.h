@@ -21,7 +21,7 @@ public:
 	virtual TypeExpression* operation(Operator op, TypeExpression* secondOperand = nullptr);
 
 	//Type Equivelance
-	virtual int equivelantTo(TypeExpression* secondOperand);
+	virtual int equivelantTo(TypeExpression* secondOperand, bool);
 	
 protected:
 	int bytes;

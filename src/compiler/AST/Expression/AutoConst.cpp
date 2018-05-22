@@ -1,11 +1,15 @@
 #include "AutoConst.h"
 #include "../../Type Checker/all.h"
-AutoConst::AutoConst(string type, void* value, Node* parent):Expression(parent)
+AutoConst::AutoConst(string type, void* value, Node* parent, int lineNo):Expression(parent)
 {
 	this->type = type;
 	this->value = value; 
-
+	this->lineNo = lineNo;
 	this->nodeType = TypesTable::getType(type).first;
+}
+
+int AutoConst::getLineNo() {
+	return this->lineNo;
 }
 
 string AutoConst::getType() 
@@ -23,6 +27,9 @@ int AutoConst::print(int nodeCnt)
 	}
 	else if (type == "FLOAT") {
 		fprintf(nodesFile, "{ id:%d, label:'%f', shape: 'box', color:'#47fcfc'},", nodeCnt, *((float*)value));
+	}
+	else if (type == "DOUBLE") {
+		fprintf(nodesFile, "{ id:%d, label:'%f', shape: 'box', color:'#47fc0c'},", nodeCnt, *((double*)value));
 	}
 	else if (type == "CHAR") {
 		fprintf(nodesFile, "{ id:%d, label:\"%c\", shape: 'box', color:'#47fcfc'},", nodeCnt, *((char*)value));
@@ -60,6 +67,11 @@ void AutoConst::generateCode() {
 		AsmGenerator::li("t0", *((char*)this->value), true);
 	}
 	AsmGenerator::push("t0");
+}
+
+bool AutoConst::typeChecking()
+{ 
+	return true; 
 }
 
 AutoConst::~AutoConst()

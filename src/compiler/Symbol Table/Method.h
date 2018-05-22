@@ -16,10 +16,14 @@ private:
 	bool isFinal,is_static,is_abstract,is_override , is_virtual, is_extern;
 	bool is_public, is_private , is_protected , is_internal,is_new; 
 	bool must_ovrride;
+	bool exist_ovrride; 
 	bool is_constructer;
 	int default_counter;
 	vector<LocalVariable*> types_ids_parameter;
 public:
+	bool isNew() {
+		return this->is_new;
+	}
 	/// TODO: change this size to correct size with TypeExpression class
 	int stackFrameSize;
 	/*
@@ -64,6 +68,12 @@ public:
 
 	bool isComplex() {
 		return return_type_ref != nullptr;
+	}
+	bool get_exist_ovrride() {
+		return exist_ovrride; 
+	}
+	void set_exist_ovrride(bool exist_ovrride) {
+		this->exist_ovrride = exist_ovrride; ;
 	}
 
 	void set_must_ovrride(bool must_override);

@@ -48,7 +48,7 @@ bool Block::typeChecking() {
 		res |= statement->typeChecking();
 	}
 
-	return res;
+	return res || true;
 }
 
 void Block::generateCode() {

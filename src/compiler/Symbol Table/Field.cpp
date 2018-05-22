@@ -10,20 +10,30 @@ Field::Field(queue<string>&modifiers , string type_variable, string name, int di
 	this->isStatic = false;
 	this->dimension = dimension;
 	this->isConst = isConst;
+	this->readonly = false;
 	add_attributes(modifiers);
 }
 
-void Field::add_attributes(queue<string>&attributes)
+void Field::add_attributes(queue<string>attributes)
 {
 	while (!attributes.empty())
 	{
-		if (is_private) {
-			if (attributes.front() == "PUBLIC" || attributes.front() == "PROTECTED") {
-				is_private = false;
-			}
-			if (!isStatic && attributes.front() == "STATIC") {
-				isStatic = true;
-			}
+		if (attributes.front() == "PUBLIC") {
+			this->is_private = false;
+			this->isPublic = true;
+		}
+		
+		if (attributes.front() == "PROTECTED") {
+			this->is_private = this->isPublic = false;
+			this->isProtected = true;
+		}
+		
+		if (attributes.front() == "STATIC") {
+			isStatic = true;
+		}
+
+		if (!readonly && attributes.front() == "READONLY") {
+			readonly = true;
 		}
 		attribute->add(attributes.front() , attributes.size() );
 		attributes.pop();

@@ -36,6 +36,9 @@ TypeExpression* TypeString::operation(Operator op, TypeExpression* secondOperand
 		case Plus:
 			return  TypeString::getInstance();
 			break;
+		case eqeq:
+			return  TypeBoolean::getInstance();
+			break;
 		case Equal:
 			return  TypeString::getInstance();
 			break;
@@ -46,7 +49,7 @@ TypeExpression* TypeString::operation(Operator op, TypeExpression* secondOperand
 	}
 }
 
-int TypeString::equivelantTo(TypeExpression* secondOperand) {
+int TypeString::equivelantTo(TypeExpression* secondOperand, bool cast) {
 	if (secondOperand->getTypeId() == TYPE_STRING || secondOperand->getTypeId() == TYPE_CHAR)
 		return TYPE_STRING;
 	return TYPE_ERROR;
