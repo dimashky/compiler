@@ -23,7 +23,7 @@ public:
 
 	static void li(string reg, int value, bool isChar = false);
 
-	static void operation(Operator operation, string const &dest_reg, string const &reg1, string const &reg2 = false);
+	static void operation(Operator operation, string const &dest_reg, string const &reg1, string const &reg2 = "");
 
 	static void addLabel(string label_name);
 

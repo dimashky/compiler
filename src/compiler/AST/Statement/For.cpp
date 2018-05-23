@@ -1,4 +1,6 @@
 #include "For.h"
+#include "../../Symbol Table/Method.h"
+#include "../Object/Procedure.h"
 
 For::For(Node *parent) :Statement(parent) { 
 	this->condition = nullptr;
@@ -78,6 +80,14 @@ void For::setCondition(Node* condition) {
 
 void For::setInitializers(queue<Node*>initializers) {
 	this->initializers = initializers;
+	for (int i = 0; i < initializers.size(); i++) {
+		Node* init = initializers.front();
+		initializers.pop();
+		if (init->getType() == "variable") {
+			((Variable*)statement)->getSymbol()->offset = ((Method*)((Procedure*)(((Block*)parent)->parentMethod))->getSymbol())->stackFrameSize;
+			((Method*)((Procedure*)(((Block*)parent)->parentMethod))->getSymbol())->stackFrameSize += 4;
+		}
+	}
 }
 
 void For::addInitializer(Node* initializer) {
@@ -90,6 +100,39 @@ void For::setStatement(Node* statement) {
 
 void For::setIterators(queue<Node*>iterators) {
 	this->iterators = iterators;
+}
+
+void For::generateCode() {
+	// init vars
+	queue<Node*> tmp = this->initializers;
+	int forLabel = AsmGenerator::labelCounter++;
+	int exitLabel = AsmGenerator::labelCounter++;
+
+	// init iterators
+	for (int i = 0; i < tmp.size(); ++i) {
+		tmp.front()->generateCode();
+		tmp.pop();
+	}
+
+	AsmGenerator::addLabel("label"+to_string(forLabel));
+	
+	this->condition->generateCode();
+	AsmGenerator::pop("t0");
+	AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabel));
+
+	// generate the block
+	this->statement->generateCode();
+
+	// iteration 
+	tmp = this->iterators;
+
+	for (int i = 0; i < tmp.size(); ++i) {
+		tmp.front()->generateCode();
+		tmp.pop();
+	}
+
+	AsmGenerator::addInstruction("j label" + to_string(forLabel));
+	AsmGenerator::addLabel("label" + to_string(exitLabel));
 }
 
 For::~For()

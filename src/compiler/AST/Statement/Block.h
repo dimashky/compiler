@@ -7,9 +7,9 @@ class Block :public Statement
 private:
 
 	vector<Node*> statements;
-	Node* parentMethod;
 
 public:
+	Node* parentMethod;
 	Block(Node *parent);
 	
 	string getType();

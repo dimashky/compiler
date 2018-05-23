@@ -47,6 +47,7 @@ void UnaryExpression::generateCode() {
 
 	AsmGenerator::pop("t0");
 	AsmGenerator::operation(op, "t0", "t0");
+	AsmGenerator::sw("t0", "fp", -1 * ((Identifier*)expression)->getPostDot()->offset);
 	AsmGenerator::push("t0");
 }
 

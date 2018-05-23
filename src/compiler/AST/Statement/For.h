@@ -29,6 +29,8 @@ public:
 
 	bool typeChecking();
 
+	void generateCode();
+
 	~For();
 };
 
