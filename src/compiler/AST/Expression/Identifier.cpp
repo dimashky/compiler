@@ -119,12 +119,6 @@ bool Identifier::typeChecking() {
 					break;
 				parentRef = parentRef->get_parent();
 			}
-			else if (prev->getType() == "localvariable") {
-				if (((LocalVariable*)prev)->getIsConst())
-					this->isConst = true;
-			}
-			postDot->offset = prev->offset;
-		}
 
 			string requiredName = getPath();
 			
@@ -148,6 +142,7 @@ bool Identifier::typeChecking() {
 		}
 		else if (prev->getType() == "localvariable") {
 			this->nodeType = TypesTable::getType(((LocalVariable*)prev)->get_type_name()).first;
+			this->postDot->offset = prev->offset;
 		}
 	}
 

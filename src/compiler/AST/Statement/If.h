@@ -20,6 +20,8 @@ public:
 	
 	bool typeChecking();
 
+	void generateCode();
+
 	~If();
 
 	

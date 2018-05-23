@@ -27,6 +27,9 @@ public:
 	int getLineNo();
 
 	void generateCode();
+	
+	bool typeChecking();
+
 	int print(int);
 
 	~AutoConst();

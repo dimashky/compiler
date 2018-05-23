@@ -44,10 +44,18 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 		AsmGenerator::addInstruction("mul $" + dest_reg + ", $" + reg2 + ", $" + reg1);
 		break;
 	case slash:
+		// divide to zero handling
+		AsmGenerator::addInstruction("addi $" + dest_reg + ",$0, 0");
+		AsmGenerator::addInstruction("beq $"+reg1+", 0, label" + to_string(AsmGenerator::labelCounter));
 		AsmGenerator::addInstruction("div $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addLabel("label" + to_string(AsmGenerator::labelCounter++));
 		break;
 	case percent:
+		// divide to zero handling
+		AsmGenerator::addInstruction("addi $" + dest_reg + ",$0, 0");
+		AsmGenerator::addInstruction("beq $" + reg1 + ", 0, label" + to_string(AsmGenerator::labelCounter));
 		AsmGenerator::addInstruction("rem $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addLabel("label" + to_string(AsmGenerator::labelCounter++));
 		break;
 	case andand:
 		AsmGenerator::addInstruction("and $" + dest_reg + ", $" + reg2 + ", $" + reg1);

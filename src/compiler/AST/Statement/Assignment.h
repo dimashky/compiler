@@ -19,7 +19,8 @@ public:
 
 	bool typeChecking();
 
-			
+	void generateCode();
+
 	~Assignment();
 };
 
