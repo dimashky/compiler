@@ -41,6 +41,9 @@ public:
 	bool is_final();
 
 	vector<LocalVariable*>& get_parameters();
+	LocalVariable* getParameter(int index) {
+		return types_ids_parameter[index];
+	}
 	int get_parametars_count();
 	bool get_is_static();
 	bool get_is_abstract();

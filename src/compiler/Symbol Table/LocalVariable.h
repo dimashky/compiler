@@ -51,6 +51,10 @@ public:
 		return this->dimension;
 	}
 
+	void set_type_name(string type) {
+		this->type_variable = type;
+	}
+
 	~LocalVariable();
 
 };

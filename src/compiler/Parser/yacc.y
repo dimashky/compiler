@@ -228,7 +228,7 @@ floating_point_type
   | DOUBLE	{l.a("floating_point_type",0);$<r.base>$ = new string("DOUBLE");}
   ;
 class_type
-  : OBJECT									{l.a("class_type",0);$<r.base>$ = new string("OBJECT");}
+  : OBJECT									{l.a("class_type",0);$<r.base>$ = new string("object");}
   | STRING									{l.a("class_type",0);$<r.base>$ = new string("STRING");}
   ;
 pointer_type

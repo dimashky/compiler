@@ -1217,3 +1217,45 @@ bool symbolTable::checkMethodOverriding(Symbol* method, Symbol* currentClass) {
 	}
 	return false;
 }
+
+
+
+
+Symbol* symbolTable::findOverrideFunction(Symbol* method, symbolTable* currentScope, int paramIndex, Symbol* lastSymbol) {
+	if (paramIndex == ((Method*)method)->get_parametars_count()) {
+		return symbolTable::findIdentifier(method, currentScope, lastSymbol);
+	}
+	LocalVariable* param = ((Method*)method)->getParameter(paramIndex);
+	if (param->isComplex()) {
+		Symbol* initType = param->getTypeRef(), *currentType = initType;
+
+		while (currentType != nullptr) {
+			param->set_type(currentType);
+			Symbol* findMethod = findOverrideFunction(method, currentScope, paramIndex + 1, lastSymbol);
+			if (findMethod->getColNo() != -15) {
+				param->set_type(initType);
+				return findMethod;
+			}
+			if (((Class*)param->getTypeRef())->get_extended_class().second != nullptr)
+				currentType = ((Class*)param->getTypeRef())->get_extended_class().second->get_owner();
+			else currentType = nullptr;
+		}
+		param->set_type(initType);
+		method->setColNo(-15);
+		return method;
+	}
+	else {
+		if (param->get_type_name() == "FLOAT") {
+			Symbol* findMethod = findOverrideFunction(method, currentScope, paramIndex + 1, lastSymbol);
+			if (findMethod->getColNo() != -15) {
+				return findMethod;
+			}
+			param->set_type_name("INT");
+			findMethod = findOverrideFunction(method, currentScope, paramIndex + 1, lastSymbol);
+			param->set_type_name("FLOAT");
+			return findMethod;
+		}
+		return findOverrideFunction(method, currentScope, paramIndex + 1, lastSymbol);
+	}
+
+}

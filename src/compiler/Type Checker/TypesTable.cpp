@@ -41,7 +41,7 @@ void TypesTable::init() {
 	TypesTable::table["BOOL"] = make_pair(TypeBoolean::getInstance(), nullptr);
 	TypesTable::table["VOID"] = make_pair(TypeVoid::getInstance(), nullptr);
 	if (symbolTable::object_ref) {
-		TypesTable::table["OBJECT"] = make_pair(new TypeClass("OBJECT"), symbolTable::object_ref->get_owner());
+		TypesTable::table["object"] = make_pair(new TypeClass("object"), symbolTable::object_ref->get_owner());
 	}
 }
 

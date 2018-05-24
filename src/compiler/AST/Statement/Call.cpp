@@ -115,6 +115,10 @@ bool Call::typeChecking() {
 	method = (Method*)symbolTable::findIdentifier(method, (symbolTable*)this->symboltable, prev);
 
 	if (method->getColNo() == -15) {
+		method = (Method*)symbolTable::findOverrideFunction(method, (symbolTable*)this->symboltable, 0, prev);
+	}
+
+	if (method->getColNo() == -15) {
 		//raise error
 		this->nodeType = new TypeError("Call undeclared function " + method->getName(), method->getLineNo());
 	}

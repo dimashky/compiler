@@ -75,7 +75,7 @@ public:
 	static Symbol* findIdentifier(Symbol* symbol, symbolTable* currentScope, Symbol* lastSymbol = nullptr);
 
 	static Symbol* findType(node* parentRef, string name) {
-		if (name == "OBJECT") {
+		if (name == "object") {
 			return symbolTable::object_ref->get_owner();
 		}
 		queue<string>divs;
@@ -92,6 +92,8 @@ public:
 		}
 		return nullptr;
 	}
+
+	static Symbol* findOverrideFunction(Symbol* method, symbolTable* currentScope, int paramIndex, Symbol* lastSymbol = nullptr);
 
 	static bool isParent(Symbol* child, Symbol* parent);
 
