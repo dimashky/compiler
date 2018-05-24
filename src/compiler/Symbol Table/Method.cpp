@@ -158,6 +158,8 @@ bool Method::compare(Symbol* comp)
 		{
 			if (p1[i]->get_type_name() != p2[i]->get_type_name())
 				return p1[i]->get_type_name() > p2[i]->get_type_name();
+			if (p1[i]->getDimension() != p2[i]->getDimension())
+				return p1[i]->getDimension() > p2[i]->getDimension();
 		}
 		return false;
 	}

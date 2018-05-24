@@ -1587,7 +1587,7 @@ formal_parameter_default_list
 
 formal_parameter
   : fixed_parameter		
-  {	
+  {
 		l.a("formal_parameter",1); 
     
 		$<r.base>$ = $<r.base>1 ;
@@ -1600,7 +1600,7 @@ formal_parameter
     
 		$<r.known_type>$ = $<r.known_type>1;
 	
-		$<r.array_dimension>$ = 0;
+		$<r.array_dimension>$ = $<r.array_dimension>1;
 
   }
   | parameter_array		
@@ -1629,6 +1629,7 @@ fixed_parameter
         $<r.line_no>$ = $<r.line_no>4;
         $<r.col_no>$ = $<r.col_no>4; 
         $<r.known_type>$ = $<r.known_type>3;
+		$<r.array_dimension>$ = $<r.array_dimension>3;
       }
   ;	
   

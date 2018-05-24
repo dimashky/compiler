@@ -97,15 +97,22 @@ bool Call::typeChecking() {
 
 	for (int i = 0; i < this->params.size(); ++i) {
 		params[i].first->typeChecking();
-		Symbol* typeRefParam = TypesTable::getType(params[i].first->nodeType->typeExpression()).second;
+		pair<TypeExpression*, Symbol*>parRes = TypesTable::getType(params[i].first->nodeType->typeExpression());
+		int dimension = 0;
+		Symbol* typeRefParam = parRes.second;
 		string typeName;
+		
+		if (parRes.first->getTypeId() == TYPE_ARRAY) {
+			dimension = ((TypeArray*)parRes.first)->getDimension();
+		}
 		if (typeRefParam != nullptr) {
 			typeName = typeRefParam->getName();
 		}
 		else {
 			typeName = params[i].first->nodeType->typeExpression();
 		}
-		LocalVariable* localVariable = new LocalVariable(typeName, "", 0, 1, 0, 0, 0);
+
+		LocalVariable* localVariable = new LocalVariable(typeName, "", dimension, 1, 0, 0, 0);
 		localVariable->set_type(typeRefParam);
 		curParams.push_back(localVariable);
 	}
