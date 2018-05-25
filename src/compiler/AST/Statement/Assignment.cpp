@@ -58,7 +58,7 @@ bool Assignment::typeChecking() {
 	if (right) {
 		right->typeChecking();
 	}
-	if (left && right && left->nodeType->getTypeId() == right->nodeType->getTypeId()) {
+	if (left && right) {
 		this->nodeType = left->nodeType->operation(Operator::Equal, right->nodeType);
 		if (this->nodeType->getTypeId() != TYPE_ERROR)
 			return true;

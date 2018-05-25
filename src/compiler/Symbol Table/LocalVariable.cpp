@@ -30,6 +30,8 @@ bool LocalVariable::is_parameter()
 void LocalVariable::set_type(Symbol* type_ref)
 {
 	this->type_ref = type_ref;
+	if (type_ref != nullptr)
+		this->type_variable = this->type_ref->getName();
 }
 
 Symbol* LocalVariable::getTypeRef() {
