@@ -162,10 +162,26 @@ void Call::generateCode() {
 		return;
 	}
 	
+
+	// store current $fp in new AR
+	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
+	
+	for (int i = 0; i < params.size(); ++i) {
+		params[i].first->generateCode();
+		AsmGenerator::pop("t1");
+		AsmGenerator::sw("t1", "sp", -1 * ( 4 * i + 8));
+	}
+
 	if (new_expression) {
+		// call parent constructor
+		if (calledMethod->astPosition->getBaseCall()) {
+			//((Call*)calledMethod->astPosition->getBaseCall())->new_expression = true;
+			//calledMethod->astPosition->getBaseCall()->generateCode();
+		}
+
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
-		
-		AsmGenerator::addInstruction("li $a0, " + to_string( ((Class*)classRef)->bytes ));
+
+		AsmGenerator::addInstruction("li $a0, " + to_string(((Class*)classRef)->bytes));
 		AsmGenerator::addInstruction("li $v0, 9");
 		AsmGenerator::addInstruction("syscall");
 
@@ -173,14 +189,10 @@ void Call::generateCode() {
 
 		AsmGenerator::sw("s0", "sp", -4);
 	}
+	else 
+	{
+		// send this value 
 
-	// store current $fp in new AR
-	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
-	
-	for (int i = 0; i < params.size(); ++i) {
-		params[i].first->generateCode();
-		AsmGenerator::pop("t0");
-		AsmGenerator::sw("t0", "sp", -1 * ( 4 * i + 8));
 	}
 
 	// move $sp to new $sp

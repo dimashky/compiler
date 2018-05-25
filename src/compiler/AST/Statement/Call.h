@@ -17,8 +17,9 @@ private:
 	*/
 	vector<pair<Node*,int> >params;
 	Method* calledMethod;
-	bool new_expression, known_type, base_call;
+	bool known_type, base_call;
 public:
+	bool new_expression;
 	Call(Node *call, Node* parent, bool new_expression = false, bool known_type = false,bool base_call = false);
 
 	string getType();

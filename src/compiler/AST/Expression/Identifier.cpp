@@ -92,11 +92,14 @@ bool Identifier::typeChecking() {
 
 	prev = symbolTable::findIdentifier(postDot, (symbolTable*)this->symboltable, prev);
 
+	postDot->offset = prev->offset;
+
 	if (postDot->getName() == "this" || postDot->getName() == "base") {
 		if (Identifier::isStaticMethod)
 			this->nodeType = new TypeError("use '" + postDot->getName() + "' keyword in static method is not allowed", postDot->getLineNo());
 		else
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
+		postDot = prev;
 		return true;
 	}
 
@@ -126,6 +129,7 @@ bool Identifier::typeChecking() {
 				
 			if (prev != nullptr) {
 				this->nodeType = TypesTable::findOrCreate(prev->getFullPath(), prev);
+				postDot = prev;
 				return true;
 			}
 		}
@@ -142,7 +146,6 @@ bool Identifier::typeChecking() {
 		}
 		else if (prev->getType() == "localvariable") {
 			this->nodeType = TypesTable::getType(((LocalVariable*)prev)->get_type_name()).first;
-			this->postDot->offset = prev->offset;
 		}
 	}
 
@@ -190,7 +193,7 @@ bool Identifier::typeChecking() {
 		}
 	}
 
-
+	postDot = prev;
 	return true;
 	
 	/*
@@ -212,9 +215,21 @@ bool Identifier::typeChecking() {
 }
 
 void Identifier::generateCode() {
-	// handle it
-	AsmGenerator::lw("t1", "fp", -1 * postDot->offset);
-	AsmGenerator::push("t1");
+	if (preDot != nullptr) {
+		preDot->generateCode();
+		AsmGenerator::pop("t0");
+		AsmGenerator::lw("t0", "t0", -1 * postDot->offset);
+	}
+	else {
+		if (postDot->getType() != "field") {
+			AsmGenerator::lw("t0", "fp", -1 * postDot->offset);
+		}
+		else {
+			AsmGenerator::lw("t0", "fp", -4);
+			AsmGenerator::lw("t0", "t0", -1 * postDot->offset);
+		}
+	}
+	AsmGenerator::push("t0");
 }
 
 Identifier::~Identifier()

@@ -831,10 +831,13 @@ bool symbolTable::closeScope()
 			if (openBrackets.top()->owner->getType() == "class" && !((Class*)openBrackets.top()->owner)->get_have_constructor() && !((Class*)openBrackets.top()->owner)->get_is_static())
 			{
 				Method* defaultConstructer = new Method(queue<string>(), "", openBrackets.top()->owner->getName(), openBrackets.top()->owner->getLineNo(), 0);
+				defaultConstructer->returnAddressOffset = 8;
+
 				addMethod(defaultConstructer, queue<string>(), queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(),queue<int>(),queue<Node*>(), true ,true  );
 				defaultConstructer->setPublic();
-			
+				
 				Procedure* ns = new Procedure(defaultConstructer, Node::current);
+				ns->setBlock(new Block(ns));
 				ns->setSymbolTable(symbolTable::openBrackets.top());
 				((Procedure*)Node::current)->add(ns);
 

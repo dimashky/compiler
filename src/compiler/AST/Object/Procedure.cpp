@@ -11,6 +11,9 @@ Procedure::Procedure(Symbol* symbol, Node* parent, Node* baseCall):Object(symbol
 	this->baseCall = baseCall;
 	if (baseCall)
 		baseCall->setParent(this);
+	if (this->symbol && this->symbol->getType() == "method") {
+		((Method*)this->symbol)->astPosition = this;
+	}
 	/*
 	 *	TODO: init nodeType with symbol table.
 	 */
@@ -151,10 +154,6 @@ void Procedure::generateCode() {
 	// class
 	else {
 		for (auto local : this->locals) {
-			if (local->getType() == "variable") {
-				((Variable*)local)->getSymbol()->offset = ((Class*)symbol)->bytes;
-				((Class*)symbol)->bytes += 4;
-			}
 			local->generateCode();
 		}
 	}

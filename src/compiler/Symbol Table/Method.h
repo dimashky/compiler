@@ -6,6 +6,7 @@
 #include "Attribute.h"
 #include "symbolTable.h"
 #include "LocalVariable.h"
+#include "../AST/Object/Procedure.h"
 using namespace::std;
 class Method : public Symbol
 {
@@ -21,6 +22,8 @@ private:
 	int default_counter;
 	vector<LocalVariable*> types_ids_parameter;
 public:
+	Procedure* astPosition;
+
 	bool isNew() {
 		return this->is_new;
 	}

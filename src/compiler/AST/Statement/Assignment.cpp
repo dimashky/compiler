@@ -74,9 +74,24 @@ bool Assignment::typeChecking() {
 
 
 void Assignment::generateCode() {
+
 	right->generateCode();
+
+	if (left->getPreDot() != nullptr) {
+		left->getPreDot()->generateCode();
+		AsmGenerator::pop("t1");
+	}
+	else if ( left->getPostDot()->getType() == "field" ) {
+		AsmGenerator::lw("t1", "fp", -4);
+	}
+	else {
+		AsmGenerator::addInstruction("move $t1, $fp");
+	}
+	
 	AsmGenerator::pop("t0");
-	AsmGenerator::sw("t0", "fp", -1 * left->getPostDot()->offset);
+
+	AsmGenerator::sw("t0", "t1", -1 * left->getPostDot()->offset);
+
 	AsmGenerator::printReg("t0");
 }
 

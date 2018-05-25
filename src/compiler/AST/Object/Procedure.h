@@ -33,6 +33,10 @@ public:
 
 	void generateCode();
 
+	Node* getBaseCall() {
+		return baseCall;
+	}
+
 	~Procedure();
 };
 
