@@ -16,9 +16,6 @@ private:
 	Attribute* attribute;
 	bool isFinal,is_public,is_private,is_protected,owner_is_namespace, is_abstract,have_constructor,is_static,is_internal;
 	node* type_graph_position;
-	
-
-
 public:
 	int bytes;
 

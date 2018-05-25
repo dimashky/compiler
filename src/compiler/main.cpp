@@ -105,13 +105,17 @@ int main()
 	AST->print(0);
 	Node::closeFiles();
 	AsmGenerator::initializeFile();
+	
+	if (error_handler.errorsNum() > 0) {
+		exit(-1);
+	}
+
 	AST->generateCode();
 
 	AsmGenerator::writeAsmFile();
-//	if (error_handler.errorsNum() == 0) {
-		system("java -jar Mars.jar AssemblyCode.asm");
-//	}
- 	system("pause");
+	system("java -jar Mars.jar AssemblyCode.asm");
+
+	system("pause");
 	return 0;
 }
 

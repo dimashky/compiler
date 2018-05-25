@@ -121,18 +121,23 @@ bool Procedure::typeChecking() {
 
 void Procedure::generateCode() {
 	// function
-	if (block) {
+	if (this->symbol && this->symbol->getType() == "method" && block) {
 		AsmGenerator::addInstruction("\n");
 		AsmGenerator::addLabel(this->symbol->getName()); /// Change from get name to get FULL name
 		// store current $ra in new AR
 		if (this->symbol->getName() != "Main") {
 			AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
+			
 			block->generateCode();
+			
 			AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
+			
 			AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
+			
 			AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
 
-			AsmGenerator::lw("t0", "sp", 0);
+			AsmGenerator::lw("t0", "sp", ((Method*)this->symbol)->get_is_constructer() * -4 );
+			
 			AsmGenerator::push("t0");
 
 			AsmGenerator::addInstruction("jr $ra");

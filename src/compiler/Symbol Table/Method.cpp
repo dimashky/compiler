@@ -30,7 +30,7 @@ Method::Method(queue<string>&modifiers, string return_type, string name, int lin
 
 	this->exist_ovrride = false; 
 	this->must_ovrride = true; 
-	this->stackFrameSize = 4;
+	this->stackFrameSize = 8;
 }
 
 void Method::add_attributes(queue<string>&attributes , string name_parent,bool is_body)

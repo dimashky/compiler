@@ -150,15 +150,28 @@ void Call::generateCode() {
 	if (!calledMethod) {
 		return;
 	}
-	AsmGenerator::comment("call function " + calledMethod->getName());
+	
+	if (new_expression) {
+		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
+		
+		AsmGenerator::addInstruction("li $a0, " + to_string( ((Class*)classRef)->bytes ));
+		AsmGenerator::addInstruction("li $v0, 9");
+		AsmGenerator::addInstruction("syscall");
+
+		AsmGenerator::addInstruction("move $s0, $v0");
+
+		AsmGenerator::sw("s0", "sp", -4);
+	}
+
 	// store current $fp in new AR
 	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
-	/// TODO: 
+	
 	for (int i = 0; i < params.size(); ++i) {
 		params[i].first->generateCode();
 		AsmGenerator::pop("t0");
-		AsmGenerator::sw("t0", "sp", -1 * ( 4 * i + 4));
+		AsmGenerator::sw("t0", "sp", -1 * ( 4 * i + 8));
 	}
+
 	// move $sp to new $sp
 	AsmGenerator::addInstruction("add $fp, $sp, 0");
 	AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));

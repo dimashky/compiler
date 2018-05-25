@@ -1,4 +1,5 @@
 #include "Field.h"
+#include "Class.h"
 
 Field::Field(queue<string>&modifiers , string type_variable, string name, int dimension, int line_no, int col_no, bool isConst) : Symbol(name, line_no, col_no)
 {
@@ -12,6 +13,13 @@ Field::Field(queue<string>&modifiers , string type_variable, string name, int di
 	this->isConst = isConst;
 	this->readonly = false;
 	add_attributes(modifiers);
+	if (!this->isStatic) {
+		this->offset = ((Class*)symbolTable::openBrackets.top()->get_owner())->bytes;
+		((Class*)symbolTable::openBrackets.top()->get_owner())->bytes += 4;
+	}
+	else {
+		/// TODO : handle static data member
+	}
 }
 
 void Field::add_attributes(queue<string>attributes)
