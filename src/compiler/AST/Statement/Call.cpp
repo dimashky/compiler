@@ -199,7 +199,7 @@ void Call::generateCode() {
 	AsmGenerator::addInstruction("add $fp, $sp, 0");
 	AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
 
-	AsmGenerator::addInstruction("jal " + calledMethod->getName());
+	AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
 }
 
 Call::~Call()

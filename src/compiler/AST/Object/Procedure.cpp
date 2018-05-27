@@ -128,7 +128,7 @@ void Procedure::generateCode() {
 	// function
 	if (this->symbol && this->symbol->getType() == "method" && block) {
 		AsmGenerator::addInstruction("\n");
-		AsmGenerator::addLabel(this->symbol->getName()); /// Change from get name to get FULL name
+		AsmGenerator::addLabel(this->getFullPath()); /// Change from get name to get FULL name
 		// store current $ra in new AR
 		if (this->symbol->getName() != "Main") {
 			AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
