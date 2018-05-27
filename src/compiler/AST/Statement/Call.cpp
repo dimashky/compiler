@@ -147,7 +147,7 @@ bool Call::typeChecking() {
 		}
 		else {
 			if (base_call) {
-				this->nodeType = TypesTable::getType("VOID").first;
+				this->nodeType = TypesTable::findOrCreate(((Procedure*)method->astPosition->getParent())->getSymbol()->getFullPath(), ((Procedure*)method->astPosition->getParent())->getSymbol());
 			}
 			else {
 				this->nodeType = TypesTable::getType(method->get_return_type()).first;
@@ -175,8 +175,8 @@ void Call::generateCode() {
 	if (new_expression) {
 		// call parent constructor
 		if (calledMethod->astPosition->getBaseCall()) {
-			//((Call*)calledMethod->astPosition->getBaseCall())->new_expression = true;
-			//calledMethod->astPosition->getBaseCall()->generateCode();
+			((Call*)calledMethod->astPosition->getBaseCall())->new_expression = true;
+			calledMethod->astPosition->getBaseCall()->generateCode();
 		}
 
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;

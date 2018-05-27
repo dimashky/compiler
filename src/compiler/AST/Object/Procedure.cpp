@@ -103,6 +103,8 @@ bool Procedure::typeChecking() {
 		baseCall = new Call(new Identifier(nullptr, new Symbol("base", symbol->getLineNo(), -13)), this->parent, false, false, true);
 		((Call*)baseCall)->setSymbolTable(this->symboltable);
 		baseCall->typeChecking();
+		((Call*)baseCall)->new_expression = true;
+
 		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
 		}

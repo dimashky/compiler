@@ -2,19 +2,16 @@ class MainClass
 {
     static void Main(string []args)
     {
-        a test = new a(1);
+        MainClass test = new b();
     }
-    class a
-    {
-        public a x;
-        public int z;
-        public a(int p)
-        {
-            z = p;
-            if(p == 1)
-            {
-                x = new a(2);
-            }
-        }       
-    }
+}
+
+class a : MainClass
+{
+
+}
+
+class b : a
+{
+
 }
