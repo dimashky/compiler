@@ -6,10 +6,13 @@
 #include <fstream>
 #include <sstream>
 #include "../AST/Operator.h"
+#include <map>
 
 using namespace std;
 
 class AsmGenerator{
+	static std::map<string, string> strings;
+	static int stringCounter;
 public:
 	static ofstream assembly_code_file;
 	
@@ -39,6 +42,8 @@ public:
 
 	static void addInstruction(string instruction);
 	
+	static void addString(string dest_reg, string value);
+
 	static void comment(string comment_meesage);
 
 	// System Calls

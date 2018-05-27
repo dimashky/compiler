@@ -4,6 +4,9 @@
 #include "../Symbol Table/Method.h"
 
 int AsmGenerator::labelCounter = 0;
+int AsmGenerator::stringCounter = 0;
+map<string, string> AsmGenerator::strings;
+
 
 void AsmGenerator::initializeFile()
 {
@@ -148,12 +151,8 @@ void AsmGenerator::printString(string reg_string_address)
 }
 
 void AsmGenerator::printStr(string str) {
-	string labelString = str;
-	replace(labelString.begin(), labelString.end(), ' ', '_');
-
-	AsmGenerator::addInstruction(".data\n\t" + labelString + ": .asciiz \"" + str + "\" ");
-
-	AsmGenerator::addInstruction(".text\nla $a0," + labelString);
+	
+	AsmGenerator::addString("a0", str);
 	AsmGenerator::systemCall(4);
 }
 
@@ -232,6 +231,17 @@ void AsmGenerator::allocate(string dest_reg, string source_reg) {
 	AsmGenerator::addInstruction("move $" + dest_reg + ", $v0");
 }
 
+void AsmGenerator::addString(string dest_reg, string value) {
+	auto result = AsmGenerator::strings.find(value);
+	if (result != strings.end()) {
+		AsmGenerator::addInstruction("la $" + dest_reg + ", " + result->second);
+	}
+	else {
+		AsmGenerator::strings[value] = "string" + to_string(stringCounter);
+		AsmGenerator::addInstruction(".data\n\tstring" + to_string(stringCounter) + ": .asciiz \"" + value + "\"\n.text\n");
+		AsmGenerator::addInstruction("la $" + dest_reg + ", string" + to_string(stringCounter++));
+	}
+}
 
 ofstream AsmGenerator::assembly_code_file;
 stringstream AsmGenerator::main_stream;

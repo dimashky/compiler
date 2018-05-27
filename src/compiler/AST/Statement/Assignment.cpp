@@ -116,6 +116,8 @@ void Assignment::generateCode() {
 	}
 
 	AsmGenerator::printReg("t0");
+	AsmGenerator::printNewLine();
+	AsmGenerator::printStr("Hello ?");
 }
 
 Assignment::~Assignment()

@@ -1,4 +1,5 @@
 #include "AutoConst.h"
+#include <algorithm>
 #include "../../Type Checker/all.h"
 AutoConst::AutoConst(string type, void* value, Node* parent, int lineNo):Expression(parent)
 {
@@ -65,6 +66,11 @@ void AutoConst::generateCode() {
 	}
 	else if (this->type == "CHAR") {
 		AsmGenerator::li("t0", *((char*)this->value), true);
+	}
+	else if (this->type == "STRING") {
+		std::string tmp = (*((string*)value));
+		std::replace(tmp.begin(), tmp.end(), '"', ' ');
+		AsmGenerator::addString("t0", tmp);
 	}
 	AsmGenerator::push("t0");
 }
