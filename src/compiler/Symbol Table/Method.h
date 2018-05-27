@@ -23,7 +23,9 @@ private:
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Procedure* astPosition;
+	string getMethodSignator() {
 
+	}
 	bool isNew() {
 		return this->is_new;
 	}
