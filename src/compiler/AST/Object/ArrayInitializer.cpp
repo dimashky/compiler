@@ -112,7 +112,7 @@ void ArrayInitializer::generateCode() {
 			elements[i]->generateCode();
 			AsmGenerator::pop("t0");
 			AsmGenerator::printReg("t0");
-			AsmGenerator::sw("t0", "t5", -4 * i);
+			AsmGenerator::sw("t0", "t5", 4 * i);
 		}
 		AsmGenerator::push("t5");
 	}

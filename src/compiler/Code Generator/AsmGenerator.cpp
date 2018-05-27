@@ -9,12 +9,12 @@ void AsmGenerator::initializeFile()
 {
 	assembly_code_file.open("./AssemblyCode.asm");
 	main_stream << ".text\n"
-		<< ".globl Main\n"
+		<< ".globl MainClass.Main_STRING\n"
 		<< "add $fp, $sp, 0\n"
 		<< "add $sp, $sp,"
 		<< -1 * ((Method*)symbolTable::mainRef)->stackFrameSize
 		<< "\n"
-		<< "jal Main\n";
+		<< "jal MainClass.Main_STRING\n";
 }
 
 void AsmGenerator::writeAsmFile()
@@ -144,6 +144,16 @@ void AsmGenerator::systemCall(int systemCall_code)
 void AsmGenerator::printString(string reg_string_address)
 {
 	AsmGenerator::move("a0",reg_string_address);
+	AsmGenerator::systemCall(4);
+}
+
+void AsmGenerator::printStr(string str) {
+	string labelString = str;
+	replace(labelString.begin(), labelString.end(), ' ', '_');
+
+	AsmGenerator::addInstruction(".data\n\t" + labelString + ": .asciiz \"" + str + "\" ");
+
+	AsmGenerator::addInstruction(".text\nla $a0," + labelString);
 	AsmGenerator::systemCall(4);
 }
 

@@ -15,6 +15,8 @@ public:
 	
 	static int labelCounter;
 
+	static void printStr(string str);
+
 	static stringstream main_stream;
 
 	static void initializeFile(); 
