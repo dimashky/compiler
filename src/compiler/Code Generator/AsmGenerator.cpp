@@ -157,6 +157,12 @@ void AsmGenerator::printReg(string reg)
 {
 	AsmGenerator::move("a0",reg);
 	AsmGenerator::systemCall(1);
+	AsmGenerator::printNewLine();
+}
+
+void AsmGenerator::printNewLine() {
+	AsmGenerator::addInstruction("addi $a0, $0, 0xA");
+	AsmGenerator::systemCall(11);
 }
 
 void AsmGenerator::f_print_reg(string reg)
@@ -197,6 +203,25 @@ void AsmGenerator::sw(string source_register, string reference, int offset) {
 	c += ", " + to_string(offset) + "($" + reference + ")";
 	AsmGenerator::addInstruction(c);
 }
+
+void AsmGenerator::allocate(string dest_reg, int bytes) {
+
+	AsmGenerator::addInstruction("li $a0, " + to_string(bytes));
+	AsmGenerator::addInstruction("li $v0, 9");
+	AsmGenerator::addInstruction("syscall");
+
+	AsmGenerator::addInstruction("move $"+ dest_reg +", $v0");
+}
+
+void AsmGenerator::allocate(string dest_reg, string source_reg) {
+
+	AsmGenerator::addInstruction("move $a0, $" + source_reg);
+	AsmGenerator::addInstruction("li $v0, 9");
+	AsmGenerator::addInstruction("syscall");
+
+	AsmGenerator::addInstruction("move $" + dest_reg + ", $v0");
+}
+
 
 ofstream AsmGenerator::assembly_code_file;
 stringstream AsmGenerator::main_stream;

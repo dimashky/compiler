@@ -81,16 +81,39 @@ void Assignment::generateCode() {
 		left->getPreDot()->generateCode();
 		AsmGenerator::pop("t1");
 	}
-	else if ( left->getPostDot()->getType() == "field" ) {
-		AsmGenerator::lw("t1", "fp", -4);
+	else {
+		if (left->getPostDot()->getType() == "field") {
+			AsmGenerator::lw("t1", "fp", -4);
+		}
+		else {
+			AsmGenerator::addInstruction("move $t1, $fp");
+		}
+	}
+
+	if (left->dimensions.size() > 0) {
+		AsmGenerator::push("t1");
+
+		left->dimensions[0]->generateCode();
+		AsmGenerator::pop("t0"); // index value
+		
+		AsmGenerator::pop("t1"); // prev t1 
+		
+		AsmGenerator::addInstruction("subi $t1, $t1, " + to_string( left->getPostDot()->offset));
+		
+		AsmGenerator::lw("t1", "t1", 0);
+		
+		AsmGenerator::addInstruction("addi $t4, $0, 4");
+		AsmGenerator::addInstruction("mul $t0, $t0, $t4");
+		
+		AsmGenerator::addInstruction("add $t1, $t1, $t0");
+		
+		AsmGenerator::pop("t0"); // right value 
+		AsmGenerator::sw("t0", "t1", 0);
 	}
 	else {
-		AsmGenerator::addInstruction("move $t1, $fp");
+		AsmGenerator::pop("t0");	// right value
+		AsmGenerator::sw("t0", "t1", -1 * left->getPostDot()->offset);
 	}
-	
-	AsmGenerator::pop("t0");
-
-	AsmGenerator::sw("t0", "t1", -1 * left->getPostDot()->offset);
 
 	AsmGenerator::printReg("t0");
 }

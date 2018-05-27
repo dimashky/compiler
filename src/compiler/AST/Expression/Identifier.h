@@ -17,9 +17,9 @@ private:
 	*/
 	Node* preDot;
 	Symbol* postDot;
-	vector<Node*>dimensions;
 	bool isArray, isConst, isReadonly, isType;
 public:
+	vector<Node*>dimensions;
 
 	static bool leftAssignment, isAssigned, isStaticMethod;
 

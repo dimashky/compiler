@@ -181,11 +181,7 @@ void Call::generateCode() {
 
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
 
-		AsmGenerator::addInstruction("li $a0, " + to_string(((Class*)classRef)->bytes));
-		AsmGenerator::addInstruction("li $v0, 9");
-		AsmGenerator::addInstruction("syscall");
-
-		AsmGenerator::addInstruction("move $s0, $v0");
+		AsmGenerator::allocate("s0", ((Class*)classRef)->bytes);
 
 		AsmGenerator::sw("s0", "sp", -4);
 	}

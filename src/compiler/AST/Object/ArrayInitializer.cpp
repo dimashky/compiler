@@ -38,6 +38,7 @@ void ArrayInitializer::setElements(queue<Node*>elements)
 	while (!elements.empty()) {
 		this->elements.push_back(elements.front());
 		elements.pop();
+		cout << "toto" << endl;
 	}
 	return;
 }
@@ -95,6 +96,26 @@ bool ArrayInitializer::typeChecking() {
 	}
 
 	return true;
+}
+
+void ArrayInitializer::generateCode() {
+	// solve array issue for one dimension now!
+	if (dimensions.size() == 1) {
+		for (auto dimension : dimensions) {
+			dimension->generateCode();
+			AsmGenerator::pop("t0");
+			AsmGenerator::addInstruction("addi $t4, $0, 4");
+			AsmGenerator::addInstruction("mul $t0, $t0, $t4");
+			AsmGenerator::allocate("t5", "t0");
+		}
+		for (int i = 0; i < elements.size(); ++i) {
+			elements[i]->generateCode();
+			AsmGenerator::pop("t0");
+			AsmGenerator::printReg("t0");
+			AsmGenerator::sw("t0", "t5", -4 * i);
+		}
+		AsmGenerator::push("t5");
+	}
 }
 
 ArrayInitializer::~ArrayInitializer(){

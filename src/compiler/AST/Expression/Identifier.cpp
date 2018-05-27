@@ -228,6 +228,19 @@ void Identifier::generateCode() {
 			AsmGenerator::lw("t0", "fp", -4);
 			AsmGenerator::lw("t0", "t0", -1 * postDot->offset);
 		}
+		if (dimensions.size() > 0) {
+			AsmGenerator::push("t0");
+			// handle only one dimension right now!
+			dimensions[0]->generateCode();
+			AsmGenerator::pop("t1");
+			AsmGenerator::addInstruction("addi $t0, $0, -4");
+			AsmGenerator::addInstruction("mul $t1, $t0, $t1");
+			
+			AsmGenerator::pop("t0");
+
+			AsmGenerator::addInstruction("sub $t0, $t0, $t1");
+			AsmGenerator::lw("t0", "t0", 0);
+		}
 	}
 	AsmGenerator::push("t0");
 }

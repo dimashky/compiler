@@ -24,6 +24,8 @@ public:
 
 	bool typeChecking();
 
+	void generateCode();
+
 	~ArrayInitializer();
 };
 

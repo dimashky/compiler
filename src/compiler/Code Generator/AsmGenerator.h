@@ -48,7 +48,13 @@ public:
 
 	static void printReg(string reg);
 
+	static void printNewLine();
+
 	static void f_print_reg(string reg);
+
+	static void allocate(string dest_reg, int bytes);
+
+	static void allocate(string dest_reg, string source_reg);
 
 	static void move(string dest_reg ,string source_reg);
 	static void f_move(string dest_reg ,string source_reg);
