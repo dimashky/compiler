@@ -103,6 +103,8 @@ bool Procedure::typeChecking() {
 		baseCall = new Call(new Identifier(nullptr, new Symbol("base", symbol->getLineNo(), -13)), this->parent, false, false, true);
 		((Call*)baseCall)->setSymbolTable(this->symboltable);
 		baseCall->typeChecking();
+		((Call*)baseCall)->new_expression = true;
+
 		if (baseCall->nodeType->getTypeId() == TYPE_ERROR) {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
 		}
@@ -126,7 +128,7 @@ void Procedure::generateCode() {
 	// function
 	if (this->symbol && this->symbol->getType() == "method" && block) {
 		AsmGenerator::addInstruction("\n");
-		AsmGenerator::addLabel(this->symbol->getName()); /// Change from get name to get FULL name
+		AsmGenerator::addLabel(this->getFullPath()); /// Change from get name to get FULL name
 		// store current $ra in new AR
 		if (this->symbol->getName() != "Main") {
 			AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));

@@ -160,7 +160,7 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 
 		list.push(curr_part);
 
-		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
+		/*pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
 		
 		if (ref.first != nullptr)
 			((Field*)symbol)->set_type(((symbolTable*)ref.first)->owner);
@@ -168,7 +168,7 @@ void symbolTable::addField(Symbol* symbol, bool known_type)
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((Field*)symbol)->get_type_name() + "' couldn't be found."));
 		
-		else
+		else*/
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
 	}
 
@@ -212,19 +212,19 @@ void symbolTable::addLocalVariable(Symbol* symbol, bool known_type)
 		}
 
 		list.push(curr_part);
-
+		
 		symbolTable* parent_class = parent;
 
 		while (parent_class->owner == nullptr || parent_class->owner != nullptr && parent_class->owner->getType() != "class")
 			parent_class = parent_class->parent;
 
-		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent_class->owner)->get_type_graph_position(), list);
+		/*pair<void*, bool> ref = type_defination_tree->find(((Class*)parent_class->owner)->get_type_graph_position(), list);
 
 		if (ref.first != nullptr)
 			((LocalVariable*)symbol)->set_type(((symbolTable*)ref.first)->owner);
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error, the type name '" + ((LocalVariable*)symbol)->get_type_name() + "' couldn't be found."));
-		else
+		else*/
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent_class->owner)->get_type_graph_position(), symbol)));
 	}
 
@@ -374,7 +374,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		}
 
 		list.push(curr_part);
-
+		/*
 		pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
 
 		if (ref.first != nullptr)
@@ -383,7 +383,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 		else if (ref.second)
 			error_handler.add(error(symbol->getLineNo(), -1, "error,  the type name '" + ((Method*)symbol)->get_return_type() + "' couldn't be found"));
 
-		else
+		else*/
 			later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), symbol)));
 	}
 
@@ -427,7 +427,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			}
 
 			list.push(curr_part);
-
+			/*
 			pair<void*, bool> ref = type_defination_tree->find(((Class*)parent->owner)->get_type_graph_position(), list);
 
 			if (ref.first != nullptr)
@@ -436,7 +436,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			else if (ref.second)
 				error_handler.add(error(par[i]->getLineNo(), -1, "error, the type name '" + par[i]->get_type_name() + "' couldn't be found."));
 
-			else
+			else*/
 				later_defination_var.push(make_pair(list, make_pair(((Class*)parent->owner)->get_type_graph_position(), par[i])));
 		}
 

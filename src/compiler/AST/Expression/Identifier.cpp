@@ -157,12 +157,16 @@ bool Identifier::typeChecking() {
 			this->isReadonly = true;
 		//throw error when access to static field from this keyword
 		if (((Field*)prev)->getIsStatic()) {
-			if (preDot != nullptr && preDot->getType() == "identifier" && (((Identifier*)preDot)->postDot->getName() == "this" || ((Identifier*)preDot)->postDot->getName() == "base"))
-			{
+			if (preDot != nullptr && preDot->getType() == "identifier" && (((Identifier*)preDot)->postDot->getName() == "this" || ((Identifier*)preDot)->postDot->getName() == "base")) {
 				this->nodeType = new TypeError("cannot access to static field from 'this' keyword or objects", postDot->getLineNo());
 				return true;
 			}
 		}
+		else if (preDot && preDot->getType() == "identifier" && ((Identifier*)preDot)->isType) {
+			this->nodeType = new TypeError("cannot access to no static field from it's type name", postDot->getLineNo());
+			return true;
+		}
+
 		//handle arrays
 		if (((Field*)prev)->getDimension() != this->dimensions.size()) {
 			if (((Field*)prev)->getDimension() == 0) {

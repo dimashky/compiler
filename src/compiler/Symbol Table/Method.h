@@ -23,7 +23,14 @@ private:
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Procedure* astPosition;
-
+	string getFullPath() {
+		string signature = this->getName();
+		for each (auto param in this->types_ids_parameter)
+		{
+			signature += "_" + param->get_type_name();
+		}
+		return signature;
+	}
 	bool isNew() {
 		return this->is_new;
 	}
