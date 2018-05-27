@@ -29,6 +29,7 @@ public:
 		{
 			signature += "_" + param->get_type_name();
 		}
+		return signature;
 	}
 	bool isNew() {
 		return this->is_new;
