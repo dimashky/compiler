@@ -23,8 +23,12 @@ private:
 	vector<LocalVariable*> types_ids_parameter;
 public:
 	Procedure* astPosition;
-	string getMethodSignator() {
-
+	string getFullPath() {
+		string signature = this->getName();
+		for each (auto param in this->types_ids_parameter)
+		{
+			signature += "_" + param->get_type_name();
+		}
 	}
 	bool isNew() {
 		return this->is_new;

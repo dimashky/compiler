@@ -20,6 +20,18 @@ public:
 	bool getHasReturn();
 
 	string getType();
+	
+	string getFullPath() {
+		if (symbol) {
+			if (symbol->getType() == "class") {
+				return symbol->getFullPath();
+			}
+			else if (symbol->getType() == "method") {
+				return ((Procedure*)parent)->symbol->getFullPath() + "." + symbol->getFullPath();
+			}
+		}
+		return "";
+	}
 
 	void setHasReturn(bool hasReturnStatement);
 
