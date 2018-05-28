@@ -12,12 +12,12 @@ void AsmGenerator::initializeFile()
 {
 	assembly_code_file.open("./AssemblyCode.asm");
 	main_stream << ".text\n"
-		<< ".globl MainClass.Main_STRING\n"
+		<< ".globl "<< symbolTable::mainPath  <<"\n"
 		<< "add $fp, $sp, 0\n"
 		<< "add $sp, $sp,"
 		<< -1 * ((Method*)symbolTable::mainRef)->stackFrameSize
 		<< "\n"
-		<< "jal MainClass.Main_STRING\n";
+		<< "jal "<< symbolTable::mainPath  <<"\n";
 }
 
 void AsmGenerator::writeAsmFile()
