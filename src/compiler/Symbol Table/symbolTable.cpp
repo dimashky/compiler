@@ -305,7 +305,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			error_handler.add(error(symbol->getLineNo(), -1, "error, a program has more Main method ."));
 		else {
 			symbolTable::mainRef = symbol;
-			symbolTable::mainPath = parent->owner->getFullPath() + "." + "Main";
+			symbolTable::mainPath = parent->owner->getFullPath() + "." + symbol->getFullPath();
 		}
 		symbolTable::is_main++;
 	}
