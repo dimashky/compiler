@@ -3,10 +3,16 @@
 #include "../../Symbol Table/Field.h"
 #include "../../Symbol Table/LocalVariable.h"
 #include "../../Symbol Table/Class.h"
+#include "../Object/Procedure.h"
 
 Variable::Variable(Symbol* symbol, Node *equal, Node* parent) :Object(symbol, parent)
 {
 	this->equal = equal;
+}
+
+
+string Variable::getFullPath() {
+	return ((Procedure*)parent)->getSymbol()->getFullPath() + "." + symbol->getName();
 }
 
 int Variable::print(int nodeCnt)
