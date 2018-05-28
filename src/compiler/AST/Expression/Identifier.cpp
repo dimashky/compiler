@@ -221,7 +221,7 @@ bool Identifier::typeChecking() {
 void Identifier::generateCode() {
 	// static fields
 	if (postDot->getType() == "field" && ((Field*)postDot)->getIsStatic()) {
-		AsmGenerator::addInstruction("lw $t0, " + postDot->getName());
+		AsmGenerator::addInstruction("lw $t0, " + postDot->getFullPath());
 		AsmGenerator::push("t0");
 		return;
 	}

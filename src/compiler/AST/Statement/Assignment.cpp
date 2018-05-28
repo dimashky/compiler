@@ -80,11 +80,10 @@ void Assignment::generateCode() {
 	// temp dirty code for static
 	if (left->getPostDot()->getType() == "field" && ((Field*)left->getPostDot())->getIsStatic()) {
 		AsmGenerator::pop("t0");
-		AsmGenerator::addInstruction("la $a0, " + left->getPostDot()->getName());
+		AsmGenerator::addInstruction("la $a0, " + left->getPostDot()->getFullPath());
 		AsmGenerator::addInstruction("move $a1, $t0");
 		AsmGenerator::addInstruction("sw $a1, 0($a0)");
 		AsmGenerator::printReg("t0");
-		AsmGenerator::printNewLine();
 		return;
 	}
 

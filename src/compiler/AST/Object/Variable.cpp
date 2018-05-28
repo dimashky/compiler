@@ -103,11 +103,11 @@ bool Variable::typeChecking() {
 
 void Variable::generateCode() {
 	if (symbol->getType() == "field" && ((Field*)symbol)->getIsStatic()) {
-		AsmGenerator::addInstruction(".data\n\t" + symbol->getName() + ": .word 0\n.text\n");
+		AsmGenerator::addInstruction(".data\n\t" + symbol->getFullPath() + ": .word 0\n.text\n");
 		if (equal) {
 			equal->generateCode();
 			AsmGenerator::pop("t0");
-			AsmGenerator::addInstruction("la $a0, " + symbol->getName());
+			AsmGenerator::addInstruction("la $a0, " + symbol->getFullPath());
 			AsmGenerator::addInstruction("move $a1, $t0");
 			AsmGenerator::addInstruction("sw $a1, 0($a0)");
 		}
