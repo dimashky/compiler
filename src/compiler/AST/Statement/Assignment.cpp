@@ -77,6 +77,18 @@ void Assignment::generateCode() {
 
 	right->generateCode();
 
+	// temp dirty code for static
+	if (left->getPostDot()->getType() == "field" && ((Field*)left->getPostDot())->getIsStatic()) {
+		AsmGenerator::pop("t0");
+		AsmGenerator::addInstruction("la $a0, " + left->getPostDot()->getName());
+		AsmGenerator::addInstruction("move $a1, $t0");
+		AsmGenerator::addInstruction("sw $a1, 0($a0)");
+		AsmGenerator::printReg("t0");
+		AsmGenerator::printNewLine();
+		return;
+	}
+
+
 	if (left->getPreDot() != nullptr) {
 		left->getPreDot()->generateCode();
 		AsmGenerator::pop("t1");
@@ -117,7 +129,6 @@ void Assignment::generateCode() {
 
 	AsmGenerator::printReg("t0");
 	AsmGenerator::printNewLine();
-	AsmGenerator::printStr("Hello ?");
 }
 
 Assignment::~Assignment()

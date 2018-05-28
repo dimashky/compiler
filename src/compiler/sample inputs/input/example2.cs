@@ -1,8 +1,10 @@
 class MainClass
 {
+    static int y = 5;
     public static void Main(string[] args)
     {
-        string x = "hello";
-        x = x;
+        y = 3 + 3;
+        y = y;
     }
 }
+

@@ -98,12 +98,29 @@ bool Variable::typeChecking() {
 }
 
 void Variable::generateCode() {
-	/// TODO: handle declaration new variable
-	if (equal) {
-		equal->generateCode();
+	if (symbol->getType() == "field" && ((Field*)symbol)->getIsStatic()) {
+		AsmGenerator::addInstruction(".data\n\t" + symbol->getName() + ": .word 0\n.text\n");
+		if (equal) {
+			equal->generateCode();
+			AsmGenerator::pop("t0");
+			AsmGenerator::addInstruction("la $a0, " + symbol->getName());
+			AsmGenerator::addInstruction("move $a1, $t0");
+			AsmGenerator::addInstruction("sw $a1, 0($a0)");
+		}
+	}
+	else {
 		/// TODO: handle assigment to this variable
-		AsmGenerator::pop("t0");
-		AsmGenerator::sw("t0", "fp", -1 * symbol->offset);
+		if (equal) {
+			equal->generateCode();
+			AsmGenerator::pop("t0");
+			if (symbol->getType() == "field") {
+				AsmGenerator::lw("t1", "fp", -4);
+			}
+			else {
+				AsmGenerator::addInstruction("move $t1, $fp");
+			}
+			AsmGenerator::sw("t0", "t1", -1 * symbol->offset);
+		}
 	}
 }
 

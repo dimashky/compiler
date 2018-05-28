@@ -162,7 +162,6 @@ void Call::generateCode() {
 		return;
 	}
 	
-
 	// store current $fp in new AR
 	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
 	
