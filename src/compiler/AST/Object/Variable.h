@@ -14,7 +14,6 @@ public:
 
 	bool typeChecking();
 	void generateCode();
-	string getFullPath();
 	~Variable();
 };
 

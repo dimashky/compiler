@@ -8,11 +8,9 @@
 Variable::Variable(Symbol* symbol, Node *equal, Node* parent) :Object(symbol, parent)
 {
 	this->equal = equal;
-}
-
-
-string Variable::getFullPath() {
-	return ((Procedure*)parent)->getSymbol()->getFullPath() + "." + symbol->getName();
+	if (symbol->getType() == "field" && ((Field*)symbol)->getIsStatic()) {
+		((Field*)symbol)->setFullPath(((Procedure*)parent)->getSymbol()->getFullPath() + "." + symbol->getName());
+	}
 }
 
 int Variable::print(int nodeCnt)
