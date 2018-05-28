@@ -23,6 +23,7 @@ queue< pair<queue<string>, pair<node*, Symbol* > > > symbolTable::later_definati
 vector<symbolTable*> symbolTable::deleted = vector<symbolTable*>();
 queue<symbolTable*>  symbolTable::class_inhertance_abstract = queue<symbolTable* > ();
 Symbol* symbolTable::mainRef = nullptr;
+string symbolTable::mainPath = "";
 
 symbolTable::symbolTable(symbolTable* parent, Symbol* owner)
 {
@@ -304,6 +305,7 @@ void symbolTable::addMethod(Symbol* symbol, queue<string>&modifiers, queue<pair 
 			error_handler.add(error(symbol->getLineNo(), -1, "error, a program has more Main method ."));
 		else {
 			symbolTable::mainRef = symbol;
+			symbolTable::mainPath = parent->owner->getFullPath() + "." + "Main";
 		}
 		symbolTable::is_main++;
 	}

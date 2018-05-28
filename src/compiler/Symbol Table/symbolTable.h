@@ -34,6 +34,7 @@ public:
 	
 	static int is_main;
 	static Symbol* mainRef;
+	static string mainPath;
 	static vector<node*>parents;
 	static symbolTable* object_ref;
 	static vector<symbolTable*> deleted;
