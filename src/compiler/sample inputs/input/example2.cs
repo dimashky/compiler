@@ -5,7 +5,12 @@ class b : a {
 
 class a
 {
-public    int x;
+    public int x;
+    public override string ToString()
+    {
+        return "maher";
+    }
+
 }
 
 class MainClass

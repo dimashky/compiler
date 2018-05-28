@@ -6,7 +6,7 @@
 #include "Attribute.h"
 #include "Interface.h"
 #include "symbolTable.h"
-#include "Field.h"
+#include "Method.h"
 using namespace::std;
 
 class Class : public Symbol
@@ -20,6 +20,7 @@ private:
 	bool refactored;
 public:
 	int bytes;
+	vector<Method*>dispatchRow;
 
 	Class(string name, int line_no, int col_no);
 	string getType();
@@ -45,22 +46,7 @@ public:
 	string getFullPath();
 	node* get_type_graph_position();
 	pair<string, symbolTable*> get_extended_class();
-	void refactor() {
-		if (this->refactored) {
-			return;
-		}
-		((Class*)baseClassImpInterfaces[0].second->get_owner())->refactor();
-		this->bytes = ((Class*)baseClassImpInterfaces[0].second->get_owner())->bytes;
-		for each (auto field in ((symbolTable*)this->type_graph_position->stPTR)->get_symbolMap())
-		{
-			if (field.first->getType() == "field") {
-				((Field*)field.first)->offset = this->bytes;
-				this->bytes += 4;
-			}
-		}
-		this->refactored = true;
-		return;
-	}
+	void refactor();
 	~Class();
 };
 
