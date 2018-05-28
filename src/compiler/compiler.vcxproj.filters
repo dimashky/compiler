@@ -64,6 +64,9 @@
     <Filter Include="Source Files\Code Generator">
       <UniqueIdentifier>{175788b8-1d66-4dce-accd-4398b3b288e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\I/O\input\system">
+      <UniqueIdentifier>{f758363d-5120-4dd3-b49d-e633048d0094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample inputs\input\example1.cs">
@@ -71,6 +74,9 @@
     </None>
     <None Include="sample inputs\input\example2.cs">
       <Filter>Source Files\I/O\input</Filter>
+    </None>
+    <None Include="sample inputs\input\system\Console.cs">
+      <Filter>Source Files\I/O\input\system</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
