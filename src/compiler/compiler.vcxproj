@@ -21,6 +21,7 @@
   <ItemGroup>
     <None Include="sample inputs\input\example1.cs" />
     <None Include="sample inputs\input\example2.cs" />
+    <None Include="sample inputs\input\system\Console.cs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AST\Expression\AutoConst.cpp" />
