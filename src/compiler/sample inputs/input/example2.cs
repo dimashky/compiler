@@ -1,11 +1,20 @@
-class MainClass
-{
-    static int y = 5;
-    public static void Main(string[] args)
-    {
-        y = 3 + 3;
-        y = y;
-        System.Console.write(4);  
-    }
+class c :b{ }
+class b : a {
+    public int b3;
 }
 
+class a
+{
+public    int x;
+}
+
+class MainClass
+{
+    public static void Main(string[] args)
+    {
+        b rr = new b();
+        rr.b3 = 4;
+        rr.x = 3;
+        rr.b3 = rr.b3;
+    }
+}

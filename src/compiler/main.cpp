@@ -104,11 +104,12 @@ int main()
 
 	AST->print(0);
 	Node::closeFiles();
-	AsmGenerator::initializeFile();
 	
 	if (error_handler.errorsNum() > 0) {
 		exit(-1);
 	}
+
+	AsmGenerator::initializeFile();
 
 	AST->generateCode();
 
