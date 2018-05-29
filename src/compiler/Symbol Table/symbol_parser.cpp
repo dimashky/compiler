@@ -52,7 +52,7 @@ void symbolParser::add_object()
 	Node::setCurrent(ns);
 	
 	
-	Method* method = new Method(mod, "string", "ToString", 0, 0);
+	Method* method = new Method(mod, "STRING", "ToString", 0, 0);
 
 	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), queue<int>(),queue<Node*>() ,1, 1);
 

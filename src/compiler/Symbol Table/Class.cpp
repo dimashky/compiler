@@ -1,5 +1,7 @@
 #include "Class.h"
 #include "../Error Handler/error_handler.h"
+#include "Field.h"
+
 extern errorHandler error_handler;
 
 Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_no)
@@ -22,6 +24,72 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 		this->refactored = true;
 	}
 }
+
+void Class::refactor() {
+	if (this->refactored) {
+		if (this->getName() == "object" && this->dispatchRow.size() == 0) {
+			for each (auto field in ((symbolTable*)this->type_graph_position->stPTR)->get_symbolMap()) {
+				if (field.first->getType() == "method" && !((Method*)field.first)->get_is_constructer()) {
+					((Method*)field.first)->offset = this->offset;
+					dispatchRow.push_back((Method*)field.first);
+					this->offset += 4;
+				}
+			}
+		}
+		return;
+	}
+	//parent refactor 
+	((Class*)baseClassImpInterfaces[0].second->get_owner())->refactor();
+	
+	this->bytes = ((Class*)baseClassImpInterfaces[0].second->get_owner())->bytes;
+	this->offset = ((Class*)baseClassImpInterfaces[0].second->get_owner())->offset;
+
+	vector<Method*> *parentDispatchRow = &((Class*)baseClassImpInterfaces[0].second->get_owner())->dispatchRow;
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 > symbolMap = ((symbolTable*)this->type_graph_position->stPTR)->get_symbolMap();
+	map<Symbol*, pair<symbolTable*, symbolTable* >, compare_1 >::iterator it;
+
+	for each (auto method in *parentDispatchRow) {
+		if (!method->get_is_constructer()) {
+			if (!method->get_is_private()) {
+				if (method->get_is_virtual() || method->get_is_override()) {
+					it = symbolMap.find(method);
+					if (it != symbolMap.end() && ((Method*)it->first)->get_is_override()) {
+						it->first->offset = method->offset;
+						dispatchRow.push_back((Method*)it->first);
+						continue;
+					}
+				}
+			}
+			this->dispatchRow.push_back(method);
+		}
+	}
+
+	for each (auto member in symbolMap)
+	{
+		if (member.first->getType() == "field") {
+			((Field*)member.first)->offset = this->bytes;
+			this->bytes += 4;
+		}
+		else if (member.first->getType() == "method" && !((Method*)member.first)->get_is_constructer()) {
+			Method* currMethod = (Method*)member.first;
+			if (!currMethod->get_is_override()) {
+				((Method*)member.first)->offset = this->offset;
+				dispatchRow.push_back((Method*)member.first);
+				this->offset += 4;
+			}
+		}
+	}
+	this->refactored = true;
+	cout << getName() << endl;
+	for each (Method* method in dispatchRow)
+	{
+		cout << method->getFullPath() << endl;
+	}
+	cout << "======================================" << endl;
+	return;
+}
+
+
 
 void Class::add_attributes(queue<string>&attributes)
 {
