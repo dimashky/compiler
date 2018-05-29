@@ -1,51 +1,33 @@
-class fniwef
+class MainClass
 {
     public static void Main()
     {
-        a c = new b();
-        int r = c.f() + 2;
-        System.Console.write(5);
+        a c1 = new a(1, 2);
+        b c2 = new b(5);
+        a c3 = new a(7, 8);
+        System.Console.write(c1.y);
+        System.Console.write(c3.x);
     }
 }
+
+
 class a
 {
-    int da;
-    public virtual int f()
+    public int x;
+    public int y;
+
+    public a(int xx, int yy)
     {
-        return 11;
+       this.x = xx;
+        y = yy;
     }
 }
-class b : a
+
+class b
 {
-    int d;
-    public override int f()
+    public int x;
+    public b(int x)
     {
-        return 5;
+
     }
 }
-
-
-
-//class a
-//{
-//    public int x;
-
-//}
-
-//class b:a
-//{
-//    public int y;
-
-//}
-
-//class dfqwd
-//{
-//    public static void Main()
-//    {
-//        b ff = new b();
-//        ff.x = 3;
-//        ff.x = ff.x + 1;
-//        ff.y = 4;
-//        ff.y = ff.y + 1;
-//    }
-//}

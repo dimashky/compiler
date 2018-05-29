@@ -233,7 +233,13 @@ void Identifier::generateCode() {
 	}
 	else {
 		if (postDot->getType() != "field") {
-			AsmGenerator::lw("t0", "fp", -1 * postDot->offset);
+			if (postDot->getName() == "this") {
+				AsmGenerator::lw("t0", "fp", -4);
+				AsmGenerator::printStr("thissssss ");
+			}
+			else {
+				AsmGenerator::lw("t0", "fp", -1 * postDot->offset);
+			}
 		}
 		else {
 			AsmGenerator::lw("t0", "fp", -4);

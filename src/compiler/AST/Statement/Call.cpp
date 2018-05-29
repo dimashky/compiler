@@ -168,7 +168,7 @@ void Call::generateCode() {
 	for (int i = 0; i < params.size(); ++i) {
 		params[i].first->generateCode();
 		if (params[i].first->getType() == "call") {
-			AsmGenerator::sw("t1", "sp", 0);
+			AsmGenerator::lw("t1", "sp", 0);
 		}
 		else {
 			AsmGenerator::pop("t1");
@@ -181,7 +181,7 @@ void Call::generateCode() {
 		// call parent constructor
 		if (calledMethod->astPosition->getBaseCall()) {
 			((Call*)calledMethod->astPosition->getBaseCall())->new_expression = true;
-			calledMethod->astPosition->getBaseCall()->generateCode();
+		//	calledMethod->astPosition->getBaseCall()->generateCode();
 		}
 
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
