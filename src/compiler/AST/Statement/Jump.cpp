@@ -65,6 +65,31 @@ bool Jump::typeChecking() {
 	return true;
 }
 
+void Jump::generateCode() {
+		Method* method = (Method*)((Procedure*)parentMethod)->getSymbol();
+		
+		if (jumpStatement == JumpStatement::Return) {
+		
+			if (statement) {
+				statement->generateCode();
+
+				if (statement->getType() == "call") {
+					AsmGenerator::lw("t0", "sp", 0);
+				}
+				else {
+					AsmGenerator::pop("t0");
+				}
+				AsmGenerator::sw("t0", "fp", 0);
+			}
+			
+			AsmGenerator::lw("ra", "fp", -1 * method->returnAddressOffset);
+			AsmGenerator::lw("fp", "fp", -1 * (method->returnAddressOffset + 4));
+
+			AsmGenerator::addInstruction("add $sp, $sp, " + to_string(method->stackFrameSize));
+			
+			AsmGenerator::addInstruction("jr $ra");
+		}
+}
 
 Jump::~Jump()
 {

@@ -38,51 +38,43 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 	switch (op)
 	{
 	case Plus:
-		AsmGenerator::addInstruction("add $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("add $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Minus:
-		AsmGenerator::addInstruction("sub $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("sub $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case star:
-		AsmGenerator::addInstruction("mul $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("mul $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case slash:
-		// divide to zero handling
-		AsmGenerator::addInstruction("addi $" + dest_reg + ",$0, 0");
-		AsmGenerator::addInstruction("beq $"+reg1+", 0, label" + to_string(AsmGenerator::labelCounter));
-		AsmGenerator::addInstruction("div $" + dest_reg + ", $" + reg2 + ", $" + reg1);
-		AsmGenerator::addLabel("label" + to_string(AsmGenerator::labelCounter++));
+		AsmGenerator::addInstruction("div $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case percent:
-		// divide to zero handling
-		AsmGenerator::addInstruction("addi $" + dest_reg + ",$0, 0");
-		AsmGenerator::addInstruction("beq $" + reg1 + ", 0, label" + to_string(AsmGenerator::labelCounter));
-		AsmGenerator::addInstruction("rem $" + dest_reg + ", $" + reg2 + ", $" + reg1);
-		AsmGenerator::addLabel("label" + to_string(AsmGenerator::labelCounter++));
+		AsmGenerator::addInstruction("rem $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case andand:
-		AsmGenerator::addInstruction("and $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("and $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case oror:
-		AsmGenerator::addInstruction("or $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("or $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case smaller:
-		AsmGenerator::addInstruction("slt $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("slt $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Operator::leq:
-		AsmGenerator::addInstruction("sle $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("sle $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Operator::Greater:
-		AsmGenerator::addInstruction("sgt $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("sgt $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Operator::geq:
-		AsmGenerator::addInstruction("sge $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("sge $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Operator::eqeq:
-		AsmGenerator::addInstruction("seq $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("seq $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case Operator::noteq:
-		AsmGenerator::addInstruction("sne $" + dest_reg + ", $" + reg2 + ", $" + reg1);
+		AsmGenerator::addInstruction("sne $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
 	case::Operator::post_plusplus:
 		AsmGenerator::addInstruction("addi $" + dest_reg + ", $" + reg1 + ", 1");
@@ -95,7 +87,6 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 		return;
 	}
 }
-
 void AsmGenerator::addLabel (string label_name)
 {
 	AsmGenerator::addInstruction(label_name+":");
@@ -103,21 +94,15 @@ void AsmGenerator::addLabel (string label_name)
 
 void AsmGenerator::push(string source_register)
 {
-
+	AsmGenerator::addInstruction("\tsw $" + source_register + ", 0($sp)");
 	AsmGenerator::addInstruction("\tsub $sp,$sp,4");
-	string c="sw $";
-	c+=source_register;
-	c+=", 0($sp)";
-	AsmGenerator::addInstruction("\t"+c);
 }
 
 void AsmGenerator::pop(string destination_register)
 {
-	string c = "lw $";
-	c += destination_register;
-	c += ", 0($sp)";
-	AsmGenerator::addInstruction("\t"+c);
 	AsmGenerator::addInstruction("\tadd $sp,$sp,4");
+
+	AsmGenerator::addInstruction("\tlw $" + destination_register + ", 0($sp)");
 }
 
 void AsmGenerator::addInstruction(string instruction)

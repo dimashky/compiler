@@ -39,20 +39,20 @@ int Procedure::print(int nodeCnt)
 {
 	int currentId = nodeCnt;
 	if (this->symbol != nullptr)
-		fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#74bffc'},", currentId, this->symbol->getName().c_str());
+fprintf(nodesFile, "{ id:%d, label:'%s', shape: 'box', color:'#74bffc'},", currentId, this->symbol->getName().c_str());
 	else
 		fprintf(nodesFile, "{ id:%d, label:'Global Namespace', shape: 'box', color:'#74bffc'},", nodeCnt);
 
-	for (int i = 0; i < locals.size(); i++) {
-		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
-		nodeCnt = locals[i]->print(nodeCnt + 1);
-	}
-	if (block) {
-		fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
-		nodeCnt = block->print(nodeCnt + 1);
-	}
+		for (int i = 0; i < locals.size(); i++) {
+			fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+			nodeCnt = locals[i]->print(nodeCnt + 1);
+		}
+		if (block) {
+			fprintf(edgesFile, "{from:%d, to:%d, dashes:true},", currentId, nodeCnt + 1);
+			nodeCnt = block->print(nodeCnt + 1);
+		}
 
-	return nodeCnt;
+		return nodeCnt;
 }
 
 Block* Procedure::getBlock()
@@ -85,7 +85,7 @@ bool Procedure::typeChecking() {
 				error_handler.add(error(symbol->getLineNo(), symbol->getColNo(), "Warning override method without using override keyword"));
 			}
 		}
-		
+
 	}
 	//end handeling warning for override keyword
 
@@ -103,7 +103,7 @@ bool Procedure::typeChecking() {
 			this->nodeType = new TypeError("no suitable constructer in base class", this->symbol->getLineNo());
 		}
 	}
-	else if(symbol != nullptr && symbol->getType() == "method" && ((Method*)symbol)->get_is_constructer()) {
+	else if (symbol != nullptr && symbol->getType() == "method" && ((Method*)symbol)->get_is_constructer()) {
 		baseCall = new Call(new Identifier(nullptr, new Symbol("base", symbol->getLineNo(), -13)), this->parent, false, false, true);
 		((Call*)baseCall)->setSymbolTable(this->symboltable);
 		baseCall->typeChecking();
@@ -131,25 +131,23 @@ bool Procedure::typeChecking() {
 void Procedure::generateCode() {
 	// function
 	if (this->symbol && this->symbol->getType() == "method" && block) {
-		AsmGenerator::addInstruction("\n");
-		AsmGenerator::addLabel(this->getFullPath()); /// Change from get name to get FULL name
-		// store current $ra in new AR
+		AsmGenerator::comment("\nfunction declaration <" + this->symbol->getName() +">\n");
+		AsmGenerator::addLabel(this->getFullPath());
+
 		if (this->symbol->getName() != "Main") {
+			// store current $ra in new AR
 			AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
-			
+
 			block->generateCode();
-			
-			AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
-			
-			AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
-			
-			AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
 
-			AsmGenerator::lw("t0", "sp", ((Method*)this->symbol)->get_is_constructer() * -4 );
-			
-			AsmGenerator::push("t0");
+			if (((Method*)this->symbol)->get_is_constructer() || ((Method*)this->symbol)->get_return_type() == "VOID" ){
 
-			AsmGenerator::addInstruction("jr $ra");
+				AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
+				AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
+				AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
+
+				AsmGenerator::addInstruction("jr $ra");
+			}
 		}
 		else {
 			block->generateCode();

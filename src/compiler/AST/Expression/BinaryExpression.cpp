@@ -90,14 +90,24 @@ bool BinaryExpression::typeChecking() {
 }
 
 void BinaryExpression::generateCode() {
-	this->left->generateCode();
-	this->right->generateCode();
-	
 	string t0 = "t0", t1 = "t1", t2 = "t2";
-	AsmGenerator::pop(t0);
-	AsmGenerator::pop(t1);
+
+	this->left->generateCode();
+	if (this->left->getType() == "call") {
+		AsmGenerator::lw(t0, "sp", 0);
+		AsmGenerator::push(t0);
+	}
+
+	this->right->generateCode();
+	if (this->right->getType() == "call") {
+		AsmGenerator::lw(t1, "sp", 0);
+		AsmGenerator::push(t1);
+	}
+
+
+	AsmGenerator::pop(t1); // right value
+	AsmGenerator::pop(t0); // left value
 
 	AsmGenerator::operation(op, t2, t0, t1);
-
 	AsmGenerator::push(t2);
 }

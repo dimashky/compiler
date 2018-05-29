@@ -157,21 +157,27 @@ bool Call::typeChecking() {
 	return true;
 }
 
-void Call::generateCode() {
-	if (!calledMethod) {
-		return;
-	}
-	
-	// store current $fp in new AR
+
+
+
+
+void Call::generateCode() {	
+	// store old $fp in new AR
 	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
 	
 	for (int i = 0; i < params.size(); ++i) {
 		params[i].first->generateCode();
-		AsmGenerator::pop("t1");
+		if (params[i].first->getType() == "call") {
+			AsmGenerator::sw("t1", "sp", 0);
+		}
+		else {
+			AsmGenerator::pop("t1");
+		}
 		AsmGenerator::sw("t1", "sp", -1 * ( 4 * i + 8));
 	}
 
 	if (new_expression) {
+		
 		// call parent constructor
 		if (calledMethod->astPosition->getBaseCall()) {
 			((Call*)calledMethod->astPosition->getBaseCall())->new_expression = true;
@@ -179,15 +185,21 @@ void Call::generateCode() {
 		}
 
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
-
 		AsmGenerator::allocate("s0", ((Class*)classRef)->bytes);
-
-		AsmGenerator::sw("s0", "sp", -4);
+		AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
+		AsmGenerator::sw("s0", "sp", 0 ); // pass self value to return value section in AR
 	}
-	else 
-	{
-		// send this value 
-
+	else { 
+		Node* preDot = ((Identifier*)call)->getPreDot();
+		if (preDot) {
+			preDot->generateCode();
+			AsmGenerator::pop("s0");
+			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
+		}
+		else {
+			AsmGenerator::lw("s0", "fp", -4);
+			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
+		}
 	}
 
 	// move $sp to new $sp

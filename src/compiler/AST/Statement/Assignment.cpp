@@ -122,12 +122,17 @@ void Assignment::generateCode() {
 		AsmGenerator::sw("t0", "t1", 0);
 	}
 	else {
-		AsmGenerator::pop("t0");	// right value
+		if (this->right->getType() == "call") {
+			AsmGenerator::lw("t0", "sp", 0);
+		}
+		else {
+			AsmGenerator::pop("t0");	// right value
+		}
+
 		AsmGenerator::sw("t0", "t1", -1 * left->getPostDot()->offset);
 	}
 
 	AsmGenerator::printReg("t0");
-	AsmGenerator::printNewLine();
 }
 
 Assignment::~Assignment()
