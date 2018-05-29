@@ -162,7 +162,7 @@ bool Call::typeChecking() {
 
 
 void Call::generateCode() {	
-	// store old $fp in new AR
+	// store old $fp in new 
 	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
 	
 	for (int i = 0; i < params.size(); ++i) {
@@ -186,13 +186,27 @@ void Call::generateCode() {
 
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
 		AsmGenerator::allocate("s0", ((Class*)classRef)->bytes);
+		// store dispatch pointer
+		AsmGenerator::addInstruction("la $t1, " + ((Procedure*)calledMethod->astPosition->getParent())->getFullPath() + "_DispatchTable");
+		AsmGenerator::sw("t1", "s0", 0);
+
 		AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		AsmGenerator::sw("s0", "sp", 0 ); // pass self value to return value section in AR
+
+		  // move $sp to new $sp
+		AsmGenerator::addInstruction("add $fp, $sp, 0");
+		AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
+
+		AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
 	}
 	else { 
 		Node* preDot = ((Identifier*)call)->getPreDot();
 		if (preDot) {
 			preDot->generateCode();
+			if (preDot->getType() == "call") {
+				AsmGenerator::lw("s0", "sp", 0);
+				AsmGenerator::push("s0");
+			}
 			AsmGenerator::pop("s0");
 			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		}
@@ -200,13 +214,18 @@ void Call::generateCode() {
 			AsmGenerator::lw("s0", "fp", -4);
 			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		}
+		AsmGenerator::lw("t1", "s0", 0);  // dispatch ptr
+
+
+
+		AsmGenerator::printReg("t1");
+		AsmGenerator::lw("t1", "t1", calledMethod->offset);
+		// move $sp to new $sp
+		AsmGenerator::addInstruction("add $fp, $sp, 0");
+		AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
+		//AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
+		AsmGenerator::addInstruction("jalr $t1");
 	}
-
-	// move $sp to new $sp
-	AsmGenerator::addInstruction("add $fp, $sp, 0");
-	AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
-
-	AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
 }
 
 Call::~Call()

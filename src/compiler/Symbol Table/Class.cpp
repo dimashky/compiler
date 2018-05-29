@@ -20,7 +20,7 @@ Class::Class(string name, int line_no, int col_no) : Symbol(name, line_no, col_n
 	have_constructor = false;
 	this->is_static = false;
 	this->refactored = false;
-	bytes = 0;
+	bytes = 4; // first word for dispatch table pointer
 	if (getName() == "object") {
 		this->refactored = true;
 	}

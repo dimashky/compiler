@@ -53,6 +53,8 @@ void symbolParser::add_object()
 	
 	
 	Method* method = new Method(mod, "STRING", "ToString", 0, 0);
+	method->returnAddressOffset = 8;
+	method->stackFrameSize = 16;
 
 	symboltable->addMethod(method, mod, queue<pair <pair<pair<string, string >, pair<int, int> >, bool > >(), queue<int>(),queue<Node*>() ,1, 1);
 

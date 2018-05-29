@@ -140,14 +140,11 @@ void Procedure::generateCode() {
 
 			block->generateCode();
 
-			if (((Method*)this->symbol)->get_is_constructer() || ((Method*)this->symbol)->get_return_type() == "VOID" ){
+			AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
+			AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
+			AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
 
-				AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
-				AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
-				AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
-
-				AsmGenerator::addInstruction("jr $ra");
-			}
+			AsmGenerator::addInstruction("jr $ra");
 		}
 		else {
 			block->generateCode();

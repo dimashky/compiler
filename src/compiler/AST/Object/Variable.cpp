@@ -116,6 +116,10 @@ void Variable::generateCode() {
 		/// TODO: handle assigment to this variable
 		if (equal) {
 			equal->generateCode();
+			if (equal->getType() == "call") {
+				AsmGenerator::lw("t0", "sp", 0);
+				AsmGenerator::push("t0");
+			}
 			AsmGenerator::pop("t0");
 			if (symbol->getType() == "field") {
 				AsmGenerator::lw("t1", "fp", -4);
