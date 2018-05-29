@@ -33,13 +33,14 @@ void Class::refactor() {
 				if (field.first->getType() == "method" && !((Method*)field.first)->get_is_constructer()) {
 					((Method*)field.first)->offset = this->offset;
 					dispatchRow.push_back((Method*)field.first);
-					this->offset += 4;
+					this->offset += 8;
 				}
 			}
 			//init dispatch table for object class
 			AsmGenerator::addInstruction(this->getFullPath() + "_DispatchTable:");
 			for each (Method* method in this->dispatchRow) {
 				AsmGenerator::addInstruction("\t.word " + ((Procedure*)method->astPosition->getParent())->getSymbol()->getFullPath() + "." + method->getFullPath());
+				AsmGenerator::addInstruction("\t.word " + to_string(method->stackFrameSize));
 			}
 		}
 		return;
@@ -81,7 +82,7 @@ void Class::refactor() {
 			if (!currMethod->get_is_override()) {
 				((Method*)member.first)->offset = this->offset;
 				dispatchRow.push_back((Method*)member.first);
-				this->offset += 4;
+				this->offset += 8;
 			}
 		}
 	}
@@ -90,6 +91,7 @@ void Class::refactor() {
 	AsmGenerator::addInstruction(this->getFullPath() + "_DispatchTable:");
 	for each (Method* method in this->dispatchRow) {
 		AsmGenerator::addInstruction("\t.word " + ((Procedure*)method->astPosition->getParent())->getSymbol()->getFullPath() + "." + method->getFullPath());
+		AsmGenerator::addInstruction("\t.word " + to_string(method->stackFrameSize));
 	}
 
 	return;

@@ -219,12 +219,13 @@ void Call::generateCode() {
 
 
 		AsmGenerator::printReg("t1");
-		AsmGenerator::lw("t1", "t1", calledMethod->offset);
+		AsmGenerator::lw("t2", "t1", calledMethod->offset);
 		// move $sp to new $sp
 		AsmGenerator::addInstruction("add $fp, $sp, 0");
-		AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
-		//AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
-		AsmGenerator::addInstruction("jalr $t1");
+		AsmGenerator::lw("t3", "t1", 4 + calledMethod->offset);
+		AsmGenerator::addInstruction("sub $sp, $sp, $t3");
+
+		AsmGenerator::addInstruction("jalr $t2");
 	}
 }
 
