@@ -201,6 +201,7 @@ void Call::generateCode() {
 	}
 	else { 
 		Node* preDot = ((Identifier*)call)->getPreDot();
+		bool isCalledMethodStatic = this->calledMethod->get_is_static();
 		if (preDot) {
 			preDot->generateCode();
 			if (preDot->getType() == "call") {
@@ -210,15 +211,20 @@ void Call::generateCode() {
 			AsmGenerator::pop("s0");
 			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		}
-		else {
+		else if (!isCalledMethodStatic){
 			AsmGenerator::lw("s0", "fp", -4);
 			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		}
+		
+		if (isCalledMethodStatic) {
+			// move $sp to new $sp
+			AsmGenerator::addInstruction("add $fp, $sp, 0");
+			AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
+			AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
+			return;
+		}
+
 		AsmGenerator::lw("t1", "s0", 0);  // dispatch ptr
-
-
-
-		AsmGenerator::printReg("t1");
 		AsmGenerator::lw("t2", "t1", calledMethod->offset);
 		// move $sp to new $sp
 		AsmGenerator::addInstruction("add $fp, $sp, 0");
