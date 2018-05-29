@@ -100,7 +100,7 @@ bool Identifier::typeChecking() {
 		else
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
 		string lastName = postDot->getName();
-		postDot = prev;
+		*postDot = *prev;
 		postDot->setName(lastName);
 		return true;
 	}
