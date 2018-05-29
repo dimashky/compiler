@@ -9,7 +9,8 @@ map<string, string> AsmGenerator::strings;
 
 void AsmGenerator::preInitFile() {
 	assembly_code_file.open("./AssemblyCode.asm");
-	main_stream << ".data\n";
+	main_stream << ".data\n"
+		<< "buffer: .space 20\n";
 }
 
 void AsmGenerator::initializeFile()

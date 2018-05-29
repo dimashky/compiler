@@ -10,5 +10,13 @@ namespace System
         {
 
         }
+        public static int readInt()
+        {
+            return 1;
+        }
+        public static string readString()
+        {
+            return "";
+        }
     }
 }

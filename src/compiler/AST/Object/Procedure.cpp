@@ -131,29 +131,46 @@ bool Procedure::typeChecking() {
 void Procedure::generateCode() {
 	// function
 	if (this->symbol && this->symbol->getType() == "method" && block) {
+		bool isReadFunction = false;
+
 		AsmGenerator::comment("\n function declaration <" + this->symbol->getName() +">\n\n");
 		AsmGenerator::addLabel(this->getFullPath());
 
 		// store current $ra in new AR
 		AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
 
-		block->generateCode();
+		if (((Method*)symbol)->getFullPath() == "write_INT") {
+			AsmGenerator::lw("t0", "fp", -8);
+			AsmGenerator::printReg("t0");
+		}
+
+		if (((Method*)symbol)->getFullPath() == "write_STRING") {
+			AsmGenerator::lw("a0", "fp", -8);
+			AsmGenerator::systemCall(4);
+		}
+
+		if (((Method*)symbol)->getFullPath() == "readInt") {
+			AsmGenerator::systemCall(5);
+			AsmGenerator::sw("v0", "fp", 0);
+			isReadFunction = true;
+		}
+
+		if (((Method*)symbol)->getFullPath() == "readString") {
+			AsmGenerator::addInstruction("la $a0, buffer");
+			AsmGenerator::li("a1", 20);
+			AsmGenerator::systemCall(8);
+			AsmGenerator::sw("a0", "fp", 0);
+			isReadFunction = true;
+		}
+
+		if (!isReadFunction)
+			block->generateCode();
 
 		if (this->symbol->getName() == "Main") {
 			AsmGenerator::systemCall(10);
 			return;
 		}
 		
-
-		if (((Method*)symbol)->getFullPath() == "write_INT") {
-			AsmGenerator::lw("t0", "fp", -8);
-			AsmGenerator::printReg("t0");
-		}
-		
-		if (((Method*)symbol)->getFullPath() == "write_STRING") {
-			AsmGenerator::lw("a0", "fp", -8);
-			AsmGenerator::systemCall(4);
-		}
 
 		AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
 		AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
