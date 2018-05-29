@@ -2,9 +2,9 @@ class fniwef
 {
     public static void Main()
     {
-        int r;
         a c = new b();
-        r = c.f();
+        int r = c.f() + 2;
+        System.Console.write(5);
     }
 }
 class a

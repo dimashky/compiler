@@ -131,26 +131,35 @@ bool Procedure::typeChecking() {
 void Procedure::generateCode() {
 	// function
 	if (this->symbol && this->symbol->getType() == "method" && block) {
-		AsmGenerator::comment("\nfunction declaration <" + this->symbol->getName() +">\n");
+		AsmGenerator::comment("\n function declaration <" + this->symbol->getName() +">\n\n");
 		AsmGenerator::addLabel(this->getFullPath());
 
-		if (this->symbol->getName() != "Main") {
-			// store current $ra in new AR
-			AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
+		// store current $ra in new AR
+		AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
 
-			block->generateCode();
+		block->generateCode();
 
-			AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
-			AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
-			AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
-
-			AsmGenerator::addInstruction("jr $ra");
-		}
-		else {
-			block->generateCode();
+		if (this->symbol->getName() == "Main") {
 			AsmGenerator::systemCall(10);
+			return;
 		}
-		AsmGenerator::addInstruction("\n");
+		
+
+		if (((Method*)symbol)->getFullPath() == "write_INT") {
+			AsmGenerator::lw("t0", "fp", -8);
+			AsmGenerator::printReg("t0");
+		}
+		
+		if (((Method*)symbol)->getFullPath() == "write_STRING") {
+			AsmGenerator::lw("a0", "fp", -8);
+			AsmGenerator::systemCall(4);
+		}
+
+		AsmGenerator::lw("ra", "fp", -1 * ((Method*)this->symbol)->returnAddressOffset);
+		AsmGenerator::lw("fp", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset + 4));
+		AsmGenerator::addInstruction("add $sp, $sp, " + to_string(((Method*)this->symbol)->stackFrameSize));
+
+		AsmGenerator::addInstruction("jr $ra");
 	}
 	// class
 	else {

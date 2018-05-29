@@ -131,8 +131,6 @@ void Assignment::generateCode() {
 
 		AsmGenerator::sw("t0", "t1", -1 * left->getPostDot()->offset);
 	}
-
-	AsmGenerator::printReg("t0");
 }
 
 Assignment::~Assignment()
