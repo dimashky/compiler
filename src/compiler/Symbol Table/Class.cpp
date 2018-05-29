@@ -1,6 +1,7 @@
 #include "Class.h"
 #include "../Error Handler/error_handler.h"
 #include "Field.h"
+#include "../Code Generator/AsmGenerator.h"
 
 extern errorHandler error_handler;
 
@@ -34,6 +35,11 @@ void Class::refactor() {
 					dispatchRow.push_back((Method*)field.first);
 					this->offset += 4;
 				}
+			}
+			//init dispatch table for object class
+			AsmGenerator::addInstruction(this->getFullPath() + "_DispatchTable:");
+			for each (Method* method in this->dispatchRow) {
+				AsmGenerator::addInstruction("\t.word " + ((Procedure*)method->astPosition->getParent())->getSymbol()->getFullPath() + "." + method->getFullPath());
 			}
 		}
 		return;
@@ -80,12 +86,12 @@ void Class::refactor() {
 		}
 	}
 	this->refactored = true;
-	cout << getName() << endl;
-	for each (Method* method in dispatchRow)
-	{
-		cout << method->getFullPath() << endl;
+	
+	AsmGenerator::addInstruction(this->getFullPath() + "_DispatchTable:");
+	for each (Method* method in this->dispatchRow) {
+		AsmGenerator::addInstruction("\t.word " + ((Procedure*)method->astPosition->getParent())->getSymbol()->getFullPath() + "." + method->getFullPath());
 	}
-	cout << "======================================" << endl;
+
 	return;
 }
 

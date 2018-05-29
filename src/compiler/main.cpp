@@ -73,6 +73,8 @@ int main()
 	// Init again 
 	TypesTable::init();
 
+	AsmGenerator::preInitFile();
+
 	//if (error_handler.errorsNum() == 0)
 	AST->typeChecking();
 	// errors
@@ -108,6 +110,7 @@ int main()
 	if (error_handler.errorsNum() > 0) {
 		exit(-1);
 	}
+
 
 	AsmGenerator::initializeFile();
 

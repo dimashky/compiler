@@ -61,7 +61,7 @@ void symbolParser::add_object()
 	ns->setHasReturn(1);
 
 	((Procedure*)Node::current)->add(ns);
-
+	ns->setBlock(new Block(ns));
 	Node::setCurrent(ns);
 
 	endScope();

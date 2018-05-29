@@ -7,10 +7,14 @@ int AsmGenerator::labelCounter = 0;
 int AsmGenerator::stringCounter = 0;
 map<string, string> AsmGenerator::strings;
 
+void AsmGenerator::preInitFile() {
+	assembly_code_file.open("./AssemblyCode.asm");
+	main_stream << ".data\n";
+}
 
 void AsmGenerator::initializeFile()
 {
-	assembly_code_file.open("./AssemblyCode.asm");
+
 	main_stream << ".text\n"
 		<< ".globl "<< symbolTable::mainPath  <<"\n"
 		<< "add $fp, $sp, 0\n"
