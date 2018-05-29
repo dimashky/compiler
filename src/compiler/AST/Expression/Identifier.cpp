@@ -99,7 +99,9 @@ bool Identifier::typeChecking() {
 			this->nodeType = new TypeError("use '" + postDot->getName() + "' keyword in static method is not allowed", postDot->getLineNo());
 		else
 			this->nodeType = TypesTable::findOrCreate(((Class*)prev)->getFullPath(), prev);
+		string lastName = postDot->getName();
 		postDot = prev;
+		postDot->setName(lastName);
 		return true;
 	}
 
