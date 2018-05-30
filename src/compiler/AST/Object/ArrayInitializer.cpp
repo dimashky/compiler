@@ -38,7 +38,6 @@ void ArrayInitializer::setElements(queue<Node*>elements)
 	while (!elements.empty()) {
 		this->elements.push_back(elements.front());
 		elements.pop();
-		cout << "toto" << endl;
 	}
 	return;
 }
