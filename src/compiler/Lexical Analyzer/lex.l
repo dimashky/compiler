@@ -135,7 +135,9 @@
 
 single_line_comment    "//".*
 
-dec_digit              [0-9]
+sign                   [+\-]
+
+dec_digit              {sign}?[0-9]
 hex_digit              [0-9A-Fa-f]
 int_suffix             [UuLl]|[Uu][Ll]|[Ll][Uu]
 dec_literal            {dec_digit}+{int_suffix}?
@@ -143,7 +145,7 @@ hex_literal            0[xX]{hex_digit}+{int_suffix}?
 integer_literal        {dec_literal}|{hex_literal}
 
 real_suffix            [FfDdMm]
-sign                   [+\-]
+
 exponent_part          [eE]{sign}?{dec_digit}+
 whole_real1            {dec_digit}+{exponent_part}{real_suffix}?
 whole_real2            {dec_digit}+{real_suffix}

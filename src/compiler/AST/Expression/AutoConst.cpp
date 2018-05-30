@@ -60,6 +60,7 @@ void AutoConst::setValue(void* value)
 void AutoConst::generateCode() {
 	if (this->type == "INT") {
 		AsmGenerator::li("t0", *((int*)this->value));
+		cout << *((int*)this->value) << " fffffffffffffffff" << endl;
 	}
 	else if (this->type == "BOOL") {
 		AsmGenerator::li("t0", *((bool*)this->value));

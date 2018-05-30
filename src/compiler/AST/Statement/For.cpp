@@ -23,10 +23,12 @@ bool For::typeChecking() {
 		cpy.pop();
 	}
 
-	condition->typeChecking();
+	if (condition) {
+		condition->typeChecking();
 
-	if (condition->nodeType->getTypeId() != TYPE_BOOL) {
-		new TypeError("For condition must be boolean type");
+		if (condition->nodeType->getTypeId() != TYPE_BOOL) {
+			new TypeError("For condition must be boolean type");
+		}
 	}
 
 	statement->typeChecking();
@@ -116,9 +118,17 @@ void For::generateCode() {
 
 	AsmGenerator::addLabel("label"+to_string(startLabel));
 	
-	this->condition->generateCode();
-	AsmGenerator::pop("t0");
-	AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabel));
+	if (condition) {
+		this->condition->generateCode();
+		if (condition->getType() == "call") {
+			AsmGenerator::lw("t0", "sp", 0);
+		}
+		else {
+			AsmGenerator::pop("t0");
+		}
+		AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabel));
+	}
+
 
 	// generate the block
 	this->statement->generateCode();

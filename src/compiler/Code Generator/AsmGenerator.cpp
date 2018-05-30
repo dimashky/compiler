@@ -77,6 +77,7 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 		break;
 	case Operator::eqeq:
 		AsmGenerator::addInstruction("seq $" + dest_reg + ", $" + reg1 + ", $" + reg2);
+		AsmGenerator::printReg(reg1);AsmGenerator::printReg(reg2);
 		break;
 	case Operator::noteq:
 		AsmGenerator::addInstruction("sne $" + dest_reg + ", $" + reg1 + ", $" + reg2);
