@@ -20,6 +20,7 @@ private:
 
 	bool isFinal,isParameter,is_const;
 	bool initialized;
+	Node* defaultParam;
 public:
 	LocalVariable(string type_variable, string name, int dimension, bool isParameter, bool is_const, int line_no, int col_no);
 	
@@ -31,6 +32,15 @@ public:
 	string getType();
 	string get_type_name();
 	Symbol* getTypeRef();
+
+	void setDefaultParam(Node* def) {
+		this->defaultParam = def;
+		return;
+	}
+
+	Node* getDefaultParam() {
+		return this->defaultParam;
+	}
 
 	bool is_final();
 	bool is_parameter();

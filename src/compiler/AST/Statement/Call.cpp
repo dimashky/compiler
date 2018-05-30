@@ -176,6 +176,14 @@ void Call::generateCode() {
 		AsmGenerator::sw("t1", "sp", -1 * ( 4 * i + 8));
 	}
 
+	vector<LocalVariable*>methodParams = calledMethod->get_parameters();
+	for (int i = params.size();i < methodParams.size();i++) {
+		methodParams[i]->getDefaultParam()->generateCode();
+		
+		AsmGenerator::pop("t1");
+		AsmGenerator::sw("t1", "sp", -1 * (4 * i + 8));
+	}
+
 	if (new_expression) {
 		
 		// call parent constructor

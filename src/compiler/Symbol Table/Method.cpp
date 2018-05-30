@@ -113,6 +113,7 @@ void Method::add_parametars(queue<pair <pair<pair<string, string >, pair<int, in
 	{
 		LocalVariable *newLocalVariable = new LocalVariable(parameters.front().first.first.first, parameters.front().first.first.second, params_dimension.front(), true, false, parameters.front().first.second.first, parameters.front().first.second.second);
 		
+		newLocalVariable->setDefaultParam(var_init.front());
 		newLocalVariable->offset = this->stackFrameSize;
 		this->stackFrameSize += 4;
 
