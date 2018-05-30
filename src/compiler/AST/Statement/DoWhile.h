@@ -1,7 +1,7 @@
 #pragma once
-#include "Statement.h"
+#include "Loop.h"
 
-class DoWhile :public Statement
+class DoWhile :public Loop
 {
 
 private:

@@ -1,6 +1,6 @@
 #include "DoWhile.h"
 
-DoWhile::DoWhile(Node *condition, Node *statement,Node *parent) :Statement(parent)
+DoWhile::DoWhile(Node *condition, Node *statement,Node *parent) :Loop(parent)
 {
 	this->condition = condition; 
 	this->statement = statement; 

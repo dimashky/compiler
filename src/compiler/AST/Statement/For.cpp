@@ -2,7 +2,7 @@
 #include "../../Symbol Table/Method.h"
 #include "../Object/Procedure.h"
 
-For::For(Node *parent) :Statement(parent) { 
+For::For(Node *parent) :Loop(parent) { 
 	this->condition = nullptr;
 	this->statement = nullptr;
 }
@@ -105,8 +105,8 @@ void For::setIterators(queue<Node*>iterators) {
 void For::generateCode() {
 	// init vars
 	queue<Node*> tmp = this->initializers;
-	int forLabel = AsmGenerator::labelCounter++;
-	int exitLabel = AsmGenerator::labelCounter++;
+	startLabel = AsmGenerator::labelCounter++;
+	exitLabel = AsmGenerator::labelCounter++;
 
 	// init iterators
 	for (int i = 0; i < tmp.size(); ++i) {
@@ -114,7 +114,7 @@ void For::generateCode() {
 		tmp.pop();
 	}
 
-	AsmGenerator::addLabel("label"+to_string(forLabel));
+	AsmGenerator::addLabel("label"+to_string(startLabel));
 	
 	this->condition->generateCode();
 	AsmGenerator::pop("t0");
@@ -131,7 +131,7 @@ void For::generateCode() {
 		tmp.pop();
 	}
 
-	AsmGenerator::addInstruction("j label" + to_string(forLabel));
+	AsmGenerator::addInstruction("j label" + to_string(startLabel));
 	AsmGenerator::addLabel("label" + to_string(exitLabel));
 }
 

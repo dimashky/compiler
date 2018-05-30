@@ -1,17 +1,28 @@
 #include "Jump.h"
 #include "../Object/Procedure.h"
+#include "../Statement/While.h"
+
 Jump::Jump(Node* statement, JumpStatement jumpStatement, Node* parent, int lineNo) :Statement(parent)
 {
 	this->statement = statement;
 	this->jumpStatement = jumpStatement;
 	this->lineNo = lineNo;
-
+	parentLoop = nullptr;
+	
 	Node* currentNode = parent;
-
-	while (currentNode->getType() != "procedure")
+	while (currentNode->getType() != "procedure") {
+		if (this->jumpStatement == JumpStatement::Break || this->jumpStatement == JumpStatement::Continue) {
+			if (!parentLoop && (currentNode->getType() == "while" || currentNode->getType() == "dowhile" || currentNode->getType() == "for")) {
+				parentLoop = (Loop*)currentNode;
+				break;
+			}
+		}
 		currentNode = currentNode->getParent();
-	this->parentMethod = (Procedure*)currentNode;
-	((Procedure*)parentMethod)->setHasReturn(true);
+	}
+	if (this->jumpStatement == JumpStatement::Return) {
+		this->parentMethod = (Procedure*)currentNode;
+		((Procedure*)parentMethod)->setHasReturn(true);
+	}
 }
 
 
@@ -65,11 +76,9 @@ bool Jump::typeChecking() {
 	return true;
 }
 
-void Jump::generateCode() {
-		Method* method = (Method*)((Procedure*)parentMethod)->getSymbol();
-		
+void Jump::generateCode() {		
 		if (jumpStatement == JumpStatement::Return) {
-		
+			Method* method = (Method*)((Procedure*)parentMethod)->getSymbol();
 			if (statement) {
 				statement->generateCode();
 
@@ -88,6 +97,12 @@ void Jump::generateCode() {
 			AsmGenerator::addInstruction("add $sp, $sp, " + to_string(method->stackFrameSize));
 			
 			AsmGenerator::addInstruction("jr $ra");
+		}
+		else if (jumpStatement == JumpStatement::Break) {
+			AsmGenerator::addInstruction("beq $0, $0 label" + to_string(parentLoop->exitLabel));
+		}
+		else if (jumpStatement == JumpStatement::Continue) {
+			AsmGenerator::addInstruction("beq $0, $0 label" + to_string(parentLoop->startLabel));
 		}
 }
 

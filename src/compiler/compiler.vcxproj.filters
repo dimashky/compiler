@@ -228,6 +228,9 @@
     <ClCompile Include="Code Generator\AsmGenerator.cpp">
       <Filter>Source Files\Code Generator</Filter>
     </ClCompile>
+    <ClCompile Include="AST\Statement\Loop.cpp">
+      <Filter>Source Files\AST\Statement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error Handler\error_handler.h">
@@ -397,6 +400,9 @@
     </ClInclude>
     <ClInclude Include="Code Generator\AsmGenerator.h">
       <Filter>Source Files\Code Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Statement\Loop.h">
+      <Filter>Source Files\AST\Statement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

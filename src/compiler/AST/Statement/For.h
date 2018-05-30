@@ -1,10 +1,10 @@
 #pragma once
 #include "Statement.h"
 #include"../Expression/Expression.h"
-#include"../Statement/Statement.h"
+#include"Loop.h"
 #include"../../Type Checker/all.h"
 
-class For :public Statement
+class For :public Loop
 {
 
 private:

@@ -1,10 +1,10 @@
 #pragma once
 #include "Statement.h"
 #include"../Expression/Expression.h"
-#include"../Statement/Statement.h"
+#include"Loop.h"
 #include "../../Type Checker/all.h"
 
-class While :public Statement
+class While :public Loop
 {
 private:
 	Node *condition, *statement;

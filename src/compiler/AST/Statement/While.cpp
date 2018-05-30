@@ -1,6 +1,6 @@
 #include "While.h"
 
-While::While(Node *condition, Node *statement,Node *parent) :Statement(parent)
+While::While(Node *condition, Node *statement,Node *parent) :Loop(parent)
 {
 	this->condition = condition; 
 	this->statement = statement; 
@@ -31,21 +31,20 @@ void While::setStatement(Node* statement) {
 }
 
 void While::generateCode() {
-	int whileLabelNumber = ++AsmGenerator::labelCounter;
-	int exitLabelNumber = ++AsmGenerator::labelCounter;
-
-	AsmGenerator::addLabel("label" + to_string(whileLabelNumber));
+	startLabel = ++AsmGenerator::labelCounter;
+	exitLabel = ++AsmGenerator::labelCounter;
+	AsmGenerator::addLabel("label" + to_string(startLabel));
 
 	this->condition->generateCode();
 	AsmGenerator::pop("t0");
 	// if condition is false goto exit label
-	AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabelNumber));
+	AsmGenerator::addInstruction("beq $t0, $0, label" + to_string(exitLabel));
 	
 	this->statement->generateCode();
 	// go to while condition for test it
-	AsmGenerator::addInstruction("j label" + to_string(whileLabelNumber));
+	AsmGenerator::addInstruction("j label" + to_string(startLabel));
 
-	AsmGenerator::addLabel("label" + to_string(exitLabelNumber));
+	AsmGenerator::addLabel("label" + to_string(exitLabel));
 };
 
 

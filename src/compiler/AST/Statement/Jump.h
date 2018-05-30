@@ -1,6 +1,8 @@
 #pragma once
 #include "../Node.h"
 #include "Statement.h"
+#include "Loop.h"
+
 #include "../../Type Checker/all.h"
 #include "../../Symbol Table/Method.h"
 #include "../../Symbol Table/Class.h"
@@ -19,6 +21,7 @@ class Jump : public Statement
 {
 private:
 	Node* statement, *parentMethod;
+	Loop* parentLoop;
 	JumpStatement jumpStatement;
 	int lineNo;
 public:
