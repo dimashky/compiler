@@ -29,6 +29,7 @@ void AsmGenerator::writeAsmFile()
 {
 	AsmGenerator::systemCall(10);
 	AsmGenerator::addInstruction("\n\n\n\n");
+	AsmGenerator::addLabel(((Procedure*)((Method*)symbolTable::mainRef)->astPosition->getParent())->getFullPath() + "." + symbolTable::mainRef->getFullPath() + "_exit");
 	assembly_code_file << main_stream.str();
 	assembly_code_file.close();
 }

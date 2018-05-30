@@ -79,6 +79,11 @@ bool Jump::typeChecking() {
 void Jump::generateCode() {		
 		if (jumpStatement == JumpStatement::Return) {
 			Method* method = (Method*)((Procedure*)parentMethod)->getSymbol();
+			if (method == symbolTable::mainRef) {
+				string labelName = ((Procedure*)((Method*)symbolTable::mainRef)->astPosition->getParent())->getFullPath() + "." + symbolTable::mainRef->getFullPath() + "_exit";
+				AsmGenerator::addInstruction("beq $0, $0 " + labelName);
+				return;
+			}
 			if (statement) {
 				statement->generateCode();
 
