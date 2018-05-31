@@ -1,5 +1,6 @@
 #include "Assignment.h"
 #include "../Expression/AutoConst.h"
+#include "../Expression/BinaryExpression.h"
 
 Assignment::Assignment(Identifier *left, Operator op, Node *right, Node *parent) :Statement(parent)
 {
@@ -120,16 +121,15 @@ void Assignment::generateCode() {
 	left->dimensions[0]->generateCode();
 	AsmGenerator::pop("t0"); // index value
 		
-	AsmGenerator::pop("t1"); // prev t1 
+	AsmGenerator::pop("t1"); // load refrence
 		
 	AsmGenerator::addInstruction("subi $t1, $t1, " + to_string( left->getPostDot()->offset));
+	AsmGenerator::lw("t1", "t1", 0); // load first array address 
 		
-	AsmGenerator::lw("t1", "t1", 0);
+	AsmGenerator::addInstruction("addi $t4, $0, 4"); // t4 = 4
+	AsmGenerator::addInstruction("mul $t0, $t0, $t4"); // t0 = index * 4
 		
-	AsmGenerator::addInstruction("addi $t4, $0, 4");
-	AsmGenerator::addInstruction("mul $t0, $t0, $t4");
-		
-	AsmGenerator::addInstruction("add $t1, $t1, $t0");
+	AsmGenerator::addInstruction("add $t1, $t1, $t0"); // t1 = t1 + t0 (move to index)
 		
 	AsmGenerator::pop("t0"); // right value 
 	AsmGenerator::sw("t0", "t1", 0);

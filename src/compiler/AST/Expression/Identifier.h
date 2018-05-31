@@ -28,6 +28,10 @@ public:
 	string getPath();
 
 	string getType();
+
+	void setPostDot(Symbol* postdot) {
+		this->postDot = postdot;
+	}
 	
 	Node* getPreDot();
 

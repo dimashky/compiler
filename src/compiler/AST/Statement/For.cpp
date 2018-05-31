@@ -107,8 +107,8 @@ void For::setIterators(queue<Node*>iterators) {
 void For::generateCode() {
 	// init vars
 	queue<Node*> tmp = this->initializers;
-	startLabel = AsmGenerator::labelCounter++;
-	exitLabel = AsmGenerator::labelCounter++;
+	startLabel = ++AsmGenerator::labelCounter;
+	exitLabel = ++AsmGenerator::labelCounter;
 
 	// init iterators
 	for (int i = 0; i < tmp.size(); ++i) {

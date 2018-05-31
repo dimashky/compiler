@@ -43,6 +43,9 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 {
 	switch (op)
 	{
+	case As:
+		AsmGenerator::addInstruction("move $" + dest_reg + ", $" + reg1);
+		break;
 	case Plus:
 		AsmGenerator::addInstruction("add $" + dest_reg + ", $" + reg1 + ", $" + reg2);
 		break;
@@ -78,7 +81,6 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 		break;
 	case Operator::eqeq:
 		AsmGenerator::addInstruction("seq $" + dest_reg + ", $" + reg1 + ", $" + reg2);
-		AsmGenerator::printReg(reg1);AsmGenerator::printReg(reg2);
 		break;
 	case Operator::noteq:
 		AsmGenerator::addInstruction("sne $" + dest_reg + ", $" + reg1 + ", $" + reg2);
@@ -88,6 +90,12 @@ void AsmGenerator::operation(Operator op, string const &dest_reg, string const &
 		break;
 	case::Operator::pre_plusplus:
 		AsmGenerator::addInstruction("addi $" + dest_reg + ", $" + reg1 + ", 1");
+		break;
+	case::Operator::post_minusminus:
+		AsmGenerator::addInstruction("subi $" + dest_reg + ", $" + reg1 + ", 1");
+		break;
+	case::Operator::pre_minusminus:
+		AsmGenerator::addInstruction("subi $" + dest_reg + ", $" + reg1 + ", 1");
 		break;
 	default:
 		cout << "operation NOT Support!" << endl;

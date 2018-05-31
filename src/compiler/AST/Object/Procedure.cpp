@@ -142,20 +142,18 @@ void Procedure::generateCode() {
 		if (((Method*)symbol)->get_is_constructer() && baseCall) {
 			string baseCallDispatchTable = ((Procedure*)((Call*)baseCall)->calledMethod->astPosition->getParent())->getFullPath() + "_DispatchTable";
 			string currentDsipatchTable = ((Procedure*)this->getParent())->getFullPath() + "_DispatchTable";
-			AsmGenerator::lw("t0", "fp", -4);	// load this
 			
+			AsmGenerator::lw("t0", "fp", -4);	// load this
 			AsmGenerator::addInstruction("la $t1, " + baseCallDispatchTable);
 			AsmGenerator::sw("t1", "t0", 0);	// store base dispatch table pointer
 
 			((Call*)baseCall)->new_expression = false;
 			((Call*)baseCall)->isBaseCall = true;
-
 			baseCall->generateCode();
 
 			AsmGenerator::lw("t0", "fp", -4);	// load this
 			AsmGenerator::addInstruction("la $t1, " + currentDsipatchTable);
 			AsmGenerator::sw("t1", "t0", 0);	// store new dispatch table pointer
-
 		}
 
 		if (((Method*)symbol)->getFullPath() == "write_INT") {

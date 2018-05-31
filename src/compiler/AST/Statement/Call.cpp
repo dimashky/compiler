@@ -198,7 +198,7 @@ void Call::generateCode() {
 
 		AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		AsmGenerator::sw("s0", "sp", 0 ); // pass self value to return value section in AR
-
+		
 		  // move $sp to new $sp
 		AsmGenerator::addInstruction("add $fp, $sp, 0");
 		AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
@@ -233,11 +233,7 @@ void Call::generateCode() {
 		}
 
 		AsmGenerator::lw("t1", "s0", 0);  // dispatch ptr
-		AsmGenerator::printStr("S000000 ??? ");
-		AsmGenerator::printReg("s0");
-		AsmGenerator::printStr("t	1 ??? ");
-		AsmGenerator::printReg("t1");
-
+		
 		AsmGenerator::lw("t2", "t1", calledMethod->offset);
 		// move $sp to new $sp
 		AsmGenerator::addInstruction("add $fp, $sp, 0");

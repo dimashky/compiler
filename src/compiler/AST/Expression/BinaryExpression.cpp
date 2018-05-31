@@ -61,6 +61,7 @@ bool BinaryExpression::typeChecking() {
 				this->nodeType = new TypeError("type " + ((Identifier*)right)->getPostDot()->getName() + " is not defined", ((Identifier*)right)->getPostDot()->getLineNo());
 			}
 			else {
+				((Identifier*)right)->setPostDot(type);
 				this->right->nodeType = TypesTable::findOrCreate(((Class*)type)->getFullPath(), type);
 			}
 		}

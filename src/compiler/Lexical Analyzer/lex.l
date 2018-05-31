@@ -137,7 +137,7 @@ single_line_comment    "//".*
 
 sign                   [+\-]
 
-dec_digit              {sign}?[0-9]
+dec_digit              [0-9]
 hex_digit              [0-9A-Fa-f]
 int_suffix             [UuLl]|[Uu][Ll]|[Ll][Uu]
 dec_literal            {dec_digit}+{int_suffix}?

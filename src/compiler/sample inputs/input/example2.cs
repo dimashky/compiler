@@ -1,63 +1,72 @@
-namespace example1
+class a
 {
-    class Shape
+    public int x;
+    public a(int x)
     {
-        protected int width, height;
+        this.x = x;
+    }
+    public virtual void overrideTest()
+    {
+        Console.write("a class\n");
+    }
+}
 
-        public Shape(int a = 0, int b = 0)
-        {
-            width = a;
-            height = b;
-        }
-        public virtual int area()
-        {
-            Console.write("Parent class area :");
-            return 0;
-        }
-    }
-    class Rectangle : Shape
+class b : a
+{
+    public int y;
+    public int z;
+    public b(int x, int y, int z) : base(x)
     {
-        public Rectangle(int a = 0, int b = 0) : base(a, b)
-        {
+        this.y = y;
+        this.z = z;
+    }
+    public override void overrideTest()
+    {
+        Console.write("b class\n");
+    }
+}
 
-        }
-        public override int area()
-        {
-            Console.write("Rectangle class area :");
-            return (width * height);
-        }
-    }
-    class Triangle : Shape
+class c : b
+{
+    public int a;
+    public c(int x, int y, int z, int a) : base(x, y, z)
     {
-        public Triangle(int a = 0, int b = 0) : base(a, b)
-        {
-        }
-        public override int area()
-        {
-            Console.write("Triangle class area :");
-            return (width * height / 2);
-        }
+        this.a = a;
     }
-    class Caller
+    public void overloadTest(int x)
     {
-        public void CallArea()
-        {
-           /* int a;
-            a = sh.area();
-            Console.write("Area: ");
-            Console.write(a);*/
-        }
+        Console.write("int ");
+        Console.write(x);
     }
-    class Tester
+    public void overloadTest(float x)
     {
-        static void Main(string[] args)
-        {
-            Caller c = new Caller();
-            Rectangle r = new Rectangle(10, 7);
-            Triangle t = new Triangle(10, 5);
+        Console.write("float\n");
+    }
+    public void overloadTest(a x)
+    {
+        x.overrideTest();
+    }
+    public override void overrideTest()
+    {
+        Console.write("c class\n");
+    }
 
-            c.CallArea();
-            //Console.ReadKey();
-        }
+    public int fibo(int x)
+    {
+        if (x == 0 || x == 1)
+            return x;
+        return fibo(x - 1) + fibo(x - 2);
+    }
+
+}
+
+class MainClass
+{
+    public static void Main()
+    {
+        c ob1 = new c(1, 2, 3, 4);
+        int tt = ob1.fibo(10);
+        Console.write(tt);
+
     }
 }
