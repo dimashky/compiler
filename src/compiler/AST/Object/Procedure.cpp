@@ -139,6 +139,25 @@ void Procedure::generateCode() {
 		// store current $ra in new AR
 		AsmGenerator::sw("ra", "fp", -1 * (((Method*)this->symbol)->returnAddressOffset));
 
+		if (((Method*)symbol)->get_is_constructer() && baseCall) {
+			string baseCallDispatchTable = ((Procedure*)((Call*)baseCall)->calledMethod->astPosition->getParent())->getFullPath() + "_DispatchTable";
+			string currentDsipatchTable = ((Procedure*)this->getParent())->getFullPath() + "_DispatchTable";
+			AsmGenerator::lw("t0", "fp", -4);	// load this
+			
+			AsmGenerator::addInstruction("la $t1, " + baseCallDispatchTable);
+			AsmGenerator::sw("t1", "t0", 0);	// store base dispatch table pointer
+
+			((Call*)baseCall)->new_expression = false;
+			((Call*)baseCall)->isBaseCall = true;
+
+			baseCall->generateCode();
+
+			AsmGenerator::lw("t0", "fp", -4);	// load this
+			AsmGenerator::addInstruction("la $t1, " + currentDsipatchTable);
+			AsmGenerator::sw("t1", "t0", 0);	// store new dispatch table pointer
+
+		}
+
 		if (((Method*)symbol)->getFullPath() == "write_INT") {
 			AsmGenerator::lw("t0", "fp", -8);
 			AsmGenerator::printReg("t0");
@@ -163,9 +182,11 @@ void Procedure::generateCode() {
 			isReadFunction = true;
 		}
 
-		if (!isReadFunction)
+		if (!isReadFunction) {
+			AsmGenerator::comment("BEFFFFFFFFFFFFFFFFOR");
 			block->generateCode();
-
+			AsmGenerator::comment("AFTTTTTER");
+		}
 		if (this->symbol->getName() == "Main") {
 			AsmGenerator::systemCall(10);
 			return;

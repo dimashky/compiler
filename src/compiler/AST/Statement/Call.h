@@ -16,10 +16,11 @@ private:
 	*		2 => OUT
 	*/
 	vector<pair<Node*,int> >params;
-	Method* calledMethod;
 	bool known_type, base_call;
 public:
-	bool new_expression;
+	Method* calledMethod;
+
+	bool new_expression, isBaseCall;
 	Call(Node *call, Node* parent, bool new_expression = false, bool known_type = false,bool base_call = false);
 
 	string getType();

@@ -8,6 +8,7 @@ Call::Call(Node *call, Node *parent, bool new_expression, bool known_type, bool 
 	this->known_type = known_type;
 	this->base_call = baseCall;
 	this->calledMethod = nullptr;
+	this->isBaseCall = false;
 }
 
 void Call::setParams(vector<pair<Node*, int> > params) {
@@ -162,9 +163,7 @@ bool Call::typeChecking() {
 
 
 void Call::generateCode() {	
-	// store old $fp in new 
-	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
-	
+	AsmGenerator::comment("PARAms");
 	for (int i = 0; i < params.size(); ++i) {
 		params[i].first->generateCode();
 		if (params[i].first->getType() == "call") {
@@ -175,7 +174,7 @@ void Call::generateCode() {
 		}
 		AsmGenerator::sw("t1", "sp", -1 * ( 4 * i + 8));
 	}
-
+	AsmGenerator::comment("DEFAULT");
 	vector<LocalVariable*>methodParams = calledMethod->get_parameters();
 	for (int i = params.size();i < methodParams.size();i++) {
 		methodParams[i]->getDefaultParam()->generateCode();
@@ -184,13 +183,12 @@ void Call::generateCode() {
 		AsmGenerator::sw("t1", "sp", -1 * (4 * i + 8));
 	}
 
+	// store old $fp in new 
+	AsmGenerator::sw("fp", "sp", -1 * (calledMethod->returnAddressOffset + 4));
+
+
 	if (new_expression) {
-		
-		// call parent constructor
-		if (calledMethod->astPosition->getBaseCall()) {
-			((Call*)calledMethod->astPosition->getBaseCall())->new_expression = true;
-		//	calledMethod->astPosition->getBaseCall()->generateCode();
-		}
+		AsmGenerator::comment("NEW ?");
 
 		Symbol* classRef = TypesTable::getType(this->nodeType->typeExpression()).second;
 		AsmGenerator::allocate("s0", ((Class*)classRef)->bytes);
@@ -208,6 +206,7 @@ void Call::generateCode() {
 		AsmGenerator::addInstruction("jal " + calledMethod->astPosition->getFullPath());
 	}
 	else { 
+		AsmGenerator::comment("ANOTHER ?");
 		Node* preDot = ((Identifier*)call)->getPreDot();
 		bool isCalledMethodStatic = this->calledMethod->get_is_static();
 		if (preDot) {
@@ -224,7 +223,8 @@ void Call::generateCode() {
 			AsmGenerator::sw("s0", "sp", -4); // pass self value to first parameter
 		}
 		
-		if (isCalledMethodStatic) {
+		if (isCalledMethodStatic || isBaseCall) {
+			AsmGenerator::comment("HERE ?");
 			// move $sp to new $sp
 			AsmGenerator::addInstruction("add $fp, $sp, 0");
 			AsmGenerator::addInstruction("sub $sp, $sp, " + to_string(calledMethod->stackFrameSize));
@@ -233,6 +233,11 @@ void Call::generateCode() {
 		}
 
 		AsmGenerator::lw("t1", "s0", 0);  // dispatch ptr
+		AsmGenerator::printStr("S000000 ??? ");
+		AsmGenerator::printReg("s0");
+		AsmGenerator::printStr("t	1 ??? ");
+		AsmGenerator::printReg("t1");
+
 		AsmGenerator::lw("t2", "t1", calledMethod->offset);
 		// move $sp to new $sp
 		AsmGenerator::addInstruction("add $fp, $sp, 0");

@@ -1,5 +1,3 @@
-namespace System
-{
     class Console
     {
         public static void write(int value)
@@ -19,4 +17,3 @@ namespace System
             return "";
         }
     }
-}
